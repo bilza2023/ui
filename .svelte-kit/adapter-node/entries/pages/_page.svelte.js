@@ -4,11 +4,11 @@ const fallback = "/brand/placeholder.webp";
 const FlexBoxCom = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let thumbnails = [
     {
-      src: "/brand/math3.webp",
+      src: "/brand/math4.webp",
       url: "/courses/ai"
     },
     {
-      src: "/brand/english9th.webp",
+      src: "/brand/english9th2.webp",
       url: "/courses/ai"
     },
     {
@@ -20,11 +20,11 @@ const FlexBoxCom = create_ssr_component(($$result, $$props, $$bindings, slots) =
       url: "/courses/ai"
     },
     {
-      src: "/brand/math2.webp",
+      src: "/brand/web.webp",
       url: "/courses/ai"
     },
     {
-      src: "/brand/math_class9.webp",
+      src: "/brand/it2.webp",
       url: "/courses/ai"
     }
   ];
