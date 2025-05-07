@@ -1,11 +1,6 @@
 import { c as create_ssr_component } from "../../../chunks/ssr.js";
-const css = {
-  code: "h1.svelte-o5vp62{text-align:center;margin-top:2rem;color:#4fc3f7}ul.svelte-o5vp62{max-width:600px;margin:2rem auto;padding-left:1rem}li.svelte-o5vp62{margin-bottom:1rem}a.svelte-o5vp62{color:#90caf9;font-weight:bold;text-decoration:none}a.svelte-o5vp62:hover{text-decoration:underline}",
-  map: null
-};
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css);
-  return `<h1 class="svelte-o5vp62" data-svelte-h="svelte-otr9cw">Blog Index</h1> <ul class="svelte-o5vp62" data-svelte-h="svelte-10mowjr"><li class="svelte-o5vp62"><a href="/blog/letter_to_parents_4may_2025.html" class="svelte-o5vp62">A Letter To Parents</a></li> <li class="svelte-o5vp62"><a href="/blog/devops/installing_nginx.html" class="svelte-o5vp62">Installing NginX on Server</a></li>   </ul>`;
+  return `<div class="min-h-screen w-full bg-[#1e1e1e] text-white px-6 py-8" data-svelte-h="svelte-uvhkdd"><h1 class="text-2xl font-bold text-[#90caf9] mb-2">📚 Blog Index</h1> <p class="text-sm text-gray-400 mb-1 italic">Education for Every Pakistani</p> <hr class="border-t border-[#444] my-6"> <ul class="space-y-4"><li><a href="/blog/future-in-the-ai-era-for--pakistani-students.html" class="text-[#90caf9] hover:underline text-lg font-medium">📢 Future in the AI Era – For the Pakistani students</a></li> <li><a href="/blog/devops/installing_nginx.html" class="text-[#90caf9] hover:underline text-lg font-medium">⚙️ Installing NginX on Server</a></li> </ul> <hr class="border-t border-[#444] my-8"> <p class="text-xs text-gray-500">📝 Curated by Taleem.Help • Updated regularly</p></div>`;
 });
 export {
   Page as default

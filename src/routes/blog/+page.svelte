@@ -1,39 +1,30 @@
-<h1>Blog Index</h1>
+<script>
+  // Optional logic here
+</script>
 
-<ul>
-  <li><a href="/blog/letter_to_parents_4may_2025.html">A Letter To Parents</a></li>
-  <li>
-    <a href="/blog/devops/installing_nginx.html">Installing NginX on Server</a>
-  </li>
+<div class="min-h-screen w-full bg-[#1e1e1e] text-white px-6 py-8">
+  <h1 class="text-2xl font-bold text-[#90caf9] mb-2">📚 Blog Index</h1>
+  <p class="text-sm text-gray-400 mb-1 italic">Education for Every Pakistani</p>
 
-  <!-- <li><a href="/blog/backend-servies-presentation/index.html">Presentation</a></li> -->
-  <!-- Add more links below -->
-</ul>
+  <hr class="border-t border-[#444] my-6" />
 
-<style>
-  h1 {
-    text-align: center;
-    margin-top: 2rem;
-    color: #4fc3f7;
-  }
+ 
 
-  ul {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding-left: 1rem;
-  }
+  <ul class="space-y-4">
+    <li>
+      <a href="/blog/future-in-the-ai-era-for--pakistani-students.html" class="text-[#90caf9] hover:underline text-lg font-medium">
+        📢 Future in the AI Era – For the Pakistani students
+      </a>
+    </li>
+    <li>
+      <a href="/blog/devops/installing_nginx.html" class="text-[#90caf9] hover:underline text-lg font-medium">
+        ⚙️ Installing NginX on Server
+      </a>
+    </li>
+    <!-- More links... -->
+  </ul>
 
-  li {
-    margin-bottom: 1rem;
-  }
+  <hr class="border-t border-[#444] my-8" />
 
-  a {
-    color: #90caf9;
-    font-weight: bold;
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-</style>
+  <p class="text-xs text-gray-500">📝 Curated by Taleem.Help • Updated regularly</p>
+</div>

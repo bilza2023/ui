@@ -66,10 +66,12 @@ const FlexBoxCom = create_ssr_component(($$result, $$props, $$bindings, slots) =
     "/brand/ai4.webp",
     "/brand/it.webp",
     "/brand/math_class9.webp",
+    "/brand/english.webp",
+    "/brand/english.webp",
     "/brand/english.webp"
   ];
-  return `<div class="flex flex-wrap justify-center gap-4 p-2">${each(Array(4), (_, i) => {
-    return `<div class="w-[200px] h-[240px] bg-[#f3e8d9] border border-[#8b5306] rounded-xl overflow-hidden"><img${add_attribute("src", thumbnails[i] || fallback, 0)} alt="thumbnail" class="w-full h-full object-cover"> </div>`;
+  return `<div class="flex flex-wrap justify-center gap-4 p-4">${each(thumbnails, (thumb, i) => {
+    return `<div class="w-[200px] h-[240px] bg-[#f3e8d9] border border-[#8b5306] rounded-xl overflow-hidden p-0"><img${add_attribute("src", thumb || fallback, 0)} alt="thumbnail" class="w-full h-full object-cover"> </div>`;
   })}</div>`;
 });
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {

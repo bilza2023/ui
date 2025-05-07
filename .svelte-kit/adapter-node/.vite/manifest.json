@@ -78,7 +78,7 @@
   },
   "src/routes/+layout.svelte": {
     "css": [
-      "_app/immutable/assets/_layout.BjpxnH13.css"
+      "_app/immutable/assets/_layout.DRk1_xWl.css"
     ],
     "file": "entries/pages/_layout.svelte.js",
     "imports": [
@@ -115,9 +115,6 @@
     "src": "src/routes/admin/+page.svelte"
   },
   "src/routes/blog/+page.svelte": {
-    "css": [
-      "_app/immutable/assets/_page.CiOj15UQ.css"
-    ],
     "file": "entries/pages/blog/_page.svelte.js",
     "imports": [
       "_ssr.js"
