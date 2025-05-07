@@ -210,7 +210,7 @@ const SvelteToast = create_ssr_component(($$result, $$props, $$bindings, slots) 
 });
 const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   const options = {};
-  return `${$$result.head += `<!-- HEAD_svelte-1ht9n07_START --><!-- HEAD_svelte-1ht9n07_END -->`, ""}  ${validate_component(SvelteToast, "SvelteToast").$$render($$result, { options }, {}, {})}  <div class="bg-gray-800 min-h-screen h-full">${slots.default ? slots.default({}) : ``}</div>`;
+  return `${$$result.head += `<!-- HEAD_svelte-1ht9n07_START --><!-- HEAD_svelte-1ht9n07_END -->`, ""}  ${validate_component(SvelteToast, "SvelteToast").$$render($$result, { options }, {}, {})}  <div class="min-h-screen h-full">${slots.default ? slots.default({}) : ``}</div>`;
 });
 export {
   Layout as default

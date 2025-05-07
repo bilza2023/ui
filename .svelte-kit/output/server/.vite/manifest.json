@@ -78,7 +78,7 @@
   },
   "src/routes/+layout.svelte": {
     "css": [
-      "_app/immutable/assets/_layout.BprvNcom.css"
+      "_app/immutable/assets/_layout.D1DvkQr3.css"
     ],
     "file": "entries/pages/_layout.svelte.js",
     "imports": [
@@ -92,10 +92,19 @@
   "src/routes/+page.svelte": {
     "file": "entries/pages/_page.svelte.js",
     "imports": [
-      "_ssr.js"
+      "_ssr.js",
+      "_client.js"
     ],
     "isEntry": true,
     "src": "src/routes/+page.svelte"
+  },
+  "src/routes/about/+page.svelte": {
+    "file": "entries/pages/about/_page.svelte.js",
+    "imports": [
+      "_ssr.js"
+    ],
+    "isEntry": true,
+    "src": "src/routes/about/+page.svelte"
   },
   "src/routes/admin/+page.svelte": {
     "file": "entries/pages/admin/_page.svelte.js",
@@ -139,6 +148,14 @@
     "isEntry": true,
     "src": "src/routes/canvas_slides_index/+page.svelte"
   },
+  "src/routes/courses/ai/+page.svelte": {
+    "file": "entries/pages/courses/ai/_page.svelte.js",
+    "imports": [
+      "_ssr.js"
+    ],
+    "isEntry": true,
+    "src": "src/routes/courses/ai/+page.svelte"
+  },
   "src/routes/editor/+page.svelte": {
     "css": [
       "_app/immutable/assets/_page.DTMBWJWD.css",
@@ -168,6 +185,15 @@
     ],
     "isEntry": true,
     "src": "src/routes/player/+page.svelte"
+  },
+  "src/routes/static_canvas_player/+page.svelte": {
+    "file": "entries/pages/static_canvas_player/_page.svelte.js",
+    "imports": [
+      "_ssr.js",
+      "_CoreItemsMap.js"
+    ],
+    "isEntry": true,
+    "src": "src/routes/static_canvas_player/+page.svelte"
   },
   "src/routes/static_player/+page.svelte": {
     "css": [
