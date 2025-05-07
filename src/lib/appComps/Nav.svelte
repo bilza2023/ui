@@ -33,21 +33,16 @@
                 <!-- ******************************** -->
                 <!-- ******************************** -->
         <div class='flex'>
-        {#if isLogin}
+      
     
         <!-- <NavBtn title='Payment' icon = '🚀' url='/payment'/> -->
         <NavBtn
-        title="Blog"
-        icon="📘"
-        url="/blog"
+        title="Contact"
+        icon="📱"
+        url="/contact"
         bgColor="bg-[#d6b88d]"
         titleColor="text-gray-900"
       />
-      
-      
-
-        
-        {:else}
         <NavBtn
         title="Blog"
         icon="📘"
@@ -56,10 +51,10 @@
         titleColor="text-gray-900"
       />
       
+       
         <!-- <NavBtn title='Payment' icon = '🚀' url='/payment'/> -->
         <!-- <NavBtn title='Login' icon ='🔑'  url='/login'/> -->
         <!-- <NavBtn title='Signup' icon ='🔓'  url='/signup'/> -->
-        {/if}
         </div>
     </div><!--outer most div-->
     

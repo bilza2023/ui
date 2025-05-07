@@ -85,7 +85,7 @@
   },
   "src/routes/+layout.svelte": {
     "css": [
-      "_app/immutable/assets/_layout.415qTqLo.css"
+      "_app/immutable/assets/_layout.Zelaqpoi.css"
     ],
     "file": "entries/pages/_layout.svelte.js",
     "imports": [
@@ -152,6 +152,15 @@
     "isEntry": true,
     "src": "src/routes/canvas_slides_index/+page.svelte"
   },
+  "src/routes/contact/+page.svelte": {
+    "file": "entries/pages/contact/_page.svelte.js",
+    "imports": [
+      "_ssr.js",
+      "_Nav.js"
+    ],
+    "isEntry": true,
+    "src": "src/routes/contact/+page.svelte"
+  },
   "src/routes/courses/ai/+page.svelte": {
     "file": "entries/pages/courses/ai/_page.svelte.js",
     "imports": [
@@ -160,6 +169,24 @@
     ],
     "isEntry": true,
     "src": "src/routes/courses/ai/+page.svelte"
+  },
+  "src/routes/courses/fbise9math/+page.svelte": {
+    "file": "entries/pages/courses/fbise9math/_page.svelte.js",
+    "imports": [
+      "_ssr.js",
+      "_Nav.js"
+    ],
+    "isEntry": true,
+    "src": "src/routes/courses/fbise9math/+page.svelte"
+  },
+  "src/routes/courses/webdevelopment/+page.svelte": {
+    "file": "entries/pages/courses/webdevelopment/_page.svelte.js",
+    "imports": [
+      "_ssr.js",
+      "_Nav.js"
+    ],
+    "isEntry": true,
+    "src": "src/routes/courses/webdevelopment/+page.svelte"
   },
   "src/routes/editor/+page.svelte": {
     "css": [

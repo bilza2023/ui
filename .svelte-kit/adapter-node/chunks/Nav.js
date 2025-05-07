@@ -47,7 +47,18 @@ const Nav = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     },
     {},
     {}
-  )}</div>   <div class="flex">${`${validate_component(NavBtn, "NavBtn").$$render(
+  )}</div>   <div class="flex"> ${validate_component(NavBtn, "NavBtn").$$render(
+    $$result,
+    {
+      title: "Contact",
+      icon: "📱",
+      url: "/contact",
+      bgColor: "bg-[#d6b88d]",
+      titleColor: "text-gray-900"
+    },
+    {},
+    {}
+  )} ${validate_component(NavBtn, "NavBtn").$$render(
     $$result,
     {
       title: "Blog",
@@ -58,7 +69,7 @@ const Nav = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     },
     {},
     {}
-  )}   `}</div> </div>`;
+  )}   </div> </div>`;
 });
 export {
   Nav as N

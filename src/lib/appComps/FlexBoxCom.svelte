@@ -1,11 +1,12 @@
 <script>
    let thumbnails = [
-  { src: "/brand/math4.webp", url: "/courses/ai" },
-  { src: "/brand/english9th2.webp", url: "/courses/ai" },
+  { src: "/brand/web.webp", url: "/courses/webdevelopment" },
+  { src: "/brand/it2.webp", url: "/courses/ai" },
   { src: "/brand/ai101.webp", url: "/courses/ai" },
   { src: "/brand/ai4.webp", url: "/courses/ai" },
-  { src: "/brand/web.webp", url: "/courses/ai" },
-  { src: "/brand/it2.webp", url: "/courses/ai" },
+  { src: "/brand/ai4professionals.webp", url: "/courses/ai" },
+  { src: "/brand/mathclass9fbise.webp", url: "/courses/fbise9math" },
+  { src: "/brand/english9th2.webp", url: "/courses/ai" },
 ];
 
   
@@ -28,5 +29,6 @@
 {/each}
 
   </div>
+  
   
   
