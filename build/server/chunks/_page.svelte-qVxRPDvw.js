@@ -39,11 +39,11 @@ const Logo = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `<div class="w-20 group rounded-md"><a${add_attribute("href", url, 0)}><button${add_attribute("class", `w-full flex flex-col items-center p-2 m-0 rounded ${bg} ${hoverBg} active:bg-gray-900 transition-colors`, 0)}><span class="text-md" data-svelte-h="svelte-d8yi6b">🏠</span> <span${add_attribute("class", `text-xs font-medium transition-colors group-hover:${titleColor}`, 0)}>Home</span></button></a></div>`;
 });
 const Nav = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `  <div class="flex justify-between items-center p-3 px-6 m-0 bg-[#d6b88d] shadow-sm"><div class="flex">${validate_component(Logo, "Logo").$$render(
+  return `  <div class="flex justify-between items-center p-3 px-6 m-0 bg-[#987038] shadow-sm"><div class="flex">${validate_component(Logo, "Logo").$$render(
     $$result,
     {
       url: "/",
-      bg: "bg-[#d6b88d]",
+      bg: "bg-[#987038]",
       hoverBg: "hover:bg-[#bfa074]",
       titleColor: "text-gray-900"
     },
@@ -75,8 +75,8 @@ const FlexBoxCom = create_ssr_component(($$result, $$props, $$bindings, slots) =
   })}</div>`;
 });
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `<div class="min-h-screen h-full" style="background-color:#dbc6ab">${validate_component(Nav, "Nav").$$render($$result, {}, {}, {})}  <section class="w-full bg-[#ecdcc6]/90 px-6 py-3 shadow-sm" data-svelte-h="svelte-1bee5xc"><div class="flex items-baseline space-x-2"><h1 class="text-xl font-bold text-gray-800 tracking-tight">taleem.help</h1> <p class="text-sm text-gray-700 font-light leading-snug">Education for Every Pakistani</p></div></section>  <div class="w-full flex justify-center">${validate_component(FlexBoxCom, "FlexBoxCom").$$render($$result, {}, {}, {})}</div></div> `;
+  return `<div class="min-h-screen h-full bg-[#cbad84]"> ${validate_component(Nav, "Nav").$$render($$result, {}, {}, {})}  <section class="w-full bg-[#ecdcc6]/90 px-6 py-3 shadow-sm" data-svelte-h="svelte-1bee5xc"><div class="flex items-baseline space-x-2"><h1 class="text-xl font-bold text-gray-800 tracking-tight">taleem.help</h1> <p class="text-sm text-gray-700 font-light leading-snug">Education for Every Pakistani</p></div></section>  <div class="w-full flex justify-center">${validate_component(FlexBoxCom, "FlexBoxCom").$$render($$result, {}, {}, {})}</div></div> `;
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-DElvofiV.js.map
+//# sourceMappingURL=_page.svelte-qVxRPDvw.js.map
