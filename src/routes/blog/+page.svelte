@@ -1,30 +1,44 @@
 <script>
-  // Optional logic here
+  // Optional client-side logic
 </script>
 
-<div class="min-h-screen w-full bg-[#1e1e1e] text-white px-6 py-8">
-  <h1 class="text-2xl font-bold text-[#90caf9] mb-2">📚 Blog Index</h1>
-  <p class="text-sm text-gray-400 mb-1 italic">Education for Every Pakistani</p>
+<svelte:head>
+  <title>taleem.help : Education for Every Pakistani</title>
+</svelte:head>
 
-  <hr class="border-t border-[#444] my-6" />
+<!-- Blog Navbar -->
+<nav class="bg-[#fff3cd] shadow-sm py-3 px-6 sticky top-0 z-50">
+  <div class="max-w-5xl mx-auto flex justify-between items-center">
+    <span class="text-lg font-semibold">taleem.help : Education for Every Pakistani</span>
+    <a href="/" class="text-[#0077b6] hover:underline font-medium">🏠 Back to Home</a>
+  </div>
+</nav>
 
- 
+<!-- Blog Content -->
+<main class="max-w-3xl mx-auto py-10 px-6">
+  <header class="mb-10 text-center">
+    <h1 class="text-4xl font-bold text-[#ffb703] mb-2">📚 Blog Library</h1>
+    <p class="text-md italic text-gray-600">Inspiration and knowledge for every learner</p>
+  </header>
 
-  <ul class="space-y-4">
-    <li>
-      <a href="/blog/future-in-the-ai-era-for--pakistani-students.html" class="text-[#90caf9] hover:underline text-lg font-medium">
-        📢 Future in the AI Era – For the Pakistani students
+  <ul class="space-y-6">
+    <li class="bg-[#f8f2dd] p-5 rounded-lg shadow hover:shadow-md transition">
+      <a href="/blog/future-in-the-ai-era-for--pakistani-students.html" class="text-2xl text-[#023047] font-semibold hover:underline">
+        📢 Future in the AI Era – For the Pakistani Students
       </a>
+      <p class="text-sm text-gray-500 mt-1">Explore how AI is shaping education for the next generation.</p>
     </li>
-    <li>
-      <a href="/blog/devops/installing_nginx.html" class="text-[#90caf9] hover:underline text-lg font-medium">
+
+    <li class="bg-[#f8f2dd] p-5 rounded-lg shadow hover:shadow-md transition">
+      <a href="/blog/devops/installing_nginx.html" class="text-2xl text-[#023047] font-semibold hover:underline">
         ⚙️ Installing NginX on Server
       </a>
+      <p class="text-sm text-gray-500 mt-1">Step-by-step guide for setting up your server environment.</p>
     </li>
-    <!-- More links... -->
+    <!-- Add more blog entries here -->
   </ul>
 
-  <hr class="border-t border-[#444] my-8" />
-
-  <p class="text-xs text-gray-500">📝 Curated by Taleem.Help • Updated regularly</p>
-</div>
+  <footer class="mt-12 text-center text-xs text-gray-500">
+    📝 Curated by Taleem.Help • Updated regularly
+  </footer>
+</main>
