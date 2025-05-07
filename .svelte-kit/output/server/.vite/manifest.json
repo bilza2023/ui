@@ -10,6 +10,13 @@
   "_CoreItemsMap.js": {
     "file": "chunks/CoreItemsMap.js"
   },
+  "_Nav.js": {
+    "file": "chunks/Nav.js",
+    "imports": [
+      "_ssr.js",
+      "_client.js"
+    ]
+  },
   "_Player.svelte_svelte_type_style_lang.js": {
     "file": "_app/immutable/assets/Player.0YQbNFlR.css",
     "src": "_Player.svelte_svelte_type_style_lang.js"
@@ -78,7 +85,7 @@
   },
   "src/routes/+layout.svelte": {
     "css": [
-      "_app/immutable/assets/_layout.DRk1_xWl.css"
+      "_app/immutable/assets/_layout.415qTqLo.css"
     ],
     "file": "entries/pages/_layout.svelte.js",
     "imports": [
@@ -93,7 +100,7 @@
     "file": "entries/pages/_page.svelte.js",
     "imports": [
       "_ssr.js",
-      "_client.js"
+      "_Nav.js"
     ],
     "isEntry": true,
     "src": "src/routes/+page.svelte"
@@ -148,7 +155,8 @@
   "src/routes/courses/ai/+page.svelte": {
     "file": "entries/pages/courses/ai/_page.svelte.js",
     "imports": [
-      "_ssr.js"
+      "_ssr.js",
+      "_Nav.js"
     ],
     "isEntry": true,
     "src": "src/routes/courses/ai/+page.svelte"
