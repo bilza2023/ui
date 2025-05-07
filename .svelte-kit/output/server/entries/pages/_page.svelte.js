@@ -8,11 +8,11 @@ const FlexBoxCom = create_ssr_component(($$result, $$props, $$bindings, slots) =
       url: "/courses/ai"
     },
     {
-      src: "/brand/math4.webp",
+      src: "/brand/english9th.webp",
       url: "/courses/ai"
     },
     {
-      src: "/brand/math2.webp",
+      src: "/brand/ai101.webp",
       url: "/courses/ai"
     },
     {
@@ -20,7 +20,7 @@ const FlexBoxCom = create_ssr_component(($$result, $$props, $$bindings, slots) =
       url: "/courses/ai"
     },
     {
-      src: "/brand/it.webp",
+      src: "/brand/math2.webp",
       url: "/courses/ai"
     },
     {

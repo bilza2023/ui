@@ -1,10 +1,10 @@
 <script>
    let thumbnails = [
   { src: "/brand/math3.webp", url: "/courses/ai" },
-  { src: "/brand/math4.webp", url: "/courses/ai" },
-  { src: "/brand/math2.webp", url: "/courses/ai" },
+  { src: "/brand/english9th.webp", url: "/courses/ai" },
+  { src: "/brand/ai101.webp", url: "/courses/ai" },
   { src: "/brand/ai4.webp", url: "/courses/ai" },
-  { src: "/brand/it.webp", url: "/courses/ai" },
+  { src: "/brand/math2.webp", url: "/courses/ai" },
   { src: "/brand/math_class9.webp", url: "/courses/ai" },
 ];
 
