@@ -18,14 +18,14 @@
     </script>
                 <!-- ******************************** -->
     <!-- decided not to use NavBar comp -->
-    <div class='flex justify-between items-center p-3 px-6 m-0 bg-[#987038] shadow-sm'>
+    <div class='flex justify-between items-center p-3 px-6 m-0 bg-[#c4a77f] shadow-sm'>
   
         <div class='flex'>
         
             <Logo
             url="/"
-            bg="bg-[#987038]"
-            hoverBg="hover:bg-[#bfa074]"
+            bg="bg-[#c4a77f]"
+            hoverBg="hover:bg-[#bc9661]"
             titleColor="text-gray-900"
           />
           

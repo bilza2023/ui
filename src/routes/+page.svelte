@@ -3,7 +3,7 @@
     import FlexBoxCom from "../lib/appComps/FlexBoxCom.svelte";  
   </script>
   
-  <div class="min-h-screen h-full bg-[#cbad84]">
+  <div class="min-h-screen h-full bg-[#d5c3ab]">
     <!-- dbc6ab -->
     <Nav />
   
