@@ -3,21 +3,35 @@
     import { draw as Player } from './slimPlayer/Player';
     import Assets from './slimPlayer/assets/Assets';
     import Nav from './Nav.svelte';
-    import slideModules from '$lib/slides/index.js';
-    import { page } from '$app/stores';
+    // import slideModules from '$lib/slides/index.js';
+    // import { page } from '$app/stores';
   
     let canvasEl: HTMLCanvasElement;
     let currentIndex = 0;
 
+    const slides = [
+  {
+    uuid: "test-1",
+    name: "Slide 1",
+    background: { backgroundImage: "black_mat", backgroundColor: "#000000" },
+    items: [
+      { type: "text", text: "This is Slide 1", x: 100, y: 100, fontSize: 48, color: "yellow" },
+      { type: "sprite", x: 600, y: 80, width: 120, height: 120, spriteName: "students", selectedItem: "girl_waving" }
+    ]
+  },
+  {
+    uuid: "test-2",
+    name: "Slide 2",
+    background: { backgroundImage: "black_mat", backgroundColor: "#000000" },
+    items: [
+      { type: "text", text: "This is Slide 2", x: 100, y: 100, fontSize: 48, color: "yellow" },
+      { type: "sprite", x: 100, y: 200, width: 150, height: 150, spriteName: "students", selectedItem: "girl_waving" },
+      { type: "text", text: "Sprite rendered from 'students'", x: 300, y: 240, fontSize: 28, color: "cyan" }
+    ]
+  }
+];
 
-    let slides = [];
 
-$: {
-  const name = $page.url.searchParams.get("presentation") || "intro";
-  const module = slideModules[name];
-  if (!module) throw new Error(`Unknown presentation: ${name}`);
-  slides = module();
-}
   
     // const slides = slideModules.intro();
     const assets = new Assets();

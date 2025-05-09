@@ -1,5 +1,4 @@
-import { c as create_ssr_component, b as subscribe, v as validate_component, d as add_attribute } from "../../../chunks/ssr.js";
-import { p as page } from "../../../chunks/stores.js";
+import { c as create_ssr_component, v as validate_component, d as add_attribute } from "../../../chunks/ssr.js";
 function drawBg(item, drawCtx, assets) {
   drawCtx.ctx().globalAlpha = item.opacity;
   const width = drawCtx.getCanvasWidth();
@@ -1399,260 +1398,77 @@ const Nav = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$result.css.add(css$1);
   return `<nav class="svelte-1j9s01z"><div class="controls svelte-1j9s01z"><button title="Previous Slide" class="svelte-1j9s01z" data-svelte-h="svelte-1qbn5iu">⟵</button> <button title="Next Slide" class="svelte-1j9s01z" data-svelte-h="svelte-1m6dj1j">⟶</button></div> <div class="brand svelte-1j9s01z" data-svelte-h="svelte-1ygj3it">taleem.help</div> </nav>`;
 });
-function uuid() {
-  if (typeof crypto !== "undefined" && crypto.getRandomValues) {
-    return ("10000000-1000-4000-8000" + -1e11).replace(
-      /[018]/g,
-      (c) => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-    );
-  }
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === "x" ? r : r & 3 | 8;
-    return v.toString(16);
-  });
-}
-function createDefaultBackground() {
-  return {
-    color: "gray",
-    opacity: 1,
-    backgroundColor: "#ffffff",
-    // visible only if no backgroundImage
-    backgroundImage: "black_mat",
-    // can be null to fallback to color
-    showGrid: false,
-    cellHeight: 25,
-    cellWidth: 25,
-    gridLineWidth: 1,
-    gridLineColor: "black"
-  };
-}
-function createText(props = {}) {
-  return {
-    uuid: uuid(),
-    type: "text",
-    name: `text-${Date.now()}`,
-    text: "Add text..",
-    x: 100,
-    y: 100,
-    fontSize: 30,
-    fontFamily: "Arial",
-    // enum is advisory only
-    color: "black",
-    opacity: 1,
-    rotation: 0,
-    width: 0,
-    // computed at draw time
-    height: 0,
-    // computed at draw time
-    ...props
-  };
-}
-function createCircle(props = {}) {
-  return {
-    uuid: uuid(),
-    type: "circle",
-    name: `circle-${Date.now()}`,
-    x: 100,
-    y: 100,
-    radius: 50,
-    startAngle: 0,
-    endAngle: 2 * Math.PI,
-    lineWidth: 1,
-    dash: 0,
-    gap: 0,
-    filled: true,
-    color: "red",
-    opacity: 1,
-    ...props
-  };
-}
-function createRectangle(props = {}) {
-  return {
-    uuid: uuid(),
-    type: "rectangle",
-    name: `rectangle-${Date.now()}`,
-    x: 100,
-    y: 100,
-    width: 150,
-    height: 100,
-    rotation: 0,
-    filled: true,
-    lineWidth: 1,
-    dash: 0,
-    gap: 0,
-    color: "black",
-    opacity: 1,
-    ...props
-  };
-}
-function createTriangle(props = {}) {
-  return {
-    uuid: uuid(),
-    type: "triangle",
-    name: `triangle-${Date.now()}`,
-    x1: 100,
-    y1: 100,
-    x2: 50,
-    y2: 200,
-    x3: 200,
-    y3: 200,
-    rotation: 0,
-    lineWidth: 2,
-    filled: true,
-    dash: 0,
-    gap: 0,
-    color: "red",
-    opacity: 1,
-    ...props
-  };
-}
-function createImage(props = {}) {
-  return {
-    uuid: uuid(),
-    type: "image",
-    name: `image-${Date.now()}`,
-    x: 50,
-    y: 50,
-    width: 200,
-    height: 200,
-    src: "drops.png",
-    // must be found in assets or fallback shown
-    color: "black",
-    rotation: 0,
-    opacity: 1,
-    ...props
-  };
-}
-function createSprite(props = {}) {
-  return {
-    uuid: uuid(),
-    type: "sprite",
-    name: `sprite-${Date.now()}`,
-    x: 100,
-    y: 100,
-    width: 200,
-    height: 200,
-    src: "people",
-    // must match an Assets sprite name
-    selectedItem: "man_tblt_stndg",
-    // item name from sprite sheet
-    rotation: 0,
-    opacity: 1,
-    ...props
-  };
-}
-function createRay(props = {}) {
-  return {
-    uuid: uuid(),
-    type: "ray",
-    name: `ray-${Date.now()}`,
-    x1: 150,
-    y1: 150,
-    x2: 350,
-    y2: 250,
-    arrowWidth: 8,
-    arrowHeight: 12,
-    startArrow: true,
-    endArrow: true,
-    lineWidth: 2,
-    dash: 0,
-    gap: 0,
-    color: "blue",
-    opacity: 1,
-    ...props
-  };
-}
-class SlideBuilder {
-  constructor(name = "Untitled Slide") {
-    this.uuid = uuid();
-    this.name = name;
-    this.background = createDefaultBackground();
-    this.items = [];
-  }
-  setBackground(overrides = {}) {
-    Object.assign(this.background, overrides);
-    return this;
-  }
-  addText(props = {}) {
-    this.items.push(createText(props));
-    return this;
-  }
-  addCircle(props = {}) {
-    this.items.push(createCircle(props));
-    return this;
-  }
-  addRectangle(props = {}) {
-    this.items.push(createRectangle(props));
-    return this;
-  }
-  addTriangle(props = {}) {
-    this.items.push(createTriangle(props));
-    return this;
-  }
-  addImage(props = {}) {
-    this.items.push(createImage(props));
-    return this;
-  }
-  addSprite(props = {}) {
-    this.items.push(createSprite(props));
-    return this;
-  }
-  addRay(props = {}) {
-    this.items.push(createRay(props));
-    return this;
-  }
-  build() {
-    return {
-      uuid: this.uuid,
-      name: this.name,
-      background: this.background,
-      items: this.items
-    };
-  }
-}
-function intro() {
-  const slides = [];
-  const s1 = new SlideBuilder("Intro 1");
-  s1.setBackground({ backgroundImage: "black_mat" });
-  s1.addText({ text: "Welcome to taleem.help", x: 100, y: 100, fontSize: 50, color: "yellow" });
-  slides.push(s1.build());
-  const s2 = new SlideBuilder("Intro 2");
-  s2.setBackground({ backgroundImage: "black_mat" });
-  s2.addText({ text: "Your Journey Starts Here", x: 100, y: 180, fontSize: 40, color: "lime" });
-  slides.push(s2.build());
-  return slides;
-}
-function quotes() {
-  const slides = [];
-  const s1 = new SlideBuilder("Quote 1");
-  s1.setBackground({ backgroundImage: "black_mat" });
-  s1.addText({ text: `"Education is the passport to the future,"`, x: 100, y: 180, fontSize: 36, color: "cyan" });
-  s1.addText({ text: `"for tomorrow belongs to those who prepare for it today."`, x: 100, y: 230, fontSize: 36, color: "cyan" });
-  s1.addText({ text: "— Malcolm X", x: 500, y: 290, fontSize: 22, color: "lime" });
-  slides.push(s1.build());
-  const s2 = new SlideBuilder("Quote 2");
-  s2.setBackground({ backgroundImage: "black_mat" });
-  s2.addText({ text: `"The beautiful thing about learning is that nobody"`, x: 80, y: 180, fontSize: 34, color: "yellow" });
-  s2.addText({ text: `"can take it away from you."`, x: 80, y: 230, fontSize: 34, color: "yellow" });
-  s2.addText({ text: "— B.B. King", x: 480, y: 280, fontSize: 22, color: "orange" });
-  slides.push(s2.build());
-  return slides;
-}
-const slideModules = {
-  intro,
-  quotes
-};
 const css = {
   code: "main.svelte-1l83tsm{height:calc(100vh - 60px);background-color:#4c4545;padding:1rem;box-sizing:border-box;display:flex;justify-content:center;align-items:center}canvas.svelte-1l83tsm{width:100%;height:100%;aspect-ratio:16 / 9;max-width:100%;max-height:100%;background:white;border:2px solid #555;image-rendering:pixelated}",
   map: null
 };
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $page, $$unsubscribe_page;
-  $$unsubscribe_page = subscribe(page, (value) => $page = value);
   let canvasEl;
   let currentIndex = 0;
-  let slides = [];
+  const slides = [
+    {
+      uuid: "test-1",
+      name: "Slide 1",
+      background: {
+        backgroundImage: "black_mat",
+        backgroundColor: "#000000"
+      },
+      items: [
+        {
+          type: "text",
+          text: "This is Slide 1",
+          x: 100,
+          y: 100,
+          fontSize: 48,
+          color: "yellow"
+        },
+        {
+          type: "sprite",
+          x: 600,
+          y: 80,
+          width: 120,
+          height: 120,
+          spriteName: "students",
+          selectedItem: "girl_waving"
+        }
+      ]
+    },
+    {
+      uuid: "test-2",
+      name: "Slide 2",
+      background: {
+        backgroundImage: "black_mat",
+        backgroundColor: "#000000"
+      },
+      items: [
+        {
+          type: "text",
+          text: "This is Slide 2",
+          x: 100,
+          y: 100,
+          fontSize: 48,
+          color: "yellow"
+        },
+        {
+          type: "sprite",
+          x: 100,
+          y: 200,
+          width: 150,
+          height: 150,
+          spriteName: "students",
+          selectedItem: "girl_waving"
+        },
+        {
+          type: "text",
+          text: "Sprite rendered from 'students'",
+          x: 300,
+          y: 240,
+          fontSize: 28,
+          color: "cyan"
+        }
+      ]
+    }
+  ];
   const assets = new Assets();
   function renderSlide(index) {
     const ratio = window.devicePixelRatio || 1;
@@ -1681,16 +1497,6 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     renderSlide(currentIndex);
   }
   $$result.css.add(css);
-  {
-    {
-      const name = $page.url.searchParams.get("presentation") || "intro";
-      const module = slideModules[name];
-      if (!module)
-        throw new Error(`Unknown presentation: ${name}`);
-      slides = module();
-    }
-  }
-  $$unsubscribe_page();
   return `${validate_component(Nav, "Nav").$$render($$result, { onNext: next, onPrev: prev }, {}, {})} <main class="svelte-1l83tsm"><canvas width="1000" height="562" class="svelte-1l83tsm"${add_attribute("this", canvasEl, 0)}></canvas> </main>`;
 });
 export {
