@@ -1407,64 +1407,50 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let currentIndex = 0;
   const slides = [
     {
-      uuid: "test-1",
+      uuid: "simple-1",
       name: "Slide 1",
-      background: {
-        backgroundImage: null,
-        backgroundColor: "green"
-      },
+      background: {},
       items: [
         {
           type: "text",
-          text: "This is Slide 1",
+          text: "Minimal Slide 1",
           x: 100,
           y: 100,
           fontSize: 48,
-          color: "yellow"
+          color: "blue"
         },
         {
-          type: "sprite",
-          x: 600,
-          y: 80,
-          width: 120,
-          height: 120,
-          spriteName: "students",
-          selectedItem: "girl_waving"
+          type: "circle",
+          x: 400,
+          y: 200,
+          radius: 60,
+          color: "red",
+          filled: true
         }
       ]
     },
     {
-      uuid: "test-2",
+      uuid: "simple-2",
       name: "Slide 2",
-      background: {
-        backgroundImage: "black_mat",
-        backgroundColor: "#000000"
-      },
+      background: {},
       items: [
         {
           type: "text",
-          text: "This is Slide 2",
+          text: "Second Slide",
           x: 100,
           y: 100,
           fontSize: 48,
-          color: "yellow"
+          color: "green"
         },
         {
-          type: "sprite",
-          x: 100,
-          y: 200,
-          width: 150,
-          height: 150,
-          spriteName: "students",
-          selectedItem: "girl_waving"
-        },
-        {
-          type: "text",
-          text: "Sprite rendered from 'students'",
+          type: "rectangle",
           x: 300,
-          y: 240,
-          fontSize: 28,
-          color: "cyan"
+          y: 180,
+          width: 200,
+          height: 100,
+          fillColor: "orange",
+          borderColor: "black",
+          borderWidth: 2
         }
       ]
     }
