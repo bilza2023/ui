@@ -10,11 +10,7 @@
     
     
     let isLogin = false;
-    onMount( async ()=>{
-        // debugger;
-        isLogin = chqLogin();
-    });
-    
+
     </script>
                 <!-- ******************************** -->
     <!-- decided not to use NavBar comp -->
