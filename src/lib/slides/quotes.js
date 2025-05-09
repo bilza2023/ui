@@ -1,4 +1,5 @@
-import SlideBuilder from '$lib/slimPlayer/api/SlideBuilder.js';
+import SlideBuilder from '../slimPlayer/api/SlideBuilder.js';
+
 
 export default function quotes() {
   const slides = [];
