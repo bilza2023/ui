@@ -3,30 +3,56 @@
     export let onPrev: () => void;
   </script>
   
-  <header>
-    <button on:click={onPrev}>⬅️ Prev</button>
-    <button on:click={onNext}>Next ➡️</button>
-  </header>
+  <nav>
+    <div class="controls">
+      <button on:click={onPrev} title="Previous Slide">⟵</button>
+      <button on:click={onNext} title="Next Slide">⟶</button>
+    </div>
+  
+    <div class="brand">
+      taleem.help
+    </div>
+  </nav>
   
   <style>
-    header {
-      background: #1e1e1e;
-      padding: 1rem;
-      text-align: center;
+    nav {
       display: flex;
-      justify-content: center;
-      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+      background: #1e1e1e;
+      padding: 0.5rem 1rem;
+      height: 60px;
       border-bottom: 1px solid #333;
+      font-family: system-ui, sans-serif;
+      font-size: 1rem;
+    }
+  
+    .controls {
+      display: flex;
+      gap: 0.5rem;
     }
   
     button {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      background: #ff8800;
+      background: transparent;
       border: none;
-      border-radius: 4px;
-      color: #111;
+      font-size: 1.25rem;
+      color: #ccc;
       cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+  
+    button:hover {
+      background: #333;
+      color: #ff8800;
+    }
+  
+    .brand {
+      color: #aaa;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
     }
   </style>
   
