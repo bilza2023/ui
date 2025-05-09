@@ -69,6 +69,17 @@ const Nav = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     },
     {},
     {}
+  )} ${validate_component(NavBtn, "NavBtn").$$render(
+    $$result,
+    {
+      title: "Slides",
+      icon: "📷",
+      url: "/presentations",
+      bgColor: "bg-[#d6b88d]",
+      titleColor: "text-gray-900"
+    },
+    {},
+    {}
   )}   </div> </div>`;
 });
 export {

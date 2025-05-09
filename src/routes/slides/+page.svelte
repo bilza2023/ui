@@ -3,30 +3,14 @@
   import { draw as Player } from '$lib/slimPlayer/Player.js';
   import Assets from '$lib/slimPlayer/assets/Assets.js';
   import Nav from './Nav.svelte';
+  import slideModules from '$lib/slides/index.js';
+  import { page } from '$app/stores';
+
 
   let canvasEl: HTMLCanvasElement;
   let currentIndex = 0;
 
-  const slides = [
-    {
-      uuid: "simple-1",
-      name: "Slide 1",
-      background: {},
-      items: [
-        { type: "text", text: "Minimal Slide 1", x: 100, y: 100, fontSize: 48, color: "blue" },
-        { type: "circle", x: 400, y: 200, radius: 60, color: "red", filled: true }
-      ]
-    },
-    {
-      uuid: "simple-2",
-      name: "Slide 2",
-      background: {},
-      items: [
-        { type: "text", text: "Second Slide", x: 100, y: 100, fontSize: 48, color: "green" },
-        { type: "rectangle", x: 300, y: 180, width: 200, height: 100, fillColor: "orange", borderColor: "black", borderWidth: 2 }
-      ]
-    }
-  ];
+  let slides = [];
 
   const assets = new Assets();
 
@@ -69,10 +53,15 @@
   }
 
   onMount(() => {
-    requestAnimationFrame(() => {
-      if (canvasEl) renderSlide(currentIndex);
-    });
+  const name = $page.url.searchParams.get('presentation') || 'intro';
+  const module = slideModules[name];
+  slides = module ? module() : [];
+
+  requestAnimationFrame(() => {
+    if (canvasEl) renderSlide(currentIndex);
   });
+});
+
 </script>
 
 <Nav onNext={next} onPrev={prev} />
