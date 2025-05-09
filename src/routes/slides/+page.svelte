@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { draw as Player } from './slimPlayer/Player';
-    import Assets from './slimPlayer/assets/Assets';
+    import { draw as Player } from '../../lib/slimPlayer/Player';
+    import Assets from '../../lib/slimPlayer/assets/Assets';
     import Nav from './Nav.svelte';
     // import slideModules from '$lib/slides/index.js';
     // import { page } from '$app/stores';
@@ -13,7 +13,7 @@
   {
     uuid: "test-1",
     name: "Slide 1",
-    background: { backgroundImage: "black_mat", backgroundColor: "#000000" },
+    background: { backgroundImage: null, backgroundColor: "green" },
     items: [
       { type: "text", text: "This is Slide 1", x: 100, y: 100, fontSize: 48, color: "yellow" },
       { type: "sprite", x: 600, y: 80, width: 120, height: 120, spriteName: "students", selectedItem: "girl_waving" }

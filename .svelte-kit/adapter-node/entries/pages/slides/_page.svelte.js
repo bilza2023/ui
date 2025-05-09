@@ -1410,8 +1410,8 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       uuid: "test-1",
       name: "Slide 1",
       background: {
-        backgroundImage: "black_mat",
-        backgroundColor: "#000000"
+        backgroundImage: null,
+        backgroundColor: "green"
       },
       items: [
         {
