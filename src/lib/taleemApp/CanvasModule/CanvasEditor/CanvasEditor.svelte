@@ -50,7 +50,7 @@
   }
 
   function log() {
-    let slide = { slideExtra: background, items: items.getItems() };
+    let slide = { background, items: items.getItems() };
     const preparedSlide = "export const slide = " + JSON.stringify(slide);
     console.log(preparedSlide);
   }
