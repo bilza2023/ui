@@ -3,6 +3,6 @@
 export const index = 10;
 let component_cache;
 export const component = async () => component_cache ??= (await import('../entries/pages/courses/fbise9math/_page.svelte.js')).default;
-export const imports = ["_app/immutable/nodes/10.BTCCjg6F.js","_app/immutable/chunks/scheduler.CS4dGvIb.js","_app/immutable/chunks/index.DciHV_FM.js","_app/immutable/chunks/Nav.BSBIUfk6.js","_app/immutable/chunks/entry.DmS8JHFC.js","_app/immutable/chunks/index.Cst561re.js"];
+export const imports = ["_app/immutable/nodes/10.CIAT5B0T.js","_app/immutable/chunks/scheduler.CS4dGvIb.js","_app/immutable/chunks/index.DciHV_FM.js","_app/immutable/chunks/Nav.Cg1FmT3b.js","_app/immutable/chunks/entry.U7-PB6ci.js","_app/immutable/chunks/index.Cst561re.js"];
 export const stylesheets = [];
 export const fonts = [];

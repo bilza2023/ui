@@ -64,11 +64,18 @@
   "_ssr.js": {
     "file": "chunks/ssr.js"
   },
+  "_stores.js": {
+    "file": "chunks/stores.js",
+    "imports": [
+      "_ssr.js",
+      "_client.js"
+    ]
+  },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
     "file": "entries/fallbacks/error.svelte.js",
     "imports": [
       "_ssr.js",
-      "_client.js"
+      "_stores.js"
     ],
     "isEntry": true,
     "src": "node_modules/@sveltejs/kit/src/runtime/components/error.svelte"
@@ -85,7 +92,7 @@
   },
   "src/routes/+layout.svelte": {
     "css": [
-      "_app/immutable/assets/_layout.6HgQFJ2h.css"
+      "_app/immutable/assets/_layout.CmtfcyV8.css"
     ],
     "file": "entries/pages/_layout.svelte.js",
     "imports": [
@@ -218,6 +225,18 @@
     "isEntry": true,
     "src": "src/routes/player/+page.svelte"
   },
+  "src/routes/slides/+page.svelte": {
+    "css": [
+      "_app/immutable/assets/_page.DemUfFmc.css"
+    ],
+    "file": "entries/pages/slides/_page.svelte.js",
+    "imports": [
+      "_ssr.js",
+      "_stores.js"
+    ],
+    "isEntry": true,
+    "src": "src/routes/slides/+page.svelte"
+  },
   "src/routes/static_canvas_player/+page.svelte": {
     "file": "entries/pages/static_canvas_player/_page.svelte.js",
     "imports": [
@@ -253,5 +272,13 @@
     ],
     "isEntry": true,
     "src": "src/routes/syllabus/+page.svelte"
+  },
+  "src/routes/template-editor/+page.svelte": {
+    "file": "entries/pages/template-editor/_page.svelte.js",
+    "imports": [
+      "_ssr.js"
+    ],
+    "isEntry": true,
+    "src": "src/routes/template-editor/+page.svelte"
   }
 }
