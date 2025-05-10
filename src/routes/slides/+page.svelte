@@ -26,8 +26,11 @@
       return;
     }
 
-    canvasEl.width = width * ratio;
-    canvasEl.height = height * ratio;
+    // canvasEl.width = width * ratio;
+    // canvasEl.height = height * ratio;
+
+    canvasEl.width = 1000;
+    canvasEl.height = 562;
 
     const ctx = canvasEl.getContext("2d");
     if (!ctx) return;
@@ -88,11 +91,15 @@
   }
 
   canvas {
-    width: 100%;
-    height: 100%;
+    /* width: 100%; */
+    /* height: 100%; */
+    width: 1000px;
+    height: 562px;
+  
     aspect-ratio: 16 / 9;
     max-width: 100%;
     max-height: 100%;
+
     background: white;
     border: none;
     image-rendering: pixelated;

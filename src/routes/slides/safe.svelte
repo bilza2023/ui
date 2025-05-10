@@ -1,30 +1,36 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { draw as Player } from "./slimPlayer/Player";
-  import Assets from "./slimPlayer/assets/Assets";
-  import Nav from "./Nav.svelte";
-  import slideModules from "$lib/slides/index.js";
-  import { page } from "$app/stores";
+  import { onMount } from 'svelte';
+  import { draw as Player } from '$lib/slimPlayer/Player.js';
+  import Assets from '$lib/slimPlayer/assets/Assets.js';
+  import Nav from './Nav.svelte';
+  import slideModules from '$lib/slides/index.js';
+  import { page } from '$app/stores';
+
 
   let canvasEl: HTMLCanvasElement;
   let currentIndex = 0;
 
   let slides = [];
 
-  $: {
-    const name = $page.url.searchParams.get("presentation") || "intro";
-    const module = slideModules[name];
-    if (!module) throw new Error(`Unknown presentation: ${name}`);
-    slides = module();
-  }
-
-  // const slides = slideModules.intro();
   const assets = new Assets();
 
   function renderSlide(index: number) {
+    if (!canvasEl) return;
+
     const ratio = window.devicePixelRatio || 1;
-    canvasEl.width = canvasEl.clientWidth * ratio;
-    canvasEl.height = canvasEl.clientHeight * ratio;
+    const width = canvasEl.clientWidth;
+    const height = canvasEl.clientHeight;
+
+    if (width === 0 || height === 0) {
+      console.warn("Canvas has zero size, skipping render.");
+      return;
+    }
+
+    // canvasEl.width = width * ratio;
+    // canvasEl.height = height * ratio;
+
+    canvasEl.width = 1000;
+    canvasEl.height = 562;
 
     const ctx = canvasEl.getContext("2d");
     if (!ctx) return;
@@ -32,7 +38,7 @@
     const drawCtx = {
       ctx: () => ctx,
       getCanvasWidth: () => canvasEl.width,
-      getCanvasHeight: () => canvasEl.height,
+      getCanvasHeight: () => canvasEl.height
     };
 
     const slide = slides[index];
@@ -50,8 +56,15 @@
   }
 
   onMount(() => {
-    renderSlide(currentIndex);
+  const name = $page.url.searchParams.get('presentation') || 'intro';
+  const module = slideModules[name];
+  slides = module ? module() : [];
+
+  requestAnimationFrame(() => {
+    if (canvasEl) renderSlide(currentIndex);
   });
+});
+
 </script>
 
 <Nav onNext={next} onPrev={prev} />
@@ -61,16 +74,15 @@
 </main>
 
 <style>
-  html,
-  body {
+  html, body {
     margin: 0;
     height: 100%;
     overflow: hidden;
   }
 
   main {
-    height: calc(100vh - 60px); /* header height */
-    background-color: #4c4545; /* match body background */
+    height: calc(100vh - 60px);
+    background-color: #2a2a2a;
     padding: 1rem;
     box-sizing: border-box;
     display: flex;
@@ -79,13 +91,17 @@
   }
 
   canvas {
-    width: 100%;
-    height: 100%;
+    /* width: 100%; */
+    /* height: 100%; */
+    width: 1000px;
+    height: 562px;
+  
     aspect-ratio: 16 / 9;
     max-width: 100%;
     max-height: 100%;
+
     background: white;
-    border: 2px solid #555;
+    border: none;
     image-rendering: pixelated;
   }
 </style>
