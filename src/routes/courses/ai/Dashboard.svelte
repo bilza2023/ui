@@ -3,15 +3,16 @@
   export let bgColor = "#FDF3E7";
   export let accentColor = "#C4A77F";
   export let themeClass = "theme-business";
-  
 </script>
 
 <div class="dashboard-wrapper {themeClass}">
   <div class="dashboard" style="--bg-color: {bgColor}; --accent-color: {accentColor}">
     {#each dashboardItems as item}
       <div class="tile">
-        <div class="icon">{item.icon}</div>
-        <div class="number">{item.number}</div>
+        <div class="icon-number">
+          <div class="icon">{item.icon}</div>
+          <div class="number">{item.number}</div>
+        </div>
         <div class="label">{item.title}</div>
       </div>
     {/each}
@@ -46,16 +47,24 @@
   transform: translateY(-2px);
 }
 
+.icon-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
 .icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.4rem;
+  font-size: 2.2rem;
+  margin: 0;
 }
 
 .number {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
   color: var(--accent-color);
-  margin-bottom: 0.25rem;
+  margin: 0;
 }
 
 .label {
