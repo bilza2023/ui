@@ -35,7 +35,7 @@ export const dictionary = {
 		"/contact": [8],
 		"/courses/ai": [9],
 		"/courses/fbise9math": [10],
-		"/courses/webdevelopment": [11],
+		"/courses/it": [11],
 		"/editor": [12],
 		"/player": [13],
 		"/presentations": [14],

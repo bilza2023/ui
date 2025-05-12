@@ -17,8 +17,24 @@
 
   <!-- Left Column -->
   <div class="bg-[#f3e8d9] p-6 rounded-xl shadow-inner flex flex-col space-y-6">
-    <SubjectCard />
-    <SubjectCard />
+    
+
+    <SubjectCard
+    heading="🧠 AI Learning Tracks"
+    description="Learn to use, build, and earn with modern AI tools. From prompt basics to system design and business automation — tailored for Pakistani learners."
+    link="/courses/ai"
+    buttonText="View AI Courses →"
+  />
+  
+
+    <SubjectCard
+  heading="💻 IT Learning Tracks"
+  description="Master practical IT skills like file handling, system setup, and website basics. For jobs, freelancing, and self-reliance."
+  link="/courses/it"
+  buttonText="View IT Courses →"
+/>
+
+
     <SubjectCard />
   </div>
 
