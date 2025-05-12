@@ -30,6 +30,30 @@
                 <!-- ******************************** -->
         <div class='flex'>
       
+          <NavBtn
+          title="AI"
+          icon="🧠 "
+          url="/courses/ai"
+          bgColor="bg-[#d6b88d]"
+          titleColor="text-gray-900"
+        />
+
+        <NavBtn
+        title="IT"
+        icon="🧰"
+        url="/courses/it"
+        bgColor="bg-[#d6b88d]"
+        titleColor="text-gray-900"
+      />
+
+      <NavBtn
+      title="FBISE"
+      icon="🇵🇰"
+      url="/courses/fbise"
+      bgColor="bg-[#d6b88d]"
+      titleColor="text-gray-900"
+    />
+
     
         <!-- <NavBtn title='Payment' icon = '🚀' url='/payment'/> -->
         <NavBtn
@@ -46,13 +70,6 @@
         bgColor="bg-[#d6b88d]"
         titleColor="text-gray-900"
       />
-        <!-- <NavBtn
-        title="Slides"
-        icon="📷"
-        url="/presentations"
-        bgColor="bg-[#d6b88d]"
-        titleColor="text-gray-900"
-      /> -->
       
        
         <!-- <NavBtn title='Payment' icon = '🚀' url='/payment'/> -->

@@ -1,7 +1,7 @@
 
 <script>
   import Nav from "../../../lib/appComps/Nav.svelte";
-  import AIBanner from "../../../lib/appComps/homepage/AIBanner.svelte";
+  import AIBanner from "./AIBanner.svelte";
   import AiCards from "./AiCards.svelte";
   import Dashboard from "./Dashboard.svelte";
   import AITrackTable from "./AITrackTable.svelte";

@@ -3,7 +3,7 @@
   <div class="banner">
     <div class="banner-image">
       <img
-        src="/brand/it.webp"
+        src="/brand/fbise-banner.webp"
         alt="AI Banner"
         class="banner-img"
       />

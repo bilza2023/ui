@@ -4,7 +4,7 @@
   <!-- Left: Image -->
   <div class="banner-image">
     <img
-      src="/brand/banner_brand_section.png"
+      src="/brand/taleem-banner2.webp"
       alt="Taleem Banner"
       class="banner-img"
     />
