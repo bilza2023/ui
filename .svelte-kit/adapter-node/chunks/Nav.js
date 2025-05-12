@@ -47,7 +47,40 @@ const Nav = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     },
     {},
     {}
-  )}</div>   <div class="flex"> ${validate_component(NavBtn, "NavBtn").$$render(
+  )}</div>   <div class="flex">${validate_component(NavBtn, "NavBtn").$$render(
+    $$result,
+    {
+      title: "AI",
+      icon: "🧠 ",
+      url: "/courses/ai",
+      bgColor: "bg-[#d6b88d]",
+      titleColor: "text-gray-900"
+    },
+    {},
+    {}
+  )} ${validate_component(NavBtn, "NavBtn").$$render(
+    $$result,
+    {
+      title: "IT",
+      icon: "🧰",
+      url: "/courses/it",
+      bgColor: "bg-[#d6b88d]",
+      titleColor: "text-gray-900"
+    },
+    {},
+    {}
+  )} ${validate_component(NavBtn, "NavBtn").$$render(
+    $$result,
+    {
+      title: "FBISE",
+      icon: "🇵🇰",
+      url: "/courses/fbise",
+      bgColor: "bg-[#d6b88d]",
+      titleColor: "text-gray-900"
+    },
+    {},
+    {}
+  )}  ${validate_component(NavBtn, "NavBtn").$$render(
     $$result,
     {
       title: "Contact",
@@ -64,17 +97,6 @@ const Nav = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       title: "Blog",
       icon: "📘",
       url: "/blog",
-      bgColor: "bg-[#d6b88d]",
-      titleColor: "text-gray-900"
-    },
-    {},
-    {}
-  )} ${validate_component(NavBtn, "NavBtn").$$render(
-    $$result,
-    {
-      title: "Slides",
-      icon: "📷",
-      url: "/presentations",
       bgColor: "bg-[#d6b88d]",
       titleColor: "text-gray-900"
     },

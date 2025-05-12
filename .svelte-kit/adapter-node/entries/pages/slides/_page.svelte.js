@@ -919,7 +919,7 @@ const Nav = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `<nav class="svelte-1j9s01z"><div class="controls svelte-1j9s01z"><button title="Previous Slide" class="svelte-1j9s01z" data-svelte-h="svelte-1qbn5iu">⟵</button> <button title="Next Slide" class="svelte-1j9s01z" data-svelte-h="svelte-1m6dj1j">⟶</button></div> <div class="brand svelte-1j9s01z" data-svelte-h="svelte-1ygj3it">taleem.help</div> </nav>`;
 });
 const css = {
-  code: "main.svelte-11n4lbe{height:calc(100vh - 60px);background-color:#2a2a2a;padding:1rem;box-sizing:border-box;display:flex;justify-content:center;align-items:center}canvas.svelte-11n4lbe{width:100%;height:100%;aspect-ratio:16 / 9;max-width:100%;max-height:100%;background:white;border:none;image-rendering:pixelated}",
+  code: "main.svelte-1sgcyul{height:calc(100vh - 60px);background-color:#2a2a2a;padding:1rem;box-sizing:border-box;display:flex;justify-content:center;align-items:center}canvas.svelte-1sgcyul{width:1000px;height:562px;aspect-ratio:16 / 9;max-width:100%;max-height:100%;background:white;border:none;image-rendering:pixelated}",
   map: null
 };
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -933,7 +933,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   }
   $$result.css.add(css);
   $$unsubscribe_page();
-  return `${validate_component(Nav, "Nav").$$render($$result, { onNext: next, onPrev: prev }, {}, {})} <main class="svelte-11n4lbe"><canvas width="1000" height="562" class="svelte-11n4lbe"${add_attribute("this", canvasEl, 0)}></canvas> </main>`;
+  return `${validate_component(Nav, "Nav").$$render($$result, { onNext: next, onPrev: prev }, {}, {})} <main class="svelte-1sgcyul"><canvas width="1000" height="562" class="svelte-1sgcyul"${add_attribute("this", canvasEl, 0)}></canvas> </main>`;
 });
 export {
   Page as default

@@ -92,7 +92,7 @@
   },
   "src/routes/+layout.svelte": {
     "css": [
-      "_app/immutable/assets/_layout.CmtfcyV8.css"
+      "_app/immutable/assets/_layout.DOkrol74.css"
     ],
     "file": "entries/pages/_layout.svelte.js",
     "imports": [
@@ -104,6 +104,9 @@
     "src": "src/routes/+layout.svelte"
   },
   "src/routes/+page.svelte": {
+    "css": [
+      "_app/immutable/assets/_page.DomwOJGt.css"
+    ],
     "file": "entries/pages/_page.svelte.js",
     "imports": [
       "_ssr.js",
@@ -169,6 +172,9 @@
     "src": "src/routes/contact/+page.svelte"
   },
   "src/routes/courses/ai/+page.svelte": {
+    "css": [
+      "_app/immutable/assets/_page.D5XnZNhC.css"
+    ],
     "file": "entries/pages/courses/ai/_page.svelte.js",
     "imports": [
       "_ssr.js",
@@ -177,23 +183,29 @@
     "isEntry": true,
     "src": "src/routes/courses/ai/+page.svelte"
   },
-  "src/routes/courses/fbise9math/+page.svelte": {
-    "file": "entries/pages/courses/fbise9math/_page.svelte.js",
+  "src/routes/courses/fbise/+page.svelte": {
+    "css": [
+      "_app/immutable/assets/_page.4CbeOD4n.css"
+    ],
+    "file": "entries/pages/courses/fbise/_page.svelte.js",
     "imports": [
       "_ssr.js",
       "_Nav.js"
     ],
     "isEntry": true,
-    "src": "src/routes/courses/fbise9math/+page.svelte"
+    "src": "src/routes/courses/fbise/+page.svelte"
   },
-  "src/routes/courses/webdevelopment/+page.svelte": {
-    "file": "entries/pages/courses/webdevelopment/_page.svelte.js",
+  "src/routes/courses/it/+page.svelte": {
+    "css": [
+      "_app/immutable/assets/_page.R_oPCqep.css"
+    ],
+    "file": "entries/pages/courses/it/_page.svelte.js",
     "imports": [
       "_ssr.js",
       "_Nav.js"
     ],
     "isEntry": true,
-    "src": "src/routes/courses/webdevelopment/+page.svelte"
+    "src": "src/routes/courses/it/+page.svelte"
   },
   "src/routes/editor/+page.svelte": {
     "css": [
