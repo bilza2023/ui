@@ -34,7 +34,7 @@ export const dictionary = {
 		"/canvas_slides": [6],
 		"/contact": [8],
 		"/courses/ai": [9],
-		"/courses/fbise9math": [10],
+		"/courses/fbise": [10],
 		"/courses/it": [11],
 		"/editor": [12],
 		"/player": [13],

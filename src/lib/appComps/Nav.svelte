@@ -46,13 +46,13 @@
         bgColor="bg-[#d6b88d]"
         titleColor="text-gray-900"
       />
-        <NavBtn
+        <!-- <NavBtn
         title="Slides"
         icon="📷"
         url="/presentations"
         bgColor="bg-[#d6b88d]"
         titleColor="text-gray-900"
-      />
+      /> -->
       
        
         <!-- <NavBtn title='Payment' icon = '🚀' url='/payment'/> -->

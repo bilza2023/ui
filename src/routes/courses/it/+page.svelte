@@ -40,4 +40,4 @@
   </div>
 
 <br><br>
-<!-- <Footer /> -->
+<Footer />

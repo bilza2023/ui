@@ -33,9 +33,14 @@
   link="/courses/it"
   buttonText="View IT Courses →"
 />
+    <SubjectCard
+  heading="🇵🇰 FEBISE - Federal Board Courses"
+  description="At the moment we also offer class 9th Math, Physics and English Classes."
+  link="/courses/fbise"
+  buttonText="View FBISE Courses →"
+/>
 
 
-    <SubjectCard />
   </div>
 
   <!-- Right Sidebar -->
