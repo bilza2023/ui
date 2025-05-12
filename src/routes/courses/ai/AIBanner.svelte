@@ -2,7 +2,7 @@
   <!-- Left: Image -->
   <div class="banner-image">
     <img
-      src="/brand/ai-home-thumbnail.webp"
+      src="/brand/ai.webp"
       alt="AI Banner"
       class="banner-img"
     />
