@@ -1,5 +1,4 @@
 import { n as noop, a as assign, i as identity, c as create_ssr_component, b as subscribe, o as onDestroy, v as validate_component, m as missing_component, d as add_attribute, e as each, f as escape, g as null_to_empty } from "../../chunks/ssr.js";
-import { t as toast } from "../../chunks/SvelteToast.svelte_svelte_type_style_lang.js";
 import { w as writable } from "../../chunks/index.js";
 const is_client = typeof window !== "undefined";
 let now = is_client ? () => window.performance.now() : () => Date.now();
@@ -28,6 +27,74 @@ function loop(callback) {
     }
   };
 }
+const defaults = {
+  duration: 4e3,
+  initial: 1,
+  next: 0,
+  pausable: false,
+  dismissable: true,
+  reversed: false,
+  intro: { x: 256 }
+};
+function createToast() {
+  const { subscribe: subscribe2, update } = writable(new Array());
+  const options = {};
+  let count = 0;
+  function _obj(obj) {
+    return obj instanceof Object;
+  }
+  function _init(target = "default", opts = {}) {
+    options[target] = opts;
+    return options;
+  }
+  function push(msg, opts) {
+    const param = {
+      target: "default",
+      ..._obj(msg) ? (
+        /** @type {SvelteToastOptions} */
+        msg
+      ) : { ...opts, msg }
+    };
+    const conf = options[param.target] || {};
+    const entry = {
+      ...defaults,
+      ...conf,
+      ...param,
+      theme: { ...conf.theme, ...param.theme },
+      classes: [...conf.classes || [], ...param.classes || []],
+      id: ++count
+    };
+    update((n) => entry.reversed ? [...n, entry] : [entry, ...n]);
+    return count;
+  }
+  function pop(id) {
+    update((n) => {
+      if (!n.length || id === 0)
+        return [];
+      if (typeof id === "function")
+        return n.filter((i) => id(i));
+      if (_obj(id))
+        return n.filter(
+          /** @type {SvelteToastOptions[]} i */
+          (i) => i.target !== id.target
+        );
+      const found = id || Math.max(...n.map((i) => i.id));
+      return n.filter((i) => i.id !== found);
+    });
+  }
+  function set(id, opts) {
+    const param = _obj(id) ? id : { ...opts, id };
+    update((n) => {
+      const idx = n.findIndex((i) => i.id === param.id);
+      if (idx > -1) {
+        n[idx] = { ...n[idx], ...param };
+      }
+      return n;
+    });
+  }
+  return { subscribe: subscribe2, push, pop, set, _init };
+}
+const toast = createToast();
 function is_date(obj) {
   return Object.prototype.toString.call(obj) === "[object Date]";
 }
@@ -72,7 +139,7 @@ function get_interpolator(a, b) {
   }
   throw new Error(`Cannot interpolate ${type} values`);
 }
-function tweened(value, defaults = {}) {
+function tweened(value, defaults2 = {}) {
   const store = writable(value);
   let task;
   let target_value = value;
@@ -89,7 +156,7 @@ function tweened(value, defaults = {}) {
       duration = 400,
       easing = identity,
       interpolate = get_interpolator
-    } = assign(assign({}, defaults), opts);
+    } = assign(assign({}, defaults2), opts);
     if (duration === 0) {
       if (previous_task) {
         previous_task.abort();

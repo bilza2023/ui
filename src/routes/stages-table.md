@@ -1,8 +1,0 @@
-# Presentation Production Pipeline – Top Level
-
-| Phase                         | Objective (why this phase exists)                                                            | Who does what                                                                                                                                    |
-| ----------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **1. Draft & Asset Plan**     | Break a chapter into slides and list every asset (text, images, diagrams, narration) needed. | **Mustafa:** outline slides & draft text<br>**Miss Amber:** compile required images/diagrams list<br>**You:** supervise scope & slide types      |
-| **2. Slide Assembly**         | Build each slide inside the editor with text and placeholder images.                         | **You:** set up slide templates & tech checks<br>**Mustafa:** paste content, structure slides<br>**Miss Amber:** upload/attach images            |
-| **3. Narration & Timing**     | Record narration and sync slide timings to it.                                               | **Miss Amber:** prep/record narration (or coordinate external VO)<br>**You:** align slide timings<br>**Mustafa:** QA that narration matches text |
-| **4. Final Review & Publish** | Ensure accuracy and quality, then publish or send back for fixes.                            | **All:** review content, images, narration, timing<br>**You (lead):** decide ✅ publish or 🕒 rework                                             |
