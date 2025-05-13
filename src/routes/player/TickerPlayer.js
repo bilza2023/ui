@@ -1,10 +1,13 @@
+
 import renderCanvasItems from './renderer/CanvasRenderer.js';
 import { getActiveSlide } from './SlideUtils.js';
 
 export default class TickerPlayer {
-  constructor({ app, slides }) {
+  constructor({ app, slidesData }) {
     this.app = app;
-    this.slides = slides;
+    this.slides = slidesData.slides;
+    this.designWidth = slidesData.designWidth;
+    this.designHeight = slidesData.designHeight;
     this.currentTime = 0;
     this.currentSlideId = null;
     this.interval = null;
@@ -37,7 +40,7 @@ export default class TickerPlayer {
 
     if (activeSlide.id !== this.currentSlideId) {
       this.currentSlideId = activeSlide.id;
-      renderCanvasItems(this.app, activeSlide.items);
+      renderCanvasItems(this.app, activeSlide.items, this.designWidth, this.designHeight);
     }
 
     if (this.currentTime >= this.slides.at(-1).endTime) {

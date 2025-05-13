@@ -1,9 +1,8 @@
-
 <script>
   import { onMount } from 'svelte';
   import * as PIXI from 'pixi.js';
   import TickerPlayer from './TickerPlayer.js';
-  import { slides } from './testSlides.js';
+  import { slidesData } from './testSlides.js';
 
   let player;
   let currentTime = 0;
@@ -17,10 +16,13 @@
 
     canvasContainer.appendChild(app.view);
 
-    player = new TickerPlayer({ app, slides });
+    player = new TickerPlayer({ app, slidesData });
 
+    // Update currentTime only while playing
     const interval = setInterval(() => {
-      currentTime = player.currentTime.toFixed(1);
+      if (player?.isPlaying) {
+        currentTime = player.currentTime.toFixed(1);
+      }
     }, 100);
 
     return () => clearInterval(interval);
@@ -40,6 +42,7 @@
   };
 </script>
 
+<!-- Full dark background -->
 <div class="min-h-screen bg-gray-900 text-white">
   <!-- Toolbar -->
   <div class="w-full px-4 py-2 flex justify-between items-center">
@@ -54,7 +57,7 @@
     <div class="font-bold text-lg text-right">🧪 Slide Player</div>
   </div>
 
-  <!-- Canvas Area -->
+  <!-- Responsive Canvas Area -->
   <div class="flex justify-center mt-4">
     <div
       bind:this={canvasContainer}
