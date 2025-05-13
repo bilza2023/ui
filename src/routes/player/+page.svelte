@@ -1,3 +1,4 @@
+
 <script>
   import { onMount } from 'svelte';
   import * as PIXI from 'pixi.js';
@@ -6,15 +7,15 @@
 
   let player;
   let currentTime = 0;
+  let canvasContainer;
 
   onMount(() => {
     const app = new PIXI.Application({
-      width: 800,
-      height: 400,
+      resizeTo: canvasContainer,
       backgroundColor: 0x1e1e1e,
     });
 
-    document.getElementById('pixi-container').appendChild(app.view);
+    canvasContainer.appendChild(app.view);
 
     player = new TickerPlayer({ app, slides });
 
@@ -39,12 +40,28 @@
   };
 </script>
 
-<h1 class="text-xl font-bold mb-2">🧪 Slide Player Test</h1>
-<p class="text-sm text-gray-300 mb-2">⏱️ Current Time: {currentTime}s</p>
+<div class="min-h-screen bg-gray-900 text-white">
+  <!-- Toolbar -->
+  <div class="w-full px-4 py-2 flex justify-between items-center">
+    <!-- Buttons on left -->
+    <div class="flex gap-3">
+      <button on:click={toggle} class="bg-green-600 px-3 py-1 rounded">▶ Play / ⏸ Pause</button>
+      <button on:click={reset} class="bg-gray-600 px-3 py-1 rounded">⏮ Reset</button>
+      <span class="text-sm">⏱ {currentTime}s</span>
+    </div>
 
-<div class="flex gap-2 mb-3">
-  <button on:click={toggle} class="bg-green-600 px-3 py-1 rounded text-white">▶ Play / ⏸ Pause</button>
-  <button on:click={reset} class="bg-gray-700 px-3 py-1 rounded text-white">⏮ Reset</button>
+    <!-- Title on right -->
+    <div class="font-bold text-lg text-right">🧪 Slide Player</div>
+  </div>
+
+  <!-- Canvas Area -->
+  <div class="flex justify-center mt-4">
+    <div
+      bind:this={canvasContainer}
+      class="relative w-full max-w-screen-xl aspect-[16/9]"
+      style="max-height: calc(100vh - 100px);"
+    >
+      <!-- Pixi canvas will be injected here -->
+    </div>
+  </div>
 </div>
-
-<div id="pixi-container" class="border border-gray-500 w-[800px] h-[400px]"></div>
