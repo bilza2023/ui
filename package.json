@@ -24,7 +24,7 @@
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "mathjs": "^12.3.0",
-    "pixi.js": "^8.9.2",
+    "pixi.js": "^7.4.3",
     "simplerestclient2": "^1.0.5",
     "svelte-katex": "0.1.2",
     "sveltetools_bils": "^0.0.3",
