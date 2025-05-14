@@ -10,7 +10,7 @@
   // import PlayerToolbar from '$lib/appComps/PlayerToolbar.svelte';
   import TickerPlayer    from './TickerPlayer.js';
   // import { slidesData }  from './testSlides.js';
-  import * as slidesData from './slides/testMaster.js';
+  import {slidesData} from './testSlides';
   import { fitCanvasToViewport } from './layoutConfig.js';
 
   /* layout constants */
