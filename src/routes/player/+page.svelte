@@ -53,6 +53,7 @@
 
     player = new TickerPlayer({ app, slidesData });
 
+    
     /* piggy‑back on ticker to update stores */
     const origTick = player.tick.bind(player);
     player.tick = () => {

@@ -24,6 +24,13 @@
   <ul class="space-y-6">
     
     <li class="bg-[#f8f2dd] p-5 rounded-lg shadow hover:shadow-md transition">
+      <a href="/blog/ai-foundation-track-brochure.html" class="text-2xl text-[#023047] font-semibold hover:underline">
+        📢 Introducting AI Foundation Track - Taleem.Help
+      </a>
+      <p class="text-sm text-gray-500 mt-1">AI Foundation Course Brocheure.</p>
+    </li>
+
+    <li class="bg-[#f8f2dd] p-5 rounded-lg shadow hover:shadow-md transition">
       <a href="/blog/future-in-the-ai-era-for--pakistani-students.html" class="text-2xl text-[#023047] font-semibold hover:underline">
         📢 Future in the AI Era – For the Pakistani Students
       </a>
