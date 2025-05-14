@@ -1,70 +1,54 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import * as PIXI from 'pixi.js';
-  import TickerPlayer from './TickerPlayer.js';
-  import { slidesData } from './testSlides.js';
+  import { browser } from '$app/environment'; 
 
+  // import Nav from '$lib/appComps/Nav.svelte';
+  import SlideNav from '../../lib/appComps/SlideNav.svelte';
+  import TickerPlayer   from './TickerPlayer.js';          // your local path
+  import { slidesData } from './testSlides.js';
+  import { fitCanvasToViewport } from './layoutConfig.js';
+
+  const NAV_H  = 56;   // adjust to actual Nav height
+  const FOOT_H = 60;   // bottom reserved band
+
+  let canvasEl;
+  let app;
   let player;
-  let currentTime = 0;
-  let canvasContainer;
+
+  function resizeCanvas() {
+    const availH = window.innerHeight - NAV_H - FOOT_H;
+    const { width, height } = fitCanvasToViewport(
+      window.innerWidth,
+      availH
+    );
+    app.renderer.resize(width, height);
+  }
 
   onMount(() => {
-    const app = new PIXI.Application({
-      resizeTo: canvasContainer,
-      backgroundColor: 0x1e1e1e,
+    app = new PIXI.Application({
+      width: 100,
+      height: 100,
+      background: 0x000000,
+      view: canvasEl
     });
-
-    canvasContainer.appendChild(app.view);
 
     player = new TickerPlayer({ app, slidesData });
 
-    // Update currentTime only while playing
-    const interval = setInterval(() => {
-      if (player?.isPlaying) {
-        currentTime = player.currentTime.toFixed(1);
-      }
-    }, 100);
-
-    return () => clearInterval(interval);
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    // player.start();
   });
 
-  const toggle = () => {
-    if (player.isPlaying) {
-      player.pause();
-    } else {
-      player.start();
-    }
-  };
-
-  const reset = () => {
-    player.reset();
-    currentTime = 0;
-  };
+  onDestroy(() => {
+    if (browser && player) player.pause();      // ⬅️ 2. guard
+    if (browser && app)    app.destroy(true, { children: true });
+    if (browser)           window.removeEventListener('resize', resizeCanvas);
+  });
 </script>
 
-<!-- Full dark background -->
-<div class="min-h-screen bg-gray-900 text-white">
-  <!-- Toolbar -->
-  <div class="w-full px-4 py-2 flex justify-between items-center">
-    <!-- Buttons on left -->
-    <div class="flex gap-3">
-      <button on:click={toggle} class="bg-green-600 px-3 py-1 rounded">▶ Play / ⏸ Pause</button>
-      <button on:click={reset} class="bg-gray-600 px-3 py-1 rounded">⏮ Reset</button>
-      <span class="text-sm">⏱ {currentTime}s</span>
-    </div>
+<SlideNav {player} /> 
+<canvas bind:this={canvasEl} style="display:block;margin:0 auto;"></canvas>
 
-    <!-- Title on right -->
-    <div class="font-bold text-lg text-right">🧪 Slide Player</div>
-  </div>
-
-  <!-- Responsive Canvas Area -->
-  <div class="flex justify-center mt-4">
-    <div
-      bind:this={canvasContainer}
-      class="relative w-full max-w-screen-xl aspect-[16/9]"
-      style="max-height: calc(100vh - 100px);"
-    >
-      <!-- Pixi canvas will be injected here -->
-    </div>
-  </div>
-</div>
+<!-- reserved bottom band; style as real footer later -->
+<div style="height:{FOOT_H}px"></div>
