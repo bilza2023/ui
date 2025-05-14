@@ -9,7 +9,8 @@
   import SlideNav        from '../../lib/appComps/SlideNav.svelte';
   // import PlayerToolbar from '$lib/appComps/PlayerToolbar.svelte';
   import TickerPlayer    from './TickerPlayer.js';
-  import { slidesData }  from './testSlides.js';
+  // import { slidesData }  from './testSlides.js';
+  import * as slidesData from './slides/testMaster.js';
   import { fitCanvasToViewport } from './layoutConfig.js';
 
   /* layout constants */
@@ -62,7 +63,8 @@
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    player.start();
+    //Do not start automatically it is rude to the user
+    // player.start();
   });
 
   /* cleanup */
