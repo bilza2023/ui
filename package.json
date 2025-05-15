@@ -31,7 +31,8 @@
     "sveltetools_bils": "^0.0.3",
     "tailwindcss": "^3.3.3",
     "taleem_ui_lib": "^0.0.6",
-    "taleemtools": "^1.0.5"
+    "taleemtools": "^1.0.5",
+    "zod": "^3.24.4"
   },
   "description": "",
   "main": "canvas-data-format.js",

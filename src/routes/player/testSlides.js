@@ -3,44 +3,46 @@ export const slidesData = {
   designHeight: 576,
   slides: [
     {
-      id: "intro",
+      id: "layout-spacing-test",
       startTime: 0,
-      endTime: 3,
-      backgroundColor: "#001f3f",
-      items: [
-        {
-          type: "text",
-          text: "Welcome!",
-          x: 400,
-          y: 200,
-          width: 300,
-          height: 60,
-          fontSize: 32,
-          fontFamily: "Arial",
-          color: "#ffffff",
-          backgroundColor: "#003366",
-          padding: 12
-        }
-      ]
-    },
-    {
-      id: "next",
-      startTime: 3,
       endTime: 6,
-      backgroundColor: "#3d9970",
+      backgroundColor: "green",
       items: [
         {
           type: "text",
-          text: "Let's Begin",
-          x: 400,
-          y: 200,
-          width: 300,
-          height: 60,
-          fontSize: 32,
-          fontFamily: "Arial",
-          color: "#000000",
-          backgroundColor: "#7fdbff",
-          padding: 12
+          text: "Text A — Top",
+          x: 260, y: 60,
+          width: 500, height: 60,
+          fontSize: 28,
+          textAlign: "center",
+          backgroundColor: "#333",
+          color: "#fff",
+          padding: 10,
+          lineHeight: 1.2
+        },
+        {
+          type: "text",
+          text: "Text B — Middle",
+          x: 260, y: 140,
+          width: 500, height: 60,
+          fontSize: 28,
+          textAlign: "center",
+          backgroundColor: "#444",
+          color: "#fff",
+          padding: 10,
+          lineHeight: 1.2
+        },
+        {
+          type: "text",
+          text: "Text C — Bottom",
+          x: 260, y: 220,
+          width: 500, height: 60,
+          fontSize: 28,
+          textAlign: "center",
+          backgroundColor: "#555",
+          color: "#fff",
+          padding: 10,
+          lineHeight: 1.2
         }
       ]
     }

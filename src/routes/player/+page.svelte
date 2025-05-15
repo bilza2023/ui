@@ -5,6 +5,7 @@
   import { browser } from '$app/environment';
   import { writable } from 'svelte/store';
   import * as PIXI from 'pixi.js';
+  import { validateAll,validateSlidesData } from './validator.js';
 
   import SlideNav from '../../lib/appComps/SlideNav.svelte';
   import Ticker from './Ticker.js';
@@ -57,6 +58,23 @@
       view: canvasEl
     });
 
+    //////////////--Data Validation using zod
+const slideValidation = validateSlidesData(slidesData);
+if (!slideValidation.valid) {
+  console.error("Slide-level validation failed:", slideValidation.errors);
+  return;
+}
+
+
+const allItems = slidesData.slides.flatMap(s => s.items);
+const { valid, report } = validateAll(allItems);
+
+if (!valid) {
+  console.error("Validation failed for some items:", report);
+}else{
+  console.warn("valid data",valid);
+}
+    //////////////////////////////////////////
     engine = new DrawEngine(slidesData, app);
     ticker = new Ticker({ onTick: handleTick });
 

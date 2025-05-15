@@ -1,4 +1,6 @@
 import { drawMap } from './index.js';
+import * as PIXI from 'pixi.js';
+
 import {
   getSlideMetrics,
   mapSlideItems
@@ -8,22 +10,27 @@ export default function renderCanvasItems(
   app,
   items,
   designWidth,
-  designHeight
+  designHeight,
+  backgroundColor = "#000000"
 ) {
   const stage = app.stage;
   stage.removeChildren();
 
-  // Canvas dimensions (after +page.svelte has resized it)
   const canvasW = app.view.width;
   const canvasH = app.view.height;
 
-  // --- new uniform‑scale + centring metrics ---
   const metrics = getSlideMetrics(canvasW, canvasH, designWidth, designHeight);
-
-  // --- map every design‑space item → screen‑space ---
   const screenItems = mapSlideItems(items, metrics);
 
-  // Draw
+  // Draw background rect
+  const bg = new PIXI.Graphics();
+  bg.beginFill(PIXI.utils.string2hex(backgroundColor));
+  bg.drawRect(0, 0, canvasW, canvasH);
+  bg.endFill();
+  bg.zIndex = -1; // ensure it stays behind everything
+  stage.addChild(bg);
+
+  // Draw items
   for (const item of screenItems) {
     if (item.visible === false) continue;
     const drawFn = drawMap[item.type];
