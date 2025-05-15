@@ -1,48 +1,54 @@
 
+
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import { writable } from 'svelte/store';
   import * as PIXI from 'pixi.js';
 
-  /* local / project imports — keep paths unchanged */
-  import SlideNav        from '../../lib/appComps/SlideNav.svelte';
-  // import PlayerToolbar from '$lib/appComps/PlayerToolbar.svelte';
-  import TickerPlayer    from './TickerPlayer.js';
-  // import { slidesData }  from './testSlides.js';
-  import {slidesData} from './testSlides';
+  import SlideNav from '../../lib/appComps/SlideNav.svelte';
+  import Ticker from './Ticker.js';
+  import DrawEngine from './DrawEngine.js';
+  import { getActiveSlide } from './SlideUtils.js';
+  import { slidesData } from './testSlides.js';
   import { fitCanvasToViewport } from './layoutConfig.js';
 
-  /* layout constants */
-  const NAV_H  = 56;   // nav height
-  const FOOT_H = 60;   // reserved bottom space
+  const NAV_H  = 56;
+  const FOOT_H = 60;
 
-  /* DOM refs & instances */
   let canvasEl;
   let app;
+  let ticker;
+  let engine;
   let player;
+  let current = 0;
 
-  /* reactive stores passed to SlideNav */
-  const currentSlide = writable('—');   // slide name / id
-  const currentTime  = writable('0:00'); // running time
+  const currentSlide = writable('—');
+  const currentTime  = writable('0:00');
 
-  /* helper: seconds → "mm:ss.t" */
   function fmtTime(sec) {
     const m = Math.floor(sec / 60);
-    const s = (sec % 60).toFixed(1).padStart(4, '0'); // "02.3"
+    const s = (sec % 60).toFixed(1).padStart(4, '0');
     return `${String(m).padStart(2, '0')}:${s}`;
   }
 
-  /* resize canvas to fit 16 : 9 inside viewport minus nav & footer */
   function resizeCanvas() {
     const availH = window.innerHeight - NAV_H - FOOT_H;
     const { width, height } = fitCanvasToViewport(window.innerWidth, availH);
     app.renderer.resize(width, height);
   }
 
-  /* mount Pixi + player */
+  function handleTick(t) {
+    current = t;
+    engine.draw(current);
+
+    const active = getActiveSlide(slidesData.slides, current);
+    currentSlide.set(active?.id ?? '—');
+    currentTime.set(fmtTime(current));
+  }
+
   onMount(() => {
-    if (!browser) return; // SSR guard
+    if (!browser) return;
 
     app = new PIXI.Application({
       width: 100,
@@ -51,34 +57,34 @@
       view: canvasEl
     });
 
-    player = new TickerPlayer({ app, slidesData });
+    engine = new DrawEngine(slidesData, app);
+    ticker = new Ticker({ onTick: handleTick });
 
-    
-    /* piggy‑back on ticker to update stores */
-    const origTick = player.tick.bind(player);
-    player.tick = () => {
-      origTick();
-      currentSlide.set(player.currentSlideId ?? '—');
-      currentTime.set(fmtTime(player.currentTime));
+    player = {
+      start: () => ticker.start(),
+      pause: () => ticker.pause(),
+      reset: () => ticker.reset()
     };
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    //Do not start automatically it is rude to the user
-    // player.start();
+    // player.start(); // manually controlled
   });
 
-  /* cleanup */
   onDestroy(() => {
     if (!browser) return;
-    if (player) player.pause();
-    if (app)    app.destroy(true, { children: true });
+    if (ticker) ticker.pause();
+    if (app) app.destroy(true, { children: true });
     window.removeEventListener('resize', resizeCanvas);
   });
 </script>
 
+
 <!-- ───────────── Layout ───────────── -->
-<SlideNav {player} slide={$currentSlide} time={$currentTime} />
+<div class="mb-2">
+  <SlideNav {player} slide={$currentSlide} time={$currentTime} />
+</div>
+
 
 <canvas bind:this={canvasEl} style="display:block;margin:0 auto;"></canvas>
 

@@ -1,17 +1,31 @@
-import renderCanvasItems from './renderer/CanvasRenderer.js';
+// DrawEngine.js
 
-export default {
-  draw(slidesData, currentTime, app) {
-    debugger;
-    const slide = slidesData.slides[0]; // always take the first slide
+import renderCanvasItems from './renderer/CanvasRenderer.js';
+import { getActiveSlide } from './SlideUtils.js';
+
+export default class DrawEngine {
+  constructor(slidesData, app) {
+    this.slides = slidesData.slides;
+    this.designWidth = slidesData.designWidth;
+    this.designHeight = slidesData.designHeight;
+    this.app = app;
+    this.lastSlideId = null;
+  }
+
+  draw(currentTime) {
+    const slide = getActiveSlide(this.slides, currentTime);
     if (!slide) return;
 
+    // Prevent re-rendering the same slide if desired
+    if (slide.id === this.lastSlideId) return;
+    this.lastSlideId = slide.id;
+
     renderCanvasItems(
-      app,
+      this.app,
       slide.items,
-      slidesData.designWidth,
-      slidesData.designHeight,
+      this.designWidth,
+      this.designHeight,
       slide.backgroundColor || "#000"
     );
   }
-};
+}
