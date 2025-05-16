@@ -46,8 +46,6 @@ export class TitleWithBullets {
   build() {
     const builder = new SlideBuilder({
       id: this._id,
-      startTime: this.data.startTime || 0,
-      endTime: this.data.endTime || 5,
       backgroundColor: this.theme.backgroundColor
     });
 

@@ -41,9 +41,9 @@ export class JumboTron {
     const canvasWidth = 1020;
     const itemWidth = 800;
 
-    const jumbo = items.jumboText(this.data.text, this.theme.color, this.theme.fontSize);
+    const jumbo = items.text(this.data.text);
     jumbo.y = this.theme.topGap;
-    jumbo.height = 120;
+    // jumbo.height = 1200;
     centerHorizontally(jumbo, canvasWidth, itemWidth);
     builder.add(jumbo);
 

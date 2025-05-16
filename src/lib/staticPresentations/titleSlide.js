@@ -9,7 +9,8 @@ const deck = new DeckBuilder({ theme: lightTheme });
 // Slide 0 - JumboTron
 const slide0 = new templates.JumboTron();
 slide0.data = {
-  text: "SlideBuilder"
+  text: "SlideBuilder",
+  fontSize : 200
 };
 
 // debugger;

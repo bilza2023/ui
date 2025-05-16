@@ -31,7 +31,7 @@ export class DeckBuilder {
 
   build() {
     let lastEnd = 0;
-
+//  debugger;
     const finalSlides = this.slides.map((slide, index) => {
       const endTime = slide.__endTime;
 
