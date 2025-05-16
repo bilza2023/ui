@@ -12,7 +12,7 @@
   import DrawEngine from './DrawEngine.js';
   import { getActiveSlide } from './SlideUtils.js';
 
-  import { slidesData} from '../../lib/staticSlides/titleSlide.js';
+  import { slidesData} from '../../lib/staticPresentations/titleSlide.js';
 
   import { fitCanvasToViewport } from './layoutConfig.js';
 
@@ -59,7 +59,7 @@
 
   onMount(() => {
     if (!browser) return;
-
+// debugger;
     app = new PIXI.Application({
       width: 100,
       height: 100,

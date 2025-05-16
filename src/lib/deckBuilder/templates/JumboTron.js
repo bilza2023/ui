@@ -10,26 +10,32 @@ export class JumboTron {
   constructor() {
     this.data = {
       text: "Jumbo Headline",
-      startTime: 0,
-      endTime: 5
     };
 
     this.theme = {
       backgroundColor: "#111",
       color: "white",
-      fontSize: 100,
+      fontSize: 200,
       topGap: 150
     };
 
     this._id = `jumboTron_${idCounter++}`;
   }
 
+  mapTheme(global) {
+    return {
+      backgroundColor: global.bgColor,
+      color: global.primaryColor,
+      // fontSize: global.headingFontSize,
+      topGap: global.gapLarge
+    };
+  }
+  
+  
   build() {
     const builder = new SlideBuilder({
-      id: this._id,
-      startTime: this.data.startTime,
-      endTime: this.data.endTime,
-      backgroundColor: this.theme.backgroundColor
+        id: this._id,
+        backgroundColor: this.theme.backgroundColor      
     });
 
     const canvasWidth = 1020;
@@ -41,6 +47,7 @@ export class JumboTron {
     centerHorizontally(jumbo, canvasWidth, itemWidth);
     builder.add(jumbo);
 
-    return builder.build();
+    // return builder.build();
+    return builder.slide;
   }
 }

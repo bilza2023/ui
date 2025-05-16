@@ -13,8 +13,6 @@ export class TitleWithBullets {
       bullet1: "Composable templates",
       bullet2: "Scriptable slides",
       bullet3: "Production-ready output",
-      startTime: 0,
-      endTime: 5
     };
 
     this.theme = {
@@ -32,6 +30,19 @@ export class TitleWithBullets {
     this._id = `titleWithBullets_${idCounter++}`;
   }
 
+  mapTheme(global) {
+    return {
+      backgroundColor: global.bgColor,
+      titleColor: global.primaryColor,
+      titleFontSize: global.headingFontSize,
+      titleTopGap: global.gapLarge,
+      bulletsTopGap: global.gapLarge,
+      bulletGap: global.gapLarge,
+      bulletColor: global.primaryColor,
+      bulletFontSize: global.bulletFontSize
+    };
+  }
+  
   build() {
     const builder = new SlideBuilder({
       id: this._id,
@@ -70,6 +81,6 @@ export class TitleWithBullets {
     bullet3.textAlign = "center";
     builder.add(bullet3);
 
-    return builder.build();
+    return builder.slide;
   }
 }

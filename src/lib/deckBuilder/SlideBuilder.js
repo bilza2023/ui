@@ -19,12 +19,12 @@ export class SlideBuilder {
     return this;
   }
 
-  build() {
-    const result = SlidesDataSchema.shape.slides.element.safeParse(this.slide);
-    if (!result.success) {
-      throw new Error(`Validation failed: ${JSON.stringify(result.error.format(), null, 2)}`);
-    }
+  // build() {
+  //   const result = SlidesDataSchema.shape.slides.element.safeParse(this.slide);
+  //   if (!result.success) {
+  //     throw new Error(`Validation failed: ${JSON.stringify(result.error.format(), null, 2)}`);
+  //   }
 
-    return this.slide;
-  }
+  //   return this.slide;
+  // }
 }

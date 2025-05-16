@@ -13,7 +13,7 @@ export default class DrawEngine {
   }
 
   draw(currentTime) {
-    debugger;
+    // debugger;
     const slide = getActiveSlide(this.slides, currentTime);
     if (!slide) return;
 
