@@ -2,7 +2,6 @@
 // $lib/slideBuilder/DeckBuilder.js
 
 import { SlidesDataSchema } from './schemas/zod-items-schema-16may2025.js';
-import { titleSlideTemplate } from './templates/title-slide.js';
 
 
 export class DeckBuilder {
