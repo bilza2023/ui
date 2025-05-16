@@ -1,26 +1,44 @@
 export default class Ticker {
   constructor({ onTick }) {
-    this.time = 0;
     this.onTick = onTick;
-    this.interval = null;
+    this.elapsedTime = 0;
+    this.running = false;
+    this._rafId = null;
+    this._lastFrameTime = null;
   }
 
   start() {
-    if (this.interval) return;
-    this.interval = setInterval(() => {
-      this.time += 0.1;
-      this.onTick(this.time);
-    }, 100);
+    if (this.running) return;
+    this.running = true;
+    this._lastFrameTime = performance.now();
+    this._tick();
   }
 
   pause() {
-    clearInterval(this.interval);
-    this.interval = null;
+    this.running = false;
+    if (this._rafId) {
+      cancelAnimationFrame(this._rafId);
+      this._rafId = null;
+    }
   }
 
   reset() {
     this.pause();
-    this.time = 0;
-    this.onTick(0);
+    this.elapsedTime = 0;
+    this._lastFrameTime = null;
+    if (this.onTick) this.onTick(0); // force refresh
   }
+
+  _tick = () => {
+    if (!this.running) return;
+
+    const now = performance.now();
+    const delta = (now - this._lastFrameTime) / 1000; // convert ms to seconds
+    this._lastFrameTime = now;
+
+    this.elapsedTime += delta;
+    if (this.onTick) this.onTick(this.elapsedTime);
+
+    this._rafId = requestAnimationFrame(this._tick);
+  };
 }

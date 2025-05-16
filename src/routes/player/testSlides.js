@@ -3,46 +3,84 @@ export const slidesData = {
   designHeight: 576,
   slides: [
     {
-      id: "layout-spacing-test",
+      id: "slide-text",
       startTime: 0,
-      endTime: 6,
-      backgroundColor: "green",
+      endTime: 5,
+      backgroundColor: "red",
+      transition: {
+        type: "fade",
+        duration: 0.5
+      },
       items: [
         {
           type: "text",
-          text: "Text A — Top",
-          x: 260, y: 60,
+          text: "Welcome to Slide 1",
+          x: 260, y: 120,
           width: 500, height: 60,
-          fontSize: 28,
+          fontSize: 30,
           textAlign: "center",
-          backgroundColor: "#333",
-          color: "#fff",
-          padding: 10,
-          lineHeight: 1.2
+          color: "#ffffff",
+          backgroundColor: "#333333",
+          padding: 10
+        }
+      ]
+    },
+    {
+      id: "slide-shapes",
+      startTime: 5,
+      endTime: 10,
+      backgroundColor: "#002244",
+      transition: {
+        type: "slide",
+        duration: 0.5
+      },
+      items: [
+        {
+          type: "rect",
+          x: 100, y: 100,
+          width: 200, height: 100,
+          fill: "#ffcc00"
         },
         {
-          type: "text",
-          text: "Text B — Middle",
-          x: 260, y: 140,
-          width: 500, height: 60,
-          fontSize: 28,
-          textAlign: "center",
-          backgroundColor: "#444",
-          color: "#fff",
-          padding: 10,
-          lineHeight: 1.2
-        },
+          type: "circle",
+          x: 800, y: 200,
+          radius: 50,
+          fill: "#00ffcc"
+        }
+      ]
+    },
+    {
+      id: "slide-mixed",
+      startTime: 10,
+      endTime: 15,
+      backgroundColor: "#333",
+      transition: {
+        type: "fade",
+        duration: 0.5
+      },
+      items: [
         {
           type: "text",
-          text: "Text C — Bottom",
-          x: 260, y: 220,
-          width: 500, height: 60,
-          fontSize: 28,
-          textAlign: "center",
-          backgroundColor: "#555",
-          color: "#fff",
-          padding: 10,
-          lineHeight: 1.2
+          text: "Final Slide!",
+          x: 310, y: 80,
+          width: 400, height: 50,
+          fontSize: 26,
+          color: "#ffffff",
+          backgroundColor: "#660000",
+          padding: 8,
+          textAlign: "center"
+        },
+        {
+          type: "rect",
+          x: 100, y: 300,
+          width: 100, height: 100,
+          fill: "#cc0000"
+        },
+        {
+          type: "circle",
+          x: 900, y: 300,
+          radius: 40,
+          fill: "#0099ff"
         }
       ]
     }

@@ -41,6 +41,12 @@
 
   function handleTick(t) {
     current = t;
+//--stop if finished  
+    if (t >= slidesData.slides.at(-1).endTime) {
+  ticker.pause(); // Stop the loop
+  return;
+  }
+///////////////////////////
     engine.draw(current);
 
     const active = getActiveSlide(slidesData.slides, current);
@@ -77,16 +83,19 @@ if (!valid) {
     //////////////////////////////////////////
     engine = new DrawEngine(slidesData, app);
     ticker = new Ticker({ onTick: handleTick });
-
+    
     player = {
       start: () => ticker.start(),
       pause: () => ticker.pause(),
       reset: () => ticker.reset()
     };
 
+   
+
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
     // player.start(); // manually controlled
+    engine.draw(0);
   });
 
   onDestroy(() => {

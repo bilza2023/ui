@@ -16,7 +16,9 @@
   <div class="flex items-center space-x-2">
     <button class="px-3 py-1 rounded bg-[#d6b88d] hover:bg-[#cfae83] text-gray-900 shadow" on:click={start}>▶</button>
     <button class="px-3 py-1 rounded bg-[#d6b88d] hover:bg-[#cfae83] text-gray-900 shadow" on:click={pause}>⏸</button>
-    <button class="px-3 py-1 rounded bg-[#d6b88d] hover:bg-[#cfae83] text-gray-900 shadow" on:click={restart}>⟲</button>
+    <!-- <button class="px-3 py-1 rounded bg-[#d6b88d] hover:bg-[#cfae83] text-gray-900 shadow" on:click={restart}>⟲</button> -->
+    <button class="px-3 py-1 rounded bg-[#d6b88d] hover:bg-[#cfae83] text-gray-900 shadow" on:click={pause}>⏹</button>
+
 
     <div class="ml-4 flex items-baseline space-x-2 text-sm font-mono text-gray-900">
       <span>{time}</span>
