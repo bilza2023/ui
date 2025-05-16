@@ -1,6 +1,5 @@
-
-import { titleWithBullets } from './titleWithBullets';
+import { TitleWithBullets } from './titleWithBullets.js';
 
 export const templates = {
-    titleWithBullets,
+  TitleWithBullets: TitleWithBullets // 👈 alias for usage convenience
 };

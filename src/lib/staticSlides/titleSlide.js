@@ -1,12 +1,12 @@
 
 
 import { DeckBuilder } from '../slideBuilder/DeckBuilder.js';
-import { titleWithBullets } from '../slideBuilder/templates/index.js';
+import { templates } from '../slideBuilder/templates/index.js';
 
 const deck = new DeckBuilder();
 
 // Slide 1
-const slide1 = new titleWithBullets();
+const slide1 = new templates.TitleWithBullets();
 slide1.data = {
   title: "Welcome to SlideBuilder",
   bullet1: "Composable templates",
@@ -28,7 +28,7 @@ slide1.theme = {
 deck.add(slide1.build());
 
 // Slide 2
-const slide2 = new titleWithBullets();
+const slide2 = new templates.TitleWithBullets();
 slide2.data = {
   title: "Build With Confidence",
   bullet1: "Templates are cheap",

@@ -6,7 +6,7 @@ import { centerHorizontally, placeBelow } from './layoutUtils.js';
 
 let idCounter = 0;
 
-export class titleWithBullets {
+export class TitleWithBullets {
   constructor() {
     this.data = {
       title: "Welcome to SlideBuilder",
