@@ -3,9 +3,9 @@
 
 import { SlideBuilder } from '../SlideBuilder.js';
 import { items } from '../items/index.js';
+import { centerHorizontally, placeBelow } from './layoutUtils.js';
 
 export function titleWithBullets(data) {
-  // debugger;
   if (!data.title) {
     throw new Error('title-with-bullets template requires a title');
   }
@@ -18,38 +18,35 @@ export function titleWithBullets(data) {
   });
 
   const canvasWidth = 1020;
-  const canvasHeight = 576;
   const itemWidth = 800;
-  const centerX = (canvasWidth - itemWidth) / 2;
 
-  // Fixed layout constants
-  const headingTop = 40;
-  const headingHeight = 80;
-
-  // Add heading using functional item
+  // Add heading
   const headingItem = items.heading(data.title, "white", 70);
-  headingItem.x = centerX;
-  headingItem.y = headingTop;
-  headingItem.width = itemWidth;
-  headingItem.height = headingHeight;
+  headingItem.y = 40;
+  headingItem.height = 80;
+  centerHorizontally(headingItem, canvasWidth, itemWidth);
   builder.add(headingItem);
 
-//////////////////////////
-//add here
-const bulletGap = 20;
-const bulletHeight = 50;
-let bulletY = headingTop + headingHeight + 40;
+  // Bullet 1
+  const bullet1 = items.bulletPoint("• " + (data.bullets?.[0] || ""), "white", 40);
+  bullet1.height = 50;
+  placeBelow(bullet1, headingItem, 40);
+  centerHorizontally(bullet1, canvasWidth, itemWidth);
+  builder.add(bullet1);
 
-for (const bulletText of data.bullets || []) {
-  const bulletItem = items.bulletPoint("• " + bulletText, "white", 40);
-  bulletItem.x = centerX;
-  bulletItem.y = bulletY;
-  bulletItem.width = itemWidth;
-  bulletItem.height = bulletHeight;
-  builder.add(bulletItem);
-  bulletY += bulletHeight + bulletGap;
-}
+  // Bullet 2
+  const bullet2 = items.bulletPoint("• " + (data.bullets?.[1] || ""), "white", 40);
+  bullet2.height = 50;
+  placeBelow(bullet2, bullet1, 20);
+  centerHorizontally(bullet2, canvasWidth, itemWidth);
+  builder.add(bullet2);
 
-////////////////////////////////
+  // Bullet 3
+  const bullet3 = items.bulletPoint("• " + (data.bullets?.[2] || ""), "white", 40);
+  bullet3.height = 50;
+  placeBelow(bullet3, bullet2, 20);
+  centerHorizontally(bullet3, canvasWidth, itemWidth);
+  builder.add(bullet3);
+
   return builder.build();
 }
