@@ -1,5 +1,5 @@
 import { heading } from './heading.js';
 
-export const styleMap = {
+export const items = {
   heading,
 };

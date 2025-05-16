@@ -2,9 +2,9 @@
 // $lib/slideBuilder/templates/title-with-bullets.js
 
 import { SlideBuilder } from '../SlideBuilder.js';
-import { heading } from '../styles/heading.js';
+import { items } from '../items/index.js';
 
-export function titleWithBulletsTemplate(data) {
+export function titleWithBullets(data) {
   // debugger;
   if (!data.title) {
     throw new Error('title-with-bullets template requires a title');
@@ -27,7 +27,7 @@ export function titleWithBulletsTemplate(data) {
   const headingHeight = 80;
 
   // Add heading using functional item
-  const headingItem = heading(data.title, "white", 70);
+  const headingItem = items.heading(data.title, "white", 70);
   headingItem.x = centerX;
   headingItem.y = headingTop;
   headingItem.width = itemWidth;
