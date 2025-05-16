@@ -11,7 +11,9 @@
   import Ticker from './Ticker.js';
   import DrawEngine from './DrawEngine.js';
   import { getActiveSlide } from './SlideUtils.js';
-  import { slidesData } from './testSlides.js';
+  // import { slidesData } from './testSlides.js';
+  import { slidesData } from '$lib/staticSlides/titleSlide.js';
+
   import { fitCanvasToViewport } from './layoutConfig.js';
 
   const NAV_H  = 56;
