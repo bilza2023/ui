@@ -5,6 +5,21 @@ import { templates } from '../slideBuilder/templates/index.js';
 
 const deck = new DeckBuilder();
 
+// Slide 0
+const slide0 = new templates.JumboTron();
+slide0.data = {
+  text: "SlideBuilder",
+  startTime: 0,
+  endTime: 5
+};
+slide0.theme = {
+  backgroundColor: "#000000",
+  color: "#00ffcc",
+  fontSize: 120,
+  topGap: 180
+};
+deck.add(slide0.build());
+
 // Slide 1
 const slide1 = new templates.TitleWithBullets();
 slide1.data = {
@@ -12,8 +27,8 @@ slide1.data = {
   bullet1: "Composable templates",
   bullet2: "Scriptable slides",
   bullet3: "Production-ready output",
-  startTime: 0,
-  endTime: 5
+  startTime: 5,
+  endTime: 10
 };
 slide1.theme = {
   backgroundColor: "#ede8e1",
@@ -34,8 +49,8 @@ slide2.data = {
   bullet1: "Templates are cheap",
   bullet2: "Each slide is unique",
   bullet3: "No magic, just control",
-  startTime: 5,
-  endTime: 10
+  startTime: 10,
+  endTime: 15
 };
 slide2.theme = {
   backgroundColor: "#1a1a1a",

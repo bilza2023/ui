@@ -53,7 +53,6 @@ export const Slide ={
         "name": "",
         "content": "",
         "showAt": 0,
-        "itemExtra": {
           "step": 2,
           "startTime": 10,
           "endTime": 20,
@@ -65,8 +64,7 @@ export const Slide ={
             {
               "code": "Multiply the equation",
               "type": "text"
-            }
-          ],
+            },
           "fs": [],
           "spVisibility": false,
           "fsVisibility": false

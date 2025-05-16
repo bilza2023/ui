@@ -1,5 +1,7 @@
 import { TitleWithBullets } from './titleWithBullets.js';
+import { JumboTron } from './JumboTron.js';
 
 export const templates = {
-  TitleWithBullets: TitleWithBullets // 👈 alias for usage convenience
+  TitleWithBullets: TitleWithBullets ,
+  JumboTron: JumboTron 
 };
