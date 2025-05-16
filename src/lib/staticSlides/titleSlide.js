@@ -1,10 +1,13 @@
+
+
 import { DeckBuilder } from '../slideBuilder/DeckBuilder.js';
-import { templates } from '../slideBuilder/templates/index.js';
+import { titleWithBullets } from '../slideBuilder/templates/index.js';
 
 const deck = new DeckBuilder();
 
 // Slide 1
-templates.titleWithBullets.data = {
+const slide1 = new titleWithBullets();
+slide1.data = {
   title: "Welcome to SlideBuilder",
   bullet1: "Composable templates",
   bullet2: "Scriptable slides",
@@ -12,8 +15,7 @@ templates.titleWithBullets.data = {
   startTime: 0,
   endTime: 5
 };
-
-templates.titleWithBullets.theme = {
+slide1.theme = {
   backgroundColor: "#ede8e1",
   titleColor: "red",
   titleFontSize: 70,
@@ -23,11 +25,11 @@ templates.titleWithBullets.theme = {
   bulletColor: "blue",
   bulletFontSize: 58
 };
-
-deck.add(templates.titleWithBullets.build());
+deck.add(slide1.build());
 
 // Slide 2
-templates.titleWithBullets.data = {
+const slide2 = new titleWithBullets();
+slide2.data = {
   title: "Build With Confidence",
   bullet1: "Templates are cheap",
   bullet2: "Each slide is unique",
@@ -35,8 +37,7 @@ templates.titleWithBullets.data = {
   startTime: 5,
   endTime: 10
 };
-
-templates.titleWithBullets.theme = {
+slide2.theme = {
   backgroundColor: "#1a1a1a",
   titleColor: "#00ffaa",
   titleFontSize: 68,
@@ -46,7 +47,6 @@ templates.titleWithBullets.theme = {
   bulletColor: "#ffffff",
   bulletFontSize: 44
 };
-
-deck.add(templates.titleWithBullets.build());
+deck.add(slide2.build());
 
 export const slidesData = deck.build();
