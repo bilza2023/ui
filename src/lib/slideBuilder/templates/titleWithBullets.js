@@ -34,5 +34,22 @@ export function titleWithBullets(data) {
   headingItem.height = headingHeight;
   builder.add(headingItem);
 
+//////////////////////////
+//add here
+const bulletGap = 20;
+const bulletHeight = 50;
+let bulletY = headingTop + headingHeight + 40;
+
+for (const bulletText of data.bullets || []) {
+  const bulletItem = items.bulletPoint("• " + bulletText, "white", 40);
+  bulletItem.x = centerX;
+  bulletItem.y = bulletY;
+  bulletItem.width = itemWidth;
+  bulletItem.height = bulletHeight;
+  builder.add(bulletItem);
+  bulletY += bulletHeight + bulletGap;
+}
+
+////////////////////////////////
   return builder.build();
 }
