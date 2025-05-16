@@ -14,26 +14,15 @@ export class DeckBuilder {
     this.currentTime = 0;
   }
 
-  addTitle(data, duration = this.defaultDuration) {
-    const slide = titleSlideTemplate({
-      ...data,
-      startTime: this.currentTime,
-      endTime: this.currentTime + duration
-    });
-    this.slides.push(...slide.slides);
-    this.currentTime += duration;
-    return this;
-  }
 
-  addSlides(slideArray) {
-    for (const slide of slideArray) {
-      slide.startTime = this.currentTime;
-      slide.endTime = this.currentTime + this.defaultDuration;
-      this.slides.push(slide);
-      this.currentTime += this.defaultDuration;
-    }
-    return this;
+  add(slide) {
+    if (!slide.startTime) slide.startTime = this.currentTime;
+    if (!slide.endTime) slide.endTime = slide.startTime + this.defaultDuration;
+  
+    this.currentTime = slide.endTime;
+    this.slides.push(slide);
   }
+  
 
   build() {
     const slidesData = {
@@ -50,7 +39,5 @@ export class DeckBuilder {
     return slidesData;
   }
 
-  getSlides() {
-    return this.slides;
-  }
+ 
 }

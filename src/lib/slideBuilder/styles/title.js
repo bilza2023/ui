@@ -2,7 +2,7 @@ export const title = {
   type: 'text',
   fontSize: 70,
   fontFamily: 'Georgia',
-  color: '#ffffff',
+  color: 'red',
   textAlign: 'center',
   lineHeight: 1.4,
   padding: 10,

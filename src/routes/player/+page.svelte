@@ -12,7 +12,7 @@
   import DrawEngine from './DrawEngine.js';
   import { getActiveSlide } from './SlideUtils.js';
   // import { slidesData } from './testSlides.js';
-  import { slidesData } from '$lib/staticSlides/titleSlide.js';
+  import { slidesData} from '../../lib/staticSlides/titleSlide.js';
 
   import { fitCanvasToViewport } from './layoutConfig.js';
 
@@ -43,6 +43,7 @@
 
   function handleTick(t) {
     current = t;
+    
 //--stop if finished  
     if (t >= slidesData.slides.at(-1).endTime) {
   ticker.pause(); // Stop the loop
@@ -67,11 +68,13 @@
     });
 
     //////////////--Data Validation using zod
-const slideValidation = validateSlidesData(slidesData);
-if (!slideValidation.valid) {
-  console.error("Slide-level validation failed:", slideValidation.errors);
-  return;
-}
+console.log("slidesData" , slidesData);
+
+// const slideValidation = validateSlidesData(slidesData);
+// if (!slideValidation.valid) {
+//   console.error("Slide-level validation failed:", slideValidation.errors);
+//   return;
+// }
 
 
 const allItems = slidesData.slides.flatMap(s => s.items);

@@ -1,7 +1,5 @@
-import { title } from './title.js';
-import { bullet } from './bullet.js';
+import { heading } from './heading.js';
 
 export const styleMap = {
-  title,
-  bullet
+  heading,
 };
