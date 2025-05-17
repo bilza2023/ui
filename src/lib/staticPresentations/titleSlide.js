@@ -3,12 +3,12 @@
 
 
 import { DeckBuilder } from '../deckBuilder/DeckBuilder.js';
-import { darkTheme } from '../deckBuilder/theme/globalThemes.js';
+import { blueEducation } from '../deckBuilder/theme/globalThemes.js';
 import { loadTemplate } from '../deckBuilder/templates/loadTemplate.js';
 
-const deck = new DeckBuilder({ globalTheme: darkTheme });
+const deck = new DeckBuilder({ globalTheme: blueEducation });
 
-deck.add(5, loadTemplate("jumbotron", { text: "This is From The Slide" }));
+deck.add(5, loadTemplate("jumbotron", { text: "😃 🚀 📘 From The Slide" }));
 
 deck.add(20, loadTemplate("titleWithBullets", {
   title: "Welcome To Bilza Player",
