@@ -1,4 +1,3 @@
-
 import { getTemplate } from './getTemplate.js';
 import { getText, TextPresets } from '../itemsFolder';
 import { centerHorizontally } from './layoutUtils.js';
@@ -20,14 +19,19 @@ export function jumboTron() {
     TextPresets.jumbotron(jumbo);
 
     jumbo.color = this.theme.color || this.globalTheme.primaryColor;
-  
     jumbo.fontSize = this.theme.fontSize;
-
     jumbo.fontFamily = this.theme.fontFamily || this.globalTheme.fontFamilyHeading;
     jumbo.y = this.theme.topGap || 250;
 
     centerHorizontally(jumbo, 1020, 800);
-    return [jumbo];
+
+    return {
+      items: [jumbo],
+      background: {
+        backgroundImage: null,
+        pattern: null
+      }
+    };
   };
 
   return tmpl;

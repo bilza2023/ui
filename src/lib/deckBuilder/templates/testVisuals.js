@@ -1,17 +1,12 @@
-
-
 import { getTemplate } from './getTemplate.js';
 import { getText, getCircle, getRect, getImage } from '../itemsFolder';
-import {getBarGraph} from "../itemsFolder/itemGenerators/getBarGraph.js";
-
+import { getBarGraph } from "../itemsFolder/itemGenerators/getBarGraph.js";
 
 export function testVisuals() {
   const tmpl = getTemplate("testVisuals");
 
   tmpl.data = {};
   tmpl.theme = {};
-
-
 
   tmpl.getItems = function () {
     const items = [];
@@ -58,12 +53,18 @@ export function testVisuals() {
       height: 200,
       values: [30, 50, 70, 90, 60],
       labels: ["A", "B", "C", "D", "E"],
-      barColor : "green"
+      barColor: "green"
     });
 
     items.push(text, rect, circle, image, ...barItems);
 
-    return items;
+    return {
+      items,
+      background: {
+        backgroundImage: null,
+        pattern: null
+      }
+    };
   };
 
   return tmpl;

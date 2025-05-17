@@ -82,12 +82,61 @@ export const ItemSchema = z.discriminatedUnion("type", [
   ImageItemSchema
 ]);
 
+///////////////////////////////////////////////////////////
+//background and patterns
+// Pattern types
+const GridPattern = z.object({
+  type: z.literal("grid"),
+  cellWidth: z.number(),
+  cellHeight: z.number(),
+  lineColor: z.string(),
+  lineWidth: z.number()
+});
+
+const DotsPattern = z.object({
+  type: z.literal("dots"),
+  dotRadius: z.number(),
+  spacingX: z.number(),
+  spacingY: z.number(),
+  color: z.string()
+});
+
+const LinesPattern = z.object({
+  type: z.literal("lines"),
+  direction: z.enum(["horizontal", "vertical"]),
+  spacing: z.number(),
+  lineColor: z.string(),
+  lineWidth: z.number()
+});
+
+// Discriminated union
+const PatternSchema = z.discriminatedUnion("type", [
+  GridPattern,
+  DotsPattern,
+  LinesPattern
+]);
+
+// Background object
+export const BackgroundSchema = z.object({
+  backgroundImage: z.string().nullable(),
+  pattern: PatternSchema.nullable()
+});
+
+///////////////////////////////////////////////////////////
 // Slide-level schema
+// export const SlideSchema = z.object({
+//   id: z.string(),
+//   startTime: z.number(),
+//   endTime: z.number(),
+//   backgroundColor: z.string().optional(),
+//   items: z.array(ItemSchema)
+// });
 export const SlideSchema = z.object({
   id: z.string(),
   startTime: z.number(),
   endTime: z.number(),
   backgroundColor: z.string().optional(),
+  background: BackgroundSchema.optional(), // ✅ new
   items: z.array(ItemSchema)
 });
 

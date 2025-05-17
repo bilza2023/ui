@@ -23,7 +23,8 @@ export class DeckBuilder {
       template.globalTheme = this.globalTheme;
     }
 
-    const items = template.getItems();
+    // const items = template.getItems();
+    const { items, background } = template.getItems();
 
     const slide = {
       id: template.id,
@@ -32,8 +33,10 @@ export class DeckBuilder {
         this.globalTheme?.bgColor ||
         "#000",
       items,
+      background, // ✅ new
       __endTime: endAt
     };
+    
 
     this.slides.push(slide);
   }
