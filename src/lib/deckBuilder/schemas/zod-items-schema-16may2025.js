@@ -60,11 +60,26 @@ const CircleItemSchema = z.object({
   visible: z.boolean().default(circle.visible)
 });
 
+const ImageItemSchema = z.object({
+  type: z.literal("image"),
+
+  x: z.number(),
+  y: z.number(),
+  width: z.number(),
+  height: z.number(),
+  src: z.string(), // must match one of the values from your imagesList enum
+
+  rotation: z.number().default(0),
+  zIndex: z.number().default(0),
+  visible: z.boolean().default(true)
+});
+
 // Master union schema
 export const ItemSchema = z.discriminatedUnion("type", [
   TextItemSchema,
   RectItemSchema,
-  CircleItemSchema
+  CircleItemSchema,
+  ImageItemSchema
 ]);
 
 // Slide-level schema

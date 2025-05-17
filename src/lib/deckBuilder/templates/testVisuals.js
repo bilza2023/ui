@@ -1,27 +1,51 @@
-
 import { getTemplate } from './getTemplate.js';
-import { getText, getCircle, getRect } from '../itemsFolder';
-
-/////////////////////////////////////////
+import { getText, getCircle, getRect, getImage } from '../itemsFolder';
 
 export function testVisuals() {
   const tmpl = getTemplate("testVisuals");
 
-  tmpl.data = {};   // No dynamic input
-  tmpl.theme = {};  // No theming
+  tmpl.data = {};
+  tmpl.theme = {};
 
   tmpl.getItems = function () {
     const items = [];
 
-    const text = getText("Testing Shapes");
+    const text = getText("Visual Test Slide");
     text.x = 100;
-    text.y = 50;
+    text.y = 40;
+    text.fontSize = 40;
+    text.color = "#1a1a1a";
+    text.backgroundColor = "#f0f0f0";
+    text.padding = 10;
 
-    const rect = getRect({ x: 100, y: 150, width: 200, height: 100, fill: "#ff9999" });
+    const rect = getRect({
+      x: 100,
+      y: 120,
+      width: 250,
+      height: 120,
+      fill: "#ffe4b5",
+      borderColor: "#cc7722",
+      borderWidth: 4
+    });
 
-    const circle = getCircle({ x: 400, y: 200, radius: 50, fill: "#3399ff" });
+    const circle = getCircle({
+      x: 450,
+      y: 180,
+      radius: 60,
+      fill: "#add8e6",
+      borderColor: "#00008b",
+      borderWidth: 3
+    });
 
-    items.push(text, rect, circle);
+    const image = getImage({
+      x: 650,
+      y: 100,
+      width: 200,
+      height: 150,
+      src: "images/atom.png" // ensure this is in your allowed imagesList
+    });
+
+    items.push(text, rect, circle, image);
 
     return items;
   };

@@ -2,6 +2,7 @@
 
 
 import { getText } from './items/getText';
+import { getImage } from './items/getImage';
 import { getCircle } from './items/getCircle';
 import { getRect } from './items/getRect';
 
@@ -12,5 +13,6 @@ export {
   getText,
   getCircle,
   getRect,
+  getImage,
   TextPresets
 }
