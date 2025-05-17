@@ -1,35 +1,8 @@
 import { z } from "zod";
-import { text as TEXT_DEFAULTS } from "./items-data-structure-16may2025";
-import { SlidesDataSchema } from "./zod-items-schema-16may2025.js";
+// import { text as TEXT_DEFAULTS } from "./items-data-structure-16may2025";
+import { SlidesDataSchema } from "../../lib/deckBuilder/schemas/zod-items-schema-16may2025";
+import { ItemSchema } from "../../lib/deckBuilder/schemas/zod-items-schema-16may2025.js";
 
-// Individual item schemas
-const TextItemSchema = z.object({
-  type: z.literal("text"),
-  text: z.string(),
-  x: z.number(),
-  y: z.number(),
-  width: z.number(),
-  height: z.number().optional(),
-
-  fontSize: z.number().default(TEXT_DEFAULTS.fontSize),
-  fontFamily: z.string().default(TEXT_DEFAULTS.fontFamily),
-  color: z.string().default(TEXT_DEFAULTS.color),
-  textAlign: z.enum(["left", "center", "right"]).default(TEXT_DEFAULTS.textAlign),
-  lineHeight: z.number().default(TEXT_DEFAULTS.lineHeight),
-
-  backgroundColor: z.string().nullable().default(TEXT_DEFAULTS.backgroundColor),
-  padding: z.number().default(TEXT_DEFAULTS.padding),
-
-  borderColor: z.string().nullable().default(TEXT_DEFAULTS.borderColor),
-  borderWidth: z.number().default(TEXT_DEFAULTS.borderWidth),
-
-  rotation: z.number().default(TEXT_DEFAULTS.rotation),
-  zIndex: z.number().default(TEXT_DEFAULTS.zIndex),
-  visible: z.boolean().default(TEXT_DEFAULTS.visible)
-});
-
-// Union schema — extend this with other types like rect, circle
-const ItemSchema = z.discriminatedUnion("type", [TextItemSchema]);
 
 export function validate(item) {
   const result = ItemSchema.safeParse(item);

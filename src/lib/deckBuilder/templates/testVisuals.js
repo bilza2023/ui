@@ -1,11 +1,17 @@
+
+
 import { getTemplate } from './getTemplate.js';
 import { getText, getCircle, getRect, getImage } from '../itemsFolder';
+import {getBarGraph} from "../itemsFolder/itemGenerators/getBarGraph.js";
+
 
 export function testVisuals() {
   const tmpl = getTemplate("testVisuals");
 
   tmpl.data = {};
   tmpl.theme = {};
+
+
 
   tmpl.getItems = function () {
     const items = [];
@@ -42,10 +48,20 @@ export function testVisuals() {
       y: 100,
       width: 200,
       height: 150,
-      src: "images/atom.png" // ensure this is in your allowed imagesList
+      src: "images/atom.png"
     });
 
-    items.push(text, rect, circle, image);
+    const barItems = getBarGraph({
+      x: 100,
+      y: 320,
+      width: 600,
+      height: 200,
+      values: [30, 50, 70, 90, 60],
+      labels: ["A", "B", "C", "D", "E"],
+      barColor : "green"
+    });
+
+    items.push(text, rect, circle, image, ...barItems);
 
     return items;
   };
