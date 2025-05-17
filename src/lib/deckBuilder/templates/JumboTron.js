@@ -1,57 +1,43 @@
-// $lib/slideBuilder/templates/jumboTron.js
 
-import { SlideBuilder } from '../SlideBuilder.js';
-import { getText , TextPresets } from '../itemsFolder';
+
+import { getTemplate } from './getTemplate.js';
+import { getText, TextPresets } from '../itemsFolder';
 import { centerHorizontally } from './layoutUtils.js';
 
-let idCounter = 0;
+///////////////////////////////////////////////////
+export function jumboTronTemplate() {
+  const tmpl = getTemplate("JumboTron");
 
-export class JumboTron {
-  constructor() {
-    this.data = {
-      text: "Jumbo Headline",
-    };
+  tmpl.data = {
+    text: "Jumbo Headline"
+  };
 
-    this.theme = {
-      backgroundColor: "red",
-      color: "white",
-      fontSize: 200,
-      topGap: 150
-    };
+  tmpl.theme = {
+    backgroundColor: "#111",
+    color: "white",
+    fontSize: 200,
+    topGap: 150
+  };
 
-    this._id = `jumboTron_${idCounter++}`;
-  }
-
-  mapTheme(global) {
+  tmpl.mapTheme = function (global) {
     return {
       backgroundColor: global.bgColor,
       color: global.primaryColor,
-      fontFamily: global.fontFamilyHeading //wrong 
+      fontFamily: global.fontFamilyHeading
     };
-  }
-  
-  
-  
-  build() {
-    const builder = new SlideBuilder({
-        id: this._id,
-        backgroundColor: this.theme.backgroundColor      
-    });
+  };
 
-    const canvasWidth = 1020;
-    const itemWidth = 800;
-
-    
-    const jumbo = getText(this.data.text);
+  tmpl.getItems = function (data = this.data, theme = this.theme) {
+    const jumbo = getText(data.text);
     TextPresets.jumbotron(jumbo);
-    jumbo.color = this.theme.color;
-    jumbo.y = 150;
-    jumbo.height = 10;
-    
-    centerHorizontally(jumbo, canvasWidth, itemWidth);
-    builder.add(jumbo);
 
-    // return builder.build();
-    return builder.slide;
-  }
+    jumbo.color = theme.color;
+    jumbo.fontFamily = theme.fontFamily;
+    jumbo.y = theme.topGap ?? 150;
+
+    centerHorizontally(jumbo, 1020, 800);
+    return [jumbo];
+  };
+
+  return tmpl;
 }
