@@ -14,8 +14,6 @@ export const text = {
     textAlign: "left",
     lineHeight: 1.2,
   
-    showAt:0,
-
     backgroundColor: null,
     padding: 0,
   
@@ -33,7 +31,7 @@ export const text = {
     y: 0,
     width: 100,
     height: 100,
-    showAt:0,
+  
     fill: "#cccccc",
     borderColor: null,
     borderWidth: 0,
@@ -48,7 +46,7 @@ export const text = {
     x: 0,
     y: 0,
     radius: 50,
-    showAt:0,
+  
     fill: "#999999",
     borderColor: null,
     borderWidth: 0,

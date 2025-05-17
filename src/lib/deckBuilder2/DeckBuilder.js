@@ -19,12 +19,11 @@ export class DeckBuilder {
   }
 
   add(endAt, template) {
-    debugger;
     this.timeCheck(endAt);
     if (this.theme && typeof template.mapTheme === 'function') {
       template.theme = template.mapTheme(this.theme);
     }
-    const slide = template.build();//template.build();
+    const slide = template.build();
     slide.__endTime = endAt;
     this.slides.push(slide);
   }

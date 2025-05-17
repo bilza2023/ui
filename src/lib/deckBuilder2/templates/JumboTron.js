@@ -1,7 +1,7 @@
 // $lib/slideBuilder/templates/jumboTron.js
 
 import { SlideBuilder } from '../SlideBuilder.js';
-import { getText , TextPresets } from '../itemsFolder';
+import { items } from '../items/index.js';
 import { centerHorizontally } from './layoutUtils.js';
 
 let idCounter = 0;
@@ -13,7 +13,7 @@ export class JumboTron {
     };
 
     this.theme = {
-      backgroundColor: "red",
+      backgroundColor: "#111",
       color: "white",
       fontSize: 200,
       topGap: 150
@@ -26,10 +26,10 @@ export class JumboTron {
     return {
       backgroundColor: global.bgColor,
       color: global.primaryColor,
-      fontFamily: global.fontFamilyHeading //wrong 
+      // fontSize: global.headingFontSize,
+      topGap: global.gapLarge
     };
   }
-  
   
   
   build() {
@@ -41,13 +41,9 @@ export class JumboTron {
     const canvasWidth = 1020;
     const itemWidth = 800;
 
-    
-    const jumbo = getText(this.data.text);
-    TextPresets.jumbotron(jumbo);
-    jumbo.color = this.theme.color;
-    jumbo.y = 150;
-    jumbo.height = 10;
-    
+    const jumbo = items.text(this.data.text);
+    jumbo.y = this.theme.topGap;
+    // jumbo.height = 1200;
     centerHorizontally(jumbo, canvasWidth, itemWidth);
     builder.add(jumbo);
 

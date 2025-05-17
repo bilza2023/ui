@@ -1,1 +1,3 @@
-export { SlideBuilder } from './SlideBuilder.js';
+
+
+export { DeckBuilder } from './DeckBuilder.js';

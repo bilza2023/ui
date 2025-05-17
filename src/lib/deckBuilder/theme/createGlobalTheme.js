@@ -1,30 +1,23 @@
-
-
 export function createGlobalTheme(overrides = {}) {
-    const defaults = {
-      // Colors
-      bgColor: "#ffffff",
-      primaryColor: "#00bcd4",
-      secondaryColor: "#ff9800",
-      baseTextColor: "#333333",
-      headingColor: "#111111",
-      bulletColor: "#555555",
-  
-      // Fonts
-      fontFamilyBase: "Arial",
-      fontFamilyHeading: "Georgia",
-      baseFontSize: 40,
-      headingFontSize: 64,
-      bulletFontSize: 42,
-  
-      // Spacing
-      gapLarge: 80,
-      gapMedium: 40,
-      gapSmall: 20,
-      paddingSlide: 30,
-      paddingItem: 10
-    };
-  
-    return { ...defaults, ...overrides };
-  }
-  
+  const defaults = {
+    // Background and Foreground Colors
+    bgColor: "#ffffff",
+    baseTextColor: "#333333",
+    headingColor: "#111111",
+    bulletColor: "#555555",
+
+    // Accent Colors
+    primaryColor: "#00bcd4",
+    secondaryColor: "#ff9800",
+
+    // Shadow / Border Colors
+    shadowColor: "rgba(0, 0, 0, 0.2)",
+    borderColor: "#dddddd",
+
+    // Fonts (names only, not sizes)
+    fontFamilyBase: "Arial",
+    fontFamilyHeading: "Georgia"
+  };
+
+  return { ...defaults, ...overrides };
+}
