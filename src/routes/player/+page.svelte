@@ -5,36 +5,50 @@
   import { browser } from '$app/environment';
   import { writable } from 'svelte/store';
   import * as PIXI from 'pixi.js';
-  import { validateAll,validateSlidesData } from './validator.js';
+  import { Howl } from 'howler';
 
   import SlideNav from '../../lib/appComps/SlideNav.svelte';
-  import Ticker from './Ticker.js';
   import DrawEngine from './DrawEngine.js';
   import { getActiveSlide } from './SlideUtils.js';
-
-  import { slidesData} from '../../lib/staticPresentations/titleSlide.js';
-
+  import { slidesData } from '../../lib/staticPresentations/titleSlide.js';
   import { fitCanvasToViewport } from './layoutConfig.js';
+  import { validateAll } from './validator.js';
 
-  const NAV_H  = 56;
+  const NAV_H = 56;
   const FOOT_H = 60;
 
   let canvasEl;
   let app;
-  let ticker;
   let engine;
+  let sound;
   let player;
-  let current = 0;
+  let ticking = false;
 
   const currentSlide = writable('—');
-  // const currentTime  = writable('0:00');
-  let currentTime  = 0;
-
+  let currentTime = 0;
 
   function fmtTime(sec) {
     const m = Math.floor(sec / 60);
     const s = (sec % 60).toFixed(1).padStart(4, '0');
     return `${String(m).padStart(2, '0')}:${s}`;
+  }
+
+  function updateSlideMeta(t) {
+    currentTime = t;
+    const active = getActiveSlide(slidesData.slides, t);
+    currentSlide.set(active?.id ?? '—');
+  }
+
+  function tick() {
+    const t = sound.seek();
+    engine.draw(t);
+    updateSlideMeta(t);
+
+    if (sound.playing()) {
+      requestAnimationFrame(tick);
+    } else {
+      ticking = false;
+    }
   }
 
   function resizeCanvas() {
@@ -43,21 +57,16 @@
     app.renderer.resize(width, height);
   }
 
-
-  function handleTick(elapsed) {
-  currentTime = elapsed; // ✅ update from Ticker
-  engine.draw(currentTime);
-
-  const active = getActiveSlide(slidesData.slides, currentTime);
-  currentSlide.set(active?.id ?? '—');
-
-  // Optional: display current time as mm:ss
-  // currentTimeText.set(fmtTime(currentTime));
-}
-
   onMount(() => {
     if (!browser) return;
-// debugger;
+
+    sound = new Howl({
+      src: ['/sounds/music.opus'], // replace with your actual path
+      html5: true,
+      onload: () => console.log('Howler: loaded'),
+      onend: () => console.log('Howler: playback finished')
+    });
+
     app = new PIXI.Application({
       width: 100,
       height: 100,
@@ -65,50 +74,56 @@
       view: canvasEl
     });
 
-    //////////////--Data Validation using zod
-console.log("slidesData" , slidesData);
+    const allItems = slidesData.slides.flatMap(s => s.items);
+    const { valid, report } = validateAll(allItems);
 
-// const slideValidation = validateSlidesData(slidesData);
-// if (!slideValidation.valid) {
-//   console.error("Slide-level validation failed:", slideValidation.errors);
-//   return;
-// }
+    if (!valid) {
+      console.error("Validation failed for some items:", report);
+    } else {
+      console.warn("valid data", valid);
+    }
 
-
-const allItems = slidesData.slides.flatMap(s => s.items);
-const { valid, report } = validateAll(allItems);
-
-if (!valid) {
-  console.error("Validation failed for some items:", report);
-}else{
-  console.warn("valid data",valid);
-}
-    //////////////////////////////////////////
     engine = new DrawEngine(slidesData, app);
-    ticker = new Ticker({ onTick: handleTick });
-    
-    player = {
-      start: () => ticker.start(),
-      pause: () => ticker.pause(),
-      reset: () => ticker.reset()
-    };
 
-   
+    player = {
+      start: () => {
+        sound.play();
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(tick);
+        }
+      },
+      pause: () => {
+        sound.pause();
+        ticking = false;
+      },
+      reset: () => {
+  sound.stop(); // ✅ this fully stops + resets to 0
+  ticking = false;
+
+  requestAnimationFrame(() => {
+    const t = sound.seek(); // force sync after stop
+    engine.draw(t);
+    updateSlideMeta(t);
+  });
+}
+
+
+    };
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    // player.start(); // manually controlled
-    engine.draw(0);
+
+    engine.draw(0); // initial draw
   });
 
   onDestroy(() => {
     if (!browser) return;
-    if (ticker) ticker.pause();
+    if (sound) sound.pause();
     if (app) app.destroy(true, { children: true });
     window.removeEventListener('resize', resizeCanvas);
   });
 </script>
-
 
 <!-- ───────────── Layout ───────────── -->
 <div class="mb-2">
