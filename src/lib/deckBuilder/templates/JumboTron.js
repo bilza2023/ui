@@ -11,8 +11,8 @@ export function jumboTron() {
   };
 
   tmpl.theme = {
-    fontSize: 200,
-    topGap: 150
+    fontSize: 100,
+    topGap: 200
   };
 
   tmpl.getItems = function () {
@@ -20,9 +20,11 @@ export function jumboTron() {
     TextPresets.jumbotron(jumbo);
 
     jumbo.color = this.theme.color || this.globalTheme.primaryColor;
-    jumbo.fontSize = this.theme.fontSize || 200;
+  
+    jumbo.fontSize = this.theme.fontSize;
+
     jumbo.fontFamily = this.theme.fontFamily || this.globalTheme.fontFamilyHeading;
-    jumbo.y = this.theme.topGap || 150;
+    jumbo.y = this.theme.topGap || 250;
 
     centerHorizontally(jumbo, 1020, 800);
     return [jumbo];

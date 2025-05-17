@@ -1,29 +1,23 @@
 
 
+
+
 import { DeckBuilder } from '../deckBuilder/DeckBuilder.js';
-import {   JumboTron ,TitleWithBullets} from '../deckBuilder/templates';
-import { coffeeNote } from '../deckBuilder/theme/globalThemes.js';
+import { blueBusiness } from '../deckBuilder/theme/globalThemes.js';
+import { loadTemplate } from '../deckBuilder/templates/loadTemplate.js';
 
-const deck = new DeckBuilder({ globalTheme: coffeeNote });
+const deck = new DeckBuilder({ globalTheme: blueBusiness });
 
+deck.add(5, loadTemplate("jumbotron", 5, { text: "This is From The Slide" }));
 
-
-const slideTitleWith3Bullets = TitleWithBullets();
-deck.add(12, slideTitleWith3Bullets);
-
-// Slide 0 - JumboTron
-const slide0 = JumboTron(); // factory returns the template object
-slide0.data.text = "SlideBuilder";
-slide0.theme.fontSize = 200;
-
-deck.add(20, slide0);
-
-
-
-
-// You can do the same for more slides like TitleWithBullets
-// const slide1 = titleWithBulletsTemplate();
-// slide1.data = { ... };
-// deck.add(10, slide1);
+deck.add(20, loadTemplate("titleWithBullets", 20, {
+  title: "Welcome To Bilza Player",
+  bullet1: "Taleem Player",
+  bullet2: "Slim Player",
+  bullet3: "Pixi Player",
+  showAt1: 7,
+  showAt2: 10,
+  showAt3: 15
+}));
 
 export const slidesData = deck.build();

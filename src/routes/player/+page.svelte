@@ -150,9 +150,10 @@
 
 <!-- ───────────── Layout ───────────── -->
 <div class="mb-2">
-  <SlideNav {player} slide={$currentSlide} time={currentTime} />
   {#if !audioReady}
   <div class="text-sm text-yellow-400 px-4 py-1 font-mono">Loading audio...</div>
+  {:else}
+  <SlideNav {player} slide={$currentSlide} time={currentTime} />
 {/if}
 </div>
 

@@ -10,6 +10,9 @@ export function TitleWithBullets() {
     bullet1: "Composable templates",
     bullet2: "Scriptable slides",
     bullet3: "Production-ready output",
+    showAt1:0,
+    showAt2:0,
+    showAt3:0,
   };
 
   tmpl.theme = {
@@ -21,6 +24,7 @@ export function TitleWithBullets() {
   };
 
   tmpl.getItems = function () {
+    // debugger;
     const canvasWidth = 1020;
     const itemWidth = 800;
     const result = [];
@@ -38,7 +42,7 @@ export function TitleWithBullets() {
     placeBelow(bullet1, title, this.theme.bulletsTopGap || 110);
     centerHorizontally(bullet1, canvasWidth, itemWidth);
     bullet1.textAlign = "center";
-    bullet1.showAt = 3;
+    bullet1.showAt = this.data.showAt1;
     result.push(bullet1);
 
     const bullet2 = getText(this.data.bullet2 || "");
@@ -47,7 +51,7 @@ export function TitleWithBullets() {
     placeBelow(bullet2, bullet1, this.theme.bulletGap || 50);
     centerHorizontally(bullet2, canvasWidth, itemWidth);
     bullet2.textAlign = "center";
-    bullet2.showAt = 6;
+    bullet2.showAt = this.data.showAt2;
     result.push(bullet2);
 
     const bullet3 = getText(this.data.bullet3 || "");
@@ -57,7 +61,7 @@ export function TitleWithBullets() {
     centerHorizontally(bullet3, canvasWidth, itemWidth);
     bullet3.textAlign = "center";
     /////////////
-    bullet3.showAt = 9;
+    bullet3.showAt = this.data.showAt3;
     result.push(bullet3);
 
     return result;
