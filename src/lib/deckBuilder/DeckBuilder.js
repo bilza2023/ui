@@ -21,9 +21,10 @@ export class DeckBuilder {
 
     // Apply global theme if available
     if (this.theme && typeof template.mapTheme === 'function') {
-      template.theme = template.mapTheme(this.theme);
+      // template.theme = template.mapTheme(this.theme); //dont wrong
+       template.mapTheme(this.theme);
     }
-
+//  debugger;
     const items = template.getItems(template.data, template.theme);
 
     const slide = {
