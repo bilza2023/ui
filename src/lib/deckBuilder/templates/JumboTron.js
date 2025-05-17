@@ -5,7 +5,7 @@ import { getText, TextPresets } from '../itemsFolder';
 import { centerHorizontally } from './layoutUtils.js';
 
 ///////////////////////////////////////////////////
-export function jumboTronTemplate() {
+export function jumboTron() {
   const tmpl = getTemplate("JumboTron");
 
   tmpl.data = {

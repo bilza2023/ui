@@ -1,5 +1,5 @@
-import { JumboTron } from './JumboTron.js';
 
-export const templates = {
-  JumboTron: JumboTron 
-};
+
+
+export { jumboTron as JumboTron } from './JumboTron.js';
+export { TitleWithBullets } from './TitleWithBullets.js';
