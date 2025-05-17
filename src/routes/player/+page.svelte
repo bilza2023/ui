@@ -27,7 +27,9 @@
   let current = 0;
 
   const currentSlide = writable('—');
-  const currentTime  = writable('0:00');
+  // const currentTime  = writable('0:00');
+  let currentTime  = 0;
+
 
   function fmtTime(sec) {
     const m = Math.floor(sec / 60);
@@ -41,21 +43,17 @@
     app.renderer.resize(width, height);
   }
 
-  function handleTick(t) {
-    current = t;
-    
-//--stop if finished  
-    if (t >= slidesData.slides.at(-1).endTime) {
-  ticker.pause(); // Stop the loop
-  return;
-  }
-///////////////////////////
-    engine.draw(current);
 
-    const active = getActiveSlide(slidesData.slides, current);
-    currentSlide.set(active?.id ?? '—');
-    currentTime.set(fmtTime(current));
-  }
+  function handleTick(elapsed) {
+  currentTime = elapsed; // ✅ update from Ticker
+  engine.draw(currentTime);
+
+  const active = getActiveSlide(slidesData.slides, currentTime);
+  currentSlide.set(active?.id ?? '—');
+
+  // Optional: display current time as mm:ss
+  // currentTimeText.set(fmtTime(currentTime));
+}
 
   onMount(() => {
     if (!browser) return;
@@ -114,7 +112,7 @@ if (!valid) {
 
 <!-- ───────────── Layout ───────────── -->
 <div class="mb-2">
-  <SlideNav {player} slide={$currentSlide} time={$currentTime} />
+  <SlideNav {player} slide={$currentSlide} time={currentTime} />
 </div>
 
 

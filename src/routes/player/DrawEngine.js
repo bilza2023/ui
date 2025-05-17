@@ -18,12 +18,27 @@ export default class DrawEngine {
     if (!slide) return;
 
     // Prevent re-rendering the same slide if desired
-    if (slide.id === this.lastSlideId) return;
-    this.lastSlideId = slide.id;
+    // const isNewSlide = slide.id !== this.lastSlideId;
+    // if (isNewSlide) {
+    //   this.lastSlideId = slide.id;
+    // }
+    
+///////////////////////////////////////////
+// here remove items which are not to be show
+// for (const item of slide.items) {
+//   console.log(`item.showAt =`, item.showAt, `currentTime =`, currentTime);
+// }
+console.log("DrawEngine draw() time:", currentTime);
 
+
+const visibleItems = slide.items.filter(item =>
+  item.visible !== false &&
+  (item.showAt === undefined || currentTime >= item.showAt)
+);
+//this is a function call
     renderCanvasItems(
       this.app,
-      slide.items,
+      visibleItems,
       this.designWidth,
       this.designHeight,
       slide.backgroundColor || "#000"

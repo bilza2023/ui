@@ -33,27 +33,31 @@ export function TitleWithBullets() {
     result.push(title);
 
     const bullet1 = getText(this.data.bullet1 || "");
-    bullet1.color = this.theme.bulletColor || this.globalTheme.secondaryColor;
+    bullet1.color = this.globalTheme.bulletColor;
     bullet1.fontSize = this.theme.bulletFontSize || 80;
     placeBelow(bullet1, title, this.theme.bulletsTopGap || 110);
     centerHorizontally(bullet1, canvasWidth, itemWidth);
     bullet1.textAlign = "center";
+    bullet1.showAt = 3;
     result.push(bullet1);
 
     const bullet2 = getText(this.data.bullet2 || "");
-    bullet2.color = bullet1.color;
+    bullet2.color = this.globalTheme.bulletColor;
     bullet2.fontSize = bullet1.fontSize;
     placeBelow(bullet2, bullet1, this.theme.bulletGap || 50);
     centerHorizontally(bullet2, canvasWidth, itemWidth);
     bullet2.textAlign = "center";
+    bullet2.showAt = 6;
     result.push(bullet2);
 
     const bullet3 = getText(this.data.bullet3 || "");
-    bullet3.color = bullet1.color;
+    bullet3.color = this.globalTheme.bulletColor;
     bullet3.fontSize = bullet1.fontSize;
     placeBelow(bullet3, bullet2, this.theme.bulletGap || 50);
     centerHorizontally(bullet3, canvasWidth, itemWidth);
     bullet3.textAlign = "center";
+    /////////////
+    bullet3.showAt = 9;
     result.push(bullet3);
 
     return result;

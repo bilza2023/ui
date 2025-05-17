@@ -9,14 +9,14 @@ const deck = new DeckBuilder({ globalTheme: coffeeNote });
 
 
 const slideTitleWith3Bullets = TitleWithBullets();
-deck.add(5, slideTitleWith3Bullets);
+deck.add(12, slideTitleWith3Bullets);
 
 // Slide 0 - JumboTron
 const slide0 = JumboTron(); // factory returns the template object
 slide0.data.text = "SlideBuilder";
 slide0.theme.fontSize = 200;
 
-deck.add(10, slide0);
+deck.add(20, slide0);
 
 
 
