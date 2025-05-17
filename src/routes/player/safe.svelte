@@ -1,17 +1,18 @@
-
 <script>
-  import { onMount, onDestroy } from 'svelte';
-  import { browser } from '$app/environment';
-  import { writable } from 'svelte/store';
-  import * as PIXI from 'pixi.js';
-  import { Howl } from 'howler';
+  import { onMount, onDestroy } from "svelte";
+  import { browser } from "$app/environment";
+  import { writable } from "svelte/store";
+  import * as PIXI from "pixi.js";
+  import { Howl } from "howler";
 
-  import SlideNav from '../../lib/appComps/SlideNav.svelte';
-  import DrawEngine from './DrawEngine.js';
-  import { getActiveSlide } from './SlideUtils.js';
-  import { slidesData } from '../../lib/staticPresentations/titleSlide.js';
-  import { fitCanvasToViewport } from './layoutConfig.js';
-  import { validateAll } from './validator.js';
+  import SlideNav from "../../lib/appComps/SlideNav.svelte";
+  import DrawEngine from "./DrawEngine.js";
+  import { getActiveSlide } from "./SlideUtils.js";
+  import { slidesData } from "../../lib/staticPresentations/titleSlide.js";
+  import { fitCanvasToViewport } from "./layoutConfig.js";
+  import { validateAll } from "./validator.js";
+
+  const maxEndTime = slidesData.slides.at(-1).endTime;
 
   const NAV_H = 56;
   const FOOT_H = 60;
@@ -24,32 +25,24 @@
   let ticking = false;
   let audioReady = false;
 
-  const currentSlide = writable('—');
+  const currentSlide = writable("—");
   let currentTime = 0;
-
-  const maxEndTime = slidesData.slides.at(-1).endTime;
-
-  function fmtTime(sec) {
-    const m = Math.floor(sec / 60);
-    const s = (sec % 60).toFixed(1).padStart(4, '0');
-    return `${String(m).padStart(2, '0')}:${s}`;
-  }
 
   function updateSlideMeta(t) {
     currentTime = t;
     const active = getActiveSlide(slidesData.slides, t);
-    currentSlide.set(active?.id ?? '—');
+    currentSlide.set(active?.id ?? "—");
   }
 
   function tick() {
     const t = sound.seek();
 
     if (t >= maxEndTime) {
-      sound.stop();
+      sound.stop(); // ✅ stop playback
       ticking = false;
-      engine.draw(maxEndTime);
+      engine.draw(maxEndTime); // optional: final frame
       updateSlideMeta(maxEndTime);
-      return;
+      return; // ⛔ stop the loop
     }
 
     engine.draw(t);
@@ -72,33 +65,23 @@
     if (!browser) return;
 
     sound = new Howl({
-      src: ['/sounds/music.opus'],
+      src: ["/sounds/music.opus"], // replace with your actual path
       html5: true,
       onload: () => {
-        console.log('Howler: loaded');
         audioReady = true;
       },
-      onplay: () => {
-        console.log('Howler: playing');
-        if (!ticking) {
-          ticking = true;
-          requestAnimationFrame(tick);
-        }
-      },
-      onend: () => {
-        console.log('Howler: playback finished');
-        ticking = false;
-      }
+      onplay: () => console.log("Narration: playing"),
+      onend: () => console.log("Narration: playback finished"),
     });
 
     app = new PIXI.Application({
       width: 100,
       height: 100,
       background: 0x000000,
-      view: canvasEl
+      view: canvasEl,
     });
 
-    const allItems = slidesData.slides.flatMap(s => s.items);
+    const allItems = slidesData.slides.flatMap((s) => s.items);
     const { valid, report } = validateAll(allItems);
 
     if (!valid) {
@@ -111,40 +94,39 @@
 
     player = {
       start: () => {
-        if (!audioReady) {
-          console.warn("Audio not ready yet");
-          return;
+        sound.play();
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(tick);
         }
-        sound.play(); // onplay will auto-start tick
       },
       pause: () => {
         sound.pause();
         ticking = false;
       },
       reset: () => {
-        sound.stop();
+        sound.stop(); // ✅ this fully stops + resets to 0
         ticking = false;
-        currentTime = 0;
-        // Delay to allow stop to complete
-        setTimeout(() => {
-          const t = sound.seek();
+
+        requestAnimationFrame(() => {
+          const t = sound.seek(); // force sync after stop
           engine.draw(t);
           updateSlideMeta(t);
-        }, 50);
-      }
+        });
+      },
     };
 
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
 
     engine.draw(0); // initial draw
   });
 
   onDestroy(() => {
     if (!browser) return;
-    if (sound) sound.stop();
+    if (sound) sound.pause();
     if (app) app.destroy(true, { children: true });
-    window.removeEventListener('resize', resizeCanvas);
+    window.removeEventListener("resize", resizeCanvas);
   });
 </script>
 
@@ -152,10 +134,11 @@
 <div class="mb-2">
   <SlideNav {player} slide={$currentSlide} time={currentTime} />
   {#if !audioReady}
-  <div class="text-sm text-yellow-400 px-4 py-1 font-mono">Loading audio...</div>
-{/if}
+    <div class="text-sm text-yellow-400 px-4 py-1 font-mono">
+      Loading audio...
+    </div>
+  {/if}
 </div>
-
 
 <canvas bind:this={canvasEl} style="display:block;margin:0 auto;"></canvas>
 
