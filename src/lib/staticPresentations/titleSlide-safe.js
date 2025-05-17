@@ -3,10 +3,10 @@
 
 
 import { DeckBuilder } from '../deckBuilder/DeckBuilder.js';
-import { darkTheme } from '../deckBuilder/theme/globalThemes.js';
+import { blueBusiness } from '../deckBuilder/theme/globalThemes.js';
 import { loadTemplate } from '../deckBuilder/templates/loadTemplate.js';
 
-const deck = new DeckBuilder({ globalTheme: darkTheme });
+const deck = new DeckBuilder({ globalTheme: blueBusiness });
 
 deck.add(5, loadTemplate("jumbotron", { text: "This is From The Slide" }));
 
@@ -19,7 +19,5 @@ deck.add(20, loadTemplate("titleWithBullets", {
   showAt2: 10,
   showAt3: 15
 }));
-
-deck.add(25, loadTemplate("testVisuals"));
 
 export const slidesData = deck.build();
