@@ -1,11 +1,9 @@
 import { getTemplate } from './getTemplate.js';
-import { getText, TextPresets } from '../itemsFolder';
-import { centerHorizontally,placeBelow } from './layoutUtils.js';
+import { getText } from '../itemsFolder';
+import { centerHorizontally, placeBelow } from './layoutUtils.js';
 
 export function TitleWithBullets() {
-  const tmpl = getTemplate();
-
-  tmpl.name = "TitleWithBullets";
+  const tmpl = getTemplate("TitleWithBullets");
 
   tmpl.data = {
     title: "Welcome to SlideBuilder",
@@ -15,68 +13,45 @@ export function TitleWithBullets() {
   };
 
   tmpl.theme = {
-    backgroundColor: "#223344",
-    titleColor: "white",
     titleFontSize: 100,
     titleTopGap: 40,
-
-    bulletsTopGap: 40,
-    bulletGap: 20,
-    bulletColor: "red",
-    bulletFontSize: 50
+    bulletsTopGap: 110,
+    bulletGap: 50,
+    bulletFontSize: 80
   };
 
-  tmpl.mapTheme = function (global) {
-    return {
-      backgroundColor: global.bgColor,
-      titleColor: global.primaryColor,
-      bulletColor: global.primaryColor
-    };
-  };
-  
-
-  tmpl.getItems = function (data = this.data, theme = this.theme) {
-    debugger;
+  tmpl.getItems = function () {
     const canvasWidth = 1020;
     const itemWidth = 800;
     const result = [];
 
-    const title = getText(data.title);
-    // TextPresets.heading(title);
-    title.color = theme.titleColor;
-    title.fontSize = theme.titleFontSize;
-    
-    title.y = theme.titleTopGap;
-    // title.height = 80; 
-    title.y = theme.titleTopGap;
-
+    const title = getText(this.data.title);
+    title.color = this.theme.titleColor || this.globalTheme.primaryColor;
+    title.fontSize = this.theme.titleFontSize || 100;
+    title.y = this.theme.titleTopGap || 40;
     centerHorizontally(title, canvasWidth, itemWidth);
     result.push(title);
 
-    const bullet1 = getText(data.bullet1 || "");
-    // TextPresets.subtitle(bullet1);
-    bullet1.color = theme.bulletColor;
-    // bullet1.fontSize = theme.bulletFontSize;
-    bullet1.fontSize = theme.bulletFontSize;
-    placeBelow(bullet1, title, theme.bulletsTopGap);
+    const bullet1 = getText(this.data.bullet1 || "");
+    bullet1.color = this.theme.bulletColor || this.globalTheme.secondaryColor;
+    bullet1.fontSize = this.theme.bulletFontSize || 80;
+    placeBelow(bullet1, title, this.theme.bulletsTopGap || 110);
     centerHorizontally(bullet1, canvasWidth, itemWidth);
     bullet1.textAlign = "center";
     result.push(bullet1);
 
-    const bullet2 = getText(data.bullet2 || "");
-    // TextPresets.subtitle(bullet2);
-    bullet2.color = theme.bulletColor;
-    bullet2.fontSize = theme.bulletFontSize;
-    placeBelow(bullet2, bullet1, theme.bulletGap);
+    const bullet2 = getText(this.data.bullet2 || "");
+    bullet2.color = bullet1.color;
+    bullet2.fontSize = bullet1.fontSize;
+    placeBelow(bullet2, bullet1, this.theme.bulletGap || 50);
     centerHorizontally(bullet2, canvasWidth, itemWidth);
     bullet2.textAlign = "center";
     result.push(bullet2);
 
-    const bullet3 = getText(data.bullet3 || "");
-    // TextPresets.subtitle(bullet3);
-    bullet3.color = theme.bulletColor;
-    bullet3.fontSize = theme.bulletFontSize;
-    placeBelow(bullet3, bullet2, theme.bulletGap);
+    const bullet3 = getText(this.data.bullet3 || "");
+    bullet3.color = bullet1.color;
+    bullet3.fontSize = bullet1.fontSize;
+    placeBelow(bullet3, bullet2, this.theme.bulletGap || 50);
     centerHorizontally(bullet3, canvasWidth, itemWidth);
     bullet3.textAlign = "center";
     result.push(bullet3);
@@ -84,5 +59,5 @@ export function TitleWithBullets() {
     return result;
   };
 
-  return tmpl; // ✅ this was missing
+  return tmpl;
 }

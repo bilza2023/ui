@@ -2,9 +2,10 @@
 
 import { DeckBuilder } from '../deckBuilder/DeckBuilder.js';
 import {   JumboTron ,TitleWithBullets} from '../deckBuilder/templates';
-import { blueBusiness } from '../deckBuilder/theme/globalThemes.js';
+import { coffeeNote } from '../deckBuilder/theme/globalThemes.js';
 
-const deck = new DeckBuilder({ theme: blueBusiness });
+const deck = new DeckBuilder({ globalTheme: coffeeNote });
+
 
 
 const slideTitleWith3Bullets = TitleWithBullets();

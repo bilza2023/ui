@@ -10,12 +10,9 @@ export function getTemplate(name="BaseTemplate") {
 
     data: {},         // User sets
     theme: {},        // User sets
+    globalTheme: {},   // Injected by DeckBuilder
 
-    mapTheme(globalTheme) {
-      return {};      // User overrides or edits this
-    },
-
-    getItems(data, theme) {
+    getItems(data, globalTheme) {
       return [];      // User defines how to generate items
     }
   };

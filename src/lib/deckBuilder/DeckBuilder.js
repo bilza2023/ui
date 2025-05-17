@@ -2,10 +2,10 @@
 import { SlidesDataSchema } from './schemas/zod-items-schema-16may2025.js';
 
 export class DeckBuilder {
-  constructor({ designWidth = 1020, designHeight = 576, theme = null } = {}) {
+  constructor({ designWidth = 1020, designHeight = 576, globalTheme = null } = {}) {
     this.designWidth = designWidth;
     this.designHeight = designHeight;
-    this.theme = theme;
+    this.globalTheme = globalTheme; // ✅ renamed for clarity
     this.slides = [];
   }
 
@@ -16,20 +16,21 @@ export class DeckBuilder {
   }
 
   add(endAt, template) {
-  
     this.timeCheck(endAt);
 
-    // Apply global theme if available
-    if (this.theme && typeof template.mapTheme === 'function') {
-      // template.theme = template.mapTheme(this.theme); //dont wrong
-       template.mapTheme(this.theme);
+    // ✅ Inject global theme only
+    if (this.globalTheme) {
+      template.globalTheme = this.globalTheme;
     }
-//  debugger;
-    const items = template.getItems(template.data, template.theme);
+
+    const items = template.getItems();
 
     const slide = {
       id: template.id,
-      backgroundColor: template.theme.backgroundColor ?? "#000",
+      backgroundColor:
+        template.theme?.backgroundColor ||
+        this.globalTheme?.bgColor ||
+        "#000",
       items,
       __endTime: endAt
     };
@@ -66,10 +67,9 @@ export class DeckBuilder {
 
     const result = SlidesDataSchema.safeParse(slidesData);
     if (!result.success) {
-      // throw new Error(`Validation failed: ${JSON.stringify(result.error.format(), null, 2)}`);
+      throw new Error(`Validation failed: ${JSON.stringify(result.error.format(), null, 2)}`);
     }
 
     return slidesData;
   }
 }
-

@@ -1,10 +1,8 @@
 
-
 import { getTemplate } from './getTemplate.js';
 import { getText, TextPresets } from '../itemsFolder';
 import { centerHorizontally } from './layoutUtils.js';
 
-///////////////////////////////////////////////////
 export function jumboTron() {
   const tmpl = getTemplate("JumboTron");
 
@@ -13,27 +11,18 @@ export function jumboTron() {
   };
 
   tmpl.theme = {
-    backgroundColor: "#111",
-    color: "white",
     fontSize: 200,
     topGap: 150
   };
 
-  tmpl.mapTheme = function (global) {
-    return {
-      backgroundColor: global.bgColor,
-      color: global.primaryColor,
-      fontFamily: global.fontFamilyHeading
-    };
-  };
-
-  tmpl.getItems = function (data = this.data, theme = this.theme) {
-    const jumbo = getText(data.text);
+  tmpl.getItems = function () {
+    const jumbo = getText(this.data.text);
     TextPresets.jumbotron(jumbo);
 
-    jumbo.color = theme.color;
-    jumbo.fontFamily = theme.fontFamily;
-    jumbo.y = theme.topGap ?? 150;
+    jumbo.color = this.theme.color || this.globalTheme.primaryColor;
+    jumbo.fontSize = this.theme.fontSize || 200;
+    jumbo.fontFamily = this.theme.fontFamily || this.globalTheme.fontFamilyHeading;
+    jumbo.y = this.theme.topGap || 150;
 
     centerHorizontally(jumbo, 1020, 800);
     return [jumbo];
