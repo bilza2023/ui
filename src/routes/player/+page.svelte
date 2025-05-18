@@ -5,7 +5,7 @@
   import { Howl } from 'howler';
 
   import SlideNav from '../../lib/appComps/SlideNav.svelte';
-  import DrawEngine from './DrawEngine.js';
+  import DrawEngine from './drawEngine/DrawEngine';
   import { slidesData } from '../../lib/staticPresentations/titleSlide.js';
   import { fitCanvasToViewport } from './layoutConfig.js';
   import { validateAll } from './validator.js';

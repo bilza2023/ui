@@ -1,7 +1,7 @@
 import { getTemplate } from './getTemplate.js';
 import { getText } from '../itemsFolder';
 import { centerHorizontally, placeBelow } from './layoutUtils.js';
-
+ 
 export function TitleWithBullets() {
   const tmpl = getTemplate("TitleWithBullets");
 
@@ -22,10 +22,9 @@ export function TitleWithBullets() {
     bulletGap: 50,
     bulletFontSize: 80
   };
-
+/////////////////////////////////////////////////
   tmpl.getItems = function () {
-    const canvasWidth = 1020;
-    const itemWidth = 800;
+ 
     const result = [];
 
     const title = getText(this.data.title);

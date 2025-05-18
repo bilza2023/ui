@@ -1,37 +1,31 @@
-
-
-
+// $lib/userPresentations/titleSlide.js
 
 import { DeckBuilder } from '../deckBuilder/DeckBuilder.js';
 import { blueEducation } from '../deckBuilder/theme/globalThemes.js';
-import { loadTemplate } from '../deckBuilder/templates/loadTemplate.js';
+import { Templates } from '../deckBuilder/templates/templateRegistry/Templates.js';
 
 const deck = new DeckBuilder({ globalTheme: blueEducation });
 
+// Slide 1 – JumboTron
+deck.add(10, Templates.JumboTron);
 
-deck.add(5, loadTemplate("testVisuals"));
-/////////////////////////////////////////////
-deck.add(10, loadTemplate("jumbotron", { text: "😃 🚀 📘 From The Slide" }));
+// Slide 2 – Title With Bullets
+const slide2 = Templates.TitleWithBullets;
 
-deck.add(20, loadTemplate("titleWithBullets", {
-  title: "Welcome To Bilza Player",
-  bullet1: "Taleem Player",
-  bullet2: "Slim Player",
-  bullet3: "Pixi Player",
-  showAt1: 12,
-  showAt2: 14,
-  showAt3: 16
-}));
+slide2.data = {
+  title: "Welcome To Presentation",
+  bullet1: "What is taleem.help",
+  bullet2: "Vision",
+  bullet3: "Products",
+  showAt1: 15,
+  showAt2: 20,
+  showAt3: 25
+};
+//////////////////////////
+deck.add(30, slide2);
 
+// Slide 3 – Test Visuals
+deck.add(40, Templates.TestVisuals);
 
-
-
-
-
-
-
-
-
-
-//////////////////////////////////////////////////
+// Finalize and export
 export const slidesData = deck.build();

@@ -20,7 +20,8 @@ export class DeckBuilder {
 
     // ✅ Inject global theme only
     if (this.globalTheme) {
-      template.globalTheme = this.globalTheme;
+      //read only copy
+      template.globalTheme = JSON.parse(JSON.stringify(this.globalTheme));
     }
 
     // const items = template.getItems();

@@ -10,7 +10,7 @@ export function jumboTron() {
   };
 
   tmpl.theme = {
-    fontSize: 100,
+    fontSize: 80,
     topGap: 200
   };
 

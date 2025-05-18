@@ -1,11 +1,11 @@
 
-
-import { JumboTron, TitleWithBullets,testVisuals } from './index';
+import {TitleWithBullets} from "./templateRegistry/TitleWithBullets";
+import {JumboTron} from "./templateRegistry/JumboTron";
 
 const templateRegistry = {
   jumbotron: JumboTron,
   titleWithBullets: TitleWithBullets,
-  testVisuals: testVisuals,
+  // testVisuals: testVisuals,
   // add more templates as needed
 };
 export function loadTemplate(name, data = {}, theme = {}) {
