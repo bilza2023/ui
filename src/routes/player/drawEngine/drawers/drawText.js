@@ -1,31 +1,37 @@
 import * as PIXI from 'pixi.js';
 
 export default function drawText(app, item) {
-  const style = new PIXI.TextStyle({
-    fontFamily: item.fontFamily || 'Arial',
-    fontSize: item.fontSize || 24,
-    fill: item.color || '#ffffff',
-    wordWrap: true,
-    wordWrapWidth: item.width || 400,
-    align: item.textAlign || 'left',
-    lineHeight: item.lineHeight || 1.2,
-  });
+  // 1. Ensure BitmapFont is available (runtime-generated for test)
+  if (!PIXI.BitmapFont.available["TestFont"]) {
+    PIXI.BitmapFont.from("TestFont", {
+      fontFamily: item.fontFamily || 'Arial',
+      fontSize: item.fontSize || 24,
+      fill: item.color || '#ffffff'
+    });
+  }
 
-  const textObj = new PIXI.Text(item.text, style);
+  // 2. Create BitmapText
+  const bt = new PIXI.BitmapText(item.text, {
+    fontName: "TestFont",
+    fontSize: item.fontSize || 24,
+    tint: item.color || 0xffffff
+  });
 
   const padding = item.padding || 0;
 
+  // 3. Apply alignment and positioning
   if (item.textAlign === 'center') {
-    textObj.anchor.x = 0.5;
-    textObj.x = item.x + (item.width || 400) / 2;
+    bt.anchor = new PIXI.Point(0.5, 0); // anchor.y = 0 (top)
+    bt.x = item.x + (item.width || 400) / 2;
   } else {
-    textObj.anchor.x = 0;
-    textObj.x = item.x + padding;
+    bt.anchor = new PIXI.Point(0, 0);
+    bt.x = item.x + padding;
   }
 
-  textObj.y = item.y + padding;
-  textObj.rotation = item.rotation || 0;
-  if (item.zIndex !== undefined) textObj.zIndex = item.zIndex;
+  bt.y = item.y + padding;
+  bt.rotation = item.rotation || 0;
+  if (item.zIndex !== undefined) bt.zIndex = item.zIndex;
 
-  app.stage.addChild(textObj);
+  // 4. Add to stage
+  app.stage.addChild(bt);
 }
