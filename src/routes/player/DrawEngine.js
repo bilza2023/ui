@@ -1,6 +1,6 @@
 // DrawEngine.js
 
-import renderCanvasItems from './renderer/CanvasRenderer.js';
+import renderSlide from './renderer/SlideRenderer.js';
 import { getActiveSlide } from './SlideUtils.js';
 
 export default class DrawEngine {
@@ -13,35 +13,15 @@ export default class DrawEngine {
   }
 
   draw(currentTime) {
-    // debugger;
     const slide = getActiveSlide(this.slides, currentTime);
     if (!slide) return;
 
-    // Prevent re-rendering the same slide if desired
-    // const isNewSlide = slide.id !== this.lastSlideId;
-    // if (isNewSlide) {
-    //   this.lastSlideId = slide.id;
-    // }
-    
-///////////////////////////////////////////
-// here remove items which are not to be show
-// for (const item of slide.items) {
-//   console.log(`item.showAt =`, item.showAt, `currentTime =`, currentTime);
-// }
-console.log("DrawEngine draw() time:", currentTime);
-
-
-const visibleItems = slide.items.filter(item =>
-  item.visible !== false &&
-  (item.showAt === undefined || currentTime >= item.showAt)
-);
-//this is a function call
-    renderCanvasItems(
+    // Future: prevent unnecessary re-renders by comparing slide.id
+    renderSlide(
       this.app,
-      visibleItems,
       this.designWidth,
       this.designHeight,
-      slide.backgroundColor || "#000"
+      slide
     );
   }
 }

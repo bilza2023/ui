@@ -1,4 +1,7 @@
+
+// renderer/CanvasRenderer.js
 import { drawMap } from './index.js';
+import drawBackground from './drawBackground.js';
 import * as PIXI from 'pixi.js';
 
 import {
@@ -11,7 +14,8 @@ export default function renderCanvasItems(
   items,
   designWidth,
   designHeight,
-  backgroundColor = "#000000"
+  background = null,
+  fallbackColor = "#000000"
 ) {
   const stage = app.stage;
   stage.removeChildren();
@@ -22,13 +26,19 @@ export default function renderCanvasItems(
   const metrics = getSlideMetrics(canvasW, canvasH, designWidth, designHeight);
   const screenItems = mapSlideItems(items, metrics);
 
-  // Draw background rect
-  const bg = new PIXI.Graphics();
-  bg.beginFill(PIXI.utils.string2hex(backgroundColor));
-  bg.drawRect(0, 0, canvasW, canvasH);
-  bg.endFill();
-  bg.zIndex = -1; // ensure it stays behind everything
-  stage.addChild(bg);
+  // ✅ Decide whether to draw fallback color
+  const shouldFallback = !background || (!background.backgroundImage && !background.pattern);
+
+  if (!shouldFallback) {
+    drawBackground(app, background, canvasW, canvasH);
+  } else {
+    const bg = new PIXI.Graphics();
+    bg.beginFill(PIXI.utils.string2hex(fallbackColor));
+    bg.drawRect(0, 0, canvasW, canvasH);
+    bg.endFill();
+    bg.zIndex = -1;
+    stage.addChild(bg);
+  }
 
   // Draw items
   for (const item of screenItems) {

@@ -62,9 +62,16 @@ export function testVisuals() {
       items,
       background: {
         backgroundImage: null,
-        pattern: null
+        pattern: {
+          type: "grid",
+          cellWidth: 50,
+          cellHeight: 50,
+          lineColor: "#cccccc",
+          lineWidth: 1
+        }
       }
     };
+    
   };
 
   return tmpl;
