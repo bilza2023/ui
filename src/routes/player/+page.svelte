@@ -24,10 +24,14 @@
   let currentTime = 0;
   const maxEndTime = slidesData.slides.at(-1).endTime;
 
-  function handleSeek(time) {
-  sound.seek(time);
-  engine.draw(time);
-  currentTime = time;
+  function handleSeek(event) {
+    // debugger;
+    const time = parseFloat(event.target.value);
+  if (!isNaN(time)) {
+    sound.seek(time);
+    engine.draw(time);
+    currentTime = time;
+  }
 }
 
 function handleVolume(event) {
@@ -35,7 +39,7 @@ function handleVolume(event) {
   if (!isNaN(volume)) {
     sound.volume(volume);
   }
-  console.log("handleVolume",volume);
+  // console.log("handleVolume",volume);
 }
 function start(){
   if (!audioReady) {
