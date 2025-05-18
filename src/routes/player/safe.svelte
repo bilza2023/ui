@@ -1,14 +1,16 @@
 <script>
-  import { onMount, onDestroy } from 'svelte';
-  import { browser } from '$app/environment';
-  import * as PIXI from 'pixi.js';
-  import { Howl } from 'howler';
+  import { onMount, onDestroy } from "svelte";
+  import { browser } from "$app/environment";
+  import { writable } from "svelte/store";
+  import * as PIXI from "pixi.js";
+  import { Howl } from "howler";
 
-  import SlideNav from '../../lib/appComps/SlideNav.svelte';
-  import DrawEngine from './DrawEngine.js';
-  import { slidesData } from '../../lib/staticPresentations/titleSlide.js';
-  import { fitCanvasToViewport } from './layoutConfig.js';
-  import { validateAll } from './validator.js';
+  import SlideNav from "../../lib/appComps/SlideNav.svelte";
+  import DrawEngine from "./drawEngine/DrawEngine.js";
+  import { getActiveSlide } from "./SlideUtils.js";
+  import { slidesData } from "../../lib/staticPresentations/titleSlide.js";
+  import { fitCanvasToViewport } from "./layoutConfig.js";
+  import { validateAll } from "./validator.js";
 
   const NAV_H = 56;
   const FOOT_H = 60;
@@ -21,13 +23,21 @@
   let ticking = false;
   let audioReady = false;
 
+  const currentSlide = writable("—");
   let currentTime = 0;
+
   const maxEndTime = slidesData.slides.at(-1).endTime;
 
   function fmtTime(sec) {
     const m = Math.floor(sec / 60);
-    const s = (sec % 60).toFixed(1).padStart(4, '0');
-    return `${String(m).padStart(2, '0')}:${s}`;
+    const s = (sec % 60).toFixed(1).padStart(4, "0");
+    return `${String(m).padStart(2, "0")}:${s}`;
+  }
+
+  function updateSlideMeta(t) {
+    currentTime = t;
+    const active = getActiveSlide(slidesData.slides, t);
+    currentSlide.set(active?.id ?? "—");
   }
 
   function tick() {
@@ -37,11 +47,12 @@
       sound.stop();
       ticking = false;
       engine.draw(maxEndTime);
+      updateSlideMeta(maxEndTime);
       return;
     }
 
-    currentTime = t;
     engine.draw(t);
+    updateSlideMeta(t);
 
     if (sound.playing()) {
       requestAnimationFrame(tick);
@@ -60,33 +71,33 @@
     if (!browser) return;
 
     sound = new Howl({
-      src: ['/sounds/music.opus'],
+      src: ["/sounds/music.opus"],
       html5: true,
       onload: () => {
-        console.log('Howler: loaded');
+        console.log("Howler: loaded");
         audioReady = true;
       },
       onplay: () => {
-        console.log('Howler: playing');
+        console.log("Howler: playing");
         if (!ticking) {
           ticking = true;
           requestAnimationFrame(tick);
         }
       },
       onend: () => {
-        console.log('Howler: playback finished');
+        console.log("Howler: playback finished");
         ticking = false;
-      }
+      },
     });
 
     app = new PIXI.Application({
       width: 100,
       height: 100,
       background: 0x000000,
-      view: canvasEl
+      view: canvasEl,
     });
 
-    const allItems = slidesData.slides.flatMap(s => s.items);
+    const allItems = slidesData.slides.flatMap((s) => s.items);
     const { valid, report } = validateAll(allItems);
 
     if (!valid) {
@@ -113,15 +124,17 @@
         sound.stop();
         ticking = false;
         currentTime = 0;
+        // Delay to allow stop to complete
         setTimeout(() => {
           const t = sound.seek();
           engine.draw(t);
+          updateSlideMeta(t);
         }, 50);
-      }
+      },
     };
 
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
 
     engine.draw(0); // initial draw
   });
@@ -130,25 +143,29 @@
     if (!browser) return;
     if (sound) sound.stop();
     if (app) app.destroy(true, { children: true });
-    window.removeEventListener('resize', resizeCanvas);
+    window.removeEventListener("resize", resizeCanvas);
   });
 </script>
 
 <!-- ───────────── Layout ───────────── -->
-<div class="mb-8">
+<div class="mb-2">
   {#if !audioReady}
-  <div class="text-sm text-yellow-400 px-4 py-1 font-mono">Loading audio...</div>
+    <div class="text-sm text-yellow-400 px-4 py-1 font-mono">
+      Loading audio...
+    </div>
   {:else}
-  <SlideNav {player} time={currentTime} />
-{/if}
+    <SlideNav {player} slide={$currentSlide} time={currentTime} />
+  {/if}
 </div>
 
 <canvas bind:this={canvasEl} style="display:block;margin:0 auto;"></canvas>
 
+<!-- reserved bottom band / footer placeholder -->
 <div style="height:{FOOT_H}px"></div>
 
 <style>
+  /* Dark charcoal background for this route */
   :global(body) {
-    background: #2e2e30;
+    background: #1e1e1e;
   }
 </style>
