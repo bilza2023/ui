@@ -3,13 +3,33 @@ export const ASPECT_RATIO   = 16 / 9;
 export const DEFAULT_DESIGN = { width: 1020, height: 576 };
 
 // 1 ─ canvas fitting
+// export function fitCanvasToViewport(viewportW, viewportH) {
+//   let width  = viewportW;
+//   let height = width / ASPECT_RATIO;
+//   if (height > viewportH) {
+//     height = viewportH;
+//     width  = height * ASPECT_RATIO;
+//   }
+//   return { width: Math.floor(width), height: Math.floor(height) };
+// }
+
 export function fitCanvasToViewport(viewportW, viewportH) {
+  const minHeight = 320; // minimal usable height for small screens
+
   let width  = viewportW;
   let height = width / ASPECT_RATIO;
+
   if (height > viewportH) {
     height = viewportH;
     width  = height * ASPECT_RATIO;
   }
+
+  // Clamp to min height
+  if (height < minHeight) {
+    height = minHeight;
+    width  = minHeight * ASPECT_RATIO;
+  }
+
   return { width: Math.floor(width), height: Math.floor(height) };
 }
 

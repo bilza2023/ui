@@ -4,6 +4,20 @@ import { BaseTemplate } from '../baseTemplate/BaseTemplate';
 
 const TitleWithBullets = new BaseTemplate("titleWithBullets");
 
+TitleWithBullets.createBullet = function (text, referenceItem, showAt, isFirst = false) {
+  const bullet = this.items.text(text || "");
+  bullet.color = this.globalTheme.bulletColor;
+  bullet.fontSize = this.resolve("bulletFontSize", 80);
+  bullet.textAlign = "center";
+  bullet.showAt = showAt;
+
+  const gap = this.resolve(isFirst ? "bulletsTopGap" : "bulletGap", isFirst ? 110 : 50);
+  this.placeBelow(bullet, referenceItem, gap);
+  this.centerHorizontally(bullet);
+
+  return bullet;
+};
+///////////////////////////////////////////////////
 TitleWithBullets.data = {
   title: "Welcome to SlideBuilder",
   bullet1: "Composable templates",
@@ -32,33 +46,15 @@ TitleWithBullets.getItems = function () {
   this.centerHorizontally(title);
   result.push(title);
 
-  const bullet1 = this.items.text(this.data.bullet1 || "");
-  bullet1.color = this.globalTheme.bulletColor;
-  bullet1.fontSize = this.resolve("bulletFontSize", 80);
-  this.placeBelow(bullet1, title, this.resolve("bulletsTopGap", 110));
-  this.centerHorizontally(bullet1);
-  bullet1.textAlign = "center";
-  bullet1.showAt = this.data.showAt1;
+  const bullet1 = this.createBullet(this.data.bullet1, title, this.data.showAt1, true);
   result.push(bullet1);
-
-  const bullet2 = this.items.text(this.data.bullet2 || "");
-  bullet2.color = this.globalTheme.bulletColor;
-  bullet2.fontSize = bullet1.fontSize;
-  this.placeBelow(bullet2, bullet1, this.resolve("bulletGap", 50));
-  this.centerHorizontally(bullet2);
-  bullet2.textAlign = "center";
-  bullet2.showAt = this.data.showAt2;
+  
+  const bullet2 = this.createBullet(this.data.bullet2, bullet1, this.data.showAt2);
   result.push(bullet2);
-
-  const bullet3 = this.items.text(this.data.bullet3 || "");
-  bullet3.color = this.globalTheme.bulletColor;
-  bullet3.fontSize = bullet1.fontSize;
-  this.placeBelow(bullet3, bullet2, this.resolve("bulletGap", 50));
-  this.centerHorizontally(bullet3);
-  bullet3.textAlign = "center";
-  bullet3.showAt = this.data.showAt3;
+  
+  const bullet3 = this.createBullet(this.data.bullet3, bullet2, this.data.showAt3);
   result.push(bullet3);
-
+  
   return {
     items: result,
     background: this.getBackground()
@@ -66,3 +62,4 @@ TitleWithBullets.getItems = function () {
 };
 
 export { TitleWithBullets };
+

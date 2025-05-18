@@ -144,6 +144,8 @@ function reset(){
 </script>
 
 <!-- ───────────── Layout ───────────── -->
+<!-- <main class="h-[calc(100vh-60px)]"> -->
+
 <div class="mb-8">
   {#if !audioReady}
   <div class="text-sm text-yellow-400 px-4 py-1 font-mono">Loading audio...</div>
@@ -152,12 +154,25 @@ function reset(){
 {/if}
 </div>
 
-<canvas bind:this={canvasEl} style="display:block;margin:0 auto;"></canvas>
+<!-- <canvas bind:this={canvasEl} style="display:block;margin:0 auto;"></canvas> -->
 
+<canvas
+  bind:this={canvasEl}
+  style="display:block;margin:0 auto;max-width:100%;height:auto;"
+></canvas>
+
+<!-- </main> -->
 <div style="height:{FOOT_H}px"></div>
 
 <style>
   :global(body) {
     background: #2e2e30;
   }
+
+  canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 </style>
