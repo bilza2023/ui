@@ -22,9 +22,15 @@ JumboTron.getItems = function () {
   jumbo.y = this.resolve("topGap", 250);
 
   this.centerHorizontally(jumbo);
+///////////////////////////////////////////////////////
+const emoji = this.items.emoji("🎓✨");
+emoji.fontSize = 48;
+emoji.y = jumbo.y + jumbo.fontSize + 20;
+this.centerHorizontally(emoji);
 
+///////////////////////////////////////////////////////
   return {
-    items: [jumbo],
+    items: [jumbo,emoji],
     background: this.getBackground()
   };
 };

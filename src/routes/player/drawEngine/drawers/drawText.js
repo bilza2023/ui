@@ -1,20 +1,21 @@
 import * as PIXI from 'pixi.js';
 
 export default function drawText(app, item) {
-  // 1. Ensure BitmapFont is available (runtime-generated for test)
+  const fontColor = item.color || '#ffffff';
+  const tintColor = hexColorToNumber(fontColor);
+
   if (!PIXI.BitmapFont.available["TestFont"]) {
     PIXI.BitmapFont.from("TestFont", {
       fontFamily: item.fontFamily || 'Arial',
       fontSize: item.fontSize || 24,
-      fill: item.color || '#ffffff'
+      fill: fontColor
     });
   }
 
-  // 2. Create BitmapText
   const bt = new PIXI.BitmapText(item.text, {
     fontName: "TestFont",
     fontSize: item.fontSize || 24,
-    tint: item.color || 0xffffff
+    tint: tintColor
   });
 
   const padding = item.padding || 0;
@@ -35,3 +36,23 @@ export default function drawText(app, item) {
   // 4. Add to stage
   app.stage.addChild(bt);
 }
+
+
+ function hexColorToNumber(color) {
+  if (typeof color === 'string') {
+    if (color.startsWith('#')) {
+      return parseInt(color.slice(1), 16);
+    } else {
+      console.warn(`Invalid color string: "${color}". Must start with "#"`);
+      return 0xffffff;
+    }
+  }
+
+  if (typeof color === 'number') {
+    return color;
+  }
+
+  console.warn(`Invalid color type: ${typeof color}. Must be string or number`);
+  return 0xffffff;
+}
+

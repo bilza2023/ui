@@ -74,13 +74,34 @@ const ImageItemSchema = z.object({
   visible: z.boolean().default(true)
 });
 
+const EmojiItemSchema = z.object({
+  type: z.literal("emoji"),
+
+  x: z.number(),
+  y: z.number(),
+  width: z.number(),
+  height: z.number(),
+  text: z.string(),
+
+  fontSize: z.number().default(48),
+  fontFamily: z.string().default("Segoe UI Emoji"),
+  color: z.string().default("#000000"),
+
+  rotation: z.number().default(0),
+  zIndex: z.number().default(1),
+  visible: z.boolean().default(true)
+});
+
+//////////////////////////////////////////////////////////
 // Master union schema
 export const ItemSchema = z.discriminatedUnion("type", [
   TextItemSchema,
   RectItemSchema,
   CircleItemSchema,
-  ImageItemSchema
+  ImageItemSchema,
+  EmojiItemSchema // ← Add this
 ]);
+
 
 ///////////////////////////////////////////////////////////
 //background and patterns
@@ -122,15 +143,9 @@ export const BackgroundSchema = z.object({
   pattern: PatternSchema.nullable()
 });
 
+
 ///////////////////////////////////////////////////////////
-// Slide-level schema
-// export const SlideSchema = z.object({
-//   id: z.string(),
-//   startTime: z.number(),
-//   endTime: z.number(),
-//   backgroundColor: z.string().optional(),
-//   items: z.array(ItemSchema)
-// });
+
 export const SlideSchema = z.object({
   id: z.string(),
   startTime: z.number(),

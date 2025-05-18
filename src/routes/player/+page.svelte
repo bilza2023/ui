@@ -4,7 +4,7 @@
   import * as PIXI from 'pixi.js';
   import { Howl } from 'howler';
 
-  import SlideNav from '../../lib/appComps/SlideNav.svelte';
+  import SlideNav from './SlideNav.svelte';
   import DrawEngine from './drawEngine/DrawEngine';
   import { slidesData } from '../../lib/staticPresentations/titleSlide.js';
   import { fitCanvasToViewport } from './layoutConfig.js';
@@ -24,12 +24,39 @@
   let currentTime = 0;
   const maxEndTime = slidesData.slides.at(-1).endTime;
 
-  function fmtTime(sec) {
-    const m = Math.floor(sec / 60);
-    const s = (sec % 60).toFixed(1).padStart(4, '0');
-    return `${String(m).padStart(2, '0')}:${s}`;
-  }
+  function handleSeek(time) {
+  sound.seek(time);
+  engine.draw(time);
+  currentTime = time;
+}
 
+function handleVolume(event) {
+  const volume = parseFloat(event.target.value);
+  if (!isNaN(volume)) {
+    sound.volume(volume);
+  }
+  console.log("handleVolume",volume);
+}
+function start(){
+  if (!audioReady) {
+          console.warn("Audio not ready yet");
+          return;
+        }
+        sound.play(); // onplay will auto-start tick
+}
+function pause(){
+  sound.pause();
+  ticking = false;
+}
+function reset(){
+  sound.stop();
+        ticking = false;
+        currentTime = 0;
+        setTimeout(() => {
+          const t = sound.seek();
+          engine.draw(t);
+        }, 50);
+}
   function tick() {
     const t = sound.seek();
 
@@ -56,8 +83,8 @@
     app.renderer.resize(width, height);
   }
 
-  onMount(() => {
-    if (!browser) return;
+ onMount(() => {
+  if (!browser) return;
 
     sound = new Howl({
       src: ['/sounds/music.opus'],
@@ -97,29 +124,7 @@
 
     engine = new DrawEngine(slidesData, app);
 
-    player = {
-      start: () => {
-        if (!audioReady) {
-          console.warn("Audio not ready yet");
-          return;
-        }
-        sound.play(); // onplay will auto-start tick
-      },
-      pause: () => {
-        sound.pause();
-        ticking = false;
-      },
-      reset: () => {
-        sound.stop();
-        ticking = false;
-        currentTime = 0;
-        setTimeout(() => {
-          const t = sound.seek();
-          engine.draw(t);
-        }, 50);
-      }
-    };
-
+   
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
@@ -139,7 +144,7 @@
   {#if !audioReady}
   <div class="text-sm text-yellow-400 px-4 py-1 font-mono">Loading audio...</div>
   {:else}
-  <SlideNav {player} time={currentTime} />
+  <SlideNav {start} {pause} {reset} time={currentTime} {handleVolume} {handleSeek}  />
 {/if}
 </div>
 

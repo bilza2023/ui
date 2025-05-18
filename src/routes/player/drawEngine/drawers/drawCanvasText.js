@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 
-export default function drawText(app, item) {
+export default function drawCanvasText(app, item) {
   const style = new PIXI.TextStyle({
     fontFamily: item.fontFamily || 'Arial',
     fontSize: item.fontSize || 24,
