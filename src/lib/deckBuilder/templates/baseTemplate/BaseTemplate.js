@@ -1,7 +1,7 @@
 
 import { itemsMap } from '../../itemsFolder/items/itemsMap';
 
-export class BaseTemplate {
+class BaseTemplate {
   constructor(name) { // name is must since templates must have unique name they do not have id their name is id
     // this.id = null; // Will be assigned by DeckBuilder????? uuid?
     this.name = name;
@@ -64,3 +64,27 @@ getItems () {
   //   return this._emojiLayer ?? null;
   // }
 }
+/////////////////////////////
+// Static helpers for background
+BaseTemplate.backgroundWithImage = function (name) {
+  return {
+    backgroundImage: name,
+    pattern: null
+  };
+};
+
+BaseTemplate.backgroundWithPattern = function (pattern) {
+  return {
+    backgroundImage: null,
+    pattern
+  };
+};
+
+BaseTemplate.createBackground = function ({ backgroundImage = null, pattern = null } = {}) {
+  return {
+    backgroundImage: pattern ? null : backgroundImage,
+    pattern: pattern || null
+  };
+};
+
+export { BaseTemplate };

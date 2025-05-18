@@ -1,12 +1,12 @@
-
-import { assets } from './singletonAssets/assets'; // assuming you have exported singleton
+// renderer/drawBackground.js
 import * as PIXI from 'pixi.js';
+import Assets from './assets/Assets.js';
 import drawGridPattern from './patterns/drawGridPattern.js';
 import drawDotsPattern from './patterns/drawDotsPattern.js';
 import drawLinesPattern from './patterns/drawLinesPattern.js';
 
-
 export default function drawBackground(app, background, width, height, backgroundColor = "#dcdcdc") {
+  // ✅ Step 1: Always draw base background color from slide
   const fill = new PIXI.Graphics();
   fill.beginFill(PIXI.utils.string2hex(backgroundColor));
   fill.drawRect(0, 0, width, height);
@@ -14,18 +14,10 @@ export default function drawBackground(app, background, width, height, backgroun
   fill.zIndex = -3;
   app.stage.addChild(fill);
 
-  // if (!background) return;
-
+  // ✅ Step 2: Optional pattern/image overlays
+  if (!background) return;
   if (background.backgroundImage) {
-    const img = assets.getBackgroundImage('black_mat');
-    if (img) {
-      const texture = PIXI.Texture.from(img);
-      const sprite = new PIXI.Sprite(texture);
-      sprite.width = width;
-      sprite.height = height;
-      sprite.zIndex = -2;
-      app.stage.addChild(sprite);
-    }
+    // TODO: handle image background in future
   }
 
   if (background.pattern) {

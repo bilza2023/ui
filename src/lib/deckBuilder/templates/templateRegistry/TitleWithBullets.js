@@ -36,6 +36,8 @@ TitleWithBullets.theme = {
   bulletFontSize: 80
 };
 
+TitleWithBullets.setBackground(BaseTemplate.backgroundWithImage("black_mat"));
+
 TitleWithBullets.getItems = function () {
   const result = [];
 

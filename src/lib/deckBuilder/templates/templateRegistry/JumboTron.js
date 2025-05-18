@@ -12,7 +12,11 @@ JumboTron.theme = {
   fontSize: 80,
   topGap: 200
 };
+////////////////////////////////////////////
 
+JumboTron.setBackground(BaseTemplate.backgroundWithImage("black_mat"));
+
+////////////////////////////////////////////
 JumboTron.getItems = function () {
   const jumbo = this.items.text(this.data.text);
 
