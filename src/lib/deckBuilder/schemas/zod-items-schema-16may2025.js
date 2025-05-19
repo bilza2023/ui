@@ -140,6 +140,7 @@ const PatternSchema = z.discriminatedUnion("type", [
 // Background object
 export const BackgroundSchema = z.object({
   backgroundImage: z.string().nullable(),
+  backgroundImageOpacity: z.number().min(0).max(1).default(1), // ✅ new
   pattern: PatternSchema.nullable()
 });
 
@@ -150,7 +151,6 @@ export const SlideSchema = z.object({
   id: z.string(),
   startTime: z.number(),
   endTime: z.number(),
-  backgroundColor: z.string().optional(),
   background: BackgroundSchema.optional(), // ✅ new
   items: z.array(ItemSchema)
 });

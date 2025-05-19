@@ -24,10 +24,6 @@ getItems () {
   // this is to be provided by child class
   // return this.itemsArray;
 }
-  // Safe theme/globalTheme fallback
-  resolve(key, fallback) {
-    return this.theme?.[key] ?? this.globalTheme?.[key] ?? fallback;
-  }
 
   // Position helpers
   centerHorizontally(item) {
@@ -41,34 +37,24 @@ getItems () {
 
   // Optional background
   setBackground(bg) {
-    if (
-      typeof bg !== "object" ||
-      !("backgroundImage" in bg) ||
-      !("pattern" in bg)
-    ) {
-      throw new Error("Invalid background object. Must include backgroundImage and pattern keys.");
+    if (typeof bg !== "object" || bg === null) {
+      throw new Error("Invalid background: must be a non-null object.");
     }
+  
+    if (!("backgroundImage" in bg) && !("pattern" in bg)) {
+      throw new Error("Background must include at least one of: backgroundImage or pattern.");
+    }
+  
     this._background = bg;
   }
 
-  getBackground() {
-    return this._background ?? null;
-  }
-
-  // Optional emoji layer--keep commented for now
-  // setEmojiLayer(emojiLayer) {
-  //   this._emojiLayer = emojiLayer;
-  // }
-
-  // getEmojiLayer() {
-  //   return this._emojiLayer ?? null;
-  // }
 }
 /////////////////////////////
 // Static helpers for background
-BaseTemplate.backgroundWithImage = function (name) {
+BaseTemplate.backgroundWithImage = function (name, opacity = 1) {
   return {
     backgroundImage: name,
+    backgroundImageOpacity: opacity,
     pattern: null
   };
 };
@@ -76,15 +62,18 @@ BaseTemplate.backgroundWithImage = function (name) {
 BaseTemplate.backgroundWithPattern = function (pattern) {
   return {
     backgroundImage: null,
+    backgroundImageOpacity: 1,
     pattern
   };
 };
 
-BaseTemplate.createBackground = function ({ backgroundImage = null, pattern = null } = {}) {
+BaseTemplate.createBackground = function ({ backgroundImage = null, pattern = null, backgroundImageOpacity = 1 } = {}) {
   return {
     backgroundImage: pattern ? null : backgroundImage,
+    backgroundImageOpacity,
     pattern: pattern || null
   };
 };
+
 
 export { BaseTemplate };

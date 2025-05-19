@@ -1,24 +1,28 @@
-// testVisuals.js
+// TestVisuals.js
 
 import { BaseTemplate } from '../baseTemplate/BaseTemplate';
 import { getBarGraph } from "../../itemsFolder/itemGenerators/getBarGraph.js";
 
-const testVisuals = new BaseTemplate("testVisuals");
+const TestVisuals = new BaseTemplate("testVisuals");
 
-testVisuals.data = {};
-testVisuals.theme = {};
+// ✅ No user-editable content or theme for now
+TestVisuals.data = {};
+TestVisuals.theme = {};
 
-testVisuals.getItems = function () {
+TestVisuals.getItems = function () {
   const items = [];
 
+  // Simple heading text
   const text = this.items.text("Visual Test Slide");
   text.x = 100;
   text.y = 40;
   text.fontSize = 40;
-  text.color = "#1a1a1a";
+  text.color = this.globalTheme.primaryColor;
   text.backgroundColor = "#f0f0f0";
   text.padding = 10;
+  items.push(text);
 
+  // Rectangle
   const rect = this.items.rect({
     x: 100,
     y: 120,
@@ -28,7 +32,9 @@ testVisuals.getItems = function () {
     borderColor: "#cc7722",
     borderWidth: 4
   });
+  items.push(rect);
 
+  // Circle
   const circle = this.items.circle({
     x: 450,
     y: 180,
@@ -37,7 +43,9 @@ testVisuals.getItems = function () {
     borderColor: "#00008b",
     borderWidth: 3
   });
+  items.push(circle);
 
+  // Image
   const image = this.items.image({
     x: 650,
     y: 100,
@@ -45,7 +53,9 @@ testVisuals.getItems = function () {
     height: 150,
     src: "images/atom.png"
   });
+  items.push(image);
 
+  // Bar Graph
   const barItems = getBarGraph({
     x: 100,
     y: 320,
@@ -55,24 +65,12 @@ testVisuals.getItems = function () {
     labels: ["A", "B", "C", "D", "E"],
     barColor: "green"
   });
-
-  items.push(text, rect, circle, image, ...barItems);
-
-  testVisuals.setBackground({
-    backgroundImage: null,
-    pattern: {
-      type: "grid",
-      cellWidth: 50,
-      cellHeight: 50,
-      lineColor: "#cccccc",
-      lineWidth: 1
-    }
-  });
+  items.push(...barItems);
 
   return {
     items,
-    background: this.getBackground()
+    background: this._background
   };
 };
 
-export { testVisuals };
+export { TestVisuals };
