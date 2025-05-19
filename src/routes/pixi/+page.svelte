@@ -15,7 +15,6 @@
   const DESIGN_WIDTH = 1020;
   const DESIGN_HEIGHT = 576;
 
- 
   let ticker;
   let sound;
   let audioReady = false;
@@ -54,7 +53,6 @@
     }
     sound.play(); // onplay will auto-start tick
     tick();
-  
   }
   function pause() {
     sound.pause();
@@ -70,7 +68,6 @@
     // }, 50);
   }
   function tick() {
-    
     const t = sound.seek();
 
     if (t >= maxEndTime) {
@@ -114,7 +111,7 @@
         console.log("Howler: loaded");
         sound.volume(1);
         audioReady = true;
-      }
+      },
     });
 
     // Render First Slide
@@ -132,14 +129,13 @@
 
     resize();
     window.addEventListener("resize", resize);
-
   });
-///////////////////////////////////  
+  ///////////////////////////////////
   onDestroy(() => {
     if (!browser) return;
     if (sound) sound.stop();
     if (app) app.destroy(true, { children: true });
-    window.removeEventListener('resize', resize);
+    window.removeEventListener("resize", resize);
   });
 </script>
 
