@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📅 Template Architecture</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+</head>
+<body>
+  <header>
+    <h1>📅 Template Architecture</h1>
+  </header>
+
+  <section>
+    <p>Templates are modular layout units that produce visual slide content. Each template defines <strong>what</strong> should be rendered — not <strong>how</strong>. They use declarative logic and return structured instructions to the DeckBuilder system.</p>
+
+    <h2>1. Base Construction</h2>
+    <ul>
+      <li>Templates are instances of <code>BaseTemplate(name)</code></li>
+      <li>The <code>name</code> is the unique identifier (used as ID)</li>
+      <li>Template is defined as a JS module and registered manually</li>
+    </ul>
+
+    <h2>2. Core Fields</h2>
+    <ul>
+      <li><code>data</code>: User-editable fields for content</li>
+      <li><code>theme</code>: Optional object with user-exposed overrides</li>
+      <li><code>globalTheme</code>: Read-only theme object injected by the DeckBuilder</li>
+      <li><code>_background</code>: Set internally by <code>setBackground()</code></li>
+    </ul>
+
+    <h2>3. Required Method: getItems()</h2>
+    <p>Every template must define <code>getItems()</code>, returning:</p>
+    <pre><code>{
+  items: [...],
+  background: this._background
+}</code></pre>
+
+    <p>This method defines all slide visuals and layout logic. It is called by DeckBuilder during composition.</p>
+
+    <h2>4. Layout Utilities</h2>
+    <ul>
+      <li><code>centerHorizontally(item)</code>: Center aligns within canvas</li>
+      <li><code>placeBelow(item, refItem, gap)</code>: Stacks item vertically</li>
+    </ul>
+
+    <h2>5. Background API</h2>
+    <p>Templates must call <code>setBackground()</code> using a validated background object:</p>
+    <pre><code>this.setBackground(BaseTemplate.createBackground({
+  backgroundImage: "bg.jpg",
+  pattern: null
+}));</code></pre>
+
+    <h2>6. No Internal Metadata</h2>
+    <ul>
+      <li>Templates do <strong>not</strong> set IDs, timing, or sequencing</li>
+      <li>They return layout only — DeckBuilder adds structural metadata</li>
+    </ul>
+
+    <h2>7. Lifecycle Summary</h2>
+    <ol>
+      <li>Template is defined and registered</li>
+      <li><code>template.getItems()</code> is called by DeckBuilder</li>
+      <li>Items + background returned and wrapped into a slide</li>
+    </ol>
+
+    <p>Templates act as visual declarators. They must be portable, theme-friendly, and layout-focused, decoupled from external data flow or system state.</p>
+  </section>
+</body>
+</html>

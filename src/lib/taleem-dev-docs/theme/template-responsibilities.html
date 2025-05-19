@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📂 Template Responsibilities</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+</head>
+<body>
+  <header>
+    <h1>📂 Template Responsibilities</h1>
+  </header>
+
+  <section>
+    <p>Templates are layout logic units that produce renderable slide content. They do not render directly; instead, they define what content should appear, how it should be styled, and how it should be positioned.</p>
+
+    <h2>1. Separation of Concerns</h2>
+    <ul>
+      <li>Templates must not define or overwrite global theme or background.</li>
+      <li>They only consume <code>this.globalTheme</code> and <code>this._background</code>.</li>
+      <li>They should never mutate or reassign these objects.</li>
+    </ul>
+
+    <h2>2. Data Ownership</h2>
+    <ul>
+      <li><code>data</code>: user-editable content fields</li>
+      <li><code>theme</code>: optional override points defined by the template author</li>
+      <li><code>getItems()</code>: must return final layout</li>
+    </ul>
+
+    <h2>3. Controlled Theming Escape</h2>
+    <p>If a template allows end-users to override specific visual decisions, it should:</p>
+    <ol>
+      <li>Declare overrideable fields inside <code>template.theme</code></li>
+      <li>Fallback safely inside <code>getItems()</code>:</li>
+    </ol>
+    <pre><code>title.color = this.theme.titleColor ?? this.globalTheme.primaryColor;</code></pre>
+
+    <h2>4. Background Management</h2>
+    <p>Templates can assign a background using the provided helper methods:</p>
+    <pre><code>this.setBackground(BaseTemplate.createBackground({
+  backgroundImage: "stars.jpg",
+  pattern: null,
+  backgroundImageOpacity: 1
+}));</code></pre>
+
+    <h2>5. Layout Helpers</h2>
+    <ul>
+      <li><code>centerHorizontally(item)</code>: centers item horizontally</li>
+      <li><code>placeBelow(item, refItem, gap)</code>: vertically stacks item under refItem</li>
+    </ul>
+
+    <h2>6. Return Contract</h2>
+    <p>Every <code>getItems()</code> must return:</p>
+    <pre><code>{
+  items: [...],
+  background: this._background
+}</code></pre>
+
+    <h2>7. Compatibility Requirements</h2>
+    <ul>
+      <li>Template must look consistent across 5 major themes</li>
+      <li>Must gracefully handle missing or null data</li>
+      <li>Must not include timing or slide metadata</li>
+    </ul>
+
+    <p>Templates define logic, not rendering. They are designed for reuse, clarity, and style-agnostic composition.</p>
+  </section>
+</body>
+</html>

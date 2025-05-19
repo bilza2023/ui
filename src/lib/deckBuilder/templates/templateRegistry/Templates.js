@@ -1,10 +1,9 @@
-import { JumboTron } from './JumboTron.js';
-import { TitleWithBullets } from './TitleWithBullets.js';
-import { TestVisuals } from './TestVisuals.js';
-
+import { createJumboTron } from './JumboTron.js';
+import { createTitleWithBullets } from './TitleWithBullets.js';
+import { createTestVisuals } from './TestVisuals.js';
 
 export const Templates = {
-  JumboTron:JumboTron,
-  TitleWithBullets:TitleWithBullets,
-  TestVisuals,
+  JumboTron: createJumboTron,
+  TitleWithBullets: createTitleWithBullets,
+  TestVisuals: createTestVisuals,
 };
