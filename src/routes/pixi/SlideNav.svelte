@@ -1,66 +1,104 @@
 <script>
-  export let start;
-  export let pause;
-  export let reset;
-  export let handleVolume;
-  export let handleSeek;
-  export let time;
-  export let duration; // ✅ duration is passed from parent
-  export let volume = 1; // Also add this in +page.svelte
+  import { onMount, onDestroy } from "svelte";
+  import { Howl } from "howler";
 
-  
+  export let update = (t) => {};
+  export let src = "/sounds/music.opus";
+
+  let sound;
+  let ticking = false;
+  let audioReady = false;
+  let maxEndTime = 0;
+  let currentTime = 0;
+  let raf;
+
+  function tick() {
+    currentTime = sound.seek() || 0;
+    update(currentTime);
+
+    if (currentTime >= maxEndTime) {
+      stop();
+      return;
+    }
+
+    if (sound.playing()) {
+      raf = requestAnimationFrame(tick);
+    } else {
+      ticking = false;
+    }
+  }
+
+  function play() {
+    if (!audioReady) return;
+    sound.play();
+  }
+
+  function pause() {
+    if (sound) {
+      sound.pause();
+      ticking = false;
+    }
+  }
+
+  function stop() {
+    if (sound) {
+      sound.stop();
+      cancelAnimationFrame(raf);
+      ticking = false;
+      update(0);
+    }
+  }
+
+  function setVolume(e) {
+    const v = parseFloat(e.target.value);
+    if (!isNaN(v)) sound.volume(v);
+  }
+
+  function seek(e) {
+    const t = parseFloat(e.target.value);
+    if (!isNaN(t)) {
+      sound.seek(t);
+      update(t);
+    }
+  }
+
+  onMount(() => {
+    sound = new Howl({
+      src: [src],
+      html5: true,
+      onload: () => {
+        audioReady = true;
+        maxEndTime = sound.duration();
+      },
+      onplay: () => {
+        if (!ticking) {
+          ticking = true;
+          raf = requestAnimationFrame(tick);
+        }
+      }
+    });
+  });
+
+  onDestroy(() => {
+    if (sound) sound.stop();
+    cancelAnimationFrame(raf);
+  });
 </script>
 
-<nav
-  class="bg-gray-900 text-white text-sm font-mono px-4 py-2 flex justify-between items-center"
->
-  <!-- Left -->
-  <div class="flex items-center space-x-3">
-    <button on:click={start}>▶ Play</button>
-    <button on:click={pause}>⏸ Pause</button>
-    <button on:click={reset}>⏮ Reset</button>
-    <span class="text-yellow-300"
-      >Time: {Math.floor(time)} / {Math.floor(duration)} sec</span
-    >
-  </div>
+<div class="text-white p-2 bg-black flex items-center gap-4">
+  <button on:click={play}>▶ Play</button>
+  <button on:click={pause}>⏸ Pause</button>
+  <button on:click={stop}>⏹ Reset</button>
 
-  <!-- Middle: Scrollbars -->
-  <div class="flex w-1/2 space-x-2 mx-4">
-    <input
-      type="range"
-      min="0"
-      max={duration}
-      step="0.01"
-      value={time}
-      on:input={handleSeek}
-      class="w-[80%] h-2 accent-yellow-200 cursor-pointer"
-    />
-    <input
-      type="range"
-      min="0"
-      max="1"
-      step="0.01"
-      value={volume}
-      on:input={handleVolume}
-      class="w-[20%] h-[2px] accent-green-400 cursor-pointer"
-    />
-  </div>
+  <span class="text-sm font-mono">Time: {currentTime.toFixed(1)}s</span>
 
-  <!-- Right -->
-  <div class="text-yellow-300">
-    <a href="https://taleem.help">taleem.help</a>
-  </div>
-</nav>
+  <label class="text-sm">Seek:
+    <input type="range" min="0" max={maxEndTime} step="0.1" on:input={seek} />
+  </label>
 
-<style>
-  nav button {
-    background: none;
-    border: none;
-    color: inherit;
-    cursor: pointer;
-  }
+  <label class="text-sm">Volume:
+    <input type="range" min="0" max="1" step="0.01" on:input={setVolume} />
+  </label>
 
-  nav button:hover {
-    text-decoration: underline;
-  }
-</style>
+
+</div>
