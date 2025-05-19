@@ -1,12 +1,11 @@
-
 import { assets } from './singletonAssets/assets'; // assuming you have exported singleton
 import * as PIXI from 'pixi.js';
 import drawGridPattern from './patterns/drawGridPattern.js';
 import drawDotsPattern from './patterns/drawDotsPattern.js';
 import drawLinesPattern from './patterns/drawLinesPattern.js';
 
-
 export default function drawBackground(app, background, width, height, backgroundColor = "#dcdcdc") {
+  // 1. Base fill (theme backgroundColor)
   const fill = new PIXI.Graphics();
   fill.beginFill(PIXI.utils.string2hex(backgroundColor));
   fill.drawRect(0, 0, width, height);
@@ -14,25 +13,34 @@ export default function drawBackground(app, background, width, height, backgroun
   fill.zIndex = -3;
   app.stage.addChild(fill);
 
-  // if (!background) return;
+  if (!background) return;
 
+  // 2. Background image (with optional opacity)
   if (background.backgroundImage) {
-    const img = assets.getBackgroundImage('black_mat');
+    const img = assets.getBackgroundImage(background.backgroundImage);
     if (img) {
       const texture = PIXI.Texture.from(img);
       const sprite = new PIXI.Sprite(texture);
       sprite.width = width;
       sprite.height = height;
+      sprite.alpha = background.backgroundImageOpacity ?? 1;
       sprite.zIndex = -2;
       app.stage.addChild(sprite);
     }
   }
 
+  // 3. Pattern overlay
   if (background.pattern) {
     switch (background.pattern.type) {
-      case "grid": drawGridPattern(app, background.pattern, width, height); break;
-      case "dots": drawDotsPattern(app, background.pattern, width, height); break;
-      case "lines": drawLinesPattern(app, background.pattern, width, height); break;
+      case "grid":
+        drawGridPattern(app, background.pattern, width, height);
+        break;
+      case "dots":
+        drawDotsPattern(app, background.pattern, width, height);
+        break;
+      case "lines":
+        drawLinesPattern(app, background.pattern, width, height);
+        break;
     }
   }
 }

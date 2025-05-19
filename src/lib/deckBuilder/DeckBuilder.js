@@ -11,7 +11,7 @@ export class DeckBuilder {
   }
 
   add(endAt, template) {
- debugger;
+ 
     timeCheck(endAt);
     injectGlobalTheme(template, this.globalTheme);
     injectGlobalBackground(template, this.globalBackground);

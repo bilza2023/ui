@@ -24,7 +24,8 @@ export default class DrawEngine {
     const canvasH = this.app.view.height;
 
     // 1. Draw background (always)
-    drawBackground(this.app, slide.background, canvasW, canvasH, slide.backgroundColor || "#dcdcdc");
+    drawBackground(this.app, slide.background, canvasW, canvasH, this.globalTheme?.backgroundColor ?? "#dcdcdc");
+
 
     // 2. Filter visible items
     const visibleItems = slide.items.filter(item =>
