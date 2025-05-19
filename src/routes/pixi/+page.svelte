@@ -53,6 +53,8 @@
       return;
     }
     sound.play(); // onplay will auto-start tick
+    tick();
+  
   }
   function pause() {
     sound.pause();
@@ -62,12 +64,13 @@
     sound.stop();
     ticking = false;
     currentTime = 0;
-    setTimeout(() => {
-      const t = sound.seek();
-      engine.draw(t);
-    }, 50);
+    // setTimeout(() => {
+    //   const t = sound.seek();
+    //   engine.draw(t);
+    // }, 50);
   }
   function tick() {
+    
     const t = sound.seek();
 
     if (t >= maxEndTime) {
@@ -111,18 +114,7 @@
         console.log("Howler: loaded");
         sound.volume(1);
         audioReady = true;
-      },
-      onplay: () => {
-        console.log("Howler: playing");
-        if (!ticking) {
-          ticking = true;
-          requestAnimationFrame(tick);
-        }
-      },
-      onend: () => {
-        console.log("Howler: playback finished");
-        ticking = false;
-      },
+      }
     });
 
     // Render First Slide
@@ -147,7 +139,7 @@
     if (!browser) return;
     if (sound) sound.stop();
     if (app) app.destroy(true, { children: true });
-    window.removeEventListener('resize', resizeCanvas);
+    window.removeEventListener('resize', resize);
   });
 </script>
 
