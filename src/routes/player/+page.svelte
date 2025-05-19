@@ -17,12 +17,12 @@
   let app;
   let engine;
   let sound;
-  let player;
+
   let ticking = false;
   let audioReady = false;
 
   let currentTime = 0;
-  const maxEndTime = slidesData.slides.at(-1).endTime;
+  let maxEndTime = null;
 
   function handleSeek(event) {
     // debugger;
@@ -116,6 +116,9 @@ function reset(){
       background: 0x000000,
       view: canvasEl
     });
+    // debugger;
+    maxEndTime = slidesData.slides.at(-1).endTime;
+
 
     const allItems = slidesData.slides.flatMap(s => s.items);
     const { valid, report } = validateAll(allItems);
@@ -150,8 +153,18 @@ function reset(){
   {#if !audioReady}
   <div class="text-sm text-yellow-400 px-4 py-1 font-mono">Loading audio...</div>
   {:else}
-  <SlideNav {start} {pause} {reset} time={currentTime} {handleVolume} {handleSeek}  />
-{/if}
+  <!-- <SlideNav {start} {pause} {reset} time={currentTime} {handleVolume} {handleSeek}  /> -->
+  <SlideNav
+  {start}
+  {pause}
+  {reset}
+  time={currentTime}
+  duration={maxEndTime}
+  {handleVolume}
+  {handleSeek}
+/>
+
+  {/if}
 </div>
 
 <!-- <canvas bind:this={canvasEl} style="display:block;margin:0 auto;"></canvas> -->

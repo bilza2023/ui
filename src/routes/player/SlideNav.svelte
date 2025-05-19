@@ -5,7 +5,7 @@
   export let handleVolume;
   export let handleSeek;
   export let time;
-  export let duration = 60; // Add this in +page.svelte later
+  export let duration; // ✅ duration is passed from parent
   export let volume = 1;    // Also add this in +page.svelte
 
   function fmtTime(sec) {
@@ -14,15 +14,7 @@
     return `${String(m).padStart(2, '0')}:${s}`;
   }
 
-  
-  // function handleSeek(e) {
-  //   player.seek(parseFloat(e.target.value));
-  // }
 
-  // function handleVolume(e) {
-  //   player.setVolume(parseFloat(e.target.value));
-  //   volume = parseFloat(e.target.value);
-  // }
 </script>
 
 <nav class="bg-gray-900 text-white text-sm font-mono px-4 py-2 flex justify-between items-center">
@@ -31,7 +23,7 @@
     <button on:click={start}>▶ Play</button>
     <button on:click={pause}>⏸ Pause</button>
     <button on:click={reset}>⏮ Reset</button>
-    <span class="text-yellow-300">{fmtTime(time)}</span>
+    <span class="text-yellow-300">Time: {Math.floor(time)} / {Math.floor(duration)} sec</span>
   </div>
 
   <!-- Middle: Scrollbars -->

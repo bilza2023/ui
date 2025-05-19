@@ -29,7 +29,7 @@ slide3.data = {
   title: "Photosynthesis",
   imageSrc: "images/atom.png", // without .png
   showAtTitle: 0,
-  showAtImage: 37
+  showAtImage: 31
 };
 deck.add(50, slide3);
 
@@ -38,7 +38,7 @@ const slide4 = Templates.ImageWithCaption();
 slide4.data = {
   imageSrc: "images/mad_scientist.jpg",
   caption: "Plant cell structure",
-  showAtImage: 0,
+  showAtImage: 51,
   showAtCaption: 5
 };
 deck.add(70, slide4);
@@ -48,7 +48,7 @@ const slide5 = Templates.ImageLeftTextRight();
 slide5.data = {
   imageSrc: "images/drops.png",
   text: "The microscope allows us to see microscopic organisms.",
-  showAtImage: 0,
+  showAtImage: 71,
   showAtText: 5
 };
 deck.add(90, slide5);
