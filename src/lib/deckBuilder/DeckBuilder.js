@@ -11,7 +11,7 @@ export class DeckBuilder {
   }
 
   add(endAt, template) {
-
+ debugger;
     timeCheck(endAt);
     injectGlobalTheme(template, this.globalTheme);
     injectGlobalBackground(template, this.globalBackground);
@@ -19,7 +19,7 @@ export class DeckBuilder {
     const { items, background } = template.getItems();
 
     const slide = {
-      id: template.id,
+      id: uuid(),
       backgroundColor:
         template.theme?.backgroundColor ??
         this.globalTheme?.bgColor ??
@@ -42,10 +42,12 @@ build() {
   };
 
   const result = SlidesDataSchema.safeParse(slidesData);
-  if (!result.success) {
-    const formatted = formatZodError(result.error.format());
-    throw new Error(`Validation failed:\n${formatted}`);
-  }
+
+    if (!result.success) {
+      const formatted = formatZodError(result.error.format());
+      console.error("🔴 Zod Validation Failed:\n" + formatted); // <-- this line helps
+      throw new Error(`Validation failed:\n${formatted}`);
+    }
   
 
   return slidesData;
@@ -97,17 +99,30 @@ function finalizeSlides(slides) {
   });
 }
 
-function formatZodError(errorFormat) {
+function formatZodError(errorFormat, path = []) {
   const lines = [];
 
   for (const key in errorFormat) {
-    if (key === "_errors") continue;
-
-    const field = errorFormat[key];
-    if (field && Array.isArray(field._errors) && field._errors.length > 0) {
-      lines.push(`• ${key}: ${field._errors.join(", ")}`);
+    if (key === "_errors") {
+      const errs = errorFormat[key];
+      if (errs?.length) {
+        lines.push(`• ${path.join(".") || "root"}: ${errs.join(", ")}`);
+      }
+    } else {
+      const nested = errorFormat[key];
+      if (typeof nested === "object") {
+        lines.push(...formatZodError(nested, [...path, key]));
+      }
     }
   }
 
-  return lines.join("\n");
+  return lines;
+}
+
+function uuid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
 }

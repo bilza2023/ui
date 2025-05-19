@@ -4,6 +4,7 @@ import { DeckBuilder } from '../deckBuilder/DeckBuilder.js';
 import { coffeeNote, darkTheme } from '../deckBuilder/theme/globalThemes.js';
 import { Templates } from '../deckBuilder/templates/templateRegistry/Templates.js';
 
+
 const deck = new DeckBuilder({ globalTheme: darkTheme });
 
 // Slide 1 – JumboTron
