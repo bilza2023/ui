@@ -1,4 +1,4 @@
-import { assets } from './singletonAssets/assets'; // assuming you have exported singleton
+
 import * as PIXI from 'pixi.js';
 import drawGridPattern from './patterns/drawGridPattern.js';
 import drawDotsPattern from './patterns/drawDotsPattern.js';
@@ -17,7 +17,7 @@ export default function drawBackground(app, background, width, height, backgroun
 
   // 2. Background image (with optional opacity)
   if (background.backgroundImage) {
-    const img = assets.getBackgroundImage(background.backgroundImage);
+    const img = "images/drops.png/";
     if (img) {
       const texture = PIXI.Texture.from(img);
       const sprite = new PIXI.Sprite(texture);
