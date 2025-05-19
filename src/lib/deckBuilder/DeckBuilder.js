@@ -11,7 +11,7 @@ export class DeckBuilder {
   }
 
   add(endAt, template) {
- 
+  debugger;
     timeCheck(endAt);
     injectGlobalTheme(template, this.globalTheme);
     injectGlobalBackground(template, this.globalBackground);
@@ -72,10 +72,11 @@ function injectGlobalTheme(template, globalTheme) {
 }
 
 function injectGlobalBackground(template, globalBackground) {
-  if (template.getBackground?.() === null && globalBackground) {
+  if ((template.getBackground?.() == null) && globalBackground) {
     template.setBackground(structuredClone(globalBackground));
   }
 }
+
 
 function finalizeSlides(slides) {
   let lastEnd = 0;

@@ -12,43 +12,28 @@ TitleWithBullets.data = {
   bullet3: "Production-ready output",
   showAt1: 0,
   showAt2: 0,
-  showAt3: 0
-};
+  showAt3: 0,
 
-// ✅ Only expose what user is allowed to override
-TitleWithBullets.theme = {
-  titleFontSize: 100,
+  titleFontSize: 70,
   titleTopGap: 40,
   bulletsTopGap: 110,
   bulletGap: 50,
   bulletFontSize: 80
 };
 
-// 🔧 Bullet creator
-TitleWithBullets.createBullet = function (text, refItem, showAt, isFirst = false) {
-  const bullet = this.items.text(text || "");
-  bullet.color = this.globalTheme.bulletColor;
-  bullet.fontSize = this.theme.bulletFontSize ?? 80;
-  bullet.textAlign = "center";
-  bullet.showAt = showAt;
+// ✅ Only expose what user is allowed to override
+TitleWithBullets.theme = {
 
-  const gap = isFirst
-    ? this.theme.bulletsTopGap ?? 110
-    : this.theme.bulletGap ?? 50;
-
-  this.placeBelow(bullet, refItem, gap);
-  this.centerHorizontally(bullet);
-
-  return bullet;
 };
 
 TitleWithBullets.getItems = function () {
   const items = [];
 
   const title = this.items.text(this.data.title);
-  title.color = this.globalTheme.headingColor;
-  title.fontSize = this.theme.titleFontSize ?? 100;
-  title.y = this.theme.titleTopGap ?? 40;
+
+  title.color = this.globalTheme.primaryColor;
+  title.fontSize = this.data.titleFontSize ?? 100;
+  title.y = this.data.titleTopGap ?? 40;
   title.textAlign = "center";
   this.centerHorizontally(title);
   items.push(title);
@@ -64,5 +49,24 @@ TitleWithBullets.getItems = function () {
     background: this._background
   };
 };
+////////////////////////////////
+// 🔧 Bullet creator
+TitleWithBullets.createBullet = function (text, refItem, showAt, isFirst = false) {
+  const bullet = this.items.text(text || "");
+  bullet.color = this.globalTheme.secondaryColor;
+  bullet.fontSize = this.data.bulletFontSize ?? 80;
+  bullet.textAlign = "center";
+  bullet.showAt = showAt;
 
+  const gap = isFirst
+    ? this.data.bulletsTopGap ?? 110
+    : this.data.bulletGap ?? 50;
+
+  this.placeBelow(bullet, refItem, gap);
+  this.centerHorizontally(bullet);
+
+  return bullet;
+};
+
+////////////////////////////////
 export { TitleWithBullets };

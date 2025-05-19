@@ -11,7 +11,7 @@ JumboTron.data = {
 
 // ✅ Only expose what user is allowed to override
 JumboTron.theme = {
-  fontSize: 80,
+  fontSize: 70,
   topGap: 200
 };
 

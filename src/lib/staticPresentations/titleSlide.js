@@ -1,11 +1,27 @@
 // $lib/userPresentations/titleSlide.js
 
 import { DeckBuilder } from '../deckBuilder/DeckBuilder.js';
-import { coffeeNote, darkTheme } from '../deckBuilder/theme/globalThemes.js';
+import { coffeeNote, darkTheme,testTheme } from '../deckBuilder/theme/globalThemes.js';
 import { Templates } from '../deckBuilder/templates/templateRegistry/Templates.js';
 
 
-const deck = new DeckBuilder({ globalTheme: darkTheme });
+// const deck = new DeckBuilder({ globalTheme: coffeeNote });
+
+
+const deck = new DeckBuilder({
+  globalTheme: coffeeNote,
+  globalBackground: {
+    backgroundImage: "black_mat",
+    backgroundImageOpacity: 0.4,
+    pattern: {
+      type: "grid",
+      cellWidth: 100,
+      cellHeight: 100,
+      lineColor: "#333333",
+      lineWidth: 2
+    }
+  }
+});
 
 // Slide 1 – JumboTron
 deck.add(10, Templates.JumboTron);

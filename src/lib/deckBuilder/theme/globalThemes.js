@@ -56,6 +56,17 @@ export const blueEducation = createGlobalTheme({
   fontFamilyBase: "Verdana"
 });
 
+export const testTheme = createGlobalTheme({
+  bgColor: "#ff0000",              // red background
+  baseTextColor: "#00ff00",        // bright green
+  headingColor: "#0000ff",         // blue
+  bulletColor: "#ffff00",          // yellow
+  primaryColor: "#00ffff",         // cyan
+  secondaryColor: "#ff00ff",       // magenta
+  fontFamilyHeading: "Courier New",
+  fontFamilyBase: "Comic Sans MS"
+});
+
 export const blueBusiness = createGlobalTheme({
   bgColor: "#f0f6fb",
   baseTextColor: "#2c3e50",
