@@ -37,6 +37,11 @@
       text.y = 50;
       app.stage.addChild(text);
   
+      const border = new PIXI.Graphics();
+    border.lineStyle(4, 0xff00ff); // thick magenta border
+    border.drawRect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+    app.stage.addChild(border);
+
       // Resize canvas with CSS scaling
       function resize() {
         const container = canvasContainer;

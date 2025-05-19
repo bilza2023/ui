@@ -10,6 +10,8 @@
   import { fitCanvasToViewport } from './layoutConfig.js';
   import { validateAll } from './validator.js';
 
+  export const DESIGN_RES = { width: 1020, height: 576 };
+
   const NAV_H = 56;
   const FOOT_H = 60;
 
@@ -82,10 +84,19 @@ function reset(){
   }
 
   function resizeCanvas() {
-    const availH = window.innerHeight - NAV_H - FOOT_H;
-    const { width, height } = fitCanvasToViewport(window.innerWidth, availH);
-    app.renderer.resize(width, height);
-  }
+  const availH = window.innerHeight - NAV_H - FOOT_H;
+  const { width, height } = fitCanvasToViewport(window.innerWidth, availH);
+  app.renderer.resize(width, height);
+
+  // 👇 ADD THIS
+  const scale = Math.min(width / DESIGN_RES.width, height / DESIGN_RES.height);
+  const offsetX = (width - DESIGN_RES.width * scale) / 2;
+  const offsetY = (height - DESIGN_RES.height * scale) / 2;
+
+  app.stage.scale.set(scale);
+  app.stage.position.set(offsetX, offsetY);
+}
+
 
  onMount(() => {
   if (!browser) return;
