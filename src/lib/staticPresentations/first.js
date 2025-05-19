@@ -1,3 +1,5 @@
+// $lib/userPresentations/titleSlide.js
+
 import { DeckBuilder } from '../deckBuilder/DeckBuilder.js';
 import { coffeeNote } from '../deckBuilder/theme/globalThemes.js';
 import { Templates } from '../deckBuilder/templates/templateRegistry/Templates.js';
@@ -23,35 +25,19 @@ slide2.data = {
 };
 deck.add(30, slide2);
 
-// Slide 3 – Title + Image
-const slide3 = Templates.TitleWithImage();
-slide3.data = {
+// Slide 3 – Test Visuals
+deck.add(35, Templates.TestVisuals());
+
+//..................................
+const slide = Templates.TitleWithImage();
+slide.data = {
   title: "Photosynthesis",
-  imageSrc: "images/atom.png", // without .png
+  imageSrc: "images/atom.png",
   showAtTitle: 0,
   showAtImage: 37
 };
-deck.add(50, slide3);
+deck.add(50, slide);
 
-// Slide 4 – Image With Caption
-const slide4 = Templates.ImageWithCaption();
-slide4.data = {
-  imageSrc: "images/mad_scientist.jpg",
-  caption: "Plant cell structure",
-  showAtImage: 0,
-  showAtCaption: 5
-};
-deck.add(70, slide4);
-
-// Slide 5 – Image Left, Text Right
-const slide5 = Templates.ImageLeftTextRight();
-slide5.data = {
-  imageSrc: "images/drops.png",
-  text: "The microscope allows us to see microscopic organisms.",
-  showAtImage: 0,
-  showAtText: 5
-};
-deck.add(90, slide5);
-
+//..................................
 // Finalize and export
 export const slidesData = deck.build();

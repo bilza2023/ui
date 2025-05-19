@@ -1,12 +1,8 @@
 
 
-The Plan is simple all we have to do is 
-1: create good looking global-themes and 
-2: add good looking Templates with Emogis and pretty text etc etc
+The basic purpose of this app is to work with the normal theme and background etc of the app and the template.data and template.theme are seconcdary 
 
-- Each Template = hundreds of slides that can be made.
-- Each new theme can give a template a new dimention...
-
-IF we reach a target of 30 Templates BEAUTIFUL , WELL-ANIMATES (showAt) , stretigically thought out such that i can cover a large number of topics. 
-
-Then this mission is accomplished.
+we must focus on the main and not get stuck in editing single file
+the system as a whole should work well .
+-Now the important thing is not if we can over-ride a single slide background or not that was in the coding stage 
+NOW we need to know if the global-theme theme-xyz goes well with all templates or not.

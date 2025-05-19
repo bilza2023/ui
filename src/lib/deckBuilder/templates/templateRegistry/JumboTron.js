@@ -28,11 +28,11 @@ function createJumboTron() {
     items.push(jumbo);
 
     // 🧪 Optional: test emoji
-    const emoji = this.items.emoji("🎓✨");
-    emoji.fontSize = 48;
-    emoji.y = jumbo.y + jumbo.fontSize + 20;
-    this.centerHorizontally(emoji);
-    items.push(emoji);
+    // const emoji = this.items.emoji("🎓✨");
+    // emoji.fontSize = 48;
+    // emoji.y = jumbo.y + jumbo.fontSize + 20;
+    // this.centerHorizontally(emoji);
+    // items.push(emoji);
 
     return {
       items,
