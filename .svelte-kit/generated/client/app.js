@@ -24,8 +24,8 @@ export const dictionary = {
 		"/courses/ai": [6],
 		"/courses/fbise": [7],
 		"/courses/it": [8],
-		"/pixi": [9],
-		"/player": [10]
+		"/player": [9],
+		"/videoblog": [10]
 	};
 
 export const hooks = {

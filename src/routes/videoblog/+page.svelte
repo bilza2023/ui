@@ -53,13 +53,13 @@
   });
 </script>
 
-<div class="bg-blue-400 min-h-screen flex flex-col">
+<div class="bg-gray-400 min-h-screen flex flex-col">
   <div class="">
     <SlideNav update={update} />
   </div>
   <div id="pixi-container" class="flex-1"></div>
   <div class="bg-gray-900 text-white h-10 flex items-center justify-center">
-    Footer
+    <a href="https://taleem.help">taleem.help</a>
   </div>
 </div>
 
@@ -77,11 +77,9 @@
     justify-content: center;
     width: 100vw;
     height: calc(100vh - 60px);
-    background-color: green;
+    background-color: rgb(45, 45, 48);
     overflow: hidden;
   }
 
-  canvas {
-    display: block;
-  }
+  
 </style>
