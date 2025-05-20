@@ -48,6 +48,14 @@ getItems () {
     this._background = bg;
   }
 
+  setData(newData) {
+    this.data = { ...this.data, ...newData };
+  }
+  
+  setTheme(newTheme) {
+    this.theme = { ...this.theme, ...newTheme };
+  }
+  
 }
 /////////////////////////////
 // Static helpers for background
