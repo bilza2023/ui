@@ -6,7 +6,7 @@ function createJumboTron() {
 
   // ✅ Content-specific data
   tmpl.data = {
-    text: "🚀 Taleem.help Presentation 📘"
+    title: "Title Goes Here..."
   };
 
   // ✅ Only expose what user is allowed to override
@@ -19,7 +19,7 @@ function createJumboTron() {
     const items = [];
 
     // 🔑 Use global theme for visual grammar
-    const jumbo = this.items.text(this.data.text);
+    const jumbo = this.items.text(this.data.title);
     jumbo.fontSize = this.theme.fontSize ?? 80;
     jumbo.y = this.theme.topGap ?? 250;
     jumbo.fontFamily = this.globalTheme.fontFamilyHeading;

@@ -7,7 +7,7 @@ function createImageLeftTextRight() {
 
   tmpl.data = {
     imageSrc: "microscope",
-    text: "The microscope allows us to see microscopic organisms.",
+    text: "Microscopic organisms.",
     showAtImage: 0,
     showAtText: 5
   };

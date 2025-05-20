@@ -23,7 +23,7 @@ function createImageWithCaption() {
     const items = [];
 
     const image = this.items.image({
-      x: 0, y: 0,
+      x: 0, y: 15,
       width: this.theme.imageWidth,
       height: this.theme.imageHeight,
       src: this.data.imageSrc

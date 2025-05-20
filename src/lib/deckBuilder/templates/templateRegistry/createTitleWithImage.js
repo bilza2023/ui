@@ -32,7 +32,7 @@ function createTitleWithImage() {
 
     // Image below title
     const image = this.items.image({
-      x: 0, y: 0, width: 600, height: 400, src: this.data.imageSrc
+      x: 0, y: 0, width: 400, height: 400, src: this.data.imageSrc
     });
     image.showAt = this.data.showAtImage ?? 5;
 
