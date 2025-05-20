@@ -38,9 +38,6 @@
   "_ssr.js": {
     "file": "chunks/ssr.js"
   },
-  "_titleSlide.js": {
-    "file": "chunks/titleSlide.js"
-  },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
     "file": "entries/fallbacks/error.svelte.js",
     "imports": [
@@ -62,7 +59,7 @@
   },
   "src/routes/+layout.svelte": {
     "css": [
-      "_app/immutable/assets/_layout.Cb-D-DF1.css"
+      "_app/immutable/assets/_layout.DbHMg4mO.css"
     ],
     "file": "entries/pages/_layout.svelte.js",
     "imports": [
@@ -145,29 +142,15 @@
     "isEntry": true,
     "src": "src/routes/courses/it/+page.svelte"
   },
-  "src/routes/pixi/+page.svelte": {
+  "src/routes/videoblog/+page.svelte": {
     "css": [
-      "_app/immutable/assets/_page.CUER5KON.css"
+      "_app/immutable/assets/_page.D3YilaQw.css"
     ],
-    "file": "entries/pages/pixi/_page.svelte.js",
+    "file": "entries/pages/videoblog/_page.svelte.js",
     "imports": [
-      "_ssr.js",
-      "_titleSlide.js",
-      "_client.js"
+      "_ssr.js"
     ],
     "isEntry": true,
-    "src": "src/routes/pixi/+page.svelte"
-  },
-  "src/routes/player/+page.svelte": {
-    "css": [
-      "_app/immutable/assets/_page.BJL7hFAU.css"
-    ],
-    "file": "entries/pages/player/_page.svelte.js",
-    "imports": [
-      "_ssr.js",
-      "_titleSlide.js"
-    ],
-    "isEntry": true,
-    "src": "src/routes/player/+page.svelte"
+    "src": "src/routes/videoblog/+page.svelte"
   }
 }
