@@ -26,7 +26,8 @@ function createImageWithCaption() {
       x: 0, y: 15,
       width: this.theme.imageWidth,
       height: this.theme.imageHeight,
-      src: this.data.imageSrc
+      // src: this.data.imageSrc
+      src: "images/mad_scientist.jpg"
     });
     image.showAt = this.data.showAtImage ?? 0;
     this.centerHorizontally(image);

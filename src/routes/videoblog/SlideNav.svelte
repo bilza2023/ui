@@ -3,12 +3,12 @@
   import { Howl } from "howler";
 
   export let update = (t) => {};
-  export let src = "/sounds/music.opus";
+  export let src;
 
   let sound;
   let ticking = false;
   let audioReady = false;
-  let maxEndTime = 0;
+  export let maxEndTime= 100;
   let currentTime = 0;
   let raf;
 
@@ -68,7 +68,8 @@
       html5: true,
       onload: () => {
         audioReady = true;
-        maxEndTime = sound.duration();
+        // maxEndTime = maxEndTime;
+        //this should come from page
       },
       onplay: () => {
         if (!ticking) {

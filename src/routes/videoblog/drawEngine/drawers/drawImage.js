@@ -1,8 +1,12 @@
-
 import * as PIXI from 'pixi.js';
 
 export default function drawImage(app, item) {
-  const texture = PIXI.Texture.from(item.src);
+  const texture = PIXI.utils.TextureCache[item.src];
+  if (!texture) {
+    console.warn("Missing preloaded image:", item.src);
+    return;
+  }
+
   const sprite = new PIXI.Sprite(texture);
 
   sprite.x = item.x;

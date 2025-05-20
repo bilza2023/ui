@@ -3,12 +3,16 @@
   import * as PIXI from "pixi.js";
   import DrawEngine from "./drawEngine/DrawEngine.js";
   import SlideNav from "./SlideNav.svelte";
-  import { slidesData } from "../../lib/staticPresentations/titleSlide.js";
+  import { slidesData } from "../../lib/videoblog/titleSlide.js";
   import { browser } from "$app/environment";
 
   let app;
   const DESIGN_WIDTH = 1020;
   const DESIGN_HEIGHT = 576;
+  let src = "/sounds/music.opus";
+  // debugger;
+  const maxEndTime = slidesData.slides[slidesData.slides.length -1 ].endTime;
+
 
   let engine;
   let currentTime = 0;
@@ -28,26 +32,38 @@
     app.view.style.height = `${designH * scale}px`;
   }
 
-  onMount(() => {
-    const canvasContainer = document.getElementById("pixi-container");
+  const imageList = [
+  "brand/facebook_page_profile.webp",
+  "images/mad_scientist.jpg",
+  "images/drops.png"
+];
 
-    app = new PIXI.Application({
-      width: DESIGN_WIDTH,
-      height: DESIGN_HEIGHT,
-      backgroundColor: 0x00aa00,
-      antialias: true
-    });
+onMount(() => {
+  if (!browser) return;
+  const canvasContainer = document.getElementById("pixi-container");
 
-    canvasContainer.appendChild(app.view);
-    engine = new DrawEngine(slidesData, app);
-
-    if (!browser) return;
-    engine.draw(0);
-
-    resizeHandler = () => resizeCanvas(app, canvasContainer, DESIGN_WIDTH, DESIGN_HEIGHT);
-    resizeHandler();
-    window.addEventListener("resize", resizeHandler);
+  app = new PIXI.Application({
+    width: DESIGN_WIDTH,
+    height: DESIGN_HEIGHT,
+    backgroundColor: 0x00aa00,
+    antialias: true
   });
+
+  canvasContainer.appendChild(app.view);
+
+  // ✅ Pixi v6 Loader
+  const loader = new PIXI.Loader();
+  imageList.forEach(src => loader.add(src));
+
+  loader.load(() => {
+    engine = new DrawEngine(slidesData, app);
+    engine.draw(0); // ✅ safe to draw now
+  });
+
+  resizeHandler = () => resizeCanvas(app, canvasContainer, DESIGN_WIDTH, DESIGN_HEIGHT);
+  resizeHandler();
+  window.addEventListener("resize", resizeHandler);
+});
 
   onDestroy(() => {
     if (!browser) return;
@@ -59,7 +75,9 @@
 
 <div class="bg-gray-400 min-h-screen flex flex-col">
   <div class="">
-    <SlideNav update={update} />
+    {#if src && maxEndTime}
+    <SlideNav update={update} {src} {maxEndTime}/>
+    {/if}
   </div>
   <div id="pixi-container" class="flex-1"></div>
   <div class="bg-gray-900 text-white h-10 flex items-center justify-center">
