@@ -90,7 +90,7 @@
   <button on:click={pause}>⏸ Pause</button>
   <button on:click={stop}>⏹ Reset</button>
 
-  <span class="text-sm font-mono">Time: {currentTime.toFixed(1)}s</span>
+  <span class="text-sm font-mono">Time: {currentTime.toFixed(1)}/{Math.floor(maxEndTime)}&nbsp;s</span>
 
   <label class="text-sm">Seek:
     <input type="range" min="0" max={maxEndTime} step="0.1" on:input={seek} />
