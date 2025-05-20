@@ -88,9 +88,9 @@
 <div class="text-white p-2 bg-[#111827] flex items-center gap-4">
   
   <!-- <div class="text-red-700"> -->
-  <button on:click={play}>▶</button>
-  <button on:click={pause}>⏸</button>
-  <button on:click={stop}>⏹</button>
+  <button on:click={play}>▶ Play</button>
+  <button on:click={pause}>⏸ Pause</button>
+  <button on:click={stop}>⏹ Reset</button>
   <!-- </div> -->
 
   <span class="text-sm font-mono text-yellow-500 ">{currentTime.toFixed(1)}/{Math.floor(maxEndTime)}&nbsp;s</span>

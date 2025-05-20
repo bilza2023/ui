@@ -12,10 +12,20 @@
 
   let engine;
   let currentTime = 0;
+  let resizeHandler;
 
   function update(t) {
     currentTime = t;
     engine.draw(t);
+  }
+
+  function resizeCanvas(app, container, designW = 1020, designH = 576) {
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    const scale = Math.min(w / designW, h / designH);
+
+    app.view.style.width = `${designW * scale}px`;
+    app.view.style.height = `${designH * scale}px`;
   }
 
   onMount(() => {
@@ -34,24 +44,18 @@
     if (!browser) return;
     engine.draw(0);
 
-    function resize() {
-      const w = canvasContainer.clientWidth;
-      const h = canvasContainer.clientHeight;
-      const scale = Math.min(w / DESIGN_WIDTH, h / DESIGN_HEIGHT);
-      app.view.style.width = `${DESIGN_WIDTH * scale}px`;
-      app.view.style.height = `${DESIGN_HEIGHT * scale}px`;
-    }
-
-    resize();
-    window.addEventListener("resize", resize);
+    resizeHandler = () => resizeCanvas(app, canvasContainer, DESIGN_WIDTH, DESIGN_HEIGHT);
+    resizeHandler();
+    window.addEventListener("resize", resizeHandler);
   });
 
   onDestroy(() => {
     if (!browser) return;
     if (app) app.destroy(true, { children: true });
-    window.removeEventListener("resize", resize);
+    if (resizeHandler) window.removeEventListener("resize", resizeHandler);
   });
 </script>
+
 
 <div class="bg-gray-400 min-h-screen flex flex-col">
   <div class="">
