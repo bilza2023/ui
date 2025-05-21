@@ -1,6 +1,7 @@
 // $lib/deckBuilder/DeckBuilder.js
 // import { SlidesDataSchema } from './schemas/zod-items-schema-16may2025.js';
 import { darkTheme, lightTheme, educationSoft, coffeeNote } from "./theme/globalThemes.js";
+import { Jumbotron } from "../pixiTemplates/registry/Jumbotron.js";
 
 export class DeckBuilder {
   constructor({ globalTheme = coffeeNote, globalBackground = {} } = {}) {
@@ -11,47 +12,87 @@ export class DeckBuilder {
     this.templates = []; // hold raw templates
   }
 
-  add(endAt, template) {
-    timeCheck(endAt);
-    this.templates.push({ template, endAt });
+  add(endAt, templateName) {
+    // timeCheck(endAt);
+    this.templates.push({ templateName, endAt });
   }
 
   build() {
-   
+ 
     const slides = [];
-    for (const { template, endAt } of this.templates) {
-      injectGlobalTheme(template, this.globalTheme);
-      injectGlobalBackground(template, this.globalBackground);
-
-      // const items = template.getItems();
-      // template.items = items; // populate before build
-
-      const slide = template.buildSlide();
-      slide.id = uuid();
-      slide.__endTime = endAt;
-
-
+  
+    for (const { templateName, endAt } of this.templates) {
+      timeCheck(endAt); //✅ Moved here
+    
+     
+      // const data = template.data || {};
+      // const config = template.config || {};
+      // debugger; 
+      const items = Jumbotron.getItems(
+        {title : "Duck Tape"},
+        {},
+        this.globalTheme,
+        this.globalBackground
+      );
+  
+      const slide = {
+        id: uuid(),
+        // startTime: this.startTime,
+        startTime: 0,
+        endTime: 5,
+        // endTime: this.endTime,
+        items,
+        backgroundColor: this.backgroundColor,
+        background: this.background || {},
+      };
       slides.push(slide);
     }
-
-    // const finalSlides = finalizeSlides(slides);
-
+  ////////////////////////////////////////////////
     const slidesData = {
       designWidth: this.designWidth,
       designHeight: this.designHeight,
-      slides: slides
+      slides,
     };
-
-    // const result = SlidesDataSchema.safeParse(slidesData);
-
-    // if (!result.success) {
-    //   const formatted = formatZodError(result.error.format());
-    //   console.error("🔴 Zod Validation Failed:\n" + formatted);
-    //   throw new Error(`Validation failed:\n${formatted}`);
-    // }
-
+  
     return slidesData;
   }
+  
+  // build() {
+   
+  //   const slides = [];
+  //   for (const { template, endAt } of this.templates) {
+  //     injectGlobalTheme(template, this.globalTheme);
+  //     injectGlobalBackground(template, this.globalBackground);
+
+  //     // const items = template.getItems();
+  //     // template.items = items; // populate before build
+
+  //     const slide = template.buildSlide();
+  //     slide.id = uuid();
+  //     slide.__endTime = endAt;
+
+
+  //     slides.push(slide);
+  //   }
+
+  //   // const finalSlides = finalizeSlides(slides);
+
+  //   const slidesData = {
+  //     designWidth: this.designWidth,
+  //     designHeight: this.designHeight,
+  //     slides: slides
+  //   };
+
+  //   // const result = SlidesDataSchema.safeParse(slidesData);
+
+  //   // if (!result.success) {
+  //   //   const formatted = formatZodError(result.error.format());
+  //   //   console.error("🔴 Zod Validation Failed:\n" + formatted);
+  //   //   throw new Error(`Validation failed:\n${formatted}`);
+  //   // }
+
+  //   return slidesData;
+  // }
 }
 
 // ------------------------

@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import * as PIXI from 'pixi.js';
   import DrawEngine from './engine/DrawEngine.js';
-  import { Jumbotron} from './pixiTemplates/registry/Jumbotron.js';
+  import { attachDisplayObjects} from './attachDisplayObjects.js';
   import drawText from './engine/renderers/drawText.js';
   import drawCircle from './engine/renderers/drawCircle.js';
   import drawRect from './engine/renderers/drawRect.js';
@@ -27,19 +27,7 @@
     container.appendChild(app.view);
     // debugger;
     // Attach appropriate renderer to each item
-    debugger;
-    slidesData.slides[0].items.forEach((item) => {
-      const type = item.data.type;
-      if (type === "text") {
-        item.displayObject = drawText(item.data);
-      } else if (type === "circle") {
-        item.displayObject = drawCircle(item.data);
-      } else if (type === "rect") {
-        item.displayObject = drawRect(item.data);
-      } else if (type === "image") {
-        item.displayObject = drawImage(item.data);
-      }
-    });
+    attachDisplayObjects(slidesData.slides[0] , app)
 
     const engine = new DrawEngine(app, { debug: true });
     const currentTime = 2;

@@ -11,10 +11,10 @@ const deck = new DeckBuilder({
 
 // Slide 1 – JumboTron
 
-const introSlide = Templates.JumboTron();
-introSlide.setData({ title : "Welcome To Taleem Help"});
+// const introSlide = Templates.JumboTron();
+// introSlide.setData({ title : "Welcome To Taleem Help"});
 
-deck.add(3, introSlide);
+deck.add(3,"jumboton");
 
 
 // Slide 2 – Title With Bullets
