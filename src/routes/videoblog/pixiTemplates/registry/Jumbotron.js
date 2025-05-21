@@ -1,5 +1,6 @@
 
 import { SlideTemplate } from "../SlideTemplate.js";
+import { textItem } from "../items/textItem.js"; // or a central repo
 
 export function Jumbotron() {
   
@@ -12,30 +13,16 @@ export function Jumbotron() {
 
  
   tmpl.getItems = function(){
-    
+    debugger;
+    //we have to keep this in the function
     tmpl.setBackgroundColor(tmpl.globalTheme.backgroundColor);
-    return   [
-        {
-          data: {
-            id: "jumbo-title",
-            type: "text",
-            text: tmpl.data.title || "Default Title",
-            x: 150,
-            y: 150,
-            width: 300,
-            fontSize: 48,
-            fontFamily:  "Arial",
-            color: tmpl.globalTheme.primaryColor,
-            padding: 0,
-            textAlign: "center",
-            rotation: 0,
-            zIndex: 2,
-            showAt: 0
-          },
-          animations: [],
-          effects: []
-        }
-      ];
+    const headingItem = textItem();
+
+    headingItem.data.text =  tmpl.data.title || "Default Title";
+    headingItem.data.x =  150;
+    headingItem.data.y =  150;
+    
+    return   [ headingItem ];
   }
  
 

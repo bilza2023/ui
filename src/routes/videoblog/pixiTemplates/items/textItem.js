@@ -1,7 +1,7 @@
 
 
-export const textItem = {
-    "data": {
+export  function textItem()  {
+    return {"data": {
       "id": "heading1",
       "type": "text",
       "text": "Welcome to Taleem",
@@ -19,5 +19,5 @@ export const textItem = {
     },
     "animations": [],
     "effects": []
-  }
-  
+  };
+}
