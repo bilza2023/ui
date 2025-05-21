@@ -1,14 +1,14 @@
 <script>
-  import { onMount } from 'svelte';
-  import * as PIXI from 'pixi.js';
-  import DrawEngine from './engine/DrawEngine.js';
-  import { mockSlide } from './pixiTemplates/mockSlide.js';
-  import drawText from './engine/renderers/drawText.js';
-  import drawCircle from './engine/renderers/drawCircle.js';
-  import drawRect from './engine/renderers/drawRect.js';
-  import drawImage from './engine/renderers/drawImage.js';
-  
-  const DESIGN_RESOLUTION = {width : 1020 , height : 576}
+  import { onMount } from "svelte";
+  import * as PIXI from "pixi.js";
+  import DrawEngine from "./engine/DrawEngine.js";
+  import { mockSlide } from "./pixiTemplates/mockSlide.js";
+  import drawText from "./engine/renderers/drawText.js";
+  import circleItem from "./engine/renderers/drawCircle.js";
+  import rectItem from "./engine/renderers/drawRect.js";
+  import imageItem from "./engine/renderers/drawImage.js";
+
+  const DESIGN_RESOLUTION = { width: 1020, height: 576 };
   let container;
 
   onMount(() => {
@@ -38,8 +38,9 @@
     const currentTime = 2;
     engine.draw(mockSlide, currentTime);
   });
-
 </script>
+
+<div class="stage" bind:this={container}></div>
 
 <style>
   .stage {
@@ -50,5 +51,3 @@
     background-color: #111;
   }
 </style>
-
-<div class="stage" bind:this={container}></div>
