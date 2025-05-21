@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import * as PIXI from 'pixi.js';
   import DrawEngine from './engine/DrawEngine.js';
-  import { mockSlide } from './pixiTemplates/mockSlide.js';
+  import { Jumbotron} from './pixiTemplates/registry/Jumbotron.js';
   import drawText from './engine/renderers/drawText.js';
   import drawCircle from './engine/renderers/drawCircle.js';
   import drawRect from './engine/renderers/drawRect.js';
@@ -11,7 +11,12 @@
   const DESIGN_RESOLUTION = {width : 1020 , height : 576}
   let container;
 
+  ////////////////////////////////////////////
+  let mockSlide;
+  ////////////////////////////////////////////
   onMount(() => {
+debugger;
+    mockSlide = Jumbotron({},{},{},DESIGN_RESOLUTION);
     const app = new PIXI.Application({
       width: DESIGN_RESOLUTION.width,
       height: DESIGN_RESOLUTION.height,
