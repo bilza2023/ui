@@ -8,25 +8,27 @@
   import drawRect from './engine/renderers/drawRect.js';
   import drawImage from './engine/renderers/drawImage.js';
   
+  import {slidesData} from "./firstSlide.js";
   const DESIGN_RESOLUTION = {width : 1020 , height : 576}
   let container;
 
   ////////////////////////////////////////////
-  let mockSlide;
+  // let mockSlide;
   ////////////////////////////////////////////
   onMount(() => {
-debugger;
-    mockSlide = Jumbotron({},{},{},DESIGN_RESOLUTION);
+
+    // mockSlide = Jumbotron({title : "First"},{},{},DESIGN_RESOLUTION);
     const app = new PIXI.Application({
       width: DESIGN_RESOLUTION.width,
       height: DESIGN_RESOLUTION.height,
-      backgroundColor: mockSlide.backgroundColor,
+      backgroundColor: slidesData.slides[0].backgroundColor,
     });
 
     container.appendChild(app.view);
-
+    // debugger;
     // Attach appropriate renderer to each item
-    mockSlide.items.forEach((item) => {
+    debugger;
+    slidesData.slides[0].items.forEach((item) => {
       const type = item.data.type;
       if (type === "text") {
         item.displayObject = drawText(item.data);
@@ -41,7 +43,7 @@ debugger;
 
     const engine = new DrawEngine(app, { debug: true });
     const currentTime = 2;
-    engine.draw(mockSlide, currentTime);
+    engine.draw(slidesData.slides[0], currentTime);
   });
 
 </script>

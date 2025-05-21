@@ -1,6 +1,6 @@
 // $lib/deckBuilder/DeckBuilder.js
-import { SlidesDataSchema } from './schemas/zod-items-schema-16may2025.js';
-import {darkTheme,lightTheme,educationSoft,coffeeNote} from "./theme/globalThemes.js"
+// import { SlidesDataSchema } from './schemas/zod-items-schema-16may2025.js';
+import { darkTheme, lightTheme, educationSoft, coffeeNote } from "./theme/globalThemes.js";
 
 export class DeckBuilder {
   constructor({ globalTheme = coffeeNote, globalBackground = {} } = {}) {
@@ -8,52 +8,50 @@ export class DeckBuilder {
     this.designHeight = 576;
     this.globalTheme = globalTheme;
     this.globalBackground = globalBackground;
-    this.slides = [];
+    this.templates = []; // hold raw templates
   }
 
   add(endAt, template) {
-
     timeCheck(endAt);
-    injectGlobalTheme(template, this.globalTheme);
-    injectGlobalBackground(template, this.globalBackground);
-
-    const { items, background } = template.getItems();
-
-    const slide = {
-      id: uuid(),
-      backgroundColor: //GPT-discuss
-        template.theme?.backgroundColor ??
-        this.globalTheme?.bgColor ??
-        "#000",
-      items,
-      background,
-      __endTime: endAt
-    };
-
-    this.slides.push(slide);
+    this.templates.push({ template, endAt });
   }
 
-build() {
-  const finalSlides = finalizeSlides(this.slides);
+  build() {
+   
+    const slides = [];
+    for (const { template, endAt } of this.templates) {
+      injectGlobalTheme(template, this.globalTheme);
+      injectGlobalBackground(template, this.globalBackground);
 
-  const slidesData = {
-    designWidth: this.designWidth,
-    designHeight: this.designHeight,
-    slides: finalSlides
-  };
+      // const items = template.getItems();
+      // template.items = items; // populate before build
 
-  const result = SlidesDataSchema.safeParse(slidesData);
+      const slide = template.buildSlide();
+      slide.id = uuid();
+      slide.__endTime = endAt;
 
-    if (!result.success) {
-      const formatted = formatZodError(result.error.format());
-      console.error("🔴 Zod Validation Failed:\n" + formatted); // <-- this line helps
-      throw new Error(`Validation failed:\n${formatted}`);
+
+      slides.push(slide);
     }
-  
 
-  return slidesData;
-}
+    // const finalSlides = finalizeSlides(slides);
 
+    const slidesData = {
+      designWidth: this.designWidth,
+      designHeight: this.designHeight,
+      slides: slides
+    };
+
+    // const result = SlidesDataSchema.safeParse(slidesData);
+
+    // if (!result.success) {
+    //   const formatted = formatZodError(result.error.format());
+    //   console.error("🔴 Zod Validation Failed:\n" + formatted);
+    //   throw new Error(`Validation failed:\n${formatted}`);
+    // }
+
+    return slidesData;
+  }
 }
 
 // ------------------------
@@ -78,7 +76,6 @@ function injectGlobalBackground(template, globalBackground) {
   }
 }
 
-
 function finalizeSlides(slides) {
   let lastEnd = 0;
 
@@ -101,25 +98,6 @@ function finalizeSlides(slides) {
   });
 }
 
-function formatZodError(errorFormat, path = []) {
-  const lines = [];
-
-  for (const key in errorFormat) {
-    if (key === "_errors") {
-      const errs = errorFormat[key];
-      if (errs?.length) {
-        lines.push(`• ${path.join(".") || "root"}: ${errs.join(", ")}`);
-      }
-    } else {
-      const nested = errorFormat[key];
-      if (typeof nested === "object") {
-        lines.push(...formatZodError(nested, [...path, key]));
-      }
-    }
-  }
-
-  return lines;
-}
 
 function uuid() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
