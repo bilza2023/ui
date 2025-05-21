@@ -7,7 +7,7 @@ export function Jumbotron(data = {}, config = {}, background = {}, canvasDims) {
   tmpl.setStartTime(data.startTime || 0);
   tmpl.setEndTime(data.endTime || 5);
   tmpl.globalTheme = config.globalTheme || {}; // fallback to empty object if not provided
-
+  tmpl.setBackgroundColor(tmpl.globalTheme.backgroundColor);
   tmpl.items = [
     {
       data: {

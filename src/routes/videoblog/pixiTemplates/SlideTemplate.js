@@ -4,6 +4,7 @@ export class SlideTemplate {
     constructor(data, config, background, canvasDims) {
       this.data = data;
       this.config = config;
+      this.backgroundColor= "0x042c7c";
       this.background = background;
       this.globalTheme = null; // must be added by deck builder
       this.canvasDims = canvasDims;
@@ -20,8 +21,7 @@ export class SlideTemplate {
         startTime: 0,
         endTime: 5,
         // endTime: this.endTime,
-        // backgroundColor: this.getBackgroundColor(),
-        backgroundColor: "0x042c7c",
+        backgroundColor: this.backgroundColor,
         background: this.background || {},
         items: this.items
       };
@@ -36,7 +36,10 @@ export class SlideTemplate {
     }
   
     getBackgroundColor() {
-      return this.data.backgroundColor || 0x000000;
+      return this.data.backgroundColor;
+    }
+    setBackgroundColor(color) {
+      this.backgroundColor = color;
     }
   }
   
