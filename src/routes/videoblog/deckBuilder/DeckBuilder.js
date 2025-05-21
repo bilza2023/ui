@@ -42,7 +42,7 @@ export class DeckBuilder {
         endTime: 5,
         // endTime: this.endTime,
         items,
-        backgroundColor: this.backgroundColor,
+        backgroundColor: this.globalTheme.backgroundColor,
         background: this.background || {},
       };
       slides.push(slide);
@@ -57,42 +57,6 @@ export class DeckBuilder {
     return slidesData;
   }
   
-  // build() {
-   
-  //   const slides = [];
-  //   for (const { template, endAt } of this.templates) {
-  //     injectGlobalTheme(template, this.globalTheme);
-  //     injectGlobalBackground(template, this.globalBackground);
-
-  //     // const items = template.getItems();
-  //     // template.items = items; // populate before build
-
-  //     const slide = template.buildSlide();
-  //     slide.id = uuid();
-  //     slide.__endTime = endAt;
-
-
-  //     slides.push(slide);
-  //   }
-
-  //   // const finalSlides = finalizeSlides(slides);
-
-  //   const slidesData = {
-  //     designWidth: this.designWidth,
-  //     designHeight: this.designHeight,
-  //     slides: slides
-  //   };
-
-  //   // const result = SlidesDataSchema.safeParse(slidesData);
-
-  //   // if (!result.success) {
-  //   //   const formatted = formatZodError(result.error.format());
-  //   //   console.error("🔴 Zod Validation Failed:\n" + formatted);
-  //   //   throw new Error(`Validation failed:\n${formatted}`);
-  //   // }
-
-  //   return slidesData;
-  // }
 }
 
 // ------------------------

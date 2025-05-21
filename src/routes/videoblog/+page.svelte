@@ -3,6 +3,7 @@
   import * as PIXI from 'pixi.js';
   import DrawEngine from './engine/DrawEngine.js';
   import { attachDisplayObjects} from './attachDisplayObjects.js';
+  import { pixiApp} from './pixiApp.js';
   import drawText from './engine/renderers/drawText.js';
   import drawCircle from './engine/renderers/drawCircle.js';
   import drawRect from './engine/renderers/drawRect.js';
@@ -16,14 +17,9 @@
   // let mockSlide;
   ////////////////////////////////////////////
   onMount(() => {
-
-    // mockSlide = Jumbotron({title : "First"},{},{},DESIGN_RESOLUTION);
-    const app = new PIXI.Application({
-      width: DESIGN_RESOLUTION.width,
-      height: DESIGN_RESOLUTION.height,
-      backgroundColor: slidesData.slides[0].backgroundColor,
-    });
-
+    debugger;
+    const app = pixiApp(slidesData.slides[0].backgroundColor,DESIGN_RESOLUTION.width,DESIGN_RESOLUTION.height);
+    // debugger;
     container.appendChild(app.view);
     // debugger;
     // Attach appropriate renderer to each item

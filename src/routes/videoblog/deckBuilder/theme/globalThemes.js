@@ -101,7 +101,7 @@ export const classicPaper = createGlobalTheme({
 });
 
 export const coffeeNote = createGlobalTheme({
-  backgroundColor: "#f3e7d3",              // latte cream
+  backgroundColor: "0x282d7f",              // latte cream
   baseTextColor: "#3b2e25",
   headingColor: "#2c1e13",
   bulletColor: "#5e4b3c",
