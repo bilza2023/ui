@@ -9,7 +9,7 @@ export const presentationData = {
         startTime: 0,
         endTime: 5,
         items: [
-          {data:{
+          {
             type: 'text',
             text: 'Welcome',
             themeRole: 'primaryColor',
@@ -30,7 +30,7 @@ export const presentationData = {
             rotation: 0,
             zIndex: 0,
             visible: true
-          }}
+          }
         ],
         backgroundColor: '0xb24242',
         background: {}

@@ -26,13 +26,13 @@ export default class DrawEngine {
 
     // Filter visible items
     const visibleItems = slide.items.filter(item =>
-      item.data.showAt === undefined || currentTime >= item.data.showAt
+      item.showAt === undefined || currentTime >= item.showAt
     );
 
     // Render items
     visibleItems.forEach(item => {
       if (this.debug) {
-        console.log(`Rendering item: ${item.data.id} at time ${currentTime}`);
+        console.log(`Rendering item: ${item.id} at time ${currentTime}`);
       }
       this.itemLayer.addChild(item.displayObject);
     });
