@@ -1,13 +1,5 @@
 // DrawEngine.js
 import * as PIXI from 'pixi.js';
-import {
-  drawIcon,
-  drawCircle,
-  drawImage,
-  drawRect,
-  drawText,
-  drawTriangle
-} from "../threeAndHalf/items";
 
 export default class DrawEngine {
   constructor(app, options = {}) {
@@ -25,48 +17,37 @@ export default class DrawEngine {
 
   draw(slide, currentTime) {
     // Clear both layers
+
     this.backgroundLayer.removeChildren();
     this.itemLayer.removeChildren();
 
     // Draw background
     this.drawBackground(slide);
 
-    // Filter and render visible items
+    // Filter visible items
     const visibleItems = slide.items.filter(item =>
       item.showAt === undefined || currentTime >= item.showAt
     );
 
+    debugger;
+    // Render items
     visibleItems.forEach(item => {
-      const displayObject = this.drawObject(item);
-      if (displayObject) {
-        this.itemLayer.addChild(displayObject);
-        if (this.debug) {
-          console.log(`Rendering ${item.type} at time ${currentTime}`);
-        }
+      if (this.debug) {
+        console.log(`Rendering item: ${item.id} at time ${currentTime}`);
       }
+      this.itemLayer.addChild(item.displayObject);
     });
   }
 
   drawBackground(slide) {
+   
     const bg = new PIXI.Graphics();
     const color = slide.backgroundColor ?? 0x000000;
+
     bg.beginFill(color);
     bg.drawRect(0, 0, this.app.screen.width, this.app.screen.height);
     bg.endFill();
-    this.backgroundLayer.addChild(bg);
-  }
 
-  drawObject(item) {
-    switch (item.type) {
-      case 'text': return drawText(item);
-      case 'icon': return drawIcon(item);
-      case 'rect': return drawRect(item);
-      case 'circle': return drawCircle(item);
-      case 'triangle': return drawTriangle(item);
-      case 'image': return drawImage(item);
-      default:
-        if (this.debug) console.warn(`Unknown item type: ${item.type}`);
-        return null;
-    }
+    this.backgroundLayer.addChild(bg);
   }
 }
