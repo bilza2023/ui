@@ -1,10 +1,11 @@
-// $lib/deckBuilder/DeckBuilder.js
-// import { SlidesDataSchema } from './schemas/zod-items-schema-16may2025.js';
-import { darkTheme, lightTheme, educationSoft, coffeeNote } from "./theme/globalThemes.js";
-import { Jumbotron } from "../pixiTemplates/registry/Jumbotron.js";
+
+//DeckBuilder.js
+import { GlobalThemes } from './theme/index.js';
+
+import {TemplatesMap} from "../pixiTemplates/registry";
 
 export class DeckBuilder {
-  constructor({ globalTheme = coffeeNote, globalBackground = {} } = {}) {
+  constructor({ globalTheme = GlobalThemes.highContrast, globalBackground = {} } = {}) {
     this.designWidth = 1020;
     this.designHeight = 576;
     this.globalTheme = globalTheme;
@@ -14,6 +15,7 @@ export class DeckBuilder {
 
   add(endAt, templateName) {
     // timeCheck(endAt);
+    
     this.templates.push({ templateName, endAt });
   }
 
@@ -21,43 +23,52 @@ export class DeckBuilder {
  
     const slides = [];
   
-    for (const { templateName, endAt } of this.templates) {
-      timeCheck(endAt); //✅ Moved here
-    
-     
-      // const data = template.data || {};
-      // const config = template.config || {};
-      // debugger; 
-      const items = Jumbotron.getItems(
-        {title : "Duck Tape"},
-        {},
-        this.globalTheme,
-        this.globalBackground
-      );
-  
-      const slide = {
-        id: uuid(),
-        // startTime: this.startTime,
-        startTime: 0,
-        endTime: 5,
-        // endTime: this.endTime,
-        items,
-        backgroundColor: this.globalTheme.backgroundColor,
-        background: this.background || {},
-      };
-      slides.push(slide);
-    }
-  ////////////////////////////////////////////////
-    const slidesData = {
-      designWidth: this.designWidth,
-      designHeight: this.designHeight,
-      slides,
-    };
-  
-    return slidesData;
-  }
-  
-}
+////////////////////////////////BUILD LOOP ///////////////////////////////////
+for (let i = 0; i < this.templates.length; i++) {
+  const userData = this.templates[i];
+
+// timeCheck(endAt); //✅ Moved here
+//--get template
+const templateEntry = TemplatesMap[userData.templateName];
+if (!templateEntry) throw new Error(`Template '${userData.templateName}' not found`);
+
+///////////--add data and config into template--
+
+const finalData = { ...templateEntry.data, ...userData.data };
+const finalConfig = { ...templateEntry.config, ...userData.config };
+
+const items = templateEntry.getItems(finalData, finalConfig, this.globalTheme, this.globalBackground);
+
+//===now complete the slide
+const slide = {
+  id: uuid(),
+  // startTime: this.startTime,
+  startTime: 0,
+  endTime: 5,
+  // endTime: this.endTime,
+  items,
+  backgroundColor: this.globalTheme.backgroundColor,
+  background: this.globalBackground || {},
+  };
+  //////////--slide
+  slides.push(slide);
+
+}//build loop ends
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////
+const slidesData = {
+  designWidth: this.designWidth,
+  designHeight: this.designHeight,
+  slides,
+  };
+  // debugger;
+  console.log("build-step - slidesData",slidesData);
+  return slidesData;
+}//build function
+
+////////////////////////////////////////////////////////////////////  
+////////////////////////////////////////////////////////////////////  
+}//class ends
 
 // ------------------------
 // 🧩 Utility functions

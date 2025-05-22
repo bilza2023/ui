@@ -18,6 +18,7 @@ export default class DrawEngine {
       if (this.debug) {
         console.log(`Rendering item: ${item.data.id} at time ${currentTime}`);
       }
+      console.log("draw-step - visibleItems",visibleItems);
       this.stage.addChild(item.displayObject);
     });
   }

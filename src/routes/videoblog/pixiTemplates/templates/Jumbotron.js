@@ -1,12 +1,12 @@
-
-import { SlideTemplate } from "../SlideTemplate.js";
+'use strict';
 import { textItem } from "../items/textItem.js"; // or a central repo
 
 export const Jumbotron = {
   _endTime: 5,
   data: { title: "Welcome" },
   config: { fontSize: 48 },
-  getItems(data, config, globalTheme, background) {
+  getItems(data, config, globalTheme, globalBackground) {
+    // debugger;
     return [
       textItem({
         text: data.title,

@@ -1,20 +1,18 @@
+'use strict';
 
 import { DeckBuilder } from './deckBuilder/DeckBuilder.js';
-import { coffeeNote } from './deckBuilder/theme/globalThemes.js';
+
 import { Templates } from './pixiTemplates/Templates.js';
 
 
-const deck = new DeckBuilder({
-  globalTheme: coffeeNote,
-  globalBackground: null
-});
+const deck = new DeckBuilder({});
 
 // Slide 1 – JumboTron
 
 // const introSlide = Templates.JumboTron();
 // introSlide.setData({ title : "Welcome To Taleem Help"});
 
-deck.add(3,"jumboton");
+deck.add(3,"jumbotron",{title: "From User"});
 
 
 // Slide 2 – Title With Bullets

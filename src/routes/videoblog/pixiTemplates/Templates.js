@@ -1,6 +1,6 @@
 
 
-import { Jumbotron } from './registry/Jumbotron';
+import { Jumbotron } from './templates/Jumbotron';
 // import { createTitleWithBullets } from './TitleWithBullets.js';
 // import { createTestVisuals } from './TestVisuals.js';
 // import { createTitleWithImage } from './createTitleWithImage.js';

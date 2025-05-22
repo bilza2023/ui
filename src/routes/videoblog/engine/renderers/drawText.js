@@ -1,21 +1,33 @@
 
 import * as PIXI from 'pixi.js';
 
-export default function drawText(textItem) {
-  const fontColor = textItem.color || '#ffffff';
-  const tintColor = hexColorToNumber(fontColor);
+function colorToHexString(value) {
+  if (typeof value !== 'number') {
+    throw new Error(`Invalid color: expected number, got ${typeof value}`);
+  }
+  return `#${value.toString(16).padStart(6, '0')}`;
+}
 
-  if (!PIXI.BitmapFont.available["TestFont"]) {
-    PIXI.BitmapFont.from("TestFont", {
-      fontFamily: textItem.fontFamily || 'Arial',
-      fontSize: textItem.fontSize || 24,
-      fill: fontColor
+export default function drawText(textItem) {
+  if (typeof textItem.color !== 'number') {
+    throw new Error(`Invalid item color type, expected number, got ${typeof textItem.color}`);
+  }
+
+  const fontFamily = textItem.fontFamily || 'Arial';
+  const fontSize = textItem.fontSize || 24;
+  const fontKey = `Font_${fontFamily}_${fontSize}`;
+
+  if (!PIXI.BitmapFont.available[fontKey]) {
+    PIXI.BitmapFont.from(fontKey, {
+      fontFamily,
+      fontSize,
+      fill: tintColor
     });
   }
 
   const bt = new PIXI.BitmapText(textItem.text, {
-    fontName: "TestFont",
-    fontSize: textItem.fontSize || 24,
+    fontName: fontKey,
+    fontSize,
     tint: tintColor
   });
 
@@ -34,22 +46,4 @@ export default function drawText(textItem) {
   if (textItem.zIndex !== undefined) bt.zIndex = textItem.zIndex;
 
   return bt;
-}
-
-function hexColorToNumber(color) {
-  if (typeof color === 'string') {
-    if (color.startsWith('#')) {
-      return parseInt(color.slice(1), 16);
-    } else {
-      console.warn(`Invalid color string: "${color}". Must start with \"#\"`);
-      return 0xffffff;
-    }
-  }
-
-  if (typeof color === 'number') {
-    return color;
-  }
-
-  console.warn(`Invalid color type: ${typeof color}. Must be string or number`);
-  return 0xffffff;
 }
