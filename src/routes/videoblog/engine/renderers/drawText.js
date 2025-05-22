@@ -5,6 +5,7 @@ import { darkTheme } from "../themes/globalThemes.js";
 import decideTheColour from "./decide-the-colour.js";
 
 export default function drawText(app, textItem, globalTheme = darkTheme) {
+ 
   // === 1. Resolve tint color based on themeRole and overrides
   const tintColor = decideTheColour(textItem, globalTheme);
 

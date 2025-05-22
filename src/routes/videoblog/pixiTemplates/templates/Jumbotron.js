@@ -13,7 +13,7 @@ export const Jumbotron = {
       x: 100,
       y: 100,
       fontSize: 40,
-   
+      color: 0xf9e104, // if we remove this then the return to globalTheme
     });
 
     // console.log(items);
