@@ -37,19 +37,21 @@ export default class DrawEngine {
     );
 
     visibleItems.forEach(item => {
-      const displayObject = this.drawObject(item);
-      if (displayObject) {
-        this.itemLayer.addChild(displayObject);
+      // const displayObject = this.drawObject(item);
+      // if (displayObject) {
+        this.itemLayer.addChild(item);
         if (this.debug) {
           console.log(`Rendering ${item.type} at time ${currentTime}`);
         }
-      }
+      // }
     });
   }
 
   drawBackground(slide) {
     const bg = new PIXI.Graphics();
-    const color = slide.backgroundColor ?? 0x000000;
+    // debugger;
+    const color = slide.backgroundColor ?? 0x000000; //gives 1710618
+    // const color = 0x0e20ed;
     bg.beginFill(color);
     bg.drawRect(0, 0, this.app.screen.width, this.app.screen.height);
     bg.endFill();

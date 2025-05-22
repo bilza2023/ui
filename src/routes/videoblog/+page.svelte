@@ -14,13 +14,13 @@
   // let mockSlide;
   ////////////////////////////////////////////
   onMount(() => {
-   
+
     const app = pixiApp(presentationData.slidesData[0].backgroundColor,DESIGN_RESOLUTION.width,DESIGN_RESOLUTION.height);
     // debugger;
     container.appendChild(app.view);
     // Attach appropriate renderer to each item
     // debugger;
-    attachDisplayObjects(presentationData.slidesData[0] , app)
+    // attachDisplayObjects(presentationData.slidesData[0] , app)
 
     const engine = new DrawEngine(app, { debug: true });
     const currentTime = 2;
