@@ -1,10 +1,13 @@
+import toPixiColor from "./slideTemplates/util/toPixiColor";
+
 export default class SlideBuilder {
-    constructor() {
+    constructor(globalTheme) {
       this.template = null;
       this.data = {};
       this.config = {};
+      this.globalTheme = globalTheme; 
       this.background = {};
-      this.backgroundColor = 0x000000;
+      this.backgroundColor = null;
       this.startTime = 0;
       this.endTime = 5;
     }
@@ -44,16 +47,21 @@ export default class SlideBuilder {
       this.endTime = t;
       return this;
     }
-  
+    
     build() {
       if (!this.template) {
         throw new Error("No template set. Use .setTemplate() before build().");
       }
-  
-      const slide = this.template(this.data, this.config, this.background);
+      const slide = this.template(this.globalTheme,this.data, this.config, this.background);
       slide.startTime = this.startTime;
       slide.endTime = this.endTime;
-      slide.backgroundColor = this.backgroundColor;
+debugger;
+      if(this.backgroundColor !== null){
+        slide.backgroundColor = this.backgroundColor;
+      }else {
+        slide.backgroundColor = toPixiColor(this.globalTheme.backgroundColor);
+      }
+
       return slide;
     }
   }

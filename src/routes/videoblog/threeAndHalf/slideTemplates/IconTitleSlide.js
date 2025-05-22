@@ -1,27 +1,25 @@
 // IconTitleSlide.js
 import { drawIcon, drawText } from "../items";
-import SlideBuilder from "../SlideBuilder";
+import toPixiColor from "./util/toPixiColor";
 
-
-export function IconTitleSlide(data = {}, config = {}, background = {}) {
+export function IconTitleSlide(globalTheme, data = {}, config = {}, background = {}) {
   const startTime = 0;
   const endTime = 5;
 
   const mergedData = {
     title: data.title || "Default Title",
-    fontSize: data.fontSize || 40,
-    icon: data.icon || "BULB",
+    fontSize: data.fontSize || 90,
+    icon: data.icon || "ROCKET",
     iconSize: data.iconSize || 300,
-    iconX: data.iconX || 460,
+    iconX: data.iconX || 560,
     iconY: data.iconY || 120,
-    textX: data.textX || 260,
-    textY: data.textY || 260,
+    textX: data.textX || 100,
+    textY: data.textY || 200,
   };
 
   const mergedConfig = {
-    // iconColor: config.iconColor || 0xffcc00,//icons dont use colors
-    textColor: config.textColor || 0xffffff,
-    fontFamily: config.fontFamily || "Arial Black",
+    textColor: config.textColor || toPixiColor(globalTheme.headingColor) || 0xffffff,
+  fontFamily: config.fontFamily || globalTheme.fontFamilyHeading || "Arial Black",
   };
 
   const icon = drawIcon({
@@ -48,7 +46,7 @@ export function IconTitleSlide(data = {}, config = {}, background = {}) {
   return {
     startTime,
     endTime,
-    backgroundColor: 0x0e20ed,
+    backgroundColor: globalTheme.backgroundColor,
     background,
     data: mergedData,
     config: mergedConfig,
