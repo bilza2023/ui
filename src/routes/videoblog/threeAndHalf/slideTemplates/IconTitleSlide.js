@@ -1,5 +1,7 @@
 // IconTitleSlide.js
 import { drawIcon, drawText } from "../items";
+import SlideBuilder from "../SlideBuilder";
+
 
 export function IconTitleSlide(data = {}, config = {}, background = {}) {
   const startTime = 0;
@@ -7,6 +9,7 @@ export function IconTitleSlide(data = {}, config = {}, background = {}) {
 
   const mergedData = {
     title: data.title || "Default Title",
+    fontSize: data.fontSize || 40,
     icon: data.icon || "BULB",
     iconSize: data.iconSize || 300,
     iconX: data.iconX || 460,
@@ -34,7 +37,7 @@ export function IconTitleSlide(data = {}, config = {}, background = {}) {
     y: mergedData.textY,
     width: 500,
     height: 80,
-    fontSize: 44,
+    fontSize: mergedData.fontSize,
     fontFamily: mergedConfig.fontFamily,
     color: mergedConfig.textColor,
     textAlign: "center",
