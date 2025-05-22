@@ -4,7 +4,7 @@
    return {
     type: "text",
     text: "Normal Text",
-
+    themeRole: "primaryColor", 
     x: 0,
     y: 0,
     width: 200,
@@ -12,7 +12,6 @@
 
     fontSize: 35,
     fontFamily: "Georgia",
-    color: "black",
     textAlign: "center",
     lineHeight: 1.2,
     padding: 20,

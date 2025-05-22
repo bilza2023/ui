@@ -14,10 +14,10 @@
   // let mockSlide;
   ////////////////////////////////////////////
   onMount(() => {
+    debugger;
     const app = pixiApp(slidesData.slides[0].backgroundColor,DESIGN_RESOLUTION.width,DESIGN_RESOLUTION.height);
     // debugger;
     container.appendChild(app.view);
-    debugger;
     // Attach appropriate renderer to each item
     // debugger;
     attachDisplayObjects(slidesData.slides[0] , app)

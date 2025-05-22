@@ -1,16 +1,14 @@
 
+// drawText.js
 import * as PIXI from 'pixi.js';
-import {darkTheme} from "../themes/globalThemes";
+import { darkTheme } from "../themes/globalThemes.js";
+import decideTheColour from "./decide-the-colour.js";
 
+export default function drawText(app, textItem, globalTheme = darkTheme) {
+  // === 1. Resolve tint color based on themeRole and overrides
+  const tintColor = decideTheColour(textItem, globalTheme);
 
-export default function drawText(app,textItem,globalTheme=darkTheme) {
-  debugger;
-  let tintColor = textItem.color;
-  if (typeof textItem.color !== 'number') {
-    tintColor = parseInt(textItem.color.replace("#", ""), 16);
-  }
-
-  // const tintColor = textItem.color || 'green';
+  // === 2. Prepare font
   const fontFamily = textItem.fontFamily || 'Arial';
   const fontSize = textItem.fontSize || 24;
   const fontKey = `Font_${fontFamily}_${fontSize}`;
@@ -19,16 +17,18 @@ export default function drawText(app,textItem,globalTheme=darkTheme) {
     PIXI.BitmapFont.from(fontKey, {
       fontFamily,
       fontSize,
-      fill: tintColor
+      fill: tintColor   // color used for generating glyph atlas
     });
   }
 
+  // === 3. Create BitmapText instance
   const bt = new PIXI.BitmapText(textItem.text, {
     fontName: fontKey,
     fontSize,
-    tint: tintColor
+    tint: tintColor     // final runtime tint
   });
 
+  // === 4. Positioning logic
   const padding = textItem.padding || 0;
 
   if (textItem.textAlign === 'center') {

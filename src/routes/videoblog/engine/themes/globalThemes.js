@@ -13,19 +13,19 @@ export const darkTheme = {
   fontFamilyHeading: "Georgia",
   fontFamilyBase: "Arial"
 };
-
 export const highContrast = {
-    "backgroundColor": "#ffffff",
-    "baseTextColor": "#000000",
-    "headingColor": "#000000",
-    "bulletColor": "#222222",
-    "primaryColor": "#ff0000",
-    "secondaryColor": "#0000ff",
-    "borderColor": "#000000",
-    "shadowColor": "rgba(0, 0, 0, 0.1)",
-    "fontFamilyHeading": "Arial Black",
-    "fontFamilyBase": "Tahoma"
+  backgroundColor: "#c43535",         // soft light grey
+  baseTextColor: "#1a1a1a",           // near-black
+  headingColor: "#003366",           // deep blue
+  bulletColor: "#333333",            // dark grey
+  primaryColor: "#007acc",           // calm blue
+  secondaryColor: "#cc3300",         // strong warm red
+  borderColor: "#dddddd",            // light borders
+  shadowColor: "rgba(0, 0, 0, 0.15)", // soft shadow
+  fontFamilyHeading: "Georgia",
+  fontFamilyBase: "Segoe UI"
 };
+
 
 export const GlobalThemes = {
   darkTheme,

@@ -1,6 +1,6 @@
 
 
-import { getText, getCircle, getRect, getImage } from '../index';
+import { getText, getCircle, getRect, getImage } from '../itemsFolder/index';
 
 export   // 👉 Local helper for testing bar graphs
 function getBarGraph({

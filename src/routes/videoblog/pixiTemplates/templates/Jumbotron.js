@@ -13,7 +13,7 @@ export const Jumbotron = {
       x: 100,
       y: 100,
       fontSize: 40,
-      color: 0xe81e1e,
+   
     });
 
     // console.log(items);
