@@ -1,36 +1,46 @@
-'use strict';
-
-import { DeckBuilder } from './deckBuilder/DeckBuilder.js';
-
-import { Templates } from './pixiTemplates/Templates.js';
-
-
-const deck = new DeckBuilder({});
-
-// Slide 1 – JumboTron
-
-// const introSlide = Templates.JumboTron();
-// introSlide.setData({ title : "Welcome To Taleem Help"});
-
-deck.add(3,"jumbotron",{title: "From User"});
-
-
-// Slide 2 – Title With Bullets
-// const slide3 = Templates.TitleWithBullets();
-// slide3.setData({
-//   title: "Taleem Help",
-//   bullet1: "Mission Objectives",
-//   bullet2: "Products",
-//   bullet3: "Up Comming..",
-//   showAt1: 4,
-//   showAt2: 6,
-//   showAt3: 8
-// });
-// deck.add(10, slide3);
-
-
-
-
 
 // Finalize and export
-export const slidesData = deck.build();
+export const presentationData = {
+    designWidth: 1020,
+    designHeight: 576,
+    slidesData: [
+      {
+        id: '69623375-54ad-417a-bd32-0bc505f9584f',
+        startTime: 0,
+        endTime: 5,
+        items: [
+          {data:{
+            type: 'text',
+            text: 'Welcome',
+            themeRole: 'primaryColor',
+            x: 100,
+            y: 100,
+            width: 200,
+            height: 50,
+            color : 0x2207f2, // if removed revert to globalTheme
+            fontSize: 40,
+            fontFamily: 'Georgia',
+            textAlign: 'center',
+            lineHeight: 1.2,
+            padding: 20,
+            backgroundColor: null,
+            borderColor: null,
+            borderWidth: 0,
+            showAt: 0,
+            rotation: 0,
+            zIndex: 0,
+            visible: true
+          }}
+        ],
+        backgroundColor: '0xb24242',
+        background: {}
+      }
+    ]
+  };
+
+
+
+//   every slide must have
+
+//   slideData.data 
+//   slideData.globalTheme 

@@ -6,7 +6,7 @@
   import { pixiApp} from './pixiApp.js';
 
   
-  import {slidesData} from "./firstSlide.js";
+  import {presentationData} from "./firstSlide.js";
   const DESIGN_RESOLUTION = {width : 1020 , height : 576}
   let container;
 
@@ -14,17 +14,17 @@
   // let mockSlide;
   ////////////////////////////////////////////
   onMount(() => {
-    // debugger;
-    const app = pixiApp(slidesData.slides[0].backgroundColor,DESIGN_RESOLUTION.width,DESIGN_RESOLUTION.height);
+   
+    const app = pixiApp(presentationData.slidesData[0].backgroundColor,DESIGN_RESOLUTION.width,DESIGN_RESOLUTION.height);
     // debugger;
     container.appendChild(app.view);
     // Attach appropriate renderer to each item
     // debugger;
-    attachDisplayObjects(slidesData.slides[0] , app)
+    attachDisplayObjects(presentationData.slidesData[0] , app)
 
     const engine = new DrawEngine(app, { debug: true });
     const currentTime = 2;
-    engine.draw(slidesData.slides[0], currentTime);
+    engine.draw(presentationData.slidesData[0], currentTime);
   });
 
 </script>

@@ -17,9 +17,10 @@ export default class DrawEngine {
 
   draw(slide, currentTime) {
     // Clear both layers
+
     this.backgroundLayer.removeChildren();
     this.itemLayer.removeChildren();
-
+  debugger;
     // Draw background
     this.drawBackground(slide);
 
@@ -38,7 +39,7 @@ export default class DrawEngine {
   }
 
   drawBackground(slide) {
-    debugger;
+   
     const bg = new PIXI.Graphics();
     const color = slide.backgroundColor ?? 0x000000;
 
