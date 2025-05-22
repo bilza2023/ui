@@ -1,18 +1,16 @@
 
 import * as PIXI from 'pixi.js';
+import {darkTheme} from "../themes/globalThemes";
 
-function colorToHexString(value) {
-  if (typeof value !== 'number') {
-    throw new Error(`Invalid color: expected number, got ${typeof value}`);
-  }
-  return `#${value.toString(16).padStart(6, '0')}`;
-}
 
-export default function drawText(textItem) {
+export default function drawText(app,textItem,globalTheme=darkTheme) {
+  debugger;
+  let tintColor = textItem.color;
   if (typeof textItem.color !== 'number') {
-    throw new Error(`Invalid item color type, expected number, got ${typeof textItem.color}`);
+    tintColor = parseInt(textItem.color.replace("#", ""), 16);
   }
 
+  // const tintColor = textItem.color || 'green';
   const fontFamily = textItem.fontFamily || 'Arial';
   const fontSize = textItem.fontSize || 24;
   const fontKey = `Font_${fontFamily}_${fontSize}`;

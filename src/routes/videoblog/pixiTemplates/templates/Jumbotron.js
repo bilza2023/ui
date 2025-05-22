@@ -5,16 +5,19 @@ export const Jumbotron = {
   _endTime: 5,
   data: { title: "Welcome" },
   config: { fontSize: 48 },
-  getItems(data, config, globalTheme, globalBackground) {
-    // debugger;
-    return [
-      textItem({
-        text: data.title,
-        x: 100,
-        y: 100,
-        fontSize: 40,
-        color: globalTheme.primaryColor,
-      }),
-    ];
+  getItems(data) {
+  
+    let item = {}
+    item.data =   textItem({
+      text: data.title,
+      x: 100,
+      y: 100,
+      fontSize: 40,
+      color: 0xe81e1e,
+    });
+
+    // console.log(items);
+    return [item];
+    // return Object.freeze(items.map(Object.freeze));
   },
 };

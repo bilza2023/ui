@@ -1,8 +1,7 @@
-
-export function getText(content = "Normal Text") {
+export function getText(props = {}) {
   return {
     type: "text",
-    text: content,
+    text: "Normal Text",
 
     x: 0,
     y: 0,
@@ -23,6 +22,8 @@ export function getText(content = "Normal Text") {
 
     rotation: 0,
     zIndex: 0,
-    visible: true
+    visible: true,
+
+    ...props
   };
 }
