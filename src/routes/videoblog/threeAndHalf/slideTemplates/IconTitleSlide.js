@@ -1,61 +1,38 @@
 
 //==>>> IconTitleSlide.js
 import toPixiColor from "./util/toPixiColor";
+// IconTitleTemplate.js
+import { TemplateBuilder } from "../templateBuilder/TemplateBuilder";
 
 export function IconTitleSlide(globalTheme, data = {}, config = {}, background = {}) {
-  const startAt = 0;
-  const endAt = 5;
+  const builder = new TemplateBuilder();
 
-  const mergedData = {
-    title: data.title || "Default Title",
-    fontSize: data.fontSize || 90,
-    icon: data.icon || "ROCKET",
-    iconSize: data.iconSize || 300,
-    iconX: data.iconX || 560,
-    iconY: data.iconY || 120,
-    textX: data.textX || 100,
-    textY: data.textY || 200,
-  };
+  // --- Icon item ---
+  const icon = builder.addItem("icon", { x: 560, y: 120 });
 
-  const mergedConfig = {
-    textColor: config.textColor || toPixiColor(globalTheme.headingColor) || 0xffffff,
-    fontFamily: config.fontFamily || globalTheme.fontFamilyHeading || "Arial Black",
-  };
+  icon.link("iconName").default("ROCKET").unlessData("icon");
+  icon.link("width").default(300).unlessData("iconSize");
+  icon.link("color").defaultTheme("headingColor").unlessConfig("textColor");
+  icon.link("fontFamily").defaultTheme("fontFamilyHeading").unlessConfig("fontFamily");
 
-  const iconData = {
-    type: "icon",
-    iconName: mergedData.icon,
-    x: mergedData.iconX,
-    y: mergedData.iconY,
-    width: mergedData.iconSize,
-    color: mergedConfig.textColor,
-    fontFamily: mergedConfig.fontFamily,
-  };
-
-  const headingData = {
-    type: "text",
-    text: mergedData.title,
-    x: mergedData.textX,
-    y: mergedData.textY,
+  // --- Text item ---
+  const text = builder.addItem("text", {
+    x: 100,
+    y: 200,
     width: 500,
     height: 80,
-    fontSize: mergedData.fontSize,
-    fontFamily: mergedConfig.fontFamily,
-    color: mergedConfig.textColor,
     textAlign: "center",
     padding: 10,
     lineHeight: 1.3,
-  };
+  });
+
+  text.link("text").default("Default Title").unlessData("title");
+  text.link("fontSize").default(90).unlessData("fontSize");
+  text.link("color").defaultTheme("headingColor").unlessConfig("textColor");
+  text.link("fontFamily").defaultTheme("fontFamilyHeading").unlessConfig("fontFamily");
 
   return {
-    startAt,
-    endAt,
-    background: { backgroundColor: globalTheme.backgroundColor, ...background },
-    data: mergedData,
-    config: mergedConfig,
-    items: [
-      { data: iconData },
-      { data: headingData },
-    ],
+    items: builder.getItems(data, config, globalTheme),
+    background,
   };
 }

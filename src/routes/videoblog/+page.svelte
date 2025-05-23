@@ -5,6 +5,7 @@
   
   
   import {presentationData} from "./firstSlide.js";
+  console.log("presentationData",presentationData);
   const DESIGN_RESOLUTION = {width : 1020 , height : 576}
 
   ////////////////////////////////////////////
