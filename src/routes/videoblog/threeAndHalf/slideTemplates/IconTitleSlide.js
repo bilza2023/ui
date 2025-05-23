@@ -1,4 +1,5 @@
-// IconTitleSlide.js
+
+//==>>> IconTitleSlide.js
 import { drawIcon, drawText } from "../items";
 import toPixiColor from "./util/toPixiColor";
 

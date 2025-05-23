@@ -2,30 +2,38 @@
   import { onMount } from 'svelte';
   import * as PIXI from 'pixi.js';
   import DrawEngine from './engine/DrawEngine.js';
-  import { attachDisplayObjects} from './attachDisplayObjects.js';
+  import Player from "./player/Player.js";
   import { pixiApp} from './pixiApp.js';
-
+  
   
   import {presentationData} from "./firstSlide.js";
   const DESIGN_RESOLUTION = {width : 1020 , height : 576}
-  let container;
 
   ////////////////////////////////////////////
   // let mockSlide;
   ////////////////////////////////////////////
-  onMount(() => {
+  let container;
 
-    const app = pixiApp(presentationData.slidesData[0].backgroundColor,DESIGN_RESOLUTION.width,DESIGN_RESOLUTION.height);
-    // debugger;
-    container.appendChild(app.view);
-    // Attach appropriate renderer to each item
-    // debugger;
-    // attachDisplayObjects(presentationData.slidesData[0] , app)
+onMount(() => {
+  const DESIGN_WIDTH = 1020;
+  const DESIGN_HEIGHT = 576;
 
-    const engine = new DrawEngine(app, { debug: true });
-    const currentTime = 2;
-    engine.draw(presentationData.slidesData[0], currentTime);
+  const app = pixiApp(
+    presentationData.slidesData[0].backgroundColor,
+    DESIGN_WIDTH,
+    DESIGN_HEIGHT
+  );
+
+  container.appendChild(app.view);
+
+  const player = new Player({
+    app,
+    slides: presentationData.slidesData,
   });
+
+  player.goToTime(0); // optional: to render first frame
+});
+
 
 </script>
 

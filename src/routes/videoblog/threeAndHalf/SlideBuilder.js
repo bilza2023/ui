@@ -55,7 +55,7 @@ export default class SlideBuilder {
       const slide = this.template(this.globalTheme,this.data, this.config, this.background);
       slide.startTime = this.startTime;
       slide.endTime = this.endTime;
-debugger;
+
       if(this.backgroundColor !== null){
         slide.backgroundColor = this.backgroundColor;
       }else {
