@@ -1,7 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-  import * as PIXI from 'pixi.js';
-  import DrawEngine from './engine/DrawEngine.js';
   import Player from "./player/Player.js";
   import { pixiApp} from './pixiApp.js';
   
