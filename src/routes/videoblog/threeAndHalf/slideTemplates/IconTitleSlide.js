@@ -1,11 +1,10 @@
 
 //==>>> IconTitleSlide.js
-import { drawIcon, drawText } from "../items";
 import toPixiColor from "./util/toPixiColor";
 
 export function IconTitleSlide(globalTheme, data = {}, config = {}, background = {}) {
-  const startTime = 0;
-  const endTime = 5;
+  const startAt = 0;
+  const endAt = 5;
 
   const mergedData = {
     title: data.title || "Default Title",
@@ -20,17 +19,21 @@ export function IconTitleSlide(globalTheme, data = {}, config = {}, background =
 
   const mergedConfig = {
     textColor: config.textColor || toPixiColor(globalTheme.headingColor) || 0xffffff,
-  fontFamily: config.fontFamily || globalTheme.fontFamilyHeading || "Arial Black",
+    fontFamily: config.fontFamily || globalTheme.fontFamilyHeading || "Arial Black",
   };
 
-  const icon = drawIcon({
+  const iconData = {
+    type: "icon",
     iconName: mergedData.icon,
     x: mergedData.iconX,
     y: mergedData.iconY,
     width: mergedData.iconSize,
-  });
+    color: mergedConfig.textColor,
+    fontFamily: mergedConfig.fontFamily,
+  };
 
-  const heading = drawText({
+  const headingData = {
+    type: "text",
     text: mergedData.title,
     x: mergedData.textX,
     y: mergedData.textY,
@@ -42,15 +45,17 @@ export function IconTitleSlide(globalTheme, data = {}, config = {}, background =
     textAlign: "center",
     padding: 10,
     lineHeight: 1.3,
-  });
+  };
 
   return {
-    startTime,
-    endTime,
-    backgroundColor: globalTheme.backgroundColor,
-    background,
+    startAt,
+    endAt,
+    background: { backgroundColor: globalTheme.backgroundColor, ...background },
     data: mergedData,
     config: mergedConfig,
-    items: [icon, heading],
+    items: [
+      { data: iconData },
+      { data: headingData },
+    ],
   };
 }

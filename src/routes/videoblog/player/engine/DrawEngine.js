@@ -1,6 +1,7 @@
 // DrawEngine.js
 import * as PIXI from "pixi.js";
 import getBackgroundColor from "./getBackgroundColor.js";
+import { drawItem } from "./drawItem.js";
 
 export default class DrawEngine {
   constructor(app) {
@@ -30,9 +31,9 @@ export default class DrawEngine {
       (it) => it.data?.showAt === undefined || currentTime >= it.data.showAt
     ) ?? [];
 
-    visibleItems.forEach((it) => {
-      // if (!it.displayObject) return;
-      this.itemLayer.addChild(it);
+    visibleItems.forEach((item) => {
+      const displayObject = drawItem(item.data);
+      this.itemLayer.addChild(displayObject);
     });
   }
 }
