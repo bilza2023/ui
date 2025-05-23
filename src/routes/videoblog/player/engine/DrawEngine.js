@@ -17,6 +17,7 @@ export default class DrawEngine {
   draw(slide, currentTime) {
     // ---- background ----
     this.backgroundLayer.removeChildren();
+    debugger;
     const bgColor = getBackgroundColor(slide);
     const bg = new PIXI.Graphics();
     bg.beginFill(bgColor);

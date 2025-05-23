@@ -50,16 +50,16 @@ export default class Player {
     this.updateIndexByTime(this.currentTime);
     this.renderCurrentSlide();
   }
-
   updateIndexByTime(time) {
     for (let i = 0; i < this.slides.length; i++) {
       const s = this.slides[i];
-      if (time >= s.startAt && time < s.endAt) {
+      if (time >= s.startTime && time < s.endTime) {
         this.currentIndex = i;
         break;
       }
     }
   }
+  
 
   renderCurrentSlide() {
     const slide = this.currentSlide;
