@@ -5,6 +5,7 @@ import toPixiColor from "./util/toPixiColor";
 import { TemplateBuilder } from "../templateBuilder/TemplateBuilder";
 
 export function IconTitleSlide(globalTheme, data = {}, config = {}, background = {}) {
+ 
   const builder = new TemplateBuilder();
 
   // --- Icon item ---
