@@ -91,7 +91,7 @@
   justify-content: center;
   align-items: start;  /* 👈 this is the fix */
   height: 100vh;
-  background-color: #111;
+  background-color: #3b3a3a;
 }
 
   :global(body) {

@@ -11,7 +11,7 @@ export const presentationData = {
       {
         startTime: 0,
         endTime: 5,
-        background: { backgroundColor: "#1a1a1a" },
+        background: { backgroundColor: "#127203" },
         items: [
           {
             type: "text",
@@ -24,7 +24,20 @@ export const presentationData = {
             textAlign: "left",
             lineHeight: 1.2,
             padding: 10,
-            animate: []
+            animate:[
+              {
+                  type: "move",
+                  start: 0,
+                  end: 2,
+                  props: {
+                    fromX: 1020,
+                    toX: 100,
+                    fromY: 200,
+                    toY: 200,
+                    primitive: "easeOut"
+                  }
+              }
+            ]
           }
         ]
       },

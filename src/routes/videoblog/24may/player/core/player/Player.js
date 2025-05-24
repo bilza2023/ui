@@ -61,7 +61,10 @@ export  class Player {
 
   renderCurrentSlide() {
     const slide = this.currentSlide;
+    //Animations
+    // debugger;
     slide.items?.forEach(item => runAnimation(item, this.currentTime));
+    //Draw
     this.drawEngine.draw(slide, this.currentTime);
   }
 
