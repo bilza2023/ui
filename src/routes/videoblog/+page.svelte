@@ -1,8 +1,9 @@
 <script>
   import { onMount } from 'svelte';
-  import {createPlayer} from "./24may/player";
+  import {Player} from "./24may/player";
   import { pixiApp } from './pixiApp.js';
-  import { presentationData } from "./24may/goldStandar.js"; // ✅ updated import
+  import { presentationData } from "./24may/goldStandarTwoSlides"; // ✅ updated import
+  import { createTicker } from './ticker/createTicker.js';
 
   let container;
 
@@ -13,11 +14,25 @@
       presentationData.designHeight
     );
 
-    container.appendChild(app.view);
-debugger;
-    const player = createPlayer({app,slides: presentationData.slidesData});
+    // let sound = "/sounds/music.opus";
+    let sound = null;
 
-    player.setTime(0); // optional: render first frame
+    container.appendChild(app.view);
+// debugger;
+    // const player = createPlayer({app,slides: presentationData.slidesData});
+    // player.play(); // optional: render first frame
+
+
+    const ticker = createTicker({ sound });
+    const player = new Player({
+  app,
+  slides: presentationData.slidesData,
+  timeSource: ticker
+});
+
+player.play();
+
+
   });
 </script>
 
