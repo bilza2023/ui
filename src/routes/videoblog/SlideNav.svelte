@@ -1,100 +1,46 @@
+
 <script>
-  import { onMount, onDestroy } from "svelte";
-  import { Howl } from "howler";
+  import { createEventDispatcher } from "svelte";
 
-  export let update = (t) => {};
-  export let src;
+  export let currentTime = 0;
+  export let maxEndTime = 100;
 
-  let sound;
-  let ticking = false;
-  let audioReady = false;
-  export let maxEndTime= 100;
-  let currentTime = 0;
-  let raf;
-
-  function tick() {
-    currentTime = sound.seek() || 0;
-    update(currentTime);
-
-    if (currentTime >= maxEndTime) {
-      stop();
-      return;
-    }
-
-    if (sound.playing()) {
-      raf = requestAnimationFrame(tick);
-    } else {
-      ticking = false;
-    }
-  }
-
-  function play() {
-    if (!audioReady) return;
-    sound.play();
-  }
-
-  function pause() {
-    if (sound) {
-      sound.pause();
-      ticking = false;
-    }
-  }
-
-  function stop() {
-    if (sound) {
-      sound.stop();
-      cancelAnimationFrame(raf);
-      ticking = false;
-      update(0);
-    }
-  }
-
-  function setVolume(e) {
-    const v = parseFloat(e.target.value);
-    if (!isNaN(v)) sound.volume(v);
-  }
+  const dispatch = createEventDispatcher();
 
   function seek(e) {
     const t = parseFloat(e.target.value);
     if (!isNaN(t)) {
-      sound.seek(t);
-      update(t);
+      dispatch("seek", t);
     }
   }
 
-  onMount(() => {
-    sound = new Howl({
-      src: [src],
-      html5: true,
-      onload: () => {
-        audioReady = true;
-        // maxEndTime = maxEndTime;
-        //this should come from page
-      },
-      onplay: () => {
-        if (!ticking) {
-          ticking = true;
-          raf = requestAnimationFrame(tick);
-        }
-      }
-    });
-  });
+  function play() {
+    dispatch("play");
+  }
 
-  onDestroy(() => {
-    if (sound) sound.stop();
-    cancelAnimationFrame(raf);
-  });
+  function pause() {
+    dispatch("pause");
+  }
+
+  function reset() {
+    dispatch("reset");
+  }
+
+  function setVolume(e) {
+    // optional if you want to pass volume to outside
+  }
 </script>
 
 <div class="text-white p-2 bg-[#111827] flex items-center gap-4">
-  
   <!-- <div class="text-red-700"> -->
   <button on:click={play}>▶ Play</button>
   <button on:click={pause}>⏸ Pause</button>
   <button on:click={stop}>⏹ Reset</button>
   <!-- </div> -->
 
-  <span class="text-sm font-mono text-yellow-500 ">{currentTime.toFixed(1)}/{Math.floor(maxEndTime)}&nbsp;s</span>
+  <span class="text-sm font-mono text-yellow-500"
+    >{currentTime.toFixed(1)}/{Math.floor(maxEndTime)}&nbsp;s</span
+  >
   <div class="flex items-center gap-2 w-full">
     <div class="flex-1 flex items-center gap-2">
       <span class="text-sm">⏱️</span>
@@ -121,13 +67,11 @@
       />
     </div>
   </div>
-  
-
-
 </div>
 
 <style>
-  html, body {
+  html,
+  body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -145,7 +89,7 @@
   }
 
   input[type="range"] {
-    accent-color: #FF9800; /* Works in modern browsers */
+    accent-color: #ff9800; /* Works in modern browsers */
   }
 
   /* WebKit (Chrome, Safari) */

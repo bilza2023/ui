@@ -4,36 +4,45 @@
   import { pixiApp } from './pixiApp.js';
   import { presentationData } from "./24may/goldStandarTwoSlides"; // ✅ updated import
   import { createTicker } from './ticker/createTicker.js';
+  import SlideNav from "./SlideNav.svelte";
 
   let container;
+  let player;
+let currentTime = 0;
 
-  onMount(() => {
-    const app = pixiApp(
-      presentationData.slidesData[0].background?.backgroundColor || "#000000",
-      presentationData.designWidth,
-      presentationData.designHeight
-    );
+onMount(() => {
+  const app = pixiApp(
+    presentationData.slidesData[0].background?.backgroundColor || "#000000",
+    presentationData.designWidth,
+    presentationData.designHeight
+  );
 
-    // let sound = "/sounds/music.opus";
-    let sound = null;
+  let sound = null; // or attach Howler sound here
+  const ticker = createTicker({ sound });
 
-    container.appendChild(app.view);
-// debugger;
-    // const player = createPlayer({app,slides: presentationData.slidesData});
-    // player.play(); // optional: render first frame
+  player = new Player({
+    app,
+    slides: presentationData.slidesData,
+    timeSource: ticker
+  });
 
+  container.appendChild(app.view);
 
-    const ticker = createTicker({ sound });
-    const player = new Player({
-  app,
-  slides: presentationData.slidesData,
-  timeSource: ticker
+  player.setTime(0);
+  // player.play();
+
+  // Sync currentTime with Player
+  function syncTimeLoop() {
+    const loop = () => {
+      if (player) currentTime = player.getCurrentTime();
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  }
+
+  syncTimeLoop();
 });
 
-player.play();
-
-
-  });
 </script>
 
 <style>
@@ -45,5 +54,15 @@ player.play();
     background-color: #111;
   }
 </style>
+
+{#if player }
+<SlideNav
+  {currentTime}
+  on:play={() => player.play()}
+  on:pause={() => player.timeSource.pause()}
+  on:reset={() => player.reset()}
+  on:seek={(e) => player.setTime(e.detail)}
+/>
+{/if}
 
 <div class="stage" bind:this={container}></div>

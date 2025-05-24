@@ -20,6 +20,7 @@ export  class Player {
   }
 
   play() {
+    // debugger;
     this.timeSource.play();
     this.startLoop();
   }
