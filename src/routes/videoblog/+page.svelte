@@ -1,9 +1,9 @@
 <script>
   import { onMount } from 'svelte';
-  import {Player} from "./24may/player";
+  import {Player,createTicker} from "./24may/player";
   import { pixiApp } from './pixiApp.js';
   import { presentationData } from "./24may/goldStandarTwoSlides"; // ✅ updated import
-  import { createTicker } from './ticker/createTicker.js';
+  // import { createTicker } from './ticker/createTicker.js';
   import SlideNav from "./SlideNav.svelte";
 
   let container;
@@ -17,9 +17,10 @@ onMount(() => {
     presentationData.designHeight
   );
 
-  let sound = null; // or attach Howler sound here
-  const ticker = createTicker({ sound });
- debugger;
+  // let soundUrl = null; 
+  let soundUrl = "sounds/music.opus"; 
+  const ticker = createTicker(soundUrl);
+
   player = new Player({
     app,
     slides: presentationData.slidesData,
