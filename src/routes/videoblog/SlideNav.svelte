@@ -31,7 +31,7 @@
   }
 </script>
 
-<div class="text-white p-2 bg-[#111827] flex items-center gap-4">
+<div class="text-white p-0 py-3 bg-[#111827] flex items-center gap-4">
   <!-- <div class="text-red-700"> -->
   <button on:click={play}>▶ Play</button>
   <button on:click={pause}>⏸ Pause</button>
@@ -70,23 +70,6 @@
 </div>
 
 <style>
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background-color: #f0f0f0;
-  }
-
-  #pixi-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: calc(100vh - 60px);
-    background-color: rgb(31, 31, 32);
-    overflow: hidden;
-  }
 
   input[type="range"] {
     accent-color: #ff9800; /* Works in modern browsers */

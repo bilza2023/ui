@@ -11,19 +11,6 @@
   let ticker;
   let currentTime = 0;
 
-  function resize(app, designWidth, designHeight) {
-    if (!container) return;
-  const parent = container;
-  const scaleX = parent.clientWidth / designWidth;
-  const scaleY =  (parent.clientHeight * 0.9) / designHeight;
-  const scale = Math.min(scaleX, scaleY);
-
-  app.view.style.width = `${designWidth * scale}px`;
-  app.view.style.height = `${designHeight * scale}px`;
-  app.view.style.display = "block";
-  app.view.style.margin = "0 auto";
-}
-
   onMount(() => {
     const app = pixiApp(
       presentationData.slidesData[0].background?.backgroundColor || "#000000",
@@ -42,17 +29,6 @@
     });
 
     container.appendChild(app.view);
-    container.appendChild(app.view);
-
-    if (container) {
-        resize(app, presentationData.designWidth, presentationData.designHeight);
-    }
-    
-    window.addEventListener("resize", () => {
-      if (container) {
-        resize(app, presentationData.designWidth, presentationData.designHeight);
-      }
-    });
 
     player.setTime(0);
     // player.play();
@@ -71,7 +47,6 @@
 </script>
 
 {#if player && ticker}
-<div class="">
   <SlideNav
     {currentTime}
     maxEndTime={presentationData.totalDuration}
@@ -80,27 +55,16 @@
     on:reset={() => player.reset()}
     on:seek={(e) => player.setTime(e.detail)}
   />
-</div>  
 {/if}
 
 <div class="stage" bind:this={container}></div>
 
 <style>
-.stage {
-  display: flex;
-  justify-content: center;
-  align-items: start;  /* 👈 this is the fix */
-  height: 100vh;
-  background-color: #111;
-}
-
-  :global(body) {
-  margin: 0;
-}
-
-.stage {
-  margin-top: 0;      /* Remove top spacing */
-  padding-top: 0;     /* Ensure no padding from top */
-}
-
+  .stage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #111;
+  }
 </style>
