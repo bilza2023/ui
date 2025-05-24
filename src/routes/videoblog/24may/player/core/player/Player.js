@@ -21,9 +21,13 @@ export  class Player {
 
   play() {
     this.timeSource.play();
-    this.startLoop();
+  
+    // ✅ Defer loop to allow layout to settle
+    requestIdleCallback(() => {
+      this.startLoop();
+    });
   }
-
+  
   getCurrentTime() {
     return this.currentTime;
   }
