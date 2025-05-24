@@ -19,7 +19,7 @@ onMount(() => {
 
   let sound = null; // or attach Howler sound here
   const ticker = createTicker({ sound });
-
+ debugger;
   player = new Player({
     app,
     slides: presentationData.slidesData,
@@ -58,6 +58,7 @@ onMount(() => {
 {#if player }
 <SlideNav
   {currentTime}
+  maxEndTime={presentationData.totalDuration} 
   on:play={() => player.play()}
   on:pause={() => player.timeSource.pause()}
   on:reset={() => player.reset()}

@@ -3,7 +3,7 @@
   import { createEventDispatcher } from "svelte";
 
   export let currentTime = 0;
-  export let maxEndTime = 100;
+  export let maxEndTime = 1000;
 
   const dispatch = createEventDispatcher();
 

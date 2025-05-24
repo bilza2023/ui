@@ -3,6 +3,7 @@
 export const presentationData = {
   designWidth: 1020,
   designHeight: 576,
+  totalDuration: 5,
   slidesData: [
     {
       startTime: 0,

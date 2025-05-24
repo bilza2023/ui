@@ -35,9 +35,14 @@ export class DeckBuilder {
   }
   
   build() {
+    //This line adds totalDuration to the presentation 
+    const totalDuration = Math.max(...slides.map(s => s.endTime));
+// return { designWidth, designHeight, totalDuration, slidesData: slides };
+
     return {
       designWidth: this.designWidth,
       designHeight: this.designHeight,
+      totalDuration:totalDuration,
       slidesData: this.slides,
     };
   }
