@@ -29,14 +29,25 @@ export  class Player {
   }
 
   startLoop() {
+    const maxTime = this.slides[this.slides.length - 1].endTime;
+  
     const loop = () => {
       if (!this.timeSource.isPlaying()) return;
+  
       const t = this.timeSource.getTime();
+      if (t >= maxTime) {
+        this.timeSource.pause(); // stop audio + ticker
+        this.setTime(maxTime);   // clamp at end
+        return;
+      }
+  
       this.setTime(t);
       requestAnimationFrame(loop);
     };
+  
     requestAnimationFrame(loop);
   }
+  
 
   reset() {
     this.timeSource.reset();

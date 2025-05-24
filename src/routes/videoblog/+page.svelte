@@ -8,6 +8,7 @@
 
   let container;
   let player;
+  let ticker;
 let currentTime = 0;
 
 onMount(() => {
@@ -19,7 +20,7 @@ onMount(() => {
 
   // let soundUrl = null; 
   let soundUrl = "sounds/music.opus"; 
-  const ticker = createTicker(soundUrl);
+   ticker = createTicker(soundUrl);
 
   player = new Player({
     app,
@@ -56,7 +57,7 @@ onMount(() => {
   }
 </style>
 
-{#if player }
+{#if player && ticker}
 <SlideNav
   {currentTime}
   maxEndTime={presentationData.totalDuration} 
