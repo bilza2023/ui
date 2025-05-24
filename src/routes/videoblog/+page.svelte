@@ -1,39 +1,24 @@
 <script>
   import { onMount } from 'svelte';
-  import Player from "./player/Player.js";
-  import { pixiApp} from './pixiApp.js';
-  
-  
-  import {presentationData} from "./firstSlide.js";
-  console.log("presentationData",presentationData);
-  const DESIGN_RESOLUTION = {width : 1020 , height : 576}
+  import {createPlayer} from "./24may/player";
+  import { pixiApp } from './pixiApp.js';
+  import { presentationData } from "./24may/goldStandar.js"; // ✅ updated import
 
-  ////////////////////////////////////////////
-  // let mockSlide;
-  ////////////////////////////////////////////
   let container;
 
-onMount(() => {
-  const DESIGN_WIDTH = 1020;
-  const DESIGN_HEIGHT = 576;
+  onMount(() => {
+    const app = pixiApp(
+      presentationData.slidesData[0].background?.backgroundColor || "#000000",
+      presentationData.designWidth,
+      presentationData.designHeight
+    );
 
-  const app = pixiApp(
-    presentationData.slidesData[0].backgroundColor,
-    DESIGN_WIDTH,
-    DESIGN_HEIGHT
-  );
+    container.appendChild(app.view);
+debugger;
+    const player = createPlayer({app,slides: presentationData.slidesData});
 
-  container.appendChild(app.view);
-
-  const player = new Player({
-    app,
-    slides: presentationData.slidesData,
+    player.setTime(0); // optional: render first frame
   });
-
-  player.goToTime(0); // optional: to render first frame
-});
-
-
 </script>
 
 <style>
