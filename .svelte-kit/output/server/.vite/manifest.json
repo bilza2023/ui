@@ -59,7 +59,7 @@
   },
   "src/routes/+layout.svelte": {
     "css": [
-      "_app/immutable/assets/_layout.DbHMg4mO.css"
+      "_app/immutable/assets/_layout.Bzr0mMZx.css"
     ],
     "file": "entries/pages/_layout.svelte.js",
     "imports": [
@@ -142,9 +142,14 @@
     "isEntry": true,
     "src": "src/routes/courses/it/+page.svelte"
   },
+  "src/routes/videoblog/+page.server.js": {
+    "file": "entries/pages/videoblog/_page.server.js",
+    "isEntry": true,
+    "src": "src/routes/videoblog/+page.server.js"
+  },
   "src/routes/videoblog/+page.svelte": {
     "css": [
-      "_app/immutable/assets/_page.D3YilaQw.css"
+      "_app/immutable/assets/_page.D7klU2F7.css"
     ],
     "file": "entries/pages/videoblog/_page.svelte.js",
     "imports": [
