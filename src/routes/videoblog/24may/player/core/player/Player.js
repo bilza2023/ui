@@ -54,8 +54,9 @@ export  class Player {
   
 
   reset() {
-    this.timeSource.reset();
-    this.setTime(0);
+    this.timeSource.pause?.();  // 1️⃣ stop sound / ticker
+    this.timeSource.reset();    // 2️⃣ rewind to 0 without auto-play
+    this.setTime(0);            // 3️⃣ render first frame
   }
 
   renderCurrentSlide() {
