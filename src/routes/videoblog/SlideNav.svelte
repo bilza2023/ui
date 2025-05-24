@@ -35,7 +35,7 @@
   <!-- <div class="text-red-700"> -->
   <button on:click={play}>▶ Play</button>
   <button on:click={pause}>⏸ Pause</button>
-  <button on:click={stop}>⏹ Reset</button>
+  <button on:click={reset}>⏹ Reset</button>
   <!-- </div> -->
 
   <span class="text-sm font-mono text-yellow-500"

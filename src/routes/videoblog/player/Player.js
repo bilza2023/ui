@@ -24,7 +24,9 @@ export default class Player {
   }
 
   reset() {
+
     this.pause();
+    debugger;
     this.currentTime = 0;
     this.currentIndex = 0;
     this.renderCurrentSlide();
