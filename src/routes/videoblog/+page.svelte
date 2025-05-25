@@ -26,6 +26,7 @@
 
   onMount(() => {
     debugger;
+    console.log("presentationData",presentationData);
     const app = pixiApp(
       presentationData.slidesData[0].background?.backgroundColor || "#000000",
       presentationData.designWidth,

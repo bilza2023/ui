@@ -11,15 +11,19 @@ const deck = new DeckBuilder({
 });
 
 // Build a simple slide manually using an item-template
-const slide = {
-  background: { backgroundColor: "#ceef10" },
-  items: templates.items.heading(GlobalThemes.darkTheme, {
-    text: "Welcome to Taleem!",
-    x: 100,
-    y: 200,
-  }),
-};
+// const slide = {
+//   background: { backgroundColor: "#ceef10" },
+//   items: templates.items.heading(GlobalThemes.darkTheme, {
+//     text: "Welcome to Taleem!",
+//     x: 100,
+//     y: 200,
+//   }),
+// };
 
-deck.slides.push(slide);
+deck.add(templates.slide.titleWith3Bullets, {
+    title: "Why Taleem?",
+    bullets: ["Affordable", "Accessible", "AI-powered"],
+    backgroundColor: "#ceef10"
+  }, 4);
 
 export const presentationData = deck.build();
