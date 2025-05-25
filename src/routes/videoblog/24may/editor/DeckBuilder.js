@@ -8,8 +8,8 @@
 
 export class DeckBuilder {
     constructor({
-      globalTheme,
-      globalBackground = {},
+      globalTheme=defaultGlobalTheme,
+      globalBackground = defaultGlobalBackground,
       designWidth = 1020,
       designHeight = 576,
       preprocess = null,
@@ -79,4 +79,23 @@ export class DeckBuilder {
   export function defaultSlideSetter(globalBackground, overrideBackground) {
     return overrideBackground || globalBackground;
   }
+  
+
+
+const defaultGlobalBackground =   {
+    backgroundColor: "#467ae2",
+};
+   
+export const defaultGlobalTheme = {
+    backgroundColor: "#f0f0f0",           // neutral light background
+    baseTextColor: "#222222",             // readable dark gray
+    headingColor: "#000000",              // solid black heading
+    bulletColor: "#333333",               // slightly softer for bullets
+    primaryColor: "#3366ff",              // blue accent
+    secondaryColor: "#ff9900",            // orange accent
+    borderColor: "#cccccc",               // light border
+    shadowColor: "rgba(0, 0, 0, 0.2)",     // gentle shadow
+    fontFamilyHeading: "Verdana",         // strong, wide headings
+    fontFamilyBase: "Helvetica"           // neutral and modern body font
+  };
   
