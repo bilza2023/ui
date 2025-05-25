@@ -1,4 +1,6 @@
-// kinetics/valueTween.js
+
+
+// valueTween.js
 import { easingMap } from './easing.js';
 
 export function valueTween({ from, to, t, start, end, primitive = "linear" }) {
