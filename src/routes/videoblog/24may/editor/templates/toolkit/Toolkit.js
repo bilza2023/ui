@@ -1,7 +1,7 @@
 // templateKit.js
 
 // Import animation presets
-import * as Anim from '../animationModule/presets/index.js';
+import * as Anim from '../../../player/hooks/animationModule/presets';
 
 // Import your existing item builders (data-item creators)
 import heading from '../items/heading.js';

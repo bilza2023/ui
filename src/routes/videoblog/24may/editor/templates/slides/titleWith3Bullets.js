@@ -1,10 +1,9 @@
 // templates/slide/titleWith3Bullets.js
 
-import heading from "../items/heading.js";
-import bulletList from "../items/bulletList.js";
+import { TemplateToolkit as T } from "../toolkit/Toolkit";
 
 export default function titleWith3Bullets(globalTheme, data = {}) {
-  const headingItem = heading(globalTheme, {
+  const headingItem = T.ItemBuilders.heading(globalTheme, {
     text: data.title || "Main Title",
     x: 100,
     y: 80,
@@ -16,12 +15,10 @@ export default function titleWith3Bullets(globalTheme, data = {}) {
 
   // Add fadeIn animation to heading
   headingItem.forEach(item => {
-    item.animate = [
-      { field: "alpha", fn: "fadeIn", start: 0, end: 1.5, props: { from: 0, to: 1 } }
-    ];
+    item.animate = [T.Anim.fadeIn(0, 1.5)];
   });
 
-  const bullets = bulletList(globalTheme, {
+  const bullets = T.ItemBuilders.bulletList(globalTheme, {
     items: data.bullets || ["First point", "Second point", "Third point"],
     x: 150,
     y: 220,
@@ -30,18 +27,10 @@ export default function titleWith3Bullets(globalTheme, data = {}) {
     fontSize: 32,
   });
 
-  // Animate each bullet to slide in from below
+  // Animate each bullet to slide up with staggered delay
   bullets.forEach((item, i) => {
     const delay = 1 + i * 0.3;
-    item.animate = [
-      {
-        field: "y",
-        fn: "moveTo",
-        start: delay,
-        end: delay + 0.8,
-        props: { fromY: item.y + 30, toY: item.y }
-      }
-    ];
+    item.animate = [T.Anim.slideUp(delay, 0.8, 30)];
   });
 
   return [...headingItem, ...bullets];
