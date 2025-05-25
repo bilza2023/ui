@@ -10,7 +10,7 @@ const deck = new DeckBuilder({
   designHeight: 576,
 });
 
-deck.add(templates.slide.titleWith3Bullets, 4, 
+deck.add(templates.slide.titleWith3Bullets, 10, 
 {title: "Why Islam?",bullets: ["In the Name of Allah", "Most Merficul", "Most Compasionate"]}
 );
 // deck.add(templates.slide.titleWith3Bullets, 4, 

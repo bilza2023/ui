@@ -25,7 +25,7 @@
 }
 
   onMount(() => {
-    debugger;
+    // debugger;
     console.log("presentationData",presentationData);
     const app = pixiApp(
       presentationData.slidesData[0].background?.backgroundColor || "#000000",
@@ -57,7 +57,7 @@
     });
 
     player.setTime(0);
-    // player.play();
+    // player.pause();
 
     // Sync currentTime with Player
     function syncTimeLoop() {

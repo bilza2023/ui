@@ -6,12 +6,14 @@ import Icons from '../core/engine/Icons.js';
 export function drawText(props = {}) {
   const merged = {
     text: 'Default Text',
-    type : 'text',
+    type: 'text',
     x: 0,
     y: 0,
+    width: 1020,              // default to full screen width
     fontSize: 36,
     fontFamily: 'Arial',
     color: 0x000000,
+    textAlign: 'left',        // new: honor layout intent
     rotation: 0,
     visible: true,
     ...props,
@@ -33,7 +35,18 @@ export function drawText(props = {}) {
     tint: merged.color,
   });
 
-  text.x = merged.x;
+  // === Alignment logic ===
+  if (merged.textAlign === 'center') {
+    text.anchor.set(0.5, 0);                         // center
+    text.x = merged.x + merged.width / 2;
+  } else if (merged.textAlign === 'right') {
+    text.anchor.set(1, 0);                           // right-align
+    text.x = merged.x + merged.width;
+  } else {
+    text.anchor.set(0, 0);                           // left-align
+    text.x = merged.x;
+  }
+
   text.y = merged.y;
   text.rotation = merged.rotation;
   text.visible = merged.visible;
