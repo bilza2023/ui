@@ -1,13 +1,14 @@
 // Player.js
 import DrawEngine from "../engine/DrawEngine.js";
-import { runAnimation } from "../../hooks/runAnimation.js";
+// import { runAnimation } from "../../hooks/runAnimation.js";
+import { AnimationModule } from '../../hooks/animationModule/core/AnimationModule.js';
 
 export  class Player {
   constructor({ app, slides, timeSource }) {
     this.app = app;
     this.slides = slides;
     this.timeSource = timeSource;
-
+    this.animator = new AnimationModule();
     this.currentIndex = 0;
     this.currentTime = 0;
     this.drawEngine = new DrawEngine(app);
@@ -63,7 +64,10 @@ export  class Player {
     const slide = this.currentSlide;
     //Animations
     // debugger;
-    slide.items?.forEach(item => runAnimation(item, this.currentTime));
+    //--need changinr
+    // slide.items?.forEach(item => runAnimation(item, this.currentTime));
+    this.animator.runAnimations(slide.items ?? [], this.currentTime);
+
     //Draw
     this.drawEngine.draw(slide, this.currentTime);
   }

@@ -10,7 +10,7 @@ const animationFunctions = {
   }
 };
 
-export default class AnimationModule {
+export  class AnimationModule {
   runAnimations(items, currentTime) {
     for (const item of items) {
       const animations = item.animate || [];
