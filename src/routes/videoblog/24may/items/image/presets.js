@@ -33,6 +33,12 @@ export const imagePresets = {
       y: 50,
       width: 100,
       height: 100
+    },
+    withTopAndSideMargin: {
+      x: 40,                 // leave 40px left margin
+      y: 120,                // leave 120px top space (e.g. for heading)
+      width: 940,            // 1020 - 2*40 side borders
+      height: 400,           // leaves ~56px at bottom (576 - 120 - 400)
     }
   };
   

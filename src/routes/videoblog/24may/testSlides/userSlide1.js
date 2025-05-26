@@ -13,6 +13,8 @@ deck.setGlobalTheme(themeUsed);
 const bg = getDefaultBackground(themeUsed)
 deck.setGlobalBackground(bg);
 /////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////
 deck.add(templates.titleWith3Bullets, 10, 
 {title: "Why Islam?",bullets: ["In the Name of Allah", "Most Merficul", "Most Compasionate"]}
 );
@@ -28,7 +30,6 @@ deck.overrideLastSlideBackground({
 //   backgroundImage: "chalkboard"
 // });
 /////////////////////////
-
 deck.add(templates.headingWithImage,20, 
   {
   title: "The Power of Visual Learning",

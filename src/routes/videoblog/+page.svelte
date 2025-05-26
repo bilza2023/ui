@@ -8,7 +8,7 @@
   import * as PIXI from "pixi.js";
 
 const backgroundAssets = {
-  chalkboard: PIXI.Texture.from("images/board_classroom.jpg"),
+  chalkboard: PIXI.Texture.from("images/class2.webp"),
   sciFiHallway: PIXI.Texture.from("images/drops.png")
 };
   let container;
