@@ -17,10 +17,10 @@ export default function bulletList(globalTheme, data = {}) {
       y: y + i * lineHeight,
       width,
       height: lineHeight,
-      text: `• ${text}`,
+      text: `${text}`,
       fontSize,
       fontFamily: globalTheme.fontFamily || "Arial",
-      color: globalTheme.textColor || "#dddddd",
+      color: globalTheme.baseTextColor || "#dddddd",
       textAlign,
       padding: 5,
     }));

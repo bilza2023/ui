@@ -3,13 +3,16 @@
 import { DeckBuilder } from "../editor";
 import { templates } from "../editor/templates/index.js";
 import { GlobalThemes } from "../editor/theme/globalThemes.js";
+import {getDefaultBackground} from "../editor/getDefaultBackground.js";
 
-const deck = new DeckBuilder({
-  globalTheme: GlobalThemes.highContrast,
-  designWidth: 1020,
-  designHeight: 576,
-});
 
+const deck = new DeckBuilder();
+//Deck Setup 
+const themeUsed = GlobalThemes.royalBlue;
+deck.setGlobalTheme(themeUsed);
+const bg = getDefaultBackground(themeUsed)
+deck.setGlobalBackground(bg);
+/////////////////////////////////////////////////////
 deck.add(templates.slide.titleWith3Bullets, 10, 
 {title: "Why Islam?",bullets: ["In the Name of Allah", "Most Merficul", "Most Compasionate"]}
 );

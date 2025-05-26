@@ -1,0 +1,1 @@
+“There is just one background per slide. However, globalTheme is for the entire presentation.”

@@ -22,13 +22,6 @@ export default function titleWith3Bullets(globalTheme, data = {}) {
   bullets[1].animate = [ T.Anim.enterFromLeft(4, 0.5, bullets[1]) ];
   bullets[2].animate = [ T.Anim.enterFromLeft(6, 0.5, bullets[2]) ];
 
-  // bullets[0].animate = [{
-  //   fn: "tween",
-  //   start: 1.5,
-  //   end:   2.3,
-  //   props: { from:  -(bullets[0].width + 100) , to: bullets[0].x }   // animates x
-  // }];
-  
 
   return [...headingItem, ...bullets];
 }

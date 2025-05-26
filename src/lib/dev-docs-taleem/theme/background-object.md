@@ -2,7 +2,7 @@
 
 # 🖼️ Background Object Model
 
-The `background` object defines optional slide background layers: **images** and **patterns**. It is separate from the `theme.bgColor`, which acts as the base fill color.
+The `background` object defines optional slide background layers: **images** and **patterns**. It is separate from the `theme.backgroundColor`, which acts as the base fill color.
 
 ---
 
@@ -10,7 +10,7 @@ The `background` object defines optional slide background layers: **images** and
 
 | Source        | Controls                         |
 |---------------|----------------------------------|
-| `theme.bgColor` | Background color (drawn first)   |
+| `theme.backgroundColor` | Background color (drawn first)   |
 | `background`    | Image and/or pattern overlay     |
 
 The background object **does not contain** a color. Only images and patterns are represented here. The color layer is sourced from the theme and rendered underneath.
@@ -99,7 +99,7 @@ This ensures validation and safe injection.
 
 When a slide is rendered, background layers are drawn in this order:
 
-1. `theme.bgColor` — base fill color
+1. `theme.backgroundColor` — base fill color
 2. `backgroundImage` — if present
 3. `pattern` — if present
 
