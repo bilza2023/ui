@@ -2,7 +2,8 @@
 import * as PIXI from "pixi.js";
 import getBackgroundColor from "./getBackgroundColor.js";
 import { drawItem } from "../../hooks/drawItem.js";
-// import {drawBackground} from "./drawBackground.js";
+import { drawBackground } from "../../hooks/drawBackground.js";
+
 
 export default class DrawEngine {
   constructor(app) {
@@ -15,19 +16,14 @@ export default class DrawEngine {
   }
 
   drawBackground(background) {
-    this.backgroundLayer.removeChildren();
-  
-    // Get backgroundColor
-    const bgColor = getBackgroundColor({ background });
-  
-    const bg = new PIXI.Graphics();
-    bg.beginFill(bgColor);
-    bg.drawRect(0, 0, this.app.screen.width, this.app.screen.height);
-    bg.endFill();
-    this.backgroundLayer.addChild(bg);
-  
-    // TODO: add PIXI-based image drawing and pattern overlays later
+    drawBackground(
+      background,
+      this.backgroundLayer,
+      this.app.screen.width,
+      this.app.screen.height
+    );
   }
+  
   draw(slide, currentTime) {
     // ✅ Skip background — already drawn by Player using drawBackground()
   

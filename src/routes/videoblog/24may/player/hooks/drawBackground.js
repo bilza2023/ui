@@ -1,41 +1,35 @@
 
 
-// drawBackground.js
+// hooks/drawBackground.js
+import * as PIXI from "pixi.js";
+import getBackgroundColor from "../core/engine/getBackgroundColor";
 
-export function drawBackground(ctx, background, width, height, assets = {}) {
-    const {
-      backgroundColor = "#000000",
-      backgroundImage = null,
-      backgroundImageOpacity = 1.0,
-      pattern = null
-    } = background;
-  
-    // Layer 1: Fill background color
-    ctx.globalAlpha = 1.0;
-    ctx.fillStyle = backgroundColor;
-    ctx.fillRect(0, 0, width, height);
-  
-    // Layer 2: Draw background image (if available)
-    if (backgroundImage && assets[backgroundImage]) {
-      ctx.globalAlpha = backgroundImageOpacity;
-      ctx.drawImage(assets[backgroundImage], 0, 0, width, height);
-    }
-  
-    // Layer 3: Draw pattern
-    if (pattern === "dots") {
-      ctx.globalAlpha = 0.3;
-      ctx.fillStyle = "#ffffff";
-      const spacing = 20;
-      for (let x = 0; x < width; x += spacing) {
-        for (let y = 0; y < height; y += spacing) {
-          ctx.beginPath();
-          ctx.arc(x, y, 2, 0, 2 * Math.PI);
-          ctx.fill();
-        }
+export function drawBackground(background, container, width, height) {
+  container.removeChildren();
+
+  // Layer 1: backgroundColor
+  const bgColor = getBackgroundColor({ background });
+  const bg = new PIXI.Graphics();
+  bg.beginFill(bgColor);
+  bg.drawRect(0, 0, width, height);
+  bg.endFill();
+  container.addChild(bg);
+
+  // Layer 2: Pattern (dots)
+  if (background.pattern === "dots") {
+    const dotLayer = new PIXI.Graphics();
+    dotLayer.beginFill(0xffffff, 0.2); // white, low opacity
+    const spacing = 30;
+
+    for (let x = 0; x < width; x += spacing) {
+      for (let y = 0; y < height; y += spacing) {
+        dotLayer.drawCircle(x, y, 2); // radius = 2px
       }
     }
-  
-    // Reset
-    ctx.globalAlpha = 1.0;
+
+    dotLayer.endFill();
+    container.addChild(dotLayer);
   }
-  
+
+  // TODO: add image layer if backgroundImage exists
+}

@@ -16,6 +16,10 @@ deck.setGlobalBackground(bg);
 deck.add(templates.slide.titleWith3Bullets, 10, 
 {title: "Why Islam?",bullets: ["In the Name of Allah", "Most Merficul", "Most Compasionate"]}
 );
+deck.overrideLastSlideBackground({
+  pattern: "dots"
+});
+
 // deck.add(templates.slide.titleWith3Bullets, 4, 
 // {title: "Why Taleem?",bullets: ["Affordable", "Accessible", "AI-powered"]},
 // {backgroundColor: "#ceef10"}
