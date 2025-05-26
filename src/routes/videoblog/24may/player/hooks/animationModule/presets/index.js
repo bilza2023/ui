@@ -1,6 +1,20 @@
 
 // animationModule/presets/index.js
 
+export function enterFromLeft(time = 0, dur = 1.0, item) {
+  return {
+    fn: "tween",
+    start: time,
+    end:   time + dur,
+    props: {
+      field: "x",
+      from: -(item.width + 100),
+      to: item.x,
+      primitive: "easeOut"
+    }
+  };
+}
+
 export function fadeIn(delay = 0, dur = 1) {
   return {
     field: "alpha",
