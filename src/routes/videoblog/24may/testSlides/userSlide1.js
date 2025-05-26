@@ -13,7 +13,7 @@ deck.setGlobalTheme(themeUsed);
 const bg = getDefaultBackground(themeUsed)
 deck.setGlobalBackground(bg);
 /////////////////////////////////////////////////////
-deck.add(templates.slide.titleWith3Bullets, 10, 
+deck.add(templates.titleWith3Bullets, 10, 
 {title: "Why Islam?",bullets: ["In the Name of Allah", "Most Merficul", "Most Compasionate"]}
 );
 deck.overrideLastSlideBackground({

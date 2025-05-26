@@ -1,37 +1,49 @@
 
 // templateKit.js
 
-// Import animation presets
+// Animation presets
 import * as Anim from '../../../player/hooks/animationModule/presets';
 
-// Import item builders (template-level data-item creators)
-import heading from '../items/heading.js';
-import bulletList from '../items/bulletList.js';
-import icon from '../items/icon.js';
-import image from '../items/image.js';
-import emojiGrid from '../items/emojiGrid.js';
+// Item builders
+import text from '../../../items/text/index.js';
+import icon from '../../../items/icon/index.js';
+import image from '../../../items/image/index.js';
 
-// Import helpers
+// Style presets (now per-item)
+import {textPresets} from '../../../items/text/presets.js';
+import {iconPresets} from '../../../items/icon/presets.js';
+import {imagePresets} from '../../../items/image/presets.js';
+
+// Helpers
 import { layout } from './layout.js';
-import { createStylePresets } from './stylePresets.js';
 
 // Constants
 const designWidth = 1020;
 const designHeight = 576;
 
-// Export final Toolkit
+// Unified style presets object
+const stylePresets = {
+  text: textPresets,
+  icon: iconPresets,
+  image: imagePresets
+};
+
+function applyPreset(preset, data = {}) {
+  return { ...preset, ...data };
+}
+
+// Final Toolkit export
 export const TemplateToolkit = {
   Anim,
   layout,
   designWidth,
   designHeight,
-  createStylePresets,
-
+  applyPreset,
   ItemBuilders: {
-    heading,
-    bulletList,
+    text,
     icon,
-    image,
-    emojiGrid
-  }
+    image
+  },
+
+  stylePresets
 };
