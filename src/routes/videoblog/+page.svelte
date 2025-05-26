@@ -5,7 +5,12 @@
   import { presentationData } from "./24may/testSlides/userSlide1"; // ✅ updated import
   // import { createTicker } from './ticker/createTicker.js';
   import SlideNav from "./SlideNav.svelte";
+  import * as PIXI from "pixi.js";
 
+const backgroundAssets = {
+  chalkboard: PIXI.Texture.from("images/board_classroom.jpg"),
+  sciFiHallway: PIXI.Texture.from("images/drops.png")
+};
   let container;
   let player;
   let ticker;
@@ -43,6 +48,10 @@
       timeSource: ticker,
     });
 
+    // Inject assets
+    console.log("backgroundAssets" , backgroundAssets);
+    player.setAssets?.(backgroundAssets); 
+    
     container.appendChild(app.view);
     container.appendChild(app.view);
 

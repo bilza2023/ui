@@ -14,8 +14,13 @@ export  class Player {
     this.currentIndex = 0;
     this.currentTime = 0;
     this.drawEngine = new DrawEngine(app);
+    this.assets = {};
   }
 
+  setAssets(assets = {}) {
+    this.assets = assets;
+  }
+  
   setTime(time) {
     this.currentTime = time;
     this.updateIndexByTime(time);
@@ -63,15 +68,18 @@ export  class Player {
   }
 
   renderCurrentSlide() {
-    // debugger;
     const slide = this.currentSlide;
-    //Animations
-    this.drawEngine.drawBackground(slide.background);
+  
+    // Step 1: Draw background with access to assets
+    this.drawEngine.drawBackground(slide.background, this.assets);
+  
+    // Step 2: Run animations
     this.animator.runAnimations(slide.items ?? [], this.currentTime);
-
-    //Draw
+  
+    // Step 3: Draw items
     this.drawEngine.draw(slide, this.currentTime);
   }
+  
 
   updateIndexByTime(time) {
     for (let i = 0; i < this.slides.length; i++) {

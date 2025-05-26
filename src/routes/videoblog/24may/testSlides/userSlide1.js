@@ -24,6 +24,9 @@ deck.overrideLastSlideBackground({
     }
   }
 });
+deck.overrideLastSlideBackground({
+  backgroundImage: "chalkboard"
+});
 
 
 // deck.add(templates.slide.titleWith3Bullets, 4, 

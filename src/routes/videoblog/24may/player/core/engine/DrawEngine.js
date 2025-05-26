@@ -14,15 +14,16 @@ export default class DrawEngine {
     this.itemLayer = new PIXI.Container();
     this.stage.addChild(this.backgroundLayer, this.itemLayer);
   }
-
-  drawBackground(background) {
+  drawBackground(background, assets = {}) {
     drawBackground(
       background,
       this.backgroundLayer,
       this.app.screen.width,
-      this.app.screen.height
+      this.app.screen.height,
+      assets
     );
   }
+  
   
   draw(slide, currentTime) {
     // ✅ Skip background — already drawn by Player using drawBackground()

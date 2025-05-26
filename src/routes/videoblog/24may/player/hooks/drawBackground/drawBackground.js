@@ -25,8 +25,21 @@ function drawBackgroundColor(background, container, width, height) {
 
 // === LAYER 2: Background Image (placeholder for now) ===
 function drawBackgroundImage(background, container, width, height, assets) {
-  // TODO: Add support for assets[background.backgroundImage]
+  const { backgroundImage, backgroundImageOpacity = 1.0 } = background;
+
+  console.log("backgroundImage",backgroundImage);
+  console.log("assets[backgroundImage]",assets[backgroundImage]);
+
+  if (!backgroundImage || !assets[backgroundImage]) return;
+
+  const sprite = new PIXI.Sprite(assets[backgroundImage]);
+  sprite.width = width;
+  sprite.height = height;
+  sprite.alpha = backgroundImageOpacity;
+
+  container.addChild(sprite);
 }
+
 
 // === LAYER 3: Pattern Drawing ===
 function drawBackgroundPattern(pattern, container, width, height) {
