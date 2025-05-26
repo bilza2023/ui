@@ -2,7 +2,7 @@
 import * as PIXI from "pixi.js";
 import getBackgroundColor from "./getBackgroundColor.js";
 import { drawItem } from "../../hooks/drawItem.js";
-import { drawBackground } from "../../hooks/drawBackground.js";
+import { drawBackground } from "../../hooks/drawBackground/drawBackground.js";
 
 
 export default class DrawEngine {

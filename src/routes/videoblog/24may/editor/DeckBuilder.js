@@ -67,7 +67,6 @@ export class DeckBuilder {
     this.slides.push(slide);
     this.currentStartTime = endTime;
   }
-
   overrideLastSlideBackground({
     backgroundColor = null,
     backgroundImage = null,
@@ -83,16 +82,26 @@ export class DeckBuilder {
     if (backgroundColor !== null) {
       bg.backgroundColor = backgroundColor;
     }
+  
     if (backgroundImage !== null) {
       bg.backgroundImage = backgroundImage;
     }
+  
     if (backgroundImageOpacity !== null) {
       bg.backgroundImageOpacity = backgroundImageOpacity;
     }
+  
     if (pattern !== null) {
-      bg.pattern = pattern;
+      if (typeof pattern !== "object" || typeof pattern.type !== "string") {
+        throw new Error("Invalid pattern: must be an object with at least a `type` field");
+      }
+      bg.pattern = {
+        type: pattern.type,
+        props: pattern.props ?? {}
+      };
     }
   }
+  
     
   build() {
     const totalDuration = this.slides.length
