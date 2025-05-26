@@ -1,11 +1,12 @@
+
 import { TemplateToolkit as T } from "../toolkit/Toolkit.js";
 
-export default function titleWith3Bullets(globalTheme, data = {}) {
+export default function headingWith2Bullets(globalTheme, data = {}) {
   // === Title ===
   const title = T.ItemBuilders.text(
     globalTheme,
     T.applyPreset(T.stylePresets.text.heading, {
-      text: data.title || "Presentation Title"
+      text: data.title || "Key Takeaways"
     })
   );
   T.layout(title[0], "center", 0.1);
@@ -20,7 +21,7 @@ export default function titleWith3Bullets(globalTheme, data = {}) {
       globalTheme,
       T.applyPreset(T.stylePresets.text.bullet, { text })
     );
-    T.layout(item[0], "center", 0.4 + i * 0.2);
+    T.layout(item[0], "center", 0.4 + i * 0.25);
     item[0].animate = [T.Anim.enterFromLeft(showAt, 0.5, item[0])];
     return item[0];
   });

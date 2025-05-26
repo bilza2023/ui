@@ -8,32 +8,53 @@ import {getDefaultBackground} from "../editor/getDefaultBackground.js";
 
 const deck = new DeckBuilder();
 //Deck Setup 
-const themeUsed = GlobalThemes.neonDark;
+const themeUsed = GlobalThemes.pastel;
 deck.setGlobalTheme(themeUsed);
 const bg = getDefaultBackground(themeUsed)
 deck.setGlobalBackground(bg);
 /////////////////////////////////////////////////////
+deck.add(templates.titleWith3Bullets, 10, {
+  title: "Why Islam?",
+  bullets: [
+    { text: "In the Name of Allah", showAt: 1 },
+    { text: "Most Merciful", showAt: 3 },
+    { text: "Most Compassionate", showAt: 8 }
+  ]
+});
 
 /////////////////////////////////////////////////////
-deck.add(templates.titleWith3Bullets, 10, 
-{title: "Why Islam?",bullets: ["In the Name of Allah", "Most Merficul", "Most Compasionate"]}
-);
-deck.overrideLastSlideBackground({
-  pattern: {
-    type: "dots",
-    props: {
-      color: themeUsed.primaryColor
-    }
-  }
-});
+// deck.add(templates.headingWith2Bullets, 10, {
+//   title: "Core Values",
+//   bullets: [
+//     { text: "Integrity matters", showAt: 2 },
+//     { text: "Keep learning", showAt: 7 }
+//   ]
+// });
+
+/////////////////////////////////////////////////////
+// deck.add(templates.jumbotron, 5, {
+//   text: "Education for Everyone"
+// });
+/////////////////////////////////////////////////////
+// deck.add(templates.titleWith3Bullets, 10, 
+// {title: "Why Islam?",bullets: ["In the Name of Allah", "Most Merficul", "Most Compasionate"]}
+// );
+// deck.overrideLastSlideBackground({
+//   pattern: {
+//     type: "dots",
+//     props: {
+//       color: themeUsed.primaryColor
+//     }
+//   }
+// });
 // deck.overrideLastSlideBackground({
 //   backgroundImage: "chalkboard"
 // });
 /////////////////////////
-deck.add(templates.headingWithImage,20, 
-  {
-  title: "The Power of Visual Learning",
-  src: "chalkboard" // or any other valid image name
-});
+// deck.add(templates.headingWithImage,20, 
+//   {
+//   title: "The Power of Visual Learning",
+//   src: "chalkboard" // or any other valid image name
+// });
 
 export const presentationData = deck.build();
