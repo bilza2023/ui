@@ -13,7 +13,7 @@ export default function titleWith3Bullets(globalTheme, data = {}) {
   const bullets = T.ItemBuilders.bulletList(globalTheme, {
     items: data.bullets || ["First point", "Second point", "Third point"],
   });
-
+//  debugger;
   T.layout(bullets[0], "center",0.4);
   T.layout(bullets[1], "center",0.6);
   T.layout(bullets[2], "center",0.8);

@@ -2,36 +2,48 @@
 import * as PIXI from "pixi.js";
 import getBackgroundColor from "./getBackgroundColor.js";
 import { drawItem } from "../../hooks/drawItem.js";
+// import {drawBackground} from "./drawBackground.js";
 
 export default class DrawEngine {
   constructor(app) {
     this.app = app;
     this.stage = app.stage;
- 
+    //this is where new code comes
     this.backgroundLayer = new PIXI.Container();
     this.itemLayer = new PIXI.Container();
     this.stage.addChild(this.backgroundLayer, this.itemLayer);
   }
 
-  draw(slide, currentTime) {
-    // Draw background
+  drawBackground(background) {
     this.backgroundLayer.removeChildren();
-    const bgColor = getBackgroundColor(slide);
+  
+    // Get backgroundColor
+    const bgColor = getBackgroundColor({ background });
+  
     const bg = new PIXI.Graphics();
     bg.beginFill(bgColor);
     bg.drawRect(0, 0, this.app.screen.width, this.app.screen.height);
     bg.endFill();
     this.backgroundLayer.addChild(bg);
-
-    // Draw items
+  
+    // TODO: add PIXI-based image drawing and pattern overlays later
+  }
+  draw(slide, currentTime) {
+    // ✅ Skip background — already drawn by Player using drawBackground()
+  
+    // Clear previous items
     this.itemLayer.removeChildren();
+  
     const items = slide.items ?? [];
-
+  
     for (const item of items) {
-      // animateItem(item, currentTime); // 🔸 will apply props later
+      // In future: apply time-aware animation props here if needed
       const displayObject = drawItem(item);
-      if (displayObject) this.itemLayer.addChild(displayObject);
+      if (displayObject) {
+        this.itemLayer.addChild(displayObject);
+      }
     }
   }
+  
 }
  

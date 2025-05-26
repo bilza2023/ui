@@ -8,7 +8,7 @@ import {getDefaultBackground} from "../editor/getDefaultBackground.js";
 
 const deck = new DeckBuilder();
 //Deck Setup 
-const themeUsed = GlobalThemes.royalBlue;
+const themeUsed = GlobalThemes.neonDark;
 deck.setGlobalTheme(themeUsed);
 const bg = getDefaultBackground(themeUsed)
 deck.setGlobalBackground(bg);

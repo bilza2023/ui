@@ -3,10 +3,12 @@ import DrawEngine from "../engine/DrawEngine.js";
 // import { runAnimation } from "../../hooks/runAnimation.js";
 import { AnimationModule } from '../../hooks/animationModule/core/AnimationModule.js';
 
+
 export  class Player {
   constructor({ app, slides, timeSource }) {
     this.app = app;
     this.slides = slides;
+
     this.timeSource = timeSource;
     this.animator = new AnimationModule();
     this.currentIndex = 0;
@@ -61,11 +63,10 @@ export  class Player {
   }
 
   renderCurrentSlide() {
+    // debugger;
     const slide = this.currentSlide;
     //Animations
-    // debugger;
-    //--need changinr
-    // slide.items?.forEach(item => runAnimation(item, this.currentTime));
+    this.drawEngine.drawBackground(slide.background);
     this.animator.runAnimations(slide.items ?? [], this.currentTime);
 
     //Draw

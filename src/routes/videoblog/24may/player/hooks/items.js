@@ -1,9 +1,10 @@
 
 import * as PIXI from 'pixi.js';
 import Icons from '../core/engine/Icons.js';
-
+import toPixiColor from "./toPixiColor.js";
 // === TEXT ===
 export function drawText(props = {}) {
+  // debugger;
   const merged = {
     text: 'Default Text',
     type: 'text',
@@ -19,6 +20,8 @@ export function drawText(props = {}) {
     ...props,
   };
 
+  // toPixiColor
+  merged.color = toPixiColor(merged.color); 
   const fontKey = `Font_${merged.fontFamily}_${merged.fontSize}`;
 
   if (!PIXI.BitmapFont.available[fontKey]) {
