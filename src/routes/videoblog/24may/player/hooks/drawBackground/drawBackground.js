@@ -27,8 +27,8 @@ function drawBackgroundColor(background, container, width, height) {
 function drawBackgroundImage(background, container, width, height, assets) {
   const { backgroundImage, backgroundImageOpacity = 1.0 } = background;
 
-  console.log("backgroundImage",backgroundImage);
-  console.log("assets[backgroundImage]",assets[backgroundImage]);
+  // console.log("backgroundImage",backgroundImage);
+  // console.log("assets[backgroundImage]",assets[backgroundImage]);
 
   if (!backgroundImage || !assets[backgroundImage]) return;
 

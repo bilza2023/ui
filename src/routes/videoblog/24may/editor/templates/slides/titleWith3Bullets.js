@@ -2,7 +2,7 @@ import { TemplateToolkit as T } from "../toolkit/Toolkit.js";
 
 export default function titleWith3Bullets(globalTheme, data = {}) {
   // === Title ===
- debugger;
+//  debugger;
   const title = T.ItemBuilders.text(
     globalTheme,
     T.applyPreset(T.stylePresets.text.heading, {

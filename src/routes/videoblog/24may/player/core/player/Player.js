@@ -77,7 +77,7 @@ export  class Player {
     this.animator.runAnimations(slide.items ?? [], this.currentTime);
   
     // Step 3: Draw items
-    this.drawEngine.draw(slide, this.currentTime);
+    this.drawEngine.draw(slide, this.currentTime,this.assets);
   }
   
 

@@ -24,15 +24,15 @@ deck.overrideLastSlideBackground({
     }
   }
 });
-deck.overrideLastSlideBackground({
-  backgroundImage: "chalkboard"
+// deck.overrideLastSlideBackground({
+//   backgroundImage: "chalkboard"
+// });
+/////////////////////////
+
+deck.add(templates.headingWithImage,20, 
+  {
+  title: "The Power of Visual Learning",
+  src: "chalkboard" // or any other valid image name
 });
-
-
-// deck.add(templates.slide.titleWith3Bullets, 4, 
-// {title: "Why Taleem?",bullets: ["Affordable", "Accessible", "AI-powered"]},
-// {backgroundColor: "#ceef10"}
-// );
-
 
 export const presentationData = deck.build();

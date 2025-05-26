@@ -168,22 +168,27 @@ export function drawTriangle(props = {}) {
 }
 
 // === IMAGE ===
-export function drawImage(props = {}) {
+export function drawImage(props = {}, assets = {}) {
+  
   const merged = {
-    type : 'image',
+    type: 'image',
     x: 0,
     y: 0,
     width: 100,
     height: 100,
-    src: 'https://pixijs.io/examples/examples/assets/bunny.png',
+    src: 'book',
     rotation: 0,
     visible: true,
     ...props,
   };
 
-  const texture = PIXI.Texture.from(merged.src);
-  const sprite = new PIXI.Sprite(texture);
+  const texture = assets[merged.src];
+  if (!texture) {
+    console.warn(`⚠️ Image asset "${merged.src}" not found in assets map.`);
+    return new PIXI.Sprite(PIXI.Texture.WHITE); // or return null
+  }
 
+  const sprite = new PIXI.Sprite(texture);
   sprite.x = merged.x;
   sprite.y = merged.y;
   sprite.width = merged.width;
@@ -193,3 +198,5 @@ export function drawImage(props = {}) {
 
   return sprite;
 }
+
+

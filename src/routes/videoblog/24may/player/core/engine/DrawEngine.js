@@ -25,7 +25,7 @@ export default class DrawEngine {
   }
   
   
-  draw(slide, currentTime) {
+  draw(slide, currentTime,assets={}) {
     // ✅ Skip background — already drawn by Player using drawBackground()
   
     // Clear previous items
@@ -35,7 +35,7 @@ export default class DrawEngine {
   
     for (const item of items) {
       // In future: apply time-aware animation props here if needed
-      const displayObject = drawItem(item);
+      const displayObject = drawItem(item,assets);
       if (displayObject) {
         this.itemLayer.addChild(displayObject);
       }
