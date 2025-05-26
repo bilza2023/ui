@@ -200,3 +200,41 @@ export function drawImage(props = {}, assets = {}) {
 }
 
 
+export function drawRichText(props = {}) {
+  const merged = {
+    text: "Default rich text",
+    type: "richText",
+    x: 0,
+    y: 0,
+    width: 800,
+    height: 200,
+    fontSize: 36,
+    fontFamily: "Georgia",
+    color: 0x000000,
+    textAlign: "left",
+    lineHeight: 1.5,
+    rotation: 0,
+    visible: true,
+    ...props
+  };
+
+  merged.color = toPixiColor(merged.color);
+
+  const text = new PIXI.Text(merged.text, {
+    fontFamily: merged.fontFamily,
+    fontSize: merged.fontSize,
+    fill: merged.color,
+    align: merged.textAlign,
+    wordWrap: true,
+    wordWrapWidth: merged.width,
+    lineHeight: merged.lineHeight * merged.fontSize
+  });
+
+  text.x = merged.x;
+  text.y = merged.y;
+  text.rotation = merged.rotation;
+  text.visible = merged.visible;
+
+  return text;
+}
+

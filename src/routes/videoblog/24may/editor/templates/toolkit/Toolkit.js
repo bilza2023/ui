@@ -8,11 +8,13 @@ import * as Anim from '../../../player/hooks/animationModule/presets';
 import text from '../../../items/text/index.js';
 import icon from '../../../items/icon/index.js';
 import image from '../../../items/image/index.js';
+import richText from '../../../items/richText/index.js';
 
 // Style presets (now per-item)
 import {textPresets} from '../../../items/text/presets.js';
 import {iconPresets} from '../../../items/icon/presets.js';
 import {imagePresets} from '../../../items/image/presets.js';
+import {richTextPresets} from '../../../items/richText/presets.js';
 
 // Helpers
 import { layout } from './layout.js';
@@ -25,7 +27,8 @@ const designHeight = 576;
 const stylePresets = {
   text: textPresets,
   icon: iconPresets,
-  image: imagePresets
+  image: imagePresets,
+  richText:richTextPresets
 };
 
 function applyPreset(preset, data = {}) {
@@ -42,7 +45,8 @@ export const TemplateToolkit = {
   ItemBuilders: {
     text,
     icon,
-    image
+    image,
+    richText
   },
 
   stylePresets

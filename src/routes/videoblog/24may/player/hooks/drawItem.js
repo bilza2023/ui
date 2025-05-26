@@ -5,6 +5,7 @@ import {
   drawCircle,
   drawImage,
   drawTriangle,
+  drawRichText,
 } from "./items.js"; // adjust path if needed
 
 
@@ -15,6 +16,7 @@ const drawMap = {
     circle: drawCircle,
     image: drawImage,
     triangle: drawTriangle,
+    richText: drawRichText,
   };
   
   
@@ -25,6 +27,7 @@ const drawMap = {
       case "rect": return drawRect(item);
       case "text": return drawText(item);
       case "icon": return drawIcon(item);
+      case "richText": return drawRichText(item);
       case "image": return drawImage(item, assets); // ✅ Fix here
       // add others...
       default:
