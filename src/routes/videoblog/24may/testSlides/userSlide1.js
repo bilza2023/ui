@@ -13,12 +13,12 @@ deck.setGlobalBackground(getDefaultBackground(themeUsed));
 let t = 0; // Time tracker
 
 // Slide 1: Title with 3 Bullets
-deck.add(templates.titleWith3Bullets, t += 6, {
+deck.add(templates.titleWith3Bullets, t += 10, {
   title: "Why Islam?",
   bullets: [
     { text: "In the Name of Allah", showAt: 2 },
-    { text: "Most Merciful", showAt: 3 },
-    { text: "Most Compassionate", showAt: 4 }
+    { text: "Most Merciful", showAt: 5 },
+    { text: "Most Compassionate", showAt: 7 }
   ]
 });
 deck.overrideLastSlideBackground({
@@ -28,15 +28,12 @@ deck.overrideLastSlideBackground({
   }
 });
 
-// Slide 2: Quote Slide
-// deck.add(templates.quoteSlide, t += 6, {
-//   text: [
-//     "“The ink of the scholar",
-//     "is more sacred",
-//     "than the blood of the martyr.”"
-//   ],
-//   author: "— Prophet Muhammad ﷺ"
-// });
+deck.add(templates.centeredHeading, t += 15, {
+  text: "Chapter 1: Introduction",
+  showAt: 11,          // absolute timeline time
+  duration: 1         // fade duration in seconds
+});
 
+/////////////////////////////////////////////////////
 // Build deck
 export const presentationData = deck.build();

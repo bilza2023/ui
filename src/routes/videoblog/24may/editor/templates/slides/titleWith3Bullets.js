@@ -1,51 +1,51 @@
-// titleWith3Bullets.js – sequential fade template
-// Heading and bullets fade in one after another.
+// titleWith3Bullets.js
+// Title + 3 bullets, each fading in at its own absolute `showAt` time.
+// Example usage in DeckBuilder:
+//
+// deck.add(templates.titleWith3Bullets, t += 6, {
+//   title: "Why Islam?",
+//   bullets: [
+//     { text: "In the Name of Allah", showAt: 2 },
+//     { text: "Most Merciful", showAt: 3 },
+//     { text: "Most Compassionate", showAt: 4 }
+//   ]
+// });
 
-import { TemplateToolkit as T } from "../../toolkit/Toolkit";
-import AnimApi from "../../toolkit/AnimApi.js";
+import { TemplateToolkit as T } from "../../toolkit/Toolkit.js";
 
-/**
- * @param {object} theme – global theme (colors, fonts)
- * @param {object} data  – { title: string, bullets: string[] | { text, showAt }[], lineGap?, gapBelowHeading? }
- * @returns {object[]} items array for the slide
- */
 export default function titleWith3Bullets(theme, data = {}) {
   const items = [];
-  const {
-    title = "Your Title",
-    bullets = ["Bullet 1", "Bullet 2", "Bullet 3"],
-    lineGap = 100,
-    gapBelowHeading = 130
-  } = data;
 
-  // ---- heading: fade in at 0–1s ------------------------------------------
-  const titleData = T.applyPreset(T.stylePresets.text.heading, {
-    text: title,
-    x: 100,
-    y: 60
-  });
-  const titleItem = T.ItemBuilders.text(theme, titleData);
-  T.AniHelpers.fadeIn(titleItem, 0, 1);
+  // 1. Title: assume it shows at time 0 (or data.titleShowAt if you want)
+  const titleItem = T.ItemBuilders.text(
+    theme,
+    T.applyPreset(T.stylePresets.text.heading, {
+      text: data.title || "Your Title",
+      x: 100,
+      y: 60
+    })
+  );
+  // fade in from 0→1 over 1s, starting at t=0
+  T.AniHelpers.fadeIn(titleItem, data.titleShowAt ?? 0, 1);
   items.push(titleItem);
 
-  // ---- bullets: each fades in sequentially --------------------------------
-  const baseY = titleData.y + gapBelowHeading;
-  bullets.forEach((b, i) => {
-    const text = typeof b === "string" ? b : b.text;
-    // compute fade start time: title 0–1, bullet1 1–2, bullet2 2–3, etc.
-    const start = i + 1;
+  // 2. Bullets: each uses its own showAt from data.bullets
+  const lineGap = data.lineGap ?? 100;
+  const gapBelowHeading = data.gapBelowHeading ?? 130;
+  const baseY = 60 + gapBelowHeading;
 
-    const bulletData = T.applyPreset(T.stylePresets.text.bullet, {
-      text,
-      x: 100,
-      y: baseY + i * lineGap
-    });
-    const bulletItem = T.ItemBuilders.text(theme, bulletData);
-
-    // hide until fade
-    AnimApi.set(bulletItem, "alpha", 0, 0);
-    // fade in over 1s at [start, start+1]
-    T.AniHelpers.fadeIn(bulletItem, start, 1);
+  (data.bullets || []).forEach((b, i) => {
+    const showAt = b.showAt;           // absolute time passed in by caller
+    const bulletItem = T.ItemBuilders.text(
+      theme,
+      T.applyPreset(T.stylePresets.text.bullet, {
+        text: b.text,
+        x: 100,
+        y: baseY + i * lineGap
+      })
+    );
+    // fade in over 0.5s at [showAt → showAt+0.5]
+    T.AniHelpers.fadeIn(bulletItem, showAt, 0.5);
     items.push(bulletItem);
   });
 
