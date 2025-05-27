@@ -59,7 +59,7 @@
   },
   "src/routes/+layout.svelte": {
     "css": [
-      "_app/immutable/assets/_layout.Bzr0mMZx.css"
+      "_app/immutable/assets/_layout.DLGN3GlY.css"
     ],
     "file": "entries/pages/_layout.svelte.js",
     "imports": [
@@ -149,7 +149,7 @@
   },
   "src/routes/videoblog/+page.svelte": {
     "css": [
-      "_app/immutable/assets/_page.D7klU2F7.css"
+      "_app/immutable/assets/_page.CqRndDAg.css"
     ],
     "file": "entries/pages/videoblog/_page.svelte.js",
     "imports": [
