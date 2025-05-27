@@ -50,4 +50,12 @@ export const fadeInFast = (start = 0) => ({
     field: "alpha",
     props: { from: 1, to: 0.3, primitive: "easeIn" }
   });
+
+  export const flyInRight = (start = 0, fromX = 1200) => ({
+    fn: "tween",
+    start,
+    end: start + 1,
+    field: "x",
+    props: { from: fromX, to: null, primitive: "easeOut" }
+  });
   

@@ -11,6 +11,7 @@ const animationFunctions = {
 
 export class AnimationModule {
   runAnimations(items, currentTime) {
+    // debugger;
     for (const item of items) {
       const animations = item.animations || []; // ✅ FIXED (was .animate)
 

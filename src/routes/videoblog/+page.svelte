@@ -7,10 +7,6 @@
   import SlideNav from "./SlideNav.svelte";
   import * as PIXI from "pixi.js";
 
-const backgroundAssets = {
-  chalkboard: PIXI.Texture.from("images/class2.webp"),
-  drops: PIXI.Texture.from("images/drops.png")
-};
   let container;
   let player;
   let ticker;
@@ -30,7 +26,12 @@ const backgroundAssets = {
 }
 
   onMount(() => {
-    debugger;
+    // debugger;
+
+const backgroundAssets = {
+  chalkboard: PIXI.Texture.from("images/class2.webp"),
+  drops: PIXI.Texture.from("images/drops.png")
+};
     console.log("presentationData",presentationData);
     const app = pixiApp(
       presentationData.slidesData[0].background?.backgroundColor || "#000000",

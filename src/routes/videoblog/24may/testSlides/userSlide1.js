@@ -18,10 +18,18 @@ let t = 0; // Time tracker
 deck.add(templates.titleWith3Bullets, t += 10, {
   title: "Why Islam?",
   bullets: [
-    { text: "In the Name of Allah", showAt: 1 },
+    { text: "In the Name of Allah", showAt: 2 },
     { text: "Most Merciful", showAt: 3 },
-    { text: "Most Compassionate", showAt: 8 }
+    { text: "Most Compassionate", showAt: 4 }
   ]
+});
+
+// deck.overrideLastSlideBackground({backgroundImage:drops,backgroundImageOpacity:0.2});
+deck.overrideLastSlideBackground({
+  pattern: {
+    type: "dots",
+    props: { color: themeUsed.primaryColor }
+  }
 });
 // debugger;
 export const presentationData = deck.build();
