@@ -2,21 +2,20 @@
 
 import { valueTween } from './valueTween.js';
 
-// === Internal animation runner map ===
 const animationFunctions = {
   tween(item, t, start, end, props) {
     const value = valueTween({ ...props, t, start, end });
-    item[props.field ?? "x"] = value; // apply to target field
+    item[props.field ?? "x"] = value; // supports x, y, alpha, scale, etc.
   }
 };
 
-export  class AnimationModule {
+export class AnimationModule {
   runAnimations(items, currentTime) {
     for (const item of items) {
-      const animations = item.animate || [];
+      const animations = item.animations || []; // ✅ FIXED (was .animate)
 
       for (const anim of animations) {
-        const fn = animationFunctions[anim.fn]; // always "tween"
+        const fn = animationFunctions[anim.fn]; // fn is always "tween"
         if (!fn) continue;
 
         fn(item, currentTime, anim.start, anim.end, anim.props || {});

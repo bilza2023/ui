@@ -1,19 +1,6 @@
-
 // animationModule/presets/index.js
 
-export function enterFromLeft(time = 0, dur = 1.0, item) {
-  return {
-    fn: "tween",
-    start: time,
-    end:   time + dur,
-    props: {
-      field: "x",
-      from: -(item.width + 100),
-      to: item.x,
-      primitive: "easeOut"
-    }
-  };
-}
+// Only returns clean tween objects — no direct item access
 
 export function fadeIn(delay = 0, dur = 1) {
   return {
@@ -25,8 +12,16 @@ export function fadeIn(delay = 0, dur = 1) {
   };
 }
 
-// 🛠️ Fixed: slideUp no longer uses "+distance" strings
-// You must set real item.y and manually provide `from` and `to` when needed
+export function fadeOut(delay = 0, dur = 1) {
+  return {
+    field: "alpha",
+    fn: "tween",
+    start: delay,
+    end: delay + dur,
+    props: { from: 1, to: 0, primitive: "easeIn" }
+  };
+}
+
 export function slideUp(delay = 0, dur = 1, fromY = null, toY = null, easing = "easeOut") {
   return {
     field: "y",
