@@ -1,55 +1,74 @@
+// quoteSlide.js
+// Reveals each line of a quote one by one, then the author.
+// data = {
+//   lines: [                    // array of { text: string, showAt: number }
+//     { text: string, showAt: number },
+//     ...
+//   ],
+//   author: { text: string, showAt: number },
+//   fontSize?: number,          // optional font size for quote lines
+//   lineHeight?: number         // optional multiplier for spacing
+// }
+
 import { TemplateToolkit as T } from "../../toolkit/Toolkit.js";
 
 export default function quoteSlide(globalTheme, data = {}) {
-  const lines = data.text || [
-    "“The ink of the scholar",
-    "is more sacred",
-    "than the blood of the martyr.”"
-  ];
-
+  const items = [];
+  const linesData = data.lines || [];
   const fontSize = data.fontSize || 48;
-  const spacing = data.lineHeight ? fontSize * data.lineHeight : fontSize * 1.4;
-  const startY = 140;
+  const lineHeight = data.lineHeight ? fontSize * data.lineHeight : fontSize * 1.4;
+  const startY = data.startY ?? 140;
 
-  const quoteItems = lines.map((line, i) => {
-    const item = T.ItemBuilders.text(
+  // === Quote Lines ===
+  linesData.forEach((entry, i) => {
+    const showAt = entry.showAt;   // absolute time for this line
+    const text = entry.text;
+
+    const lineItem = T.ItemBuilders.text(
       globalTheme,
       T.applyPreset(T.stylePresets.text.quote, {
-        text: line,
+        text,
         x: 100,
-        y: startY + i * spacing,
+        y: startY + i * lineHeight,
         width: 820,
         textAlign: "center",
         fontSize
       })
     );
-
-    T.addAnimation(item, "text", "slideInFromBottom", i + 1);
-    const anim = item.animations.at(-1);
-    anim.props.from = item.y + 300; // Start below the screen
-    anim.props.to = item.y;         // End at intended position
-
-    return item;
+    // fade in each line
+    T.AniHelpers.fadeIn(lineItem, showAt, 0.5);
+    items.push(lineItem);
   });
 
-  const authorY = startY + lines.length * spacing + 30;
+  // === Author ===
+  if (data.author && data.author.text) {
+    const authorShowAt = data.author.showAt;
+    const authorItem = T.ItemBuilders.text(
+      globalTheme,
+      T.applyPreset(T.stylePresets.text.caption, {
+        text: data.author.text,
+        x: 100,
+        y: startY + linesData.length * lineHeight + 30,
+        width: 820,
+        textAlign: "right",
+        fontSize: 28
+      })
+    );
+    T.AniHelpers.fadeIn(authorItem, authorShowAt, 0.5);
+    items.push(authorItem);
+  }
 
-  const author = T.ItemBuilders.text(
-    globalTheme,
-    T.applyPreset(T.stylePresets.text.caption, {
-      text: data.author || "",
-      x: 100,
-      y: authorY,
-      width: 820,
-      textAlign: "right",
-      fontSize: 28
-    })
-  );
-
-  T.addAnimation(author, "text", "slideInFromBottom", 4.5);
-  const anim = author.animations.at(-1);
-  anim.props.from = author.y + 300;
-  anim.props.to = author.y;
-
-  return [...quoteItems, author];
+  return items;
 }
+
+// Example usage in DeckBuilder:
+//
+// t += 8;
+// deck.add(templates.quoteSlide, t, {
+//   lines: [
+//     { text: "The ink of the scholar",   showAt: t + 1 },
+//     { text: "is more sacred",            showAt: t + 2 },
+//     { text: "than the blood of the martyr.", showAt: t + 3 }
+//   ],
+//   author: { text: "— Prophetic Traditions", showAt: t + 4 }
+// });

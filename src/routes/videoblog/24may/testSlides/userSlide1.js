@@ -38,8 +38,77 @@ deck.overrideLastSlideBackground({
 // Slide 2: Centered Heading
 // Appears at t + 1s after slide start
 // Slide duration: 15s
-const slide2EndTime = 15;
+const slide2EndTime = 25;
 
+/////////////////////////////
+deck.add(templates.iconsGrid, slide2EndTime, {
+  heading:        "Our Capabilities",
+  headingShowAt:  slide1EndTime,
+  columns:        4,
+  itemSize:       80,
+  gutterX:        60,
+  gutterY:        80,
+  startX:         120,
+  startY:         220,
+  items: [
+    { icon: "BULB",     title: "Innovation",   showAt: slide1EndTime + 1 },
+    { icon: "LOCK",     title: "Security",     showAt: slide1EndTime + 2 },
+    { icon: "ROCKET",   title: "Performance",  showAt: slide1EndTime + 3 },
+    { icon: "TOOLS",    title: "Tools",        showAt: slide1EndTime + 4 },
+    { icon: "CIRCLE",   title: "Precision",    showAt: slide1EndTime + 5 }
+  ]
+});
+/////////////////////////////
+
+
+// deck.add(templates.iconList, slide2EndTime, {
+//   items: [
+//     { icon: "BULB",     x: 100, y: 200, title: "Idea",             showAt: slide1EndTime + 1 },
+//     { icon: "LOCK",     x: 100, y: 400, title: "Security",         showAt: slide1EndTime + 2 },
+//     { icon: "ROCKET",   x: 400, y: 200, title: "Fast Performance", showAt: slide1EndTime + 3 },
+//     { icon: "CHARTDOWN",x: 400, y: 400, title: "Analytics",        showAt: slide1EndTime + 4 },
+//     { icon: "CIRCLE",   x: 700, y: 200, title: "Overview",         showAt: slide1EndTime + 5 },
+//     { icon: "CLOCK",    x: 700, y: 400, title: "Time Savings",     showAt: slide1EndTime + 6 },
+//     { icon: "EXPLOSION",x: 100, y: 100, title: "Analytics",        showAt: slide1EndTime + 7 },
+//     { icon: "ELLIPSE",   x: 400, y: 50, title: "Overview",         showAt: slide1EndTime + 8 },
+//     { icon: "FILESBOX",    x: 700, y: 50, title: "Time Savings",     showAt: slide1EndTime + 9 },
+//   ]
+// });
+
+/////////////////////////////
+// deck.add(templates.quoteSlide, slide2EndTime, {
+//   lines: [
+//     { text: "The Ink of the Scholar",   showAt:       slide1EndTime + 1 },
+//     { text: "is More Sacred",            showAt:      slide1EndTime + 2 },
+//     { text: "than the Blood of the Martyr.", showAt:  slide1EndTime + 3 }
+//   ],
+//   author: { text: "Prophet Muhammad ", showAt: slide1EndTime + 4 }
+// });
+/////////////////////////////
+    // deck.add(templates.imageLeftWithBullets, slide2EndTime, {
+    //   src:         "drops",
+    //   imageShowAt: slide1EndTime,
+    //   bullets: [
+    //     { text: "Point A", showAt: slide1EndTime + 2 },
+    //     { text: "Point B", showAt: slide1EndTime + 3 },
+    //     { text: "Point B", showAt: slide1EndTime + 4 }
+    //   ],
+    //   lineGap:     120
+    // });
+/////////////////////////////
+// deck.add(templates.imageWithCaption, slide2EndTime, {
+//   src:             "drops",
+//   showAt:          slide1EndTime,       // image fades in immediately
+//   caption:         "The Dew Drops Of Rain.",
+//   captionShowAt:   slide1EndTime + 1    // caption fades in 1s after image
+// });
+/////////////////////////////
+// deck.add(templates.headingWithImage, slide2EndTime, {
+//   title:       "Our Story",
+//   titleShowAt: slide1EndTime,            // heading appears immediately
+//   imageSrc:    "chalkboard",
+//   imageShowAt: slide1EndTime + 1         // image fades in 1s after slide start
+// });
 /////////////////////////////
 // deck.add(templates.headingWith2Bullets, slide2EndTime, {
 //   title:         "Key Takeaways",

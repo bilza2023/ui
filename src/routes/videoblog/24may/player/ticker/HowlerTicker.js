@@ -3,6 +3,14 @@ export class HowlerTicker {
     this.sound = sound;
   }
 
+  volume(val) {
+    if (val === undefined) {
+      return this.sound.volume();
+    } else {
+      this.sound.volume(val);
+      return this;
+    }
+  }
   play() {
     this.sound.play();
   }

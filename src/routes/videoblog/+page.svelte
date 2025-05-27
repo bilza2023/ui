@@ -24,7 +24,7 @@
   app.view.style.display = "block";
   app.view.style.margin = "0 auto";
 }
-
+///////////////////////////////////////////////////
   onMount(() => {
     // debugger;
 
@@ -42,6 +42,7 @@ const backgroundAssets = {
     // let soundUrl = null;
     let soundUrl = "sounds/music.opus";
     ticker = createTicker(soundUrl);
+    ticker.volume(0.2);
 
     player = new Player({
       app,
