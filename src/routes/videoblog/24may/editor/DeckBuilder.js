@@ -49,7 +49,7 @@ export class DeckBuilder {
     items = this.preprocess(items, data, { templateFn }) || [];
 
     // Here it gets this.globalBackground
-    const background = this.globalBackground;
+    const background = structuredClone(this.globalBackground) || {};
 
     const slide = {
       background,

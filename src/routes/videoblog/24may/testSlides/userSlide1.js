@@ -15,9 +15,10 @@ deck.setGlobalBackground(getDefaultBackground(themeUsed));
 let t = 0; // Time tracker
 
 deck.add(templates.imageWithCaption, t += 6, {
-  src: "drops",
+  src: "chalkboard",
   caption: "A classroom scene representing traditional learning."
 });
+deck.overrideLastSlideBackground({ backgroundImage: "drops" });
 
 deck.add(templates.centeredHeading, t += 6, {
   text: "Chapter 2 — Visual Thinking"
@@ -32,6 +33,7 @@ deck.add(templates.featureGrid4, t += 10, {
   ]
 });
 
+
 deck.add(templates.quoteSlide, t += 6, {
   text: [
     "“The ink of the scholar",
@@ -42,6 +44,8 @@ deck.add(templates.quoteSlide, t += 6, {
   fontSize: 52,
   lineHeight: 1.5
 });
+deck.overrideLastSlideBackground({ backgroundImage: "drops",backgroundImageOpacity:0.1 });
+//////////////////////////////////////////////
 
 deck.add(templates.titleWith3Bullets, t += 10, {
   title: "Why Islam?",
