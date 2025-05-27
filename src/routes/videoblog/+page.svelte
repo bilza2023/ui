@@ -9,7 +9,7 @@
 
 const backgroundAssets = {
   chalkboard: PIXI.Texture.from("images/class2.webp"),
-  sciFiHallway: PIXI.Texture.from("images/drops.png")
+  drops: PIXI.Texture.from("images/drops.png")
 };
   let container;
   let player;

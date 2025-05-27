@@ -1,21 +1,22 @@
-// workingSlides.js
+// userSlide1.js
 
 import { DeckBuilder } from "../editor";
 import { templates } from "../editor/templates/index.js";
 import { GlobalThemes } from "../editor/theme/globalThemes.js";
-import { getDefaultBackground } from "../editor/getDefaultBackground.js";
+import {getDefaultBackground} from "../editor/getDefaultBackground.js";
 
 const deck = new DeckBuilder();
 
-// Setup
+// Theme & background setup
 const themeUsed = GlobalThemes.pastel;
 deck.setGlobalTheme(themeUsed);
+debugger;
 deck.setGlobalBackground(getDefaultBackground(themeUsed));
 
-let t = 0; // Time tracker
+let t = 0; // start time marker
 
 deck.add(templates.imageWithCaption, t += 6, {
-  src: "drops",
+  src: "chalkboard",
   caption: "A classroom scene representing traditional learning."
 });
 
@@ -43,6 +44,15 @@ deck.add(templates.quoteSlide, t += 6, {
   lineHeight: 1.5
 });
 
+// deck.add(templates.imageLeftWithBullets, t += 10, {
+//   src: "chalkboard",
+//   bullets: [
+//     { text: "Visuals are powerful", showAt: 1 },
+//     { text: "They aid retention", showAt: 3 },
+//     { text: "They engage learners", showAt: 5 }
+//   ]
+// });
+
 deck.add(templates.titleWith3Bullets, t += 10, {
   title: "Why Islam?",
   bullets: [
@@ -68,6 +78,15 @@ deck.add(templates.titleWith3Bullets, t += 10, {
   title: "Why Islam?",
   bullets: ["In the Name of Allah", "Most Merciful", "Most Compassionate"]
 });
+// deck.overrideLastSlideBackground({
+//   pattern: {
+//     type: "dots",
+//     props: { color: themeUsed.primaryColor }
+//   }
+// });
+// deck.overrideLastSlideBackground({
+//   backgroundImage: "chalkboard"
+// });
 
 deck.add(templates.headingWithImage, t += 10, {
   title: "The Power of Visual Learning",

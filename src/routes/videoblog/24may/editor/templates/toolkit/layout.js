@@ -1,5 +1,5 @@
 
-
+///Error the designWidth and height should not be here
 const designWidth = 1020;
 const designHeight = 576;
 

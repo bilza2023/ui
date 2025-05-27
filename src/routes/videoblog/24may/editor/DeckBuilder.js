@@ -1,4 +1,3 @@
-// lib/deckBuilder/DeckBuilder.js
 
 
 export class DeckBuilder {
@@ -20,13 +19,10 @@ export class DeckBuilder {
     this.currentStartTime = 0;
   }
 
-  setGlobalTheme(theme) {
-    this.globalTheme = theme;
-  }
-  
-  setGlobalBackground(backgroundObj) {
-    this.globalBackground = backgroundObj;
-  }
+  setDesignWidth(w) { this.designWidth = w; }
+  setDesignHeight(h) { this.designHeight = h; }
+  setGlobalTheme(theme) {this.globalTheme = theme;}
+  setGlobalBackground(backgroundObj) {this.globalBackground = backgroundObj;}
   
   /**
    * @param {Function} templateFn – templateFn(globalTheme, data) => items[]
