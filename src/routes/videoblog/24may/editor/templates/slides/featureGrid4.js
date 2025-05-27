@@ -1,12 +1,16 @@
+// featureGrid4.js
+// Displays 4 features in a 2x2 grid.
+// Each feature is an object: { icon: string, label: string, showAt: number }
+// Each icon + label pair fades in at its own showAt time.
 
 import { TemplateToolkit as T } from "../../toolkit/Toolkit.js";
 
 export default function featureGrid4(globalTheme, data = {}) {
   const features = data.features || [
-    { icon: "BULB", label: "Fast" },
-    { icon: "LOCK", label: "Secure" },
-    { icon: "ROCKET", label: "Smooth" },
-    { icon: "TOOLS", label: "Flexible" }
+    { icon: "BULB", label: "Fast", showAt: 0 },
+    { icon: "LOCK", label: "Secure", showAt: 1 },
+    { icon: "ROCKET", label: "Smooth", showAt: 2 },
+    { icon: "TOOLS", label: "Flexible", showAt: 3 }
   ];
 
   const positions = [
@@ -16,18 +20,22 @@ export default function featureGrid4(globalTheme, data = {}) {
     { x: 560, y: 360 }
   ];
 
-  const items = features.map((f, i) => {
+  const items = [];
+  features.forEach((f, i) => {
     const centerX = positions[i].x;
     const itemWidth = 200;
-  
-    const icon = T.ItemBuilders.icon(globalTheme, {
+    const showAt = f.showAt ?? 0;
+
+    // Build icon item
+    const iconItem = T.ItemBuilders.icon(globalTheme, {
       iconName: f.icon,
-      x: centerX + itemWidth / 2 - 40, // center the icon (40 = half icon width)
+      x: centerX + itemWidth / 2 - 40,
       y: positions[i].y,
       width: 80
     });
-  
-    const label = T.ItemBuilders.text(
+
+    // Build label item
+    const labelItem = T.ItemBuilders.text(
       globalTheme,
       T.applyPreset(T.stylePresets.text.caption, {
         text: f.label,
@@ -38,9 +46,24 @@ export default function featureGrid4(globalTheme, data = {}) {
         fontSize: 28
       })
     );
-  
-    return [icon[0], label[0]];
+
+    // Apply animations directly on items
+    T.AniHelpers.fadeIn(iconItem, showAt, 0.5);
+    T.AniHelpers.fadeIn(labelItem, showAt, 0.5);
+
+    items.push(iconItem, labelItem);
   });
-  
-  return items.flat();
+
+  return items;
 }
+
+// Example usage in DeckBuilder:
+//
+// deck.add(templates.featureGrid4, t += 6, {
+//   features: [
+//     { icon: "BULB", label: "Fast", showAt: 0 },
+//     { icon: "LOCK", label: "Secure", showAt: 1 },
+//     { icon: "ROCKET", label: "Smooth", showAt: 2 },
+//     { icon: "TOOLS", label: "Flexible", showAt: 3 }
+//   ]
+// });
