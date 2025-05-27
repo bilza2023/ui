@@ -1,25 +1,25 @@
 // templateKit.js
 
 // Animation presets (low-level tween logic, optional to expose)
-import * as Anim from '../../../player/hooks/animationModule/presets';
-
+import * as Anim from '../../player/hooks/animationModule/presets/index.js';
+import AnimApi from './AnimApi.js';
 // Item builders
-import text from '../../../items/text/index.js';
-import icon from '../../../items/icon/index.js';
-import image from '../../../items/image/index.js';
-import richText from '../../../items/richText/index.js';
+import text from '../../items/text/index.js';
+import icon from '../../items/icon/index.js';
+import image from '../../items/image/index.js';
+import richText from '../../items/richText/index.js';
 
 // Style presets (per-item)
-import { textPresets } from '../../../items/text/presets.js';
-import { iconPresets } from '../../../items/icon/presets.js';
-import { imagePresets } from '../../../items/image/presets.js';
-import { richTextPresets } from '../../../items/richText/presets.js';
+import { textPresets } from '../../items/text/presets.js';
+import { iconPresets } from '../../items/icon/presets.js';
+import { imagePresets } from '../../items/image/presets.js';
+import { richTextPresets } from '../../items/richText/presets.js';
 
-// Animation presets (per-item)
-import * as textAnimations from '../../../items/text/animations.js';
-import * as iconAnimations from '../../../items/icon/animations.js';
-import * as imageAnimations from '../../../items/image/animations.js';
-import * as richTextAnimations from '../../../items/richText/animations.js';
+// // Animation presets (per-item)
+// import * as textAnimations from '../../items/text/animations.js';
+// import * as iconAnimations from '../../items/icon/animations.js';
+// import * as imageAnimations from '../../items/image/animations.js';
+// import * as richTextAnimations from '../../items/richText/animations.js';
 
 // Layout helpers
 import { layout } from './layoutFunction.js';
@@ -41,20 +41,20 @@ const stylePresets = {
 };
 
 // Unified animation preset map
-const animationPresets = {
-  text: textAnimations,
-  icon: iconAnimations,
-  image: imageAnimations,
-  richText: richTextAnimations
-};
+// const animationPresets = {
+//   text: textAnimations,
+//   icon: iconAnimations,
+//   image: imageAnimations,
+//   richText: richTextAnimations
+// };
 
 
-function addAnimation(item, type, presetName, start = 0) {
-  const animFn = animationPresets[type]?.[presetName];
-  if (!animFn) return;
-  const preset = animFn(start);
-  item.animations = Array.isArray(preset) ? preset : [preset];
-}
+// function addAnimation(item, type, presetName, start = 0) {
+//   const animFn = animationPresets[type]?.[presetName];
+//   if (!animFn) return;
+//   const preset = animFn(start);
+//   item.animations = Array.isArray(preset) ? preset : [preset];
+// }
 /**
  * applyPreset(preset, data)
  *
@@ -92,8 +92,6 @@ export const TemplateToolkit = {
   },
 
   stylePresets,
-  // animationPresets,
-  getAnimations,
-  addAnimation,
+  AnimApi,
   applyPreset
 };

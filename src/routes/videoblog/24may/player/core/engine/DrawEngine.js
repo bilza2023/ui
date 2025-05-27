@@ -34,12 +34,14 @@ export default class DrawEngine {
     const items = slide.items ?? [];
   
     for (const item of items) {
-      // In future: apply time-aware animation props here if needed
-      const displayObject = drawItem(item,assets);
+      const displayObject = drawItem(item, assets);
       if (displayObject) {
+        // ← NEW: apply the animated alpha (default to 1)
+        displayObject.alpha = item.alpha ?? 1;
         this.itemLayer.addChild(displayObject);
       }
     }
+    
   }
   
 }

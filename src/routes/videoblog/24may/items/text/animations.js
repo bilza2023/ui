@@ -58,4 +58,13 @@ export const fadeInFast = (start = 0) => ({
     field: "x",
     props: { from: fromX, to: null, primitive: "easeOut" }
   });
+
+  export const slideInFromBottom = (start = 0) => ({
+    fn: "tween",
+    start,
+    end: start + 1.5,
+    field: "y",
+    props: { from: null, to: null, primitive: "easeOut" }
+  });
+  
   

@@ -1,5 +1,5 @@
 
-import { TemplateToolkit as T } from "../toolkit/Toolkit.js";
+import { TemplateToolkit as T } from "../../toolkit/Toolkit.js";
 
 export default function featureGrid4(globalTheme, data = {}) {
   const features = data.features || [

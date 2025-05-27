@@ -100,6 +100,7 @@ export class DeckBuilder {
   
     
   build() {
+    // debugger;
     const totalDuration = this.slides.length
       ? Math.max(...this.slides.map(s => s.endTime))
       : 0;

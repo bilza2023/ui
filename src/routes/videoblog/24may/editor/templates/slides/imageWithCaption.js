@@ -1,4 +1,4 @@
-import { TemplateToolkit as T } from "../toolkit/Toolkit.js";
+import { TemplateToolkit as T } from "../../toolkit/Toolkit.js";
 
 export default function imageWithCaption(globalTheme, data = {}) {
   // === Image ===

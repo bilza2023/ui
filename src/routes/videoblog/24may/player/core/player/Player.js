@@ -1,7 +1,7 @@
 // Player.js
 import DrawEngine from "../engine/DrawEngine.js";
 // import { runAnimation } from "../../hooks/runAnimation.js";
-import { AnimationModule } from '../../hooks/animationModule/core/AnimationModule.js';
+import { runAnimations } from '../../hooks/simpleAnim.js';
 
 
 export  class Player {
@@ -10,7 +10,6 @@ export  class Player {
     this.slides = slides;
 
     this.timeSource = timeSource;
-    this.animator = new AnimationModule();
     this.currentIndex = 0;
     this.currentTime = 0;
     this.drawEngine = new DrawEngine(app);
@@ -74,8 +73,10 @@ export  class Player {
     this.drawEngine.drawBackground(slide.background, this.assets);
   
     // Step 2: Run animations
-    this.animator.runAnimations(slide.items ?? [], this.currentTime);
-  
+    // runAnimations(slide.items ?? [], this.currentTime);
+     (slide.items ?? []).forEach(item =>
+        runAnimations(item, this.currentTime)
+     );
     // Step 3: Draw items
     this.drawEngine.draw(slide, this.currentTime,this.assets);
   }
