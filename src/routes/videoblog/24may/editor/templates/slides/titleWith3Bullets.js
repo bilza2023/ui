@@ -1,70 +1,52 @@
-// titleWith3Bullets.js – final version
-// Builds a title + three-bullet slide. AnimApi adds spec-only tweens; runtime
-// engine consumes them. Items start fully off-screen right and invisible.
+// titleWith3Bullets.js – sequential fade template
+// Heading and bullets fade in one after another.
 
 import { TemplateToolkit as T } from "../../toolkit/Toolkit";
 import AnimApi from "../../toolkit/AnimApi.js";
 
 /**
  * @param {object} theme – global theme (colors, fonts)
- * @param {object} data  – {
- *   title:   string,
- *   bullets: string[] | { text, showAt? }[],
- *   lineGap?, gapBelowHeading?
- * }
+ * @param {object} data  – { title: string, bullets: string[] | { text, showAt }[], lineGap?, gapBelowHeading? }
  * @returns {object[]} items array for the slide
  */
 export default function titleWith3Bullets(theme, data = {}) {
   const items = [];
+  const {
+    title = "Your Title",
+    bullets = ["Bullet 1", "Bullet 2", "Bullet 3"],
+    lineGap = 100,
+    gapBelowHeading = 130
+  } = data;
 
-  // ---------------------------------------------------------------- spacing
-  const lineGap         = data.lineGap ?? 100;
-  const gapBelowHeading = data.gapBelowHeading ?? 130;
-
-  // ---------------------------------------------------------------- layout
-  const stageWidth = T.designWidth || 1020;   // guarantee off-screen start
-  const offscreenX = stageWidth + 40;         // 40px safety margin
-
-  // ---------------------------------------------------------------- title
+  // ---- heading: fade in at 0–1s ------------------------------------------
   const titleData = T.applyPreset(T.stylePresets.text.heading, {
-    text: data.title || "Your Title",
+    text: title,
     x: 100,
-    y: 60,
+    y: 60
   });
-  const title = T.ItemBuilders.text(theme, titleData);
+  const titleItem = T.ItemBuilders.text(theme, titleData);
+  T.AniHelpers.fadeIn(titleItem, 0, 1);
+  items.push(titleItem);
 
-  AnimApi.set(title, "alpha", 0, 0);
-  AnimApi.animate(title, "alpha", 0, 1, 1, 2, "linear");
-  // Hide immediately & tween in
-  // AnimApi.set(title, "alpha", 0, 0);
-  // AnimApi.animate(title, "x", offscreenX, title.x, 1, 2, "easeOut");
-  // AnimApi.animate(title, "alpha", 0, 1, 1, 2, "linear");
-  items.push(title);
-
-  // ---------------------------------------------------------------- bullets
-  const baseY = title.y + gapBelowHeading;
-  (data.bullets || ["Bullet 1", "Bullet 2", "Bullet 3"]).forEach((b, i) => {
-    const text    = typeof b === "string" ? b : b.text;
-    const showAt  = (typeof b === "string" ? i + 1 : b.showAt ?? i + 1);
+  // ---- bullets: each fades in sequentially --------------------------------
+  const baseY = titleData.y + gapBelowHeading;
+  bullets.forEach((b, i) => {
+    const text = typeof b === "string" ? b : b.text;
+    // compute fade start time: title 0–1, bullet1 1–2, bullet2 2–3, etc.
+    const start = i + 1;
 
     const bulletData = T.applyPreset(T.stylePresets.text.bullet, {
       text,
       x: 100,
-      y: baseY + i * lineGap,
-      showAt,
+      y: baseY + i * lineGap
     });
+    const bulletItem = T.ItemBuilders.text(theme, bulletData);
 
-    const bullet = T.ItemBuilders.text(theme, bulletData);
-
-      // Hide immediately & fade in
-  AnimApi.set(bullet, "alpha", 0, 0);
-  AnimApi.animate(bullet, "alpha", 0, 1, showAt, showAt + 1, "linear");
-
-    // AnimApi.set(bullet, "alpha", 0, 0);
-    // AnimApi.animate(bullet, "x", offscreenX, bullet.x, showAt, showAt + 1, "easeOut");
-    // AnimApi.animate(bullet, "alpha", 0, 1, showAt, showAt + 1, "linear");
-
-    items.push(bullet);
+    // hide until fade
+    AnimApi.set(bulletItem, "alpha", 0, 0);
+    // fade in over 1s at [start, start+1]
+    T.AniHelpers.fadeIn(bulletItem, start, 1);
+    items.push(bulletItem);
   });
 
   return items;

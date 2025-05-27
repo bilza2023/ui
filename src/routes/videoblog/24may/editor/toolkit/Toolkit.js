@@ -8,7 +8,7 @@ import text from '../../items/text/index.js';
 import icon from '../../items/icon/index.js';
 import image from '../../items/image/index.js';
 import richText from '../../items/richText/index.js';
-
+import * as AniHelpers from "./AniHelpers.js";
 // Style presets (per-item)
 import { textPresets } from '../../items/text/presets.js';
 import { iconPresets } from '../../items/icon/presets.js';
@@ -93,5 +93,6 @@ export const TemplateToolkit = {
 
   stylePresets,
   AnimApi,
-  applyPreset
+  applyPreset,
+  AniHelpers
 };
