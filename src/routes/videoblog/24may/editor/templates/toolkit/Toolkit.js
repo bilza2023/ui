@@ -22,7 +22,11 @@ import * as imageAnimations from '../../../items/image/animations.js';
 import * as richTextAnimations from '../../../items/richText/animations.js';
 
 // Layout helpers
-import { layout } from './layout.js';
+import { layout } from './layoutFunction.js';
+
+function getAnimations(itemType) {
+  return animationPresets[itemType] || {};
+}
 
 // Constants
 const designWidth = 1020;
@@ -44,7 +48,31 @@ const animationPresets = {
   richText: richTextAnimations
 };
 
-// Style preset applier
+
+function addAnimation(item, type, presetName, start = 0) {
+  const animFn = animationPresets[type]?.[presetName];
+  if (!animFn) return;
+  const preset = animFn(start);
+  item.animations = Array.isArray(preset) ? preset : [preset];
+}
+/**
+ * applyPreset(preset, data)
+ *
+ * Merges a style preset with custom values to produce final item data.
+ *
+ * This function does not "run" the preset — it simply combines two objects.
+ * The preset provides default values (like fontSize, color), and the data
+ * provides custom overrides (like text, position).
+ *
+ * This is how you apply style presets before passing them to item builders.
+ *
+ * Example:
+ *   const data = applyPreset(stylePresets.text.heading, {
+ *     text: "Welcome",
+ *     y: 60
+ *   });
+ *   const item = text(theme, data);
+ */
 function applyPreset(preset, data = {}) {
   return { ...preset, ...data };
 }
@@ -55,7 +83,6 @@ export const TemplateToolkit = {
   layout,
   designWidth,
   designHeight,
-  applyPreset,
 
   ItemBuilders: {
     text,
@@ -65,5 +92,8 @@ export const TemplateToolkit = {
   },
 
   stylePresets,
-  animationPresets
+  // animationPresets,
+  getAnimations,
+  addAnimation,
+  applyPreset
 };

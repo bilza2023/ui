@@ -15,8 +15,7 @@ export default function text(globalTheme, data = {}) {
       zIndex = 1
     } = data;
   
-    return [
-      {
+    return {
         type: "text",
         text,
         x,
@@ -31,7 +30,7 @@ export default function text(globalTheme, data = {}) {
         rotation,
         visible,
         zIndex
-      }
-    ];
+      };
+    
   }
   

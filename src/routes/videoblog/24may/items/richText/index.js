@@ -15,8 +15,7 @@ export default function richText(globalTheme, data = {}) {
       zIndex = 1
     } = data;
   
-    return [
-      {
+    return {
         type: "richText",
         text,
         x,
@@ -31,7 +30,6 @@ export default function richText(globalTheme, data = {}) {
         rotation,
         visible,
         zIndex
-      }
-    ];
+      };
   }
   

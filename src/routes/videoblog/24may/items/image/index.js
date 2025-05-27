@@ -10,8 +10,7 @@ export default function image(globalTheme, data = {}) {
     zIndex = 1
   } = data;
 
-  return [
-    {
+  return {
       type: "image",
       src,
       x,
@@ -21,6 +20,5 @@ export default function image(globalTheme, data = {}) {
       rotation,
       visible,
       zIndex
-    }
-  ];
+    };
 }

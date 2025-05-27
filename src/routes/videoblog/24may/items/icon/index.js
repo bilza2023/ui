@@ -11,8 +11,7 @@ export default function icon(globalTheme, data = {}) {
     zIndex = 1
   } = data;
 
-  return [
-    {
+  return {
       type: "icon",
       iconName,
       x,
@@ -23,6 +22,5 @@ export default function icon(globalTheme, data = {}) {
       rotation,
       visible,
       zIndex
-    }
-  ];
+    };
 }

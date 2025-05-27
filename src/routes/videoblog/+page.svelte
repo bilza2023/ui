@@ -30,7 +30,7 @@ const backgroundAssets = {
 }
 
   onMount(() => {
-    // debugger;
+    debugger;
     console.log("presentationData",presentationData);
     const app = pixiApp(
       presentationData.slidesData[0].background?.backgroundColor || "#000000",

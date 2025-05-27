@@ -1,29 +1,28 @@
-import { TemplateToolkit as T } from "../toolkit/Toolkit.js";
+import { TemplateToolkit as T } from "../toolkit/Toolkit";
 
-export default function titleWith3Bullets(globalTheme, data = {}) {
-  // === Title ===
-  const title = T.ItemBuilders.text(
-    globalTheme,
-    T.applyPreset(T.stylePresets.text.heading, {
-      text: data.title || "Presentation Title"
-    })
-  );
-  T.layout(title[0], "center", 0.1);
+export default function titleWith3Bullets(theme, data) {
+  const items = [];
 
-  // === Bullets (with optional showAt)
-  const bulletData = data.bullets || [];
-  const bullets = bulletData.map((entry, i) => {
-    const text = typeof entry === "string" ? entry : entry.text;
-    const showAt = typeof entry === "string" ? 2 + i * 2 : entry.showAt ?? 2 + i * 2;
+  // Apply heading style preset + override text & y
+  const titleData = T.applyPreset(T.stylePresets.text.heading, {
+    text: data.title,
+    y: 60
+  });
+  const title = T.ItemBuilders.text(theme, titleData);
+  T.addAnimation(title, "text", "fadeInFast", 1);
+  items.push(title);
 
-    const item = T.ItemBuilders.text(
-      globalTheme,
-      T.applyPreset(T.stylePresets.text.bullet, { text })
-    );
-    T.layout(item[0], "center", 0.4 + i * 0.2);
-    item[0].animate = [T.Anim.enterFromLeft(showAt, 0.5, item[0])];
-    return item[0];
+  const baseY = 200;
+  data.bullets.forEach((b, i) => {
+    const bulletData = T.applyPreset(T.stylePresets.text.bullet, {
+      text: b.text || b,
+      y: baseY + i * 60,
+      showAt: b.showAt ?? i + 1
+    });
+    const bullet = T.ItemBuilders.text(theme, bulletData);
+    T.addAnimation(bullet, "text", "fadeInFast", bulletData.showAt);
+    items.push(bullet);
   });
 
-  return [title[0], ...bullets];
+  return items;
 }
