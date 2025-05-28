@@ -4,6 +4,7 @@ import quoteComponent from './quoteComponent';
 import bullets from './bulletsComponent';
 import image from './imageComponent';
 import header from "./headerComponent.js";
+import leftHeaderRich from "./leftHeaderRich.js";
 
 
 export const fullComponents = {
@@ -11,5 +12,6 @@ export const fullComponents = {
     bullets,
     image,
     header,
+    leftHeaderRich,
   };
   

@@ -4,58 +4,43 @@ import { DeckBuilder } from "../editor/TwoTemplates/DeckBuilder.js";
 import { GlobalThemes } from "../editor/theme/globalThemes.js";
 import {getDefaultBackground} from "../editor/getDefaultBackground.js";
 
+// 1. Initialize deck
+const theme = GlobalThemes.royalBlue;
+const deck  = new DeckBuilder();
+deck.setGlobalTheme(theme);
+deck.setGlobalBackground(getDefaultBackground(theme));
 
+// 2. No header for this test
+deck.clearHeader();
 
-const themeUsed = GlobalThemes.royalBlue;
-const deck = new DeckBuilder();
-deck.setGlobalTheme(themeUsed);
-deck.setGlobalBackground(getDefaultBackground(themeUsed));
+// 3. Bullet data (left column)
+const bulletsData = [
+  { text: "Point A", showAt: 1 },
+  { text: "Point B", showAt: 2 },
+  { text: "Point C", showAt: 3 }
+];
 
-deck.addHeader("header", [{ text: "Real Numbers 101", showAt: 0 }], {
-  fontSize: 56,
-  y: 20,
-  stylePresetKey: "text.heading"
-});
+// 4. Image config (right column)
+const imgConfig = {
+  src: "chalkboard",
+  showAt: 1,
+  stylePresetKey: "fullWidth",
+  layoutMode: "center"
+};
+debugger;
+// 5. Build one half‐width slide
+deck.half(
+  10,
+  "image",          // right component key
+  [],               // right component data
+  imgConfig,
+  
+  "bullets",        // left component key
+  bulletsData,      // left component data
+  { x: 40, y: 80, lineGap: 60 }, // left config
 
-// Slide 1: quoteComponent as a full-width slide
-deck.full(10,"quote",
-  [            
-    { text: "“The ink of the scholar",     showAt: 1 },
-    { text: "is more sacred",              showAt: 2 },
-    { text: "than the blood of the martyr.”", showAt: 3 }
-  ],
-  {             // config (was everything else on data)
-    author: { text: "— Prophetic Tradition", showAt: 4 }
-  }
+  
 );
-
-// deck.full(
-//   20,            // slide end time
-//   "bullets",    // picks bulletsComponent
-//   [             // loopData: your bullets array
-//     { text: "First point",  showAt: 12 },
-//     { text: "Second point", showAt: 14 },
-//     { text: "Third point",  showAt: 16 }
-//   ],
-//   {             // config: positioning & style tweaks
-//     x: 120,
-//     y: 100,
-//     lineGap: 90,
-//     stylePresetKey: "text.bulletSmall"
-//   }
-// );
-// debugger;
-// deck.full(
-//   25,           // slide end time
-//   "image",     // picks imageComponent
-//   [],          // loopData (unused here)
-//   {            // config
-//     src: "chalkboard",
-//     showAt: 21,              // appears immediately
-//     stylePresetKey: "fullWidth",
-//     layoutMode: "center"
-//   }
-// );
 
 // Build and export the assembled presentation data
 export const presentationData = deck.build();

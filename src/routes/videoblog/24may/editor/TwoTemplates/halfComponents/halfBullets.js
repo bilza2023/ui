@@ -1,25 +1,31 @@
-// bulletsComponent.js
-import { TemplateToolkit as T } from "../toolkit/Toolkit.js";
 
-export default function bullets(theme, data = [], config = {}) {
+// halfBullets.js
+import { TemplateToolkit as T } from "../../toolkit/Toolkit.js";
+
+export default function halfBullets(theme, data = [], config = {}) {
   const {
-    x = 100,
-    y = 60,
+    x,
+    y,
     lineGap = 80,
     stylePresetKey = "text.bullet",
     xOffset = 0,
-    yOffset = 0
+    yOffset = 0,
+    leftMargin = 40
   } = config;
+
+  const baseX = xOffset + (x != null ? x : leftMargin);
+  const baseY = yOffset + (y != null ? y : 60);
 
   const items = [];
   data.forEach((entry, i) => {
     const { text, showAt } = entry;
+
     const bulletItem = T.ItemBuilders.text(
       theme,
       T.applyPreset(T.stylePresets[stylePresetKey], {
         text,
-        x: xOffset + x,
-        y: yOffset + y + i * lineGap
+        x: baseX,
+        y: baseY + i * lineGap
       })
     );
     T.AniHelpers.fadeIn(bulletItem, showAt, 0.5);
