@@ -63,6 +63,24 @@ export class DeckBuilder {
     this.slides.push(slide);
     this.currentStartTime = endTime;
   }
+//   add(templateFn, time, slotDataOrSimple) {
+//   if (isSlotObject(slotDataOrSimple)) {
+//     // slot-based path:
+//     const slideItems = templateFn(slotDataOrSimple, {
+//       design: this.design,
+//       theme: this.theme
+//     });
+//     this.slides.push({ time, items: slideItems });
+//   } else {
+//     // backward-compatible path
+//     const slideItems = templateFn(slotDataOrSimple, {
+//       box: full(this.design),
+//       theme: this.theme
+//     });
+//     this.slides.push({ time, items: slideItems });
+//   }
+// }
+
   overrideLastSlideBackground({
     backgroundColor = null,
     backgroundImage = null,

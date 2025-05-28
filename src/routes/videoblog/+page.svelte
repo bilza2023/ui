@@ -30,7 +30,8 @@
 
 const backgroundAssets = {
   chalkboard: PIXI.Texture.from("images/class2.webp"),
-  drops: PIXI.Texture.from("images/drops.png")
+  drops: PIXI.Texture.from("images/drops.png"),
+  femaleTeacher: PIXI.Texture.from("images/female_teacher.jpg")
 };
     console.log("presentationData",presentationData);
     const app = pixiApp(

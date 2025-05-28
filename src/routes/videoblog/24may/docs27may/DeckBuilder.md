@@ -1,4 +1,3 @@
-
 # DeckBuilder.md
 
 ## Overview
@@ -11,10 +10,10 @@ It enforces structural and timing rules, and provides clean hooks for injecting 
 
 ## Responsibilities
 
-- Maintains a strictly increasing timeline for slides.
-- Ensures every slide is valid and well-formed.
-- Allows pre- and post-processing via user-defined hooks.
-- Returns a clean `deck` object via `.build()`.
+* Maintains a strictly increasing timeline for slides.
+* Ensures every slide is valid and well-formed.
+* Allows pre- and post-processing via user-defined hooks.
+* Returns a clean `deck` object via `.build()`.
 
 ---
 
@@ -24,8 +23,8 @@ It enforces structural and timing rules, and provides clean hooks for injecting 
 new DeckBuilder({
   preprocess?: (items, data, ctx) => items[],
   postValidate?: (slide, data, ctx) => void
-})
-````
+} = {})
+```
 
 * `preprocess(items, data, ctx)`: Called **before** wrapping items into a slide.
 
