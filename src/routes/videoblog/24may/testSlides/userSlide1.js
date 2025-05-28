@@ -12,18 +12,17 @@ deck.setGlobalBackground(getDefaultBackground(themeUsed));
 
 
 // Slide 1: quoteComponent as a full-width slide
-deck.full(
-  10,         // slide end time (seconds)
-  "quote",    // picks quoteComponent from fullComponents registry
-  {
-    lines: [
-      { text: "“The ink of the scholar",           showAt: 1 },
-      { text: "is more sacred",                    showAt: 2 },
-      { text: "than the blood of the martyr.”",    showAt: 3 }
-    ],
-    author: { text: "— Prophetic Tradition",       showAt: 4 }
+deck.full(10,"quote",
+  [            
+    { text: "“The ink of the scholar",     showAt: 1 },
+    { text: "is more sacred",              showAt: 2 },
+    { text: "than the blood of the martyr.”", showAt: 3 }
+  ],
+  {             // config (was everything else on data)
+    author: { text: "— Prophetic Tradition", showAt: 4 }
   }
 );
+
 
 // Build and export the assembled presentation data
 export const presentationData = deck.build();
