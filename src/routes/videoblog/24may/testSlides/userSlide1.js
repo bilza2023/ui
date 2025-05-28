@@ -1,31 +1,29 @@
 // realNumbersPresentation.js – Real Numbers (14–17 yrs)
 
-import { DeckBuilder } from "../editor";
-import { templates } from "../editor/templates/index.js";
+import { DeckBuilder } from "../editor/TwoTemplates/DeckBuilder.js";
 import { GlobalThemes } from "../editor/theme/globalThemes.js";
-import { getDefaultBackground } from "../editor/getDefaultBackground.js";
+import {getDefaultBackground} from "../editor/getDefaultBackground.js";
 
+
+const themeUsed = GlobalThemes.pastel;
 const deck = new DeckBuilder();
-const themeUsed = GlobalThemes.neonDark;
-
 deck.setGlobalTheme(themeUsed);
 deck.setGlobalBackground(getDefaultBackground(themeUsed));
 
-let slideStart = 0;
-let slideEnd= 10;
-/*──────────────────────────────
-  Slide 1  | 0 – 10 · Title
-──────────────────────────────*/
-deck.add(templates.quoteSlide, slideEnd, {
-  lines: [
-    { text: "“The ink of the scholar",           showAt: slideStart + 1 },
-    { text: "is more sacred",                    showAt: slideStart + 2 },
-    { text: "than the blood of the martyr.”",    showAt: slideStart + 3 }
-  ],
-  author: { text: "— Prophetic Tradition",       showAt: slideStart + 4 }
-});
 
-/*──────────────────────────────
-  Build deck
-──────────────────────────────*/
+// Slide 1: quoteComponent as a full-width slide
+deck.full(
+  10,         // slide end time (seconds)
+  "quote",    // picks quoteComponent from fullComponents registry
+  {
+    lines: [
+      { text: "“The ink of the scholar",           showAt: 1 },
+      { text: "is more sacred",                    showAt: 2 },
+      { text: "than the blood of the martyr.”",    showAt: 3 }
+    ],
+    author: { text: "— Prophetic Tradition",       showAt: 4 }
+  }
+);
+
+// Build and export the assembled presentation data
 export const presentationData = deck.build();

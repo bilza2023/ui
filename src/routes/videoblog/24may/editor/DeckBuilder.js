@@ -29,7 +29,7 @@ export class DeckBuilder {
    * @param {number}   endTime    – absolute end time in seconds
    * @param {object}   data       – optional data object passed to the template
    */
-  add(templateFn, endTime, data = {}) {
+  add(items, endTime) {
     // debugger;
     ////////////////////////////////////////////////
     if (this.globalTheme == null || this.globalBackground == null) throw new Error("please add globalTheme and globalBackground");
@@ -45,8 +45,8 @@ export class DeckBuilder {
       throw new Error(`Slide duration must be at least 2 seconds (got ${duration})`);
     }
 
-    let items = templateFn(this.globalTheme, data) || [];
-    items = this.preprocess(items, data, { templateFn }) || [];
+    // let items = templateFn(this.globalTheme, data) || [];
+    // items = this.preprocess(items, data, { templateFn }) || [];
 
     // Here it gets this.globalBackground
     const background = structuredClone(this.globalBackground) || {};
@@ -58,28 +58,12 @@ export class DeckBuilder {
       endTime,
     };
 
-    this.postValidate(slide, data, { templateFn });
+    // this.postValidate(slide, data, { templateFn });
 
     this.slides.push(slide);
     this.currentStartTime = endTime;
   }
-//   add(templateFn, time, slotDataOrSimple) {
-//   if (isSlotObject(slotDataOrSimple)) {
-//     // slot-based path:
-//     const slideItems = templateFn(slotDataOrSimple, {
-//       design: this.design,
-//       theme: this.theme
-//     });
-//     this.slides.push({ time, items: slideItems });
-//   } else {
-//     // backward-compatible path
-//     const slideItems = templateFn(slotDataOrSimple, {
-//       box: full(this.design),
-//       theme: this.theme
-//     });
-//     this.slides.push({ time, items: slideItems });
-//   }
-// }
+
 
   overrideLastSlideBackground({
     backgroundColor = null,
