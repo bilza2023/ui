@@ -34,7 +34,7 @@ export default function image(theme, data = [], config = {}) {
     xOffset = 0,
     yOffset = 0
   } = config;
- debugger;
+ 
   // Build the image item, injecting offsets into its position
   const preset = T.stylePresets.image[stylePresetKey] || T.stylePresets.image.default;
   const imageItem = T.ItemBuilders.image(
