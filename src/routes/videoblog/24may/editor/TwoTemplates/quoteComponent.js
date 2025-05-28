@@ -9,7 +9,9 @@ import { TemplateToolkit as T } from "../toolkit/Toolkit";
  *   author?: { text: string, showAt: number },
  *   fontSize?: number,
  *   lineHeight?: number,
- *   startY?: number
+ *   startY?: number,
+ *   xOffset?: number,
+ *   yOffset?: number
  * }} config
  * @returns {SlideItem[]}
  */
@@ -18,7 +20,9 @@ export default function quoteComponent(globalTheme, data = [], config = {}) {
     author,
     fontSize = 48,
     lineHeight: lineMul = 1.4,
-    startY = 140
+    startY = 140,
+    xOffset = 0,
+    yOffset = 0
   } = config;
 
   const items = [];
@@ -31,8 +35,8 @@ export default function quoteComponent(globalTheme, data = [], config = {}) {
       globalTheme,
       T.applyPreset(T.stylePresets.text.quote, {
         text,
-        x: 100,
-        y: startY + i * lineHeight,
+        x: xOffset + 100,
+        y: yOffset + startY + i * lineHeight,
         width: 820,
         textAlign: "center",
         fontSize
@@ -49,8 +53,8 @@ export default function quoteComponent(globalTheme, data = [], config = {}) {
       globalTheme,
       T.applyPreset(T.stylePresets.text.caption, {
         text,
-        x: 100,
-        y: startY + data.length * lineHeight + 30,
+        x: xOffset + 100,
+        y: yOffset + startY + data.length * lineHeight + 30,
         width: 820,
         textAlign: "right",
         fontSize: 28
