@@ -14,17 +14,7 @@ import { textPresets } from '../../items/text/presets.js';
 import { iconPresets } from '../../items/icon/presets.js';
 import { imagePresets } from '../../items/image/presets.js';
 import { richTextPresets } from '../../items/richText/presets.js';
-
-// // Animation presets (per-item)
-// import * as textAnimations from '../../items/text/animations.js';
-// import * as iconAnimations from '../../items/icon/animations.js';
-// import * as imageAnimations from '../../items/image/animations.js';
-// import * as richTextAnimations from '../../items/richText/animations.js';
-
-// Layout helpers
 import { layout } from './layout.js';
-
-
 
 // Constants
 const designWidth = 1020;

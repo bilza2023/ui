@@ -22,10 +22,13 @@ deck.full(5, "quote", [
 
 // Slide 2: Definition
 deck.addHeader("header", [{ text: "What are Real Numbers?" }]);
-deck.full(10, "bullets", [
-  { text: "Include all rational and irrational numbers", showAt: 6 },
+deck.full(15, "bullets", [
+  { text: "All Rational and Irrational numbers", showAt: 6 },
   { text: "Can be positive, negative or zero", showAt: 7 },
-  { text: "Represented on a number line", showAt: 8 }
+  { text: "Represented on a number line", showAt: 8 },
+  { text: "Represented on a number line", showAt: 9 },
+  { text: "Represented on a number line", showAt: 10 },
+  { text: "Represented on a number line", showAt: 11 },
 ], {
   x: 120,
   y: 100,
@@ -35,9 +38,9 @@ deck.full(10, "bullets", [
 
 // Slide 3: Image Alone
 deck.addHeader("header", [{ text: "Visual Example" }]);
-deck.full(15, "image", [], {
+deck.full(20, "image", [], {
   src: "chalkboard",
-  showAt: 11,
+  showAt: 16,
   stylePresetKey: "fullWidth",
   layoutMode: "center"
 });

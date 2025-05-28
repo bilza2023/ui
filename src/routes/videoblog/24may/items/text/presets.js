@@ -12,7 +12,7 @@ export const textPresets = {
     padding: 20
   },
   bullet: {
-    fontSize: 42,
+    fontSize: 15,
     fontFamily: "Arial",
     textAlign: "left",
     padding: 10
