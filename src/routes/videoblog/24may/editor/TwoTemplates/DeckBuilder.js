@@ -21,35 +21,41 @@ import {fullComponents} from "./fullComponents.js"
     setGlobalBackground(bg) {
       this.globalBackground = bg;
     }
-  //////////////////////////
-    full(endTime ,templateKey, data = {}, overrideBg = {}) {
-      if (!this.globalTheme || !this.globalBackground) {
-        throw new Error('DeckBuilder: theme or background not set');
+    overrideLastBg(override = {}) {
+      if (this.slides.length === 0) {
+        throw new Error('DeckBuilder: no slides to override');
       }
-  
-      const compFn = fullComponents[templateKey];
-      if (typeof compFn !== 'function') {
-        throw new Error(`Unknown template: ${templateKey}`);
-      }
-  
-      // Generate and theme items
-      const themed = compFn(this.globalTheme, data) || [];
-      // const themed  = applyTheme(rawItems, this.globalTheme);
-  
-      // Allocate timing
-      const startTime = this.currentStart;
-      const duration = endTime - startTime;
-      if (duration < this.minDuration) {
-        throw new Error(`Minimum slide duration is ${this.minDuration}s`);
-      }
-      this.currentStart = endTime;
-  
-      // Prepare background
-      const background = cloneBackground(this.globalBackground, overrideBg);
-  
-      // Store slide
-      this.slides.push({ background, items: themed, startTime, endTime });
+      const last = this.slides[this.slides.length - 1];
+      last.background = cloneBackground(this.globalBackground, override);
     }
+  //////////////////////////
+  full(endTime, templateKey, data = [], config = {}) {
+    if (!this.globalTheme || !this.globalBackground) {
+      throw new Error('DeckBuilder: theme or background not set');
+    }
+
+    const compFn = fullComponents[templateKey];
+    if (typeof compFn !== 'function') {
+      throw new Error(`Unknown template: ${templateKey}`);
+    }
+
+    // Generate and theme items
+    const themed = compFn(this.globalTheme, data, config) || [];
+
+    // Allocate timing
+    const startTime = this.currentStart;
+    const duration  = endTime - startTime;
+    if (duration < this.minDuration) {
+      throw new Error(`Minimum slide duration is ${this.minDuration}s`);
+    }
+    this.currentStart = endTime;
+
+    // Always use the global background here
+    const background = cloneBackground(this.globalBackground);
+
+    // Store slide
+    this.slides.push({ background, items: themed, startTime, endTime });
+  }
   
     /**
      * Build final presentation object

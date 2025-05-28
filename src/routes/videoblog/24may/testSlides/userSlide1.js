@@ -23,6 +23,33 @@ deck.full(10,"quote",
   }
 );
 
+deck.full(
+  20,            // slide end time
+  "bullets",    // picks bulletsComponent
+  [             // loopData: your bullets array
+    { text: "First point",  showAt: 12 },
+    { text: "Second point", showAt: 14 },
+    { text: "Third point",  showAt: 16 }
+  ],
+  {             // config: positioning & style tweaks
+    x: 120,
+    y: 100,
+    lineGap: 90,
+    stylePresetKey: "text.bulletSmall"
+  }
+);
+debugger;
+deck.full(
+  25,           // slide end time
+  "image",     // picks imageComponent
+  [],          // loopData (unused here)
+  {            // config
+    src: "chalkboard",
+    showAt: 21,              // appears immediately
+    stylePresetKey: "fullWidth",
+    layoutMode: "center"
+  }
+);
 
 // Build and export the assembled presentation data
 export const presentationData = deck.build();
