@@ -1,6 +1,6 @@
 
 // headerComponent.js
-import { TemplateToolkit as T } from "../toolkit/Toolkit.js";
+import { TemplateToolkit as T } from "../../../toolkit/Toolkit.js";
 
 /**
  * Renders a single line of header text at the top.

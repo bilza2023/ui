@@ -1,9 +1,9 @@
 // DeckBuilder.js
 
 import { cloneBackground } from './backgroundUtils.js';
-import { fullComponents }  from './fullComponents.js';
-import { headerComponents }  from './headerComponents.js';
-import { halfComponents }  from './halfComponents';
+import { fullComponents }  from './components/fullComponents/index.js';
+import { headerComponents }  from './components/headerComponents';
+import { halfComponents }  from './components/halfComponents';
 
 export class DeckBuilder {
   constructor() {

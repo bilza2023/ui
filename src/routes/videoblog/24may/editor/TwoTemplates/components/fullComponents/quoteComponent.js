@@ -1,6 +1,6 @@
 
 
-import { TemplateToolkit as T } from "../toolkit/Toolkit";
+import { TemplateToolkit as T } from "../../../toolkit/Toolkit";
 
 /**
  * @param {Theme}       globalTheme

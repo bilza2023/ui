@@ -1,6 +1,6 @@
 // leftHeaderRich.js
-import { TemplateToolkit as T } from "../toolkit/Toolkit.js";
-import richTextBuilder           from "../../items/richText";  // your richText item factory
+import { TemplateToolkit as T } from "../../../toolkit/Toolkit.js";
+import richTextBuilder           from "../../../../items/richText";  // your richText item factory
 
 /**
  * A subtle, left-aligned rich-text header that fades in.

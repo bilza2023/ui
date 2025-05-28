@@ -43,7 +43,8 @@ deck.full(15, "image", [], {
 });
 
 // Slide 4: Side-by-Side Half Slide
-deck.clearHeader(); // No header for this slide
+// deck.clearHeader(); // No header for this slide
+deck.addHeader("header", [{ text: "Visual Example" }]);
 deck.half(
   22,
   "image",   [], { 

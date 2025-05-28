@@ -1,6 +1,6 @@
 
 // imageComponent.js
-import { TemplateToolkit as T } from "../toolkit/Toolkit.js";
+import { TemplateToolkit as T } from "../../../toolkit/Toolkit.js";
 
 /**
  * Renders a single image with optional layout and fade-in timing.
@@ -49,9 +49,9 @@ export default function image(theme, data = [], config = {}) {
   );
 
   // Apply automatic layout if requested
-  if (layoutMode) {
-    T.layout(imageItem, layoutMode);
-  }
+  // if (layoutMode) {
+  //   T.layout(imageItem, layoutMode);
+  // }
 
   // Fade in at the specified time
   T.AniHelpers.fadeIn(imageItem, showAt, 1);

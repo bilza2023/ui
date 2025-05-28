@@ -1,6 +1,6 @@
 
 // halfBullets.js
-import { TemplateToolkit as T } from "../../toolkit/Toolkit.js";
+import { TemplateToolkit as T } from "../../../toolkit/Toolkit.js";
 
 export default function halfBullets(theme, data = [], config = {}) {
   const {
