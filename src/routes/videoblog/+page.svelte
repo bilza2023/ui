@@ -1,120 +1,29 @@
 <script>
-  import { onMount } from "svelte";
-  import { Player, createTicker } from "./24may/player";
-  import { pixiApp } from "./pixiApp.js";
-  import { presentationData } from "./24may/testSlides/userSlide1"; // ✅ updated import
-  // import { createTicker } from './ticker/createTicker.js';
-  import SlideNav from "./SlideNav.svelte";
-  import * as PIXI from "pixi.js";
-
-  let container;
-  let player;
-  let ticker;
-  let currentTime = 0;
-
-  function resize(app, designWidth, designHeight) {
-    if (!container) return;
-  const parent = container;
-  const scaleX = parent.clientWidth / designWidth;
-  const scaleY =  (parent.clientHeight * 0.9) / designHeight;
-  const scale = Math.min(scaleX, scaleY);
-
-  app.view.style.width = `${designWidth * scale}px`;
-  app.view.style.height = `${designHeight * scale}px`;
-  app.view.style.display = "block";
-  app.view.style.margin = "0 auto";
-}
-///////////////////////////////////////////////////
-  onMount(() => {
-    // debugger;
-
-const backgroundAssets = {
-  class: PIXI.Texture.from("images/class2.webp"),
-  drops: PIXI.Texture.from("images/drops.png"),
-  femaleTeacher: PIXI.Texture.from("images/female_teacher.jpg")
-};
-    console.log("presentationData",presentationData);
-    const app = pixiApp(
-      presentationData.slidesData[0].background?.backgroundColor || "#000000",
-      presentationData.designWidth,
-      presentationData.designHeight
-    );
-
-    // let soundUrl = null;
-    let soundUrl = "sounds/music.opus";
-    ticker = createTicker(soundUrl);
-    ticker.volume(0.2);
-
-    player = new Player({
-      app,
-      slides: presentationData.slidesData,
-      timeSource: ticker,
-    });
-
-    // Inject assets
-    console.log("backgroundAssets" , backgroundAssets);
-    player.setAssets?.(backgroundAssets); 
-    
-    container.appendChild(app.view);
-    container.appendChild(app.view);
-
-    if (container) {
-        resize(app, presentationData.designWidth, presentationData.designHeight);
-    }
-    
-    window.addEventListener("resize", () => {
-      if (container) {
-        resize(app, presentationData.designWidth, presentationData.designHeight);
-      }
-    });
-
-    player.setTime(0);
-    // player.pause();
-
-    // Sync currentTime with Player
-    function syncTimeLoop() {
-      const loop = () => {
-        if (player) currentTime = player.getCurrentTime();
-        requestAnimationFrame(loop);
-      };
-      requestAnimationFrame(loop);
-    }
-
-    syncTimeLoop();
-  });
+  import { blogs } from './blogs.js';
+  import BlogList from './BlogList.svelte';
 </script>
 
-{#if player && ticker}
-<div class="">
-  <SlideNav
-    {currentTime}
-    maxEndTime={presentationData.totalDuration}
-    on:play={() => player.play()}
-    on:pause={() => player.timeSource.pause()}
-    on:reset={() => player.reset()}
-    on:seek={(e) => player.setTime(e.detail)}
-  />
-</div>  
-{/if}
+<svelte:head>
+  <title>taleem.help : Education for Every Pakistani</title>
+</svelte:head>
 
-<div class="stage" bind:this={container}></div>
+<nav class="bg-[#fff3cd] shadow-sm py-3 px-6 sticky top-0 z-50">
+  <div class="max-w-5xl mx-auto flex justify-between items-center">
+    <span class="text-lg font-semibold">taleem.help : Education for Every Pakistani</span>
+    <a href="/" class="text-[#0077b6] hover:underline font-medium">🏠 Back to Home</a>
+  </div>
+</nav>
 
-<style>
-.stage {
-  display: flex;
-  justify-content: center;
-  align-items: start;  /* 👈 this is the fix */
-  height: 100vh;
-  background-color: #3b3a3a;
-}
+<main class="max-w-3xl mx-auto py-10 px-6">
+  <header class="mb-10 text-center">
+    <h1 class="text-4xl font-bold text-[#ffb703] mb-2">📚 Blog Library</h1>
+    <p class="text-md italic text-gray-600">Inspiration and knowledge for every learner</p>
+  </header>
 
-  :global(body) {
-  margin: 0;
-}
+  <!-- Renders the list from the blogs data -->
+  <BlogList {blogs} />
 
-.stage {
-  margin-top: 0;      /* Remove top spacing */
-  padding-top: 0;     /* Ensure no padding from top */
-}
-
-</style>
+  <footer class="mt-12 text-center text-xs text-gray-500">
+    📝 Curated by Taleem.Help • Updated regularly
+  </footer>
+</main>
