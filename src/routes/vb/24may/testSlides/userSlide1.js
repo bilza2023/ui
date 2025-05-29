@@ -7,19 +7,29 @@ import { getDefaultBackground } from "../editor/getDefaultBackground.js";
 const theme = GlobalThemes.neonDark;
 const deck = new DeckBuilder();
 deck.setGlobalTheme(theme);
+
 deck.setGlobalBackground(GlobalBackgrounds.dotsBg(theme));
+
+deck.full(5, "table", [
+  { cells: ["Subject", "Marks", "Grade"] },
+  { cells: ["Math", "95", "A+"] },
+  { cells: ["Physics", "88", "A"] },
+  { cells: ["Chemistry", "91", "A+"] },
+  { cells: ["Biology", "84", "B+"] },
+]);
+
 
 
 // Slide 1: Intro with Large Bullet Points
-deck.full(5, "bullets", [
-  { text: "Pakistan's education crisis is deep and persistent", showAt: 1 },
-  { text: "A complex mix of funding, access, and policy failures", showAt: 3 }
-], {
-  x: 100,
-  y: 120,
-  lineGap: 80,
-  stylePresetKey: "text.bulletLarge"
-});
+// deck.full(5, "bullets", [
+//   { text: "Pakistan's education crisis is deep and persistent", showAt: 1 },
+//   { text: "A complex mix of funding, access, and policy failures", showAt: 3 }
+// ], {
+//   x: 100,
+//   y: 120,
+//   lineGap: 80,
+//   stylePresetKey: "text.bulletLarge"
+// });
 
 // Slide 2: Low Investment in Education
 deck.addHeader("header", [{ text: "Chronic Underfunding" }]);

@@ -6,6 +6,7 @@ import {
   drawImage,
   drawTriangle,
   drawRichText,
+  drawTable
 } from "./items.js"; // adjust path if needed
 
 
@@ -29,6 +30,7 @@ const drawMap = {
       case "icon": return drawIcon(item);
       case "richText": return drawRichText(item);
       case "image": return drawImage(item, assets); // ✅ Fix here
+      case "table": return drawTable(item, assets); // ✅ Fix here
       // add others...
       default:
         console.warn("Unknown item type:", item.type);

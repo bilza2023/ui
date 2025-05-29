@@ -238,3 +238,77 @@ export function drawRichText(props = {}) {
   return text;
 }
 
+export function drawTable(props = {}) {
+  const merged = {
+    type: "table",
+    x: 0,
+    y: 0,
+    width: 800,
+    height: 400,
+
+    rows: [],              // array of arrays OR array of {cells:[]}
+    fontSize: 28,
+    fontFamily: "Arial",
+
+    textColor:  "#ffffff", // visible by default
+    borderColor:"#333333",
+    borderWidth: 2,
+
+    padding: 10,
+    rowHeight: 50,         // fallback – recalculated below if 0
+    visible:  true,
+    ...props,
+  };
+
+  /* ---------- normalise rows ---------- */
+  const normalisedRows = merged.rows.map(r => Array.isArray(r) ? r : r.cells);
+  if (!normalisedRows.length) return new PIXI.Container();
+
+  const numRows   = normalisedRows.length;
+  const numCols   = normalisedRows[0].length;
+  const rowHeight = merged.rowHeight || merged.height / numRows;
+  const cellWidth = merged.width  / numCols;
+
+  /* ---------- colour conversion ---------- */
+  const txtCol  = toPixiColor(merged.textColor);
+  const brdCol  = toPixiColor(merged.borderColor);
+
+  /* ---------- container ---------- */
+  const container = new PIXI.Container();
+  container.position.set(merged.x, merged.y);
+  container.visible = merged.visible;
+
+  /* ---------- build cells ---------- */
+  normalisedRows.forEach((row, rIdx) => {
+    const y = rIdx * rowHeight;
+
+    row.forEach((cellText, cIdx) => {
+      const x = cIdx * cellWidth;
+
+      /* border (optional) */
+      if (merged.borderWidth > 0) {
+        const rect = new PIXI.Graphics();
+        rect.lineStyle(merged.borderWidth, brdCol, 1);
+        rect.drawRect(x, y, cellWidth, rowHeight);
+        container.addChild(rect);
+      }
+
+      /* text */
+      const textObj = new PIXI.Text(String(cellText), {
+        fontFamily : merged.fontFamily,
+        fontSize   : merged.fontSize,
+        fill       : txtCol,
+        wordWrap   : true,
+        wordWrapWidth : cellWidth - 2 * merged.padding,
+        align      : "center"
+      });
+
+      // centre text inside its cell
+      textObj.x = x + (cellWidth  - textObj.width ) / 2;
+      textObj.y = y + (rowHeight  - textObj.height) / 2;
+      container.addChild(textObj);
+    });
+  });
+
+  return container;
+}

@@ -11,6 +11,7 @@ import richText from '../../items/richText/index.js';
 import circle from '../../items/circle/index.js';
 import rect from '../../items/rect/index.js';
 import triangle from '../../items/triangle/index.js';
+import table from '../../items/table/index.js';
 
 import * as AniHelpers from "./AniHelpers.js";
 import toPixiColor from "./toPixiColor.js";
@@ -53,6 +54,7 @@ export const TemplateToolkit = {
     circle,
     rect,
     triangle,
+    table
   },
 
   stylePresets,
