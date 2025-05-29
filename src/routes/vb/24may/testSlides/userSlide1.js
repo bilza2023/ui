@@ -1,11 +1,14 @@
 import { DeckBuilder } from "../editor/TwoTemplates/DeckBuilder.js";
 import { GlobalThemes } from "../editor/theme/globalThemes.js";
+import { GlobalBackgrounds } from "../editor/theme/globalBackgrounds.js";
 import { getDefaultBackground } from "../editor/getDefaultBackground.js";
 
-const theme = GlobalThemes.royalBlue;
+
+const theme = GlobalThemes.neonDark;
 const deck = new DeckBuilder();
 deck.setGlobalTheme(theme);
-deck.setGlobalBackground(getDefaultBackground(theme));
+deck.setGlobalBackground(GlobalBackgrounds.dotsBg(theme));
+
 
 // Slide 1: Intro with Large Bullet Points
 deck.full(5, "bullets", [
