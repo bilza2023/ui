@@ -3,7 +3,8 @@
 import quoteComponent from './quoteComponent.js';
 import bullets from './bulletsComponent.js';
 import image from './imageComponent.js';
-import leftHeaderRich from "./leftHeaderRich.js";
+import leftHeaderRich from "../headerComponents/leftHeaderRich.js";
+import barchart from "./barchart.js";
 
 
 export const fullComponents = {
@@ -11,5 +12,6 @@ export const fullComponents = {
     bullets,
     image,
     leftHeaderRich,
+    barchart,
   };
   

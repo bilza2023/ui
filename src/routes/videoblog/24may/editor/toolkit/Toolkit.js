@@ -8,7 +8,12 @@ import text from '../../items/text/index.js';
 import icon from '../../items/icon/index.js';
 import image from '../../items/image/index.js';
 import richText from '../../items/richText/index.js';
+import circle from '../../items/circle/index.js';
+import rect from '../../items/rect/index.js';
+import triangle from '../../items/triangle/index.js';
+
 import * as AniHelpers from "./AniHelpers.js";
+import toPixiColor from "./toPixiColor.js";
 // Style presets (per-item)
 import { textPresets } from '../../items/text/presets.js';
 import { iconPresets } from '../../items/icon/presets.js';
@@ -44,11 +49,15 @@ export const TemplateToolkit = {
     text,
     icon,
     image,
-    richText
+    richText,
+    circle,
+    rect,
+    triangle,
   },
 
   stylePresets,
   AnimApi,
   applyPreset,
-  AniHelpers
+  AniHelpers,
+  toPixiColor
 };
