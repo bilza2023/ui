@@ -47,26 +47,29 @@ deck.full(20, "image", [], {
 
 // Slide 4: Side-by-Side Half Slide
 // deck.clearHeader(); // No header for this slide
-deck.addHeader("header", [{ text: "Visual Example" }]);
+deck.addHeader("header", [{ text: "Half Example" }]);
 deck.half(
-  22,
+  30,
   "image",   [], { 
-    src: "chalkboard", showAt: 16,
+    src: "chalkboard", showAt: 21,
     stylePresetKey: "fullWidth", layoutMode: "center"
   },
   "bullets", [
-    { text: "Zero is a real number", showAt: 17 },
-    { text: "So is π (pi)", showAt: 18 },
-    { text: "And −7.3 is too", showAt: 19 }
+    { text: "Zero is a real number", showAt: 22 },
+    { text: "So is π (pi)", showAt: 23 },
+    { text: "And −7.3 is too", showAt: 24 },
+    { text: "And −7.3 is too", showAt: 25 },
+    { text: "And −7.3 is too", showAt: 26 },
+    { text: "And −7.3 is too", showAt: 28 },
   ],
-  { x: 40, y: 80, lineGap: 60 }
+  { lineGap: 60, fontSize:32 }
 );
 
 // Final Slide: Rich Header + Quote
 deck.addHeader("header", [{ text: "Wrap Up" }]);
-deck.full(28, "quote", [
-  { text: "“Without numbers, there is no certainty.”", showAt: 23 },
-  { text: "— Galileo", showAt: 24 }
+deck.full(40, "quote", [
+  { text: "“Without numbers, there is no certainty.”", showAt: 30 },
+  { text: "— Galileo", showAt: 31 }
 ]);
 
 // Export

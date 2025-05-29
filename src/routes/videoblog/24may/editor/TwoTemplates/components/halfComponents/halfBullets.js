@@ -1,36 +1,41 @@
-
-// halfBullets.js
+// src/components/halfComponents/halfBullets.js
 import { TemplateToolkit as T } from "../../../toolkit/Toolkit.js";
 
 export default function halfBullets(theme, data = [], config = {}) {
   const {
-    x,
-    y,
-    lineGap = 80,
-    stylePresetKey = "text.bullet",
+    // horizontal & vertical offsets from DeckBuilder.half()
     xOffset = 0,
     yOffset = 0,
-    leftMargin = 40
+    // style choices
+    stylePresetKey = "bullet",
+    fontSize=32,
+    lineGap = 80,
+    leftMargin = 40,
+    gapFromTop = 60
   } = config;
 
-  const baseX = xOffset + (x != null ? x : leftMargin);
-  const baseY = yOffset + (y != null ? y : 60);
+  // 1) Horizontal start: either user x or default margin
+  const baseX = xOffset + (config.x != null ? config.x : leftMargin);
 
-  const items = [];
-  data.forEach((entry, i) => {
-    const { text, showAt } = entry;
+  // 2) Vertical start: compute top-aligned body Y, then add gap + header offset
+  const contentHeight = data.length * lineGap;
+  let baseY = T.layout.getBodyY("top", contentHeight);
+  baseY += gapFromTop;    // mirror your full-width bullets :contentReference[oaicite:1]{index=1}
+  baseY += yOffset;       // reserve header space
 
+  // 3) Build each bullet via style preset + animation
+  return data.map(({ text, showAt }, i) => {
+    const preset = T.stylePresets.text[stylePresetKey] || T.stylePresets.text.bullet;
     const bulletItem = T.ItemBuilders.text(
       theme,
-      T.applyPreset(T.stylePresets[stylePresetKey], {
+      T.applyPreset(preset, {
         text,
         x: baseX,
-        y: baseY + i * lineGap
+        y: baseY + i * lineGap,
+        fontSize
       })
     );
     T.AniHelpers.fadeIn(bulletItem, showAt, 0.5);
-    items.push(bulletItem);
+    return bulletItem;
   });
-
-  return items;
 }
