@@ -32,7 +32,10 @@
 const backgroundAssets = {
   class: PIXI.Texture.from("images/class2.webp"),
   drops: PIXI.Texture.from("images/drops.png"),
-  femaleTeacher: PIXI.Texture.from("images/female_teacher.jpg")
+  femaleTeacher: PIXI.Texture.from("images/female_teacher.jpg"),
+  physicsClass: PIXI.Texture.from("images/physicsClass.webp"),
+  whatisforce: PIXI.Texture.from("images/whatisforce.webp"),
+  typesOfForce: PIXI.Texture.from("images/typesOfForce.webp"),
 };
     console.log("presentationData",presentationData);
     const app = pixiApp(
