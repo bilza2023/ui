@@ -1,18 +1,16 @@
-
-// src/components/imageComponent.js
+// imageComponent.js
 import { TemplateToolkit as T } from "../../../toolkit/Toolkit.js";
 
 /**
- * Renders a full‐slide image centered in the body zone (below any header),
- * at its intrinsic size (from theme.assets[src]).
+ * Renders a full-slide image centered in the body zone (below any header).
  *
- * @param {object} theme       – your global theme, including theme.assets
- * @param {any[]}  data        – unused, kept for signature consistency
+ * @param {object} theme – global theme, including theme.assets
+ * @param {any[]}  data – unused, kept for signature consistency
  * @param {{
  *   src: string,
  *   showAt?: number,
- *   xOffset?: number,      – injected by DeckBuilder.full()
- *   yOffset?: number       – injected by DeckBuilder.full()
+ *   xOffset?: number,
+ *   yOffset?: number
  * }} config
  * @returns {SlideItem[]}
  */
@@ -24,25 +22,23 @@ export default function imageComponent(theme, data = [], config = {}) {
     yOffset = 0
   } = config;
 
-  // 1) Get the asset's registered dimensions
+  // Default height if not available in theme.assets
   const asset = theme.assets?.[src] || {};
-  const finalH = asset.height;
+  const finalH = asset.height || 400;
 
-  // 3) Compute Y inside the body zone (header‐aware)
-  const yPos = T.layout.getBodyY("top", finalH);
+  const yPos = T.layout.getBodyY("top", finalH) + yOffset;
+  const xPos = xOffset + 10;
+  const width = T.designWidth - 20;
 
-  // 4) Build the image item
   const imageItem = T.ItemBuilders.image(theme, {
     src,
-    width:  T.designWidth -20,
-    height: 400,
-    x:      0 + 10, // 10 is padding
-    y:      yPos,
-    showAt
+    width,
+    height: finalH,
+    x: xPos,
+    y: yPos
   });
 
-  // 5) Fade it in
-  T.AniHelpers.fadeIn(imageItem, showAt, 1);
+  T.AnimApi.animate(imageItem, "alpha", 0, 1, showAt, showAt + 1, "easeOut");
 
   return [imageItem];
 }

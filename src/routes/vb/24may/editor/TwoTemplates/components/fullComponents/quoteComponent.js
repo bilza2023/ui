@@ -1,9 +1,10 @@
-
-
+// quoteComponent.js
 import { TemplateToolkit as T } from "../../../toolkit/Toolkit";
 
 /**
- * @param {Theme}       globalTheme
+ * Renders a multi-line quote with an optional author caption.
+ *
+ * @param {Theme} theme
  * @param {Array<{ text: string, showAt: number }>} data
  * @param {{
  *   author?: { text: string, showAt: number },
@@ -15,7 +16,7 @@ import { TemplateToolkit as T } from "../../../toolkit/Toolkit";
  * }} config
  * @returns {SlideItem[]}
  */
-export default function quoteComponent(globalTheme, data = [], config = {}) {
+export default function quoteComponent(theme, data = [], config = {}) {
   const {
     author,
     fontSize = 48,
@@ -28,39 +29,43 @@ export default function quoteComponent(globalTheme, data = [], config = {}) {
   const items = [];
   const lineHeight = fontSize * lineMul;
 
-  // === Quote Lines ===
+  // Quote lines
   data.forEach((entry, i) => {
     const { text, showAt } = entry;
-    const lineItem = T.ItemBuilders.text(
-      globalTheme,
-      T.applyPreset(T.stylePresets.text.quote, {
-        text,
-        x: xOffset + 100,
-        y: yOffset + startY + i * lineHeight,
-        width: 820,
-        textAlign: "center",
-        fontSize
-      })
-    );
-    T.AniHelpers.fadeIn(lineItem, showAt, 0.5);
+    const y = yOffset + startY + i * lineHeight;
+
+    const lineItem = T.ItemBuilders.text(theme, {
+      text,
+      x: xOffset + 100,
+      y,
+      width: 820,
+      textAlign: "center",
+      fontSize,
+      fontFamily: theme.fontFamilyBase,
+      color: theme.baseTextColor
+    });
+
+    T.AnimApi.animate(lineItem, "alpha", 0, 1, showAt, showAt + 0.5);
     items.push(lineItem);
   });
 
-  // === Author ===
+  // Author caption
   if (author?.text) {
     const { text, showAt } = author;
-    const authorItem = T.ItemBuilders.text(
-      globalTheme,
-      T.applyPreset(T.stylePresets.text.caption, {
-        text,
-        x: xOffset + 100,
-        y: yOffset + startY + data.length * lineHeight + 30,
-        width: 820,
-        textAlign: "right",
-        fontSize: 28
-      })
-    );
-    T.AniHelpers.fadeIn(authorItem, showAt, 0.5);
+    const y = yOffset + startY + data.length * lineHeight + 30;
+
+    const authorItem = T.ItemBuilders.text(theme, {
+      text,
+      x: xOffset + 100,
+      y,
+      width: 820,
+      textAlign: "right",
+      fontSize: 28,
+      fontFamily: theme.fontFamilyBase,
+      color: theme.secondaryColor
+    });
+
+    T.AnimApi.animate(authorItem, "alpha", 0, 1, showAt, showAt + 0.5);
     items.push(authorItem);
   }
 

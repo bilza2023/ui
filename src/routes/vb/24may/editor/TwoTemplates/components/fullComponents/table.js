@@ -12,7 +12,8 @@ export default function table(theme, rows = [], config = {}) {
     fontSize = 28,
     fontFamily = "Arial",
     textAlign = "center",
-    borderColor = "#000000",
+    bgColor = theme.secondaryColor,
+    bgOpacity = 0.3,
     borderWidth = 2,
     cellPadding = 12,
     x = (T.designWidth - 820) / 2,
@@ -43,10 +44,11 @@ export default function table(theme, rows = [], config = {}) {
           y: yPos,
           width: cellWidth,
           height: rowHeight,
-          color: borderColor,
+          color: bgColor,
           borderWidth
         });
-        rect.alpha = 1;
+        rect.alpha = bgOpacity;  // subtle
+        
         items.push(rect);
       }
 
@@ -63,10 +65,6 @@ export default function table(theme, rows = [], config = {}) {
       });
       cell.alpha = 1;
 
-      // Optional showAt, no fade-out
-      if (showAt !== undefined) {
-        T.AniHelpers.showAndStay(cell, showAt);
-      }
 
       items.push(cell);
     });

@@ -271,6 +271,42 @@ function triangle(globalTheme, data = {}) {
     zIndex
   };
 }
+function table$1(data = {}) {
+  const {
+    x = 100,
+    y = 100,
+    width = 800,
+    height = 300,
+    rows = [],
+    // Array of { cells: [..], showAt: number }
+    fontSize = 28,
+    fontFamily = "Arial",
+    cellPadding = 12,
+    borderColor = "#000000",
+    borderWidth = 2,
+    textAlign = "center",
+    rotation = 0,
+    visible = true,
+    zIndex = 1
+  } = data;
+  return {
+    type: "table",
+    x,
+    y,
+    width,
+    height,
+    rows,
+    fontSize,
+    fontFamily,
+    cellPadding,
+    borderColor,
+    borderWidth,
+    textAlign,
+    rotation,
+    visible,
+    zIndex
+  };
+}
 function fadeIn(item, start = 0, duration = 1) {
   AnimApi.set(item, "alpha", 0, start);
   AnimApi.animate(item, "alpha", 0, 1, start, start + duration, "linear");
@@ -503,7 +539,8 @@ const TemplateToolkit = {
     richText,
     circle,
     rect,
-    triangle
+    triangle,
+    table: table$1
   },
   stylePresets,
   AnimApi,
@@ -616,38 +653,6 @@ function imageComponent(theme2, data = [], config = {}) {
   TemplateToolkit.AniHelpers.fadeIn(imageItem, showAt, 1);
   return [imageItem];
 }
-function leftHeaderRich(theme2, data = [], config = {}) {
-  const {
-    text: text2 = data[0]?.text || "Header",
-    showAt = data[0]?.showAt || 0,
-    x = 60,
-    y = 40,
-    width = 700,
-    fontSize = 36,
-    color = theme2.baseTextColor || "#333",
-    fontFamily = theme2.fontFamilyBase || "Georgia",
-    lineHeight = 1.2,
-    rotation = 0
-  } = { ...config, ...data[0] };
-  const item = richText(theme2, {
-    text: text2,
-    x,
-    y,
-    width,
-    height: null,
-    // allow auto height
-    fontSize,
-    fontFamily,
-    color,
-    textAlign: "left",
-    lineHeight,
-    rotation,
-    visible: true,
-    zIndex: 1
-  });
-  TemplateToolkit.AniHelpers.fadeIn(item, showAt, 0.5);
-  return [item];
-}
 function bullets(theme2, data = [], config = {}) {
   const {
     fontSize = 32,
@@ -687,12 +692,68 @@ function bullets(theme2, data = [], config = {}) {
   });
   return items;
 }
+function table(theme2, rows = [], config = {}) {
+  const {
+    fontSize = 28,
+    fontFamily = "Arial",
+    textAlign = "center",
+    borderColor = "#000000",
+    borderWidth = 2,
+    cellPadding = 12,
+    x = (TemplateToolkit.designWidth - 820) / 2,
+    y = 100,
+    width = 820,
+    rowHeight = fontSize * 2.2,
+    textColor = theme2.baseTextColor,
+    drawBorders = false
+  } = config;
+  const normalized = rows.map((r) => Array.isArray(r) ? { cells: r, showAt: void 0 } : r);
+  const items = [];
+  const numCols = normalized[0]?.cells.length || 1;
+  const cellWidth = width / numCols;
+  normalized.forEach((row, rowIndex) => {
+    const yPos = y + rowIndex * rowHeight;
+    const showAt = row.showAt;
+    row.cells.forEach((cellText, colIndex) => {
+      const xPos = x + colIndex * cellWidth;
+      if (drawBorders) {
+        const rect2 = TemplateToolkit.ItemBuilders.rect(theme2, {
+          x: xPos,
+          y: yPos,
+          width: cellWidth,
+          height: rowHeight,
+          color: borderColor,
+          borderWidth
+        });
+        rect2.alpha = 1;
+        items.push(rect2);
+      }
+      const cell = TemplateToolkit.ItemBuilders.text(theme2, {
+        text: cellText,
+        x: xPos + cellPadding,
+        y: yPos + cellPadding,
+        width: cellWidth - 2 * cellPadding,
+        height: rowHeight - 2 * cellPadding,
+        fontSize,
+        fontFamily,
+        textAlign,
+        color: textColor.startsWith("#") ? textColor : `#${textColor}`
+      });
+      cell.alpha = 1;
+      if (showAt !== void 0) {
+        TemplateToolkit.AniHelpers.showAndStay(cell, showAt);
+      }
+      items.push(cell);
+    });
+  });
+  return items;
+}
 const fullComponents = {
   quote: quoteComponent,
   bullets: bullets$1,
   image: imageComponent,
-  leftHeaderRich,
-  barchart: bullets
+  barchart: bullets,
+  table
 };
 function header(theme2, data = [], config = {}) {
   const {
@@ -718,6 +779,38 @@ function header(theme2, data = [], config = {}) {
     items.push(item);
   }
   return items;
+}
+function leftHeaderRich(theme2, data = [], config = {}) {
+  const {
+    text: text2 = data[0]?.text || "Header",
+    showAt = data[0]?.showAt || 0,
+    x = 60,
+    y = 40,
+    width = 700,
+    fontSize = 36,
+    color = theme2.baseTextColor || "#333",
+    fontFamily = theme2.fontFamilyBase || "Georgia",
+    lineHeight = 1.2,
+    rotation = 0
+  } = { ...config, ...data[0] };
+  const item = richText(theme2, {
+    text: text2,
+    x,
+    y,
+    width,
+    height: null,
+    // allow auto height
+    fontSize,
+    fontFamily,
+    color,
+    textAlign: "left",
+    lineHeight,
+    rotation,
+    visible: true,
+    zIndex: 1
+  });
+  TemplateToolkit.AniHelpers.fadeIn(item, showAt, 0.5);
+  return [item];
 }
 const headerComponents = {
   header,
@@ -1007,7 +1100,28 @@ const GlobalThemes = {
   royalBlue,
   neonDark
 };
-function getDefaultBackground(globalTheme) {
+function dotsBg(globalTheme) {
+  return {
+    backgroundColor: globalTheme.backgroundColor,
+    // or any hex
+    backgroundImage: null,
+    backgroundImageOpacity: 1,
+    pattern: {
+      type: "dots",
+      props: {
+        color: "#ffffff",
+        // white dots
+        opacity: 0.2,
+        // subtle
+        spacing: 30,
+        // pixels between dots
+        radius: 2
+        // small circle
+      }
+    }
+  };
+}
+function defaultBg(globalTheme) {
   return {
     backgroundColor: globalTheme.backgroundColor || "#000000",
     // fallback just in case
@@ -1016,108 +1130,222 @@ function getDefaultBackground(globalTheme) {
     pattern: null
   };
 }
+function gridBg(globalTheme) {
+  return {
+    backgroundColor: globalTheme.backgroundColor,
+    backgroundImage: null,
+    backgroundImageOpacity: 1,
+    pattern: {
+      type: "grid",
+      props: {
+        color: "#ffffff",
+        // line color
+        opacity: 0.15,
+        // subtle overlay
+        spacing: 40,
+        // distance between grid lines
+        lineWidth: 1
+        // thin lines
+      }
+    }
+  };
+}
+function stripesBg(globalTheme) {
+  return {
+    backgroundColor: globalTheme.backgroundColor,
+    backgroundImage: null,
+    backgroundImageOpacity: 1,
+    pattern: {
+      type: "stripes",
+      props: {
+        color: "#ffffff",
+        // stripe color
+        opacity: 0.05,
+        // very subtle
+        thickness: 10,
+        // height of stripe
+        gap: 20
+        // vertical gap between stripes
+      }
+    }
+  };
+}
+function wavesBg(globalTheme) {
+  return {
+    backgroundColor: globalTheme.backgroundColor,
+    backgroundImage: null,
+    backgroundImageOpacity: 1,
+    pattern: {
+      type: "waves",
+      props: {
+        color: "#ffffff",
+        // wave color
+        opacity: 0.08,
+        // soft appearance
+        amplitude: 10,
+        // wave height
+        frequency: 0.05,
+        // wave tightness
+        thickness: 2,
+        // line thickness
+        gap: 50
+        // vertical distance between waves
+      }
+    }
+  };
+}
+function crosshatchBg(globalTheme) {
+  return {
+    backgroundColor: globalTheme.backgroundColor,
+    backgroundImage: null,
+    backgroundImageOpacity: 1,
+    pattern: {
+      type: "crosshatch",
+      props: {
+        color: "#ffffff",
+        opacity: 0.1,
+        spacing: 25,
+        lineWidth: 1
+      }
+    }
+  };
+}
+function bricksBg(globalTheme) {
+  return {
+    backgroundColor: globalTheme.backgroundColor,
+    backgroundImage: null,
+    backgroundImageOpacity: 1,
+    pattern: {
+      type: "bricks",
+      props: {
+        color: "#ffffff",
+        opacity: 0.07,
+        brickWidth: 60,
+        brickHeight: 30,
+        gap: 4
+      }
+    }
+  };
+}
+function mosaicBg(globalTheme) {
+  return {
+    backgroundColor: globalTheme.backgroundColor,
+    backgroundImage: null,
+    backgroundImageOpacity: 1,
+    pattern: {
+      type: "mosaic",
+      props: {
+        color: "#ffffff",
+        opacity: 0.06,
+        minSize: 20,
+        maxSize: 60,
+        count: 100
+      }
+    }
+  };
+}
+function hexagonsBg(globalTheme) {
+  return {
+    backgroundColor: globalTheme.backgroundColor,
+    backgroundImage: null,
+    backgroundImageOpacity: 1,
+    pattern: {
+      type: "hexagons",
+      props: {
+        color: "#ffffff",
+        opacity: 0.07,
+        radius: 30,
+        gap: 4
+      }
+    }
+  };
+}
+function tilesBg(globalTheme) {
+  return {
+    backgroundColor: globalTheme.backgroundColor,
+    backgroundImage: null,
+    backgroundImageOpacity: 1,
+    pattern: {
+      type: "tiles",
+      props: {
+        color: "#ffffff",
+        opacity: 0.05,
+        size: 50,
+        gap: 5,
+        rotate: false
+      }
+    }
+  };
+}
+const GlobalBackgrounds = {
+  defaultBg,
+  dotsBg,
+  gridBg,
+  stripesBg,
+  wavesBg,
+  crosshatchBg,
+  bricksBg,
+  tilesBg,
+  hexagonsBg,
+  mosaicBg
+};
 const theme = GlobalThemes.royalBlue;
 const deck = new DeckBuilder();
 deck.setGlobalTheme(theme);
-deck.setGlobalBackground(getDefaultBackground(theme));
-deck.full(5, "bullets", [
-  { text: "Pakistan's education crisis is deep and persistent", showAt: 1 },
-  { text: "A complex mix of funding, access, and policy failures", showAt: 3 }
-], {
-  x: 100,
-  y: 120,
-  lineGap: 80,
-  stylePresetKey: "text.bulletLarge"
+deck.setGlobalBackground(GlobalBackgrounds.gridBg(theme));
+deck.addHeader("header", [{ text: "Physics Concepts Intro" }]);
+deck.full(6, "image", [], {
+  src: "physicsClass",
+  showAt: 0,
+  stylePresetKey: "fullWidth",
+  layoutMode: "center"
 });
-deck.addHeader("header", [{ text: "Chronic Underfunding" }]);
-deck.full(10, "bullets", [
-  { text: "Less than 2.5% of GDP spent on education", showAt: 6 },
-  { text: "Poor infrastructure and resources", showAt: 7 },
-  { text: "Limited teacher training and salaries", showAt: 8 }
-], {
-  x: 120,
-  y: 100,
-  lineGap: 70,
-  stylePresetKey: "text.bulletSmall"
-});
-deck.addHeader("header", [{ text: "Access Disparity" }]);
-deck.full(15, "bullets", [
-  { text: "Urban vs Rural education gap", showAt: 11 },
-  { text: "Gender-based access issues", showAt: 12 },
-  { text: "Public, private, and madrassah divide", showAt: 13 }
+deck.addHeader("header", [{ text: "What is Force?" }]);
+deck.full(14, "bullets", [
+  { text: "A push or pull on an object", showAt: 7 },
+  { text: "Can cause a change in motion", showAt: 8 },
+  { text: "Measured in Newtons (N)", showAt: 9 },
+  { text: "Vector quantity – has direction", showAt: 10 },
+  { text: "F = m × a (Newton's Second Law)", showAt: 11 }
 ], {
   x: 120,
-  y: 100,
-  lineGap: 70,
+  y: 90,
+  lineGap: 65,
   stylePresetKey: "text.bulletSmall"
 });
-deck.addHeader("header", [{ text: "Outdated Curriculum" }]);
+deck.addHeader("header", [{ text: "What is Force" }]);
+deck.full(20, "image", [], {
+  src: "whatisforce",
+  showAt: 15,
+  stylePresetKey: "fullWidth",
+  layoutMode: "center"
+});
+deck.addHeader("header", [{ text: "Examples of Forces" }]);
 deck.half(
-  22,
+  30,
   "image",
   [],
   {
-    src: "class",
-    showAt: 16,
+    src: "typesOfForce",
+    showAt: 21,
     stylePresetKey: "fullWidth",
     layoutMode: "center"
   },
   "bullets",
   [
-    { text: "Rote learning dominates", showAt: 17 },
-    { text: "Outdated subject matter", showAt: 18 },
-    { text: "No STEM or soft skills", showAt: 19 }
+    { text: "Friction opposes motion", showAt: 22 },
+    { text: "Tension in ropes and cables", showAt: 23 },
+    { text: "Gravity pulls objects down", showAt: 24 },
+    { text: "Applied force by hand or tool", showAt: 25 }
   ],
-  { lineGap: 50, fontSize: 26 }
+  { lineGap: 58, fontSize: 30 }
 );
-deck.addHeader("header", [{ text: "Governance Challenges" }]);
-deck.full(27, "bullets", [
-  { text: "Frequent policy changes", showAt: 23 },
-  { text: "Curriculum politicization", showAt: 24 },
-  { text: "Corruption and inefficiency", showAt: 25 }
-], {
-  x: 120,
-  y: 100,
-  lineGap: 70,
-  stylePresetKey: "text.bulletSmall"
-});
-deck.addHeader("header", [{ text: "The Dropout Problem" }]);
-deck.half(
-  32,
-  "image",
-  [],
-  {
-    src: "drops",
-    showAt: 28,
-    stylePresetKey: "fullWidth",
-    layoutMode: "center"
-  },
-  "bullets",
-  [
-    { text: "Kids leave school early", showAt: 29 },
-    { text: "Driven by poverty, poor quality", showAt: 30 },
-    { text: "Girls in villages worst hit", showAt: 31 }
-  ],
-  { lineGap: 50, fontSize: 26 }
-);
-deck.addHeader("header", [{ text: "The Way Forward" }]);
-deck.full(37, "bullets", [
-  { text: "Increase education budget", showAt: 33 },
-  { text: "Support teacher development", showAt: 34 },
-  { text: "Modernize curriculum", showAt: 35 },
-  { text: "Ensure equity across regions and genders", showAt: 36 }
-], {
-  x: 120,
-  y: 100,
-  lineGap: 70,
-  stylePresetKey: "text.bulletSmall"
-});
 deck.addHeader("header", [{ text: "Final Thoughts" }]);
-deck.full(42, "quote", [
-  { text: "A nation is not built by bricks,", showAt: 38 },
-  { text: "but by the education of its youth.", showAt: 39 },
-  { text: "Let us invest in minds,", showAt: 40 },
-  { text: "to secure a brighter future.", showAt: 41 }
+deck.full(38, "quote", [
+  { text: "The most incomprehensible thing", showAt: 32 },
+  { text: "about the world", showAt: 33 },
+  { text: "is that it is comprehensible.", showAt: 34 },
+  { text: "— Albert Einstein", showAt: 35 }
 ]);
 deck.build();
 const css = {

@@ -1,65 +1,66 @@
-// bulletsComponent.js
-// Vertical bullet list with optional PIXI color conversion
-
 import { TemplateToolkit as T } from "../../../toolkit/Toolkit.js";
 
 /**
- * Renders a vertical list of bullets centered horizontally.
- * @param {object} theme        Global theme (used for width)
- * @param {Array<{text:string, showAt:number, color?:string}>} data  List entries
- * @param {object} config       Configuration options:
- *   - fontSize       (number): font size in px (default: 35)
- *   - lineGap        (number): vertical gap between lines (default: fontSize * 1.4)
- *   - fontFamily     (string): font family (default: 'Arial')
- *   - color          (string): text color (default: '#000')
- *   - containerWidth (number): width of text container (default: 820)
- *   - textAlign      (string): horizontal text alignment (default: 'center')
- *   - alignment      ('top'|'center'|'bottom'): vertical alignment (default: 'top')
- *   - gapFromTop     (number): extra top gap when alignment is 'top' (default: 0)
- *   - xOffset        (number): manual x offset (default: 0)
- *   - yOffset        (number): manual y offset (default: 0)
- *   - padding        (number): horizontal padding inside container (default: 10)
+ * Full-component bar graph with manually centered value and label under each bar.
+ *
+ * @param {object} theme
+ * @param {Array<{value: number, label?: string, color?: string, showAt?: number}>} data
+ * @param {{
+ *   maxValue?: number,
+ *   height?: number,
+ *   barPadding?: number,
+ *   barColor?: string,
+ *   fontSize?: number,
+ *   maxBarWidth?: number,
+ *   labelFontSize?: number
+ * }} config
  */
-export default function bullets(theme, data = [], config = {}) {
+export default function barGraph(theme, data = [], config = {}) {
   const {
-    fontSize = 32,
-    lineGap = fontSize * 1.4,
-    fontFamily = 'Arial',
-    color = '#000',
-    containerWidth = 820,
-    textAlign = 'center',
-    alignment = 'top',
-    gapFromTop = 40,
-    xOffset = 0,
-    yOffset = 0,
-    padding = 10,
+    maxValue = Math.max(...data.map(d => d.value), 1),
+    height = 240,
+    barPadding = 16,
+    barColor = theme.primaryColor || "#00ffaa",
+    fontSize = 22,
+    maxBarWidth = 28,
+    labelFontSize = 20
   } = config;
 
-  const contentHeight = data.length * lineGap;
-  let baseY = T.layout.getBodyY(alignment, contentHeight);
-  if (alignment === 'top') baseY += gapFromTop;
-
-  const slideWidth = T.designWidth;
-  const baseX = xOffset + (slideWidth - containerWidth) / 2 + padding;
+  const numBars = data.length;
+  const barWidth = Math.min(maxBarWidth, (T.designWidth - (numBars + 1) * barPadding) / numBars);
+  const totalWidth = numBars * barWidth + (numBars + 1) * barPadding;
+  const xStart = (T.designWidth - totalWidth) / 2;
+  const yStart = T.layout.getBodyY("center", height + fontSize + labelFontSize + 12);
 
   const items = [];
-  data.forEach((entry, i) => {
-    const { text, showAt, color: entryColor } = entry;
-    const yPos = baseY + i * lineGap + yOffset;
 
-    const bulletItem = T.ItemBuilders.text(theme, {
-      text,
-      x: baseX,
-      y: yPos,
+  data.forEach((entry, index) => {
+    const { value, color, label = "", showAt = 0 } = entry;
+    const barHeight = (value / maxValue) * height;
+    const x = xStart + barPadding + index * (barWidth + barPadding);
+    const barBottom = yStart + height;
+
+    // Colored bar
+    items.push(T.ItemBuilders.rect(theme, {
+      x,
+      y: barBottom - barHeight,
+      width: barWidth,
+      height: barHeight,
+      color: T.toPixiColor(color || barColor)
+    }));
+
+
+    // Value under label
+    items.push(T.ItemBuilders.text(theme, {
+      text: `${entry.value}`,
+      x : x + (barWidth / 2) - (fontSize * `${entry.value}`.length * 0.25),
+      y: barBottom + labelFontSize + 6,
       fontSize,
-      fontFamily,
-      lineHeight: lineGap,
-      textAlign,
-      color: T.toPixiColor(entryColor || color)
-    });
+      fontFamily: theme.fontFamilyBase,
+      textAlign: "center",
+      color: theme.baseTextColor
+    }));
 
-    T.AniHelpers.fadeIn(bulletItem, showAt, 0.5);
-    items.push(bulletItem);
   });
 
   return items;
