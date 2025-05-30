@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { Player, createTicker } from "./24may/player";
   import { pixiApp } from "./pixiApp.js";
-  import { presentationData } from "./24may/testSlides/userSlide1"; // 
+  import { presentationData } from "../../lib/staticVideos/tests/userSlide"; // 
   // import { createTicker } from './ticker/createTicker.js';
   import SlideNav from "./SlideNav.svelte";
   import * as PIXI from "pixi.js";
