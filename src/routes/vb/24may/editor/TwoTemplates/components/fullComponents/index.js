@@ -7,6 +7,7 @@ import table from "./table.js";
 import barGraph from "./barchart.js";
 import pieChart from "./pieChart.js";
 import donutChart from "./donutChart.js";
+// import timeline from "./timeline.js";
 
 
 export const fullComponents = {
@@ -16,6 +17,6 @@ export const fullComponents = {
     table,
     barGraph,
     pieChart,
-    donutChart
+    donutChart,
   };
   

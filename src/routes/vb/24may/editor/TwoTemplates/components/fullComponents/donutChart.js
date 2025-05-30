@@ -1,78 +1,19 @@
-// pie_donut_charts.js
+
+// donutChartWithLegend.js
 import { TemplateToolkit as T } from "../../../toolkit/Toolkit.js";
 
-export default function pieChart(theme, data = [], config = {}) {
-  const centerX = T.designWidth / 2;
-  const centerY = T.layout.getBodyY("center", config.radius || 120);
-  const radius = config.radius || 120;
-  const total = data.reduce((sum, item) => sum + item.value, 0);
-
-  let startAngle = 0;
-  const items = [];
-
-  data.forEach((entry) => {
-    const { value, color } = entry;
-    const sliceAngle = (value / total) * Math.PI * 2;
-    const endAngle = startAngle + sliceAngle;
-
-    items.push(T.ItemBuilders.arc(theme, {
-      x: centerX,
-      y: centerY,
-      radius,
-      startAngle,
-      endAngle,
-      color: T.toPixiColor(color || theme.primaryColor)
-    }));
-
-    startAngle = endAngle;
-  });
-
-  return items;
-}
-
-export function donutChart(theme, data = [], config = {}) {
-  const centerX = T.designWidth / 2;
-  const centerY = T.layout.getBodyY("center", config.outerRadius || 140);
-  const outerRadius = config.outerRadius || 140;
-  const innerRadius = config.innerRadius || 80;
-  const total = data.reduce((sum, item) => sum + item.value, 0);
-
-  let startAngle = 0;
-  const items = [];
-
-  data.forEach((entry) => {
-    const { value, color } = entry;
-    const sliceAngle = (value / total) * Math.PI * 2;
-    const endAngle = startAngle + sliceAngle;
-
-    items.push(T.ItemBuilders.arc(theme, {
-      x: centerX,
-      y: centerY,
-      radius: outerRadius,
-      innerRadius,
-      startAngle,
-      endAngle,
-      color: T.toPixiColor(color || theme.secondaryColor)
-    }));
-
-    startAngle = endAngle;
-  });
-
-  return items;
-}
-
-export function chartWithLegend(theme, data = [], config = {}) {
+export default function donutChart(theme, data = [], config = {}) {
   const left = [];
   const right = [];
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
-  const centerX = T.designWidth / 4; // left half center
-  const centerY = T.layout.getBodyY("center", config.radius || 120);
-  const radius = config.radius || 100;
+  const centerX = T.designWidth / 4;
+  const centerY = T.layout.getBodyY("center", config.outerRadius || 120);
+  const outerRadius = config.outerRadius || 100;
+  const innerRadius = config.innerRadius || 60;
 
   let startAngle = 0;
 
-  // Draw pie chart
   data.forEach((entry) => {
     const { value, color } = entry;
     const sliceAngle = (value / total) * Math.PI * 2;
@@ -81,7 +22,8 @@ export function chartWithLegend(theme, data = [], config = {}) {
     left.push(T.ItemBuilders.arc(theme, {
       x: centerX,
       y: centerY,
-      radius,
+      radius: outerRadius,
+      innerRadius,
       startAngle,
       endAngle,
       color: T.toPixiColor(color || theme.primaryColor)
@@ -90,7 +32,6 @@ export function chartWithLegend(theme, data = [], config = {}) {
     startAngle = endAngle;
   });
 
-  // Draw legend (right half)
   const itemHeight = 36;
   const startY = centerY - (data.length * itemHeight) / 2;
   const legendX = T.designWidth * 0.55;
@@ -99,7 +40,6 @@ export function chartWithLegend(theme, data = [], config = {}) {
     const y = startY + i * itemHeight;
     const pct = ((entry.value / total) * 100).toFixed(1) + "%";
 
-    // Color swatch
     right.push(T.ItemBuilders.rect(theme, {
       x: legendX,
       y,
@@ -108,7 +48,6 @@ export function chartWithLegend(theme, data = [], config = {}) {
       color: T.toPixiColor(entry.color || theme.primaryColor)
     }));
 
-    // Label text
     right.push(T.ItemBuilders.text(theme, {
       text: entry.label || "Item",
       x: legendX + 34,
@@ -118,7 +57,6 @@ export function chartWithLegend(theme, data = [], config = {}) {
       color: theme.baseTextColor
     }));
 
-    // Percentage text
     right.push(T.ItemBuilders.text(theme, {
       text: pct,
       x: legendX + 180,
