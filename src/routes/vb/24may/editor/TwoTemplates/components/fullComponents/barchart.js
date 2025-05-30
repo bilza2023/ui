@@ -15,7 +15,7 @@ import { TemplateToolkit as T } from "../../../toolkit/Toolkit.js";
  *   labelFontSize?: number
  * }} config
  */
-export default function barGraph(theme, data = [], config = {}) {
+export default function barchart(theme, data = [], config = {}) {
   const {
     maxValue = Math.max(...data.map(d => d.value), 1),
     height = 240,
