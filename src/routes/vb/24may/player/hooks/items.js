@@ -312,3 +312,69 @@ export function drawTable(props = {}) {
 
   return container;
 }
+
+// drawArc.js
+
+export function drawArc(props = {}) {
+  const merged = {
+    type: "arc",
+    x: 0,
+    y: 0,
+    radius: 100,
+    innerRadius: 0,
+    startAngle: 0,
+    endAngle: Math.PI * 2,
+    color: 0x00ff00,
+    rotation: 0,
+    visible: true,
+    ...props
+  };
+
+  const g = new PIXI.Graphics();
+  g.beginFill(toPixiColor(merged.color));
+
+  const resolution = 50; // Higher = smoother
+
+  const drawRingSegment = (r1, r2, angleStart, angleEnd) => {
+    const angleStep = (angleEnd - angleStart) / resolution;
+    g.moveTo(
+      merged.x + r1 * Math.cos(angleStart),
+      merged.y + r1 * Math.sin(angleStart)
+    );
+
+    for (let i = 0; i <= resolution; i++) {
+      const a = angleStart + i * angleStep;
+      g.lineTo(
+        merged.x + r1 * Math.cos(a),
+        merged.y + r1 * Math.sin(a)
+      );
+    }
+
+    for (let i = resolution; i >= 0; i--) {
+      const a = angleStart + i * angleStep;
+      g.lineTo(
+        merged.x + r2 * Math.cos(a),
+        merged.y + r2 * Math.sin(a)
+      );
+    }
+  };
+
+  if (merged.innerRadius > 0) {
+    drawRingSegment(merged.radius, merged.innerRadius, merged.startAngle, merged.endAngle);
+  } else {
+    g.moveTo(merged.x, merged.y);
+    for (let i = 0; i <= resolution; i++) {
+      const a = merged.startAngle + (i / resolution) * (merged.endAngle - merged.startAngle);
+      g.lineTo(
+        merged.x + merged.radius * Math.cos(a),
+        merged.y + merged.radius * Math.sin(a)
+      );
+    }
+    g.lineTo(merged.x, merged.y); // Close pie
+  }
+
+  g.endFill();
+  g.rotation = merged.rotation;
+  g.visible = merged.visible;
+  return g;
+}

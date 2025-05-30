@@ -51,15 +51,18 @@ export default function barGraph(theme, data = [], config = {}) {
 
 
     // Value under label
-    items.push(T.ItemBuilders.text(theme, {
-      text: `${entry.value}`,
-      x : x + (barWidth / 2) - (fontSize * `${entry.value}`.length * 0.25),
-      y: barBottom + labelFontSize + 6,
-      fontSize,
-      fontFamily: theme.fontFamilyBase,
-      textAlign: "center",
-      color: theme.baseTextColor
-    }));
+// Value under label
+items.push(T.ItemBuilders.text(theme, {
+  text: `${entry.label}`,
+  x,
+  y: barBottom + labelFontSize + 6,
+  width: barWidth,
+  textAlign: "center",
+  fontSize,
+  fontFamily: theme.fontFamilyBase,
+  color: theme.baseTextColor
+}));
+
 
   });
 

@@ -9,6 +9,7 @@ import circle from './circle/index.js';
 import rect from './rect/index.js';
 import triangle from './triangle/index.js';
 import table from './table/index.js';
+import arc from './arc/index.js';
 
 // Consolidated export of all primitive item builders
 export const ItemBuilders = {
@@ -19,5 +20,6 @@ export const ItemBuilders = {
   circle,
   rect,
   triangle,
-  table
+  table,
+  arc
 };

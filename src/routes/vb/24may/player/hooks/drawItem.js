@@ -6,19 +6,10 @@ import {
   drawImage,
   drawTriangle,
   drawRichText,
-  drawTable
+  drawTable,
+  drawArc
 } from "./items.js"; // adjust path if needed
 
-
-const drawMap = {
-    text: drawText,
-    icon: drawIcon,
-    rect: drawRect,
-    circle: drawCircle,
-    image: drawImage,
-    triangle: drawTriangle,
-    richText: drawRichText,
-  };
   
   
   export function drawItem(item, assets = {}) {
@@ -29,8 +20,9 @@ const drawMap = {
       case "text": return drawText(item);
       case "icon": return drawIcon(item);
       case "richText": return drawRichText(item);
-      case "image": return drawImage(item, assets); // ✅ Fix here
-      case "table": return drawTable(item, assets); // ✅ Fix here
+      case "image": return drawImage(item, assets); // ✅ Assets here
+      case "table": return drawTable(item, assets); // ✅ Assets here
+      case "arc": return drawArc(item);
       // add others...
       default:
         console.warn("Unknown item type:", item.type);

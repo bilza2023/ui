@@ -10,8 +10,14 @@ export function pixiApp(backgroundColor, width, height) {
   const app = new PIXI.Application({
     width,
     height,
-    backgroundColor: 0xf7f7f7
+    backgroundColor: bg,
+    antialias: true,                      // ✅ Smooth edges
+    resolution: window.devicePixelRatio,  // ✅ Retina / high-DPI support
+    autoDensity: true                     // ✅ Scale canvas correctly
   });
+
+  app.renderer.view.style.width = width + "px";
+  app.renderer.view.style.height = height + "px";
 
   return app;
 }
