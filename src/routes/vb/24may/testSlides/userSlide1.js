@@ -20,7 +20,8 @@ deck.full(5, "barchart", [
   { label: "Alpha", value: 45, color: "#e74c3c", showAt: 1 },
   { label: "Beta", value: 60, color: "#2ecc71", showAt: 2 },
   { label: "Gamma", value: 30, color: "#3498db", showAt: 3 }
-]);
+]
+);
 
 // Slide 2: Header + Quote
 deck.addHeader("header", [{ text: "Quote Component" }]);
