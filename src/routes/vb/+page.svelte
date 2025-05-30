@@ -1,9 +1,10 @@
 <script>
   import { onMount } from "svelte";
+  import { page } from '$app/stores';
   import { Player, createTicker } from "./24may/player";
   import { pixiApp } from "./pixiApp.js";
-  import { presentationData } from "../../lib/staticVideos/tests/userSlide"; // 
-  // import { createTicker } from './ticker/createTicker.js';
+ 
+  import staticVideos from "../../lib/staticVideos/staticVideos";
   import SlideNav from "./SlideNav.svelte";
   import * as PIXI from "pixi.js";
 
@@ -13,6 +14,7 @@
   let ticker;
   let currentTime = 0;
 
+  let presentationData; 
   function resize(app, designWidth, designHeight) {
     if (!container) return;
   const parent = container;
@@ -26,7 +28,7 @@
   app.view.style.margin = "0 auto";
 }
 ///////////////////////////////////////////////////
-  onMount(() => {
+  onMount(async() => {
     // debugger;
 
 const backgroundAssets = {
@@ -37,7 +39,18 @@ const backgroundAssets = {
   whatisforce: PIXI.Texture.from("images/whatisforce.webp"),
   typesOfForce: PIXI.Texture.from("images/typesOfForce.webp"),
 };
-    console.log("presentationData",presentationData);
+    // console.log("presentationData",presentationData);
+////////////////////////////////////////////////////////////////////////
+// const name = $page.url.searchParams.get("presentation") || "userSlide";
+//    ({ presentationData } =
+//      await import(/* @vite-ignore */ `../../lib/staticVideos/tests/${name}.js`)); 
+const name = $page.url.searchParams.get("presentation") || "physics";
+  presentationData = staticVideos[name];
+ if(!presentationData) throw new Error( `${name} file not found`);
+ 
+////////////////////////////////////////////////////////////////////////  
+  
+  
     const app = pixiApp(
       presentationData.slidesData[0].background?.backgroundColor || "#000000",
       presentationData.designWidth,

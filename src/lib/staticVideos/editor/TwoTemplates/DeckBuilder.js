@@ -17,6 +17,10 @@ export class DeckBuilder {
     this.currentHeaderOffset  = 0;       // vertical space reserved for header
   }
 
+  setGlobalBackgroundImage(backgroundImage,backgroundImageOpacity=1.0){
+    this.globalBackground.backgroundImage = backgroundImage;
+    this.globalBackground.backgroundImageOpacity = backgroundImageOpacity;
+  }
   setDesignWidth(w) {
     this.designWidth = w;
   }
