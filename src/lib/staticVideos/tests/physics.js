@@ -6,7 +6,8 @@ import { GlobalBackgrounds } from "../editor/theme/globalBackgrounds.js";
 const theme = GlobalThemes.royalBlue;
 const deck = new DeckBuilder();
 deck.setGlobalTheme(theme);
-deck.setGlobalBackground(GlobalBackgrounds.gridBg(theme));
+deck.setGlobalBackground(GlobalBackgrounds.defaultBg(theme));
+deck.setGlobalBackgroundImage("physicsClass" , 0.08)
 
 // Slide 1: Title Image with Drops
 deck.addHeader("header", [{ text: "Physics Concepts Intro" }]);

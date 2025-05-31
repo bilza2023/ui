@@ -15,6 +15,20 @@ export const blogs = [
       description: "AI Foundation Course Brochure.",
       thumbnail: "/thumbnails/class.jpg"
     },
+    {
+      emoji: "⚙️",
+      title: "Test-1 ",
+      href: "/vb?presentation=test1",
+      description: "AI Foundation Course Brochure.",
+      thumbnail: "/thumbnails/class.jpg"
+    },
+    {
+      emoji: "⚙️",
+      title: "Test-2 ",
+      href: "/vb?presentation=test2",
+      description: "AI Foundation Course Brochure.",
+      thumbnail: "/thumbnails/class.jpg"
+    },
    
   ];
   

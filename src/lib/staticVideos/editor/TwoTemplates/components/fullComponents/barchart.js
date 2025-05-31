@@ -19,10 +19,10 @@ export default function barchart(theme, data = [], config = {}) {
   const {
     maxValue = Math.max(...data.map(d => d.value), 1),
     height = config.height || 240,
-    barPadding = config.barPadding || 50,
+    barPadding = config.barPadding || 100,
     barColor = theme.primaryColor || "#00ffaa",
     fontSize = config.fontSize || 22,
-    maxBarWidth = config.maxBarWidth || 28,
+    maxBarWidth = config.maxBarWidth || 25,
     labelFontSize = config.labelFontSize || 20
   } = config;
 

@@ -38,6 +38,7 @@ const backgroundAssets = {
   physicsClass: PIXI.Texture.from("images/physicsClass.webp"),
   whatisforce: PIXI.Texture.from("images/whatisforce.webp"),
   typesOfForce: PIXI.Texture.from("images/typesOfForce.webp"),
+  taleemclass: PIXI.Texture.from("images/taleemclass.webp"),
 };
     // console.log("presentationData",presentationData);
 ////////////////////////////////////////////////////////////////////////
