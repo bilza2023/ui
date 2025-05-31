@@ -179,22 +179,6 @@ export class DeckBuilderBase {
   const background = cloneBackground(this.globalBackground);
   this.slides.push({ background, items: allItems, startTime, endTime });
 }
-/**
- * Shorthand for half-slide with default empty configs.
- *
- * @param {number} endTime
- * @param {string} leftKey
- * @param {any[]}  leftData
- * @param {string} rightKey
- * @param {any[]}  rightData
- */
-qHalf(endTime, leftKey, leftData = [], rightKey, rightData = []) {
-  return this.half(
-    endTime,
-    leftKey,  leftData,  {},
-    rightKey, rightData, {}
-  );
-}
 
   /**
    * Build the final presentation object.

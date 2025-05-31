@@ -344,21 +344,45 @@ the names are the same as full but internally deck.half get objects from its own
 deck.half(10, \"bullets\", [ ... ], \"image\", [], { ... });
 // parser misreads data as config!
 
-To make using "half" easy we have a short hand function called "qHalf"
+Here’s a concise and clear `.md` you can add to your documentation for the new half-slide builder pattern:
 
-/**
- * Shorthand for half-slide with default empty configs.
- *
- * @param {number} endTime
- * @param {string} leftKey
- * @param {any[]}  leftData
- * @param {string} rightKey
- * @param {any[]}  rightData
- */
-qHalf(endTime, leftKey, leftData = [], rightKey, rightData = []) {
-  return this.half(
-    endTime,
-    leftKey,  leftData,  {},
-    rightKey, rightData, {}
-  );
-}
+---
+
+## ✳️ Half Slide Builder API (`startQuickHalf` / `commitHalf`)
+
+To simplify creating half-and-half slides (like `image + bullets`), we now support a **builder-style pattern**. This approach offers **better readability**, **step-wise setup**, and **automatic compatibility** with all half components.
+
+### 🛠️ Usage Pattern
+
+```js
+deck.startQuickHalf(endTime);
+deck.setLeftHalf("bullets", [ ... ]);
+deck.setRightHalf("image", [ ... ]);
+deck.commitHalf();
+```
+
+### 📦 API Reference
+
+* `startQuickHalf(endTime)`
+  Begins a new half-slide block.
+
+* `setLeftHalf(templateKey, data, config = {})`
+  Defines the **left half** of the slide.
+
+* `setRightHalf(templateKey, data, config = {})`
+  Defines the **right half** of the slide.
+
+* `commitHalf()`
+  Finalizes the slide and adds it to the deck.
+
+---
+
+### ✅ Benefits
+
+* Supports **any half component** (`bullets`, `image`, and future charts).
+* Cleaner than `deck.half(...)` when config is complex.
+* Encourages symmetrical, readable slide construction.
+
+---
+
+You can now mix any component pair (half components) on left and right — `image + image`, `bullets + bullets`, and more — with consistent spacing and animation logic.

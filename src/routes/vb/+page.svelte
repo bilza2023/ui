@@ -45,7 +45,7 @@ const backgroundAssets = {
 // const name = $page.url.searchParams.get("presentation") || "userSlide";
 //    ({ presentationData } =
 //      await import(/* @vite-ignore */ `../../lib/staticVideos/tests/${name}.js`)); 
-const name = $page.url.searchParams.get("presentation") || "physics";
+const name = $page.url.searchParams.get("presentation") || "demo";
   presentationData = staticVideos[name];
  if(!presentationData) throw new Error( `${name} file not found`);
  
