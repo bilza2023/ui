@@ -55,8 +55,7 @@
       display: flex;
       flex-direction: column;
       padding: 1rem 10rem;
-    
-      background-color: #cdae92;
+      background-color: #dfc9b5;
     }
   
     @media (min-width: 640px) {

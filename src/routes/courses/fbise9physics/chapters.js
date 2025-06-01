@@ -9,7 +9,7 @@ export const chapters = [
   Real-life examples and practical skills are emphasized throughout.`,
       image: "/images/fbise9physicsChapter1Thumbnail.webp",
       stats: { lectures: 6, notes: 12, quizzes: 2 },
-      link: "/physics/chapter-1"
+      link: "/courses/fbise9physics/chapter1"
     },
     {
       title: "Chapter 2: Kinematics",

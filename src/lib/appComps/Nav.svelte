@@ -49,7 +49,7 @@
       <NavBtn
       title="FBISE"
       icon="🇵🇰"
-      url="/courses/fbise"
+      url="/courses/fbise9physics"
       bgColor="bg-[#d6b88d]"
       titleColor="text-gray-900"
     />

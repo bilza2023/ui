@@ -1,3 +1,9 @@
+
+<script>
+  export let title = "";
+  export let content = "";
+</script>
+
 <div class="banner-container">
   <!-- AI Banner -->
   <div class="banner">
@@ -9,9 +15,9 @@
       />
     </div>
     <div class="banner-text">
-      <h2 class="banner-title">📘 Physics Class 9  (FBISE)</h2>
+      <h2 class="banner-title">{title}</h2>
       <p class="banner-description">
-        Taleem.Help’s Physics course for Class 9 follows the Federal Board syllabus in a smart, structured way. Each chapter is broken down into easy-to-understand slides, teacher-narrated video lectures, and exam-focused notes. We cover all key concepts — from motion and force to energy and heat — with solved numericals, quizzes, and practical examples. It’s designed to help students master Physics at their own pace, using modern tools.
+      {content}
       </p>
       <div class="banner-note">
         🌍 Part of the <strong>Taleem.Help</strong> national learning initiative.
