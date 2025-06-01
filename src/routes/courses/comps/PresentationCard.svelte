@@ -1,25 +1,22 @@
 <script>
     export let title = "";
     export let description = "";
-    export let thumbnail = "";
     export let timePeriod = "";     // e.g., "12 min"
     export let releaseDate = "";    // e.g., "May 2025"
     export let dim = false;
+    export let link = "#";
   </script>
+
+
+
+  <div class="presentation-card w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33%-1rem)] flex flex-col gap-3" class:dim={dim} class:active={!dim}>
   
-  <div class="presentation-card w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33%-1rem)] flex flex-col gap-3"
-       class:dim={dim}
-       class:active={!dim}>
-  
-    <!-- {#if thumbnail}
-      <img src="/images/fbise9physicsChapter1Lessons.webp" alt={title} class="thumbnail" />
-      
-    {/if} -->
-  
+  <a href={link}>  
     <div class="thumbnail-container">
         <img src="/images/fbise9physicsChapter1Lessons.webp" alt={title} class="thumbnail" />
         <div class="hover-icon">▶</div>
       </div>
+  </a>
       
     <h3 class="title">{title}</h3>
     <p class="description flex-grow">{description}</p>
@@ -28,8 +25,9 @@
       <div><strong>⏱️ Duration:</strong> {timePeriod}</div>
       <div><strong>📅 Released:</strong> {releaseDate}</div>
     </div>
-  </div>
-  
+
+</div>
+
   <style>
     .presentation-card {
       padding: 1.25rem;
@@ -83,6 +81,7 @@
   height: 10rem;
   overflow: hidden;
   border-radius: 0.5rem;
+  cursor: pointer;
 }
 
 .thumbnail-container:hover .thumbnail {
