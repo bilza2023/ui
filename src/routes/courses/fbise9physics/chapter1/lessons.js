@@ -13,7 +13,7 @@ export const lessons = [
     thumbnail: "/images/physics02.webp",
     timePeriod: "8 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_2"
   },
   {
     title: "1.3 International System of Units (SI)",
@@ -21,7 +21,7 @@ export const lessons = [
     thumbnail: "/images/physics03.webp",
     timePeriod: "7 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_3"
   },
   {
     title: "1.4 Scientific Notation",
@@ -29,7 +29,7 @@ export const lessons = [
     thumbnail: "/images/physics04.webp",
     timePeriod: "5 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_4"
   },
   {
     title: "1.5 Prefixes in Measurements",
@@ -37,7 +37,7 @@ export const lessons = [
     thumbnail: "/images/physics05.webp",
     timePeriod: "6 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_5"
   },
   {
     title: "1.6 Measuring Instruments Overview",
@@ -45,7 +45,7 @@ export const lessons = [
     thumbnail: "/images/physics06.webp",
     timePeriod: "7 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_6"
   },
   {
     title: "1.7 Vernier Caliper: Theory",
@@ -53,7 +53,7 @@ export const lessons = [
     thumbnail: "/images/physics07.webp",
     timePeriod: "6 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_7"
   },
   {
     title: "1.8 Vernier Caliper: Practical Reading",
@@ -61,7 +61,7 @@ export const lessons = [
     thumbnail: "/images/physics08.webp",
     timePeriod: "8 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_8"
   },
   {
     title: "1.9 Screw Gauge: Concept",
@@ -69,7 +69,7 @@ export const lessons = [
     thumbnail: "/images/physics09.webp",
     timePeriod: "5 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_9"
   },
   {
     title: "1.10 Screw Gauge: Reading Practice",
@@ -77,7 +77,7 @@ export const lessons = [
     thumbnail: "/images/physics10.webp",
     timePeriod: "7 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_10"
   },
   {
     title: "1.11 Mass and Weight",
@@ -85,7 +85,7 @@ export const lessons = [
     thumbnail: "/images/physics11.webp",
     timePeriod: "6 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_11"
   },
   {
     title: "1.12 Measuring Time and Area",
@@ -93,7 +93,7 @@ export const lessons = [
     thumbnail: "/images/physics12.webp",
     timePeriod: "5 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_12"
   },
   {
     title: "1.13 Volume and Density",
@@ -101,7 +101,7 @@ export const lessons = [
     thumbnail: "/images/physics13.webp",
     timePeriod: "6 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_13"
   },
   {
     title: "1.14 Accuracy and Precision",
@@ -109,7 +109,7 @@ export const lessons = [
     thumbnail: "/images/physics14.webp",
     timePeriod: "7 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_14"
   },
   {
     title: "1.15 Significant Figures",
@@ -117,7 +117,7 @@ export const lessons = [
     thumbnail: "/images/physics15.webp",
     timePeriod: "6 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_15"
   },
   {
     title: "1.16 Types of Errors",
@@ -125,7 +125,7 @@ export const lessons = [
     thumbnail: "/images/physics16.webp",
     timePeriod: "7 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_16"
   },
   {
     title: "1.17 Reducing Uncertainty",
@@ -133,7 +133,7 @@ export const lessons = [
     thumbnail: "/images/physics17.webp",
     timePeriod: "5 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_17"
   },
   {
     title: "1.18 Revision: Instruments & Units",
@@ -141,7 +141,7 @@ export const lessons = [
     thumbnail: "/images/physics18.webp",
     timePeriod: "10 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_18"
   },
   {
     title: "1.19 Chapter Summary & Quiz Guide",
@@ -149,6 +149,6 @@ export const lessons = [
     thumbnail: "/images/physics19.webp",
     timePeriod: "9 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_19"
   }
 ];

@@ -1,7 +1,7 @@
 import { DeckBuilder, GlobalThemes, GlobalBackgrounds } from "../editor";
 
 // Setup
-const theme = GlobalThemes.royalBlue;
+const theme = GlobalThemes.neonDark;
 const deck = new DeckBuilder();
 deck.setGlobalTheme(theme);
 deck.setGlobalBackground(GlobalBackgrounds.defaultBg(theme));

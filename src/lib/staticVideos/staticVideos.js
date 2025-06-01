@@ -7,5 +7,6 @@
  import { presentationData as test2 }   from "./tests/test2.js";
  import { presentationData as demo }   from "./tests/demo.js";
  import { presentationData as physics1_1 }   from "./fbise9physics/chapter1/1-1.js";
+ import { presentationData as physics1_2 }   from "./fbise9physics/chapter1/1-2.js";
 
-export default { physics, test0 ,test1,test2,demo,physics1_1};
+export default { physics, test0 ,test1,test2,demo,physics1_1 , physics1_2};
