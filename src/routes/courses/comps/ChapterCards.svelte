@@ -1,120 +1,121 @@
 <script>
-    export let title = "";
-    export let description = "";
-    export let image = "";
-    export let stats = { lectures: 0, notes: 0, quizzes: 0 };
-    export let link = "#";
-  </script>
-<div class="master">  
+  export let title = "";
+  export let description = "";
+  export let image = "";
+  export let stats = { lectures: 0, notes: 0, quizzes: 0 };
+  export let dim = false;
+  export let link = "#";
+</script>
 
-  <a href={link} class="chapter-card">
-    <div class="card-container">
-      <!-- Thumbnail -->
-      <div class="thumbnail">
-        <img src={image} alt={title} />
-      </div>
-  
-      <!-- Content -->
-      <div class="content">
-        <div>
-          <h2>{title}</h2>
-          <p>{description}</p>
-        </div>
-  
-        <!-- Stats bar -->
-        <div class="stats">
-          <span>🎥 Lectures: {stats.lectures}</span>
-          <span>📝 Notes: {stats.notes}</span>
-          <span>🧪 Quizzes: {stats.quizzes}</span>
-        </div>
-      </div>
+<div class="presentation-card w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33%-1rem)] flex flex-col gap-3" class:dim={dim} class:active={!dim}>
+  <a href={link}>
+    <div class="thumbnail-container">
+      <img src={image} alt={title} class="thumbnail" />
+      <div class="hover-icon">▶</div>
     </div>
   </a>
-</div>  
-  <style>
-    .master {
-        margin: 1rem 10rem;
-      
-    }
-    .chapter-card {
-      display: block;
-      width: 100%;
-      background-color: var(--color-bg-light);
-      border-radius: 1rem;
-      border: 1px solid var(--color-border-light);
-      box-shadow: var(--shadow-md);
-      transition: box-shadow 0.2s ease;
-      overflow: hidden;
-    }
-  
-    .chapter-card:hover {
-      box-shadow: var(--shadow-lg);
-    }
-  
-    .card-container {
-      display: flex;
-      flex-direction: column;
-      padding: 1rem 10rem;
-      background-color: #dfc9b5;
-    }
-  
-    @media (min-width: 640px) {
-      .card-container {
-        flex-direction: row;
-      }
-    }
-  
-    .thumbnail {
-      flex-shrink: 0;
-      padding: 0.5rem;
-    }
-  
-    .thumbnail img {
-  width: 12rem;
-  height: 9rem;
-  border-radius: 0.75rem;
-  object-fit: cover;
-  border: 1px solid var(--color-border-light);
-}
 
-@media (min-width: 640px) {
-  .thumbnail img {
-    width: 16rem;
-    height: 10rem;
+  <h3 class="title">{title}</h3>
+  <p class="description flex-grow">{description}</p>
+
+  <div class="meta mt-auto">
+    <div>🎥 Lectures: {stats.lectures}</div>
+    <div>📝 Notes: {stats.notes}</div>
+    <div>🧪 Quizzes: {stats.quizzes}</div>
+  </div>
+</div>
+
+<style>
+  .presentation-card {
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.2s ease, background-color 0.2s ease;
   }
-}
 
-  
-    .content {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 0.5rem;
-     
-      flex-grow: 1;
+  .presentation-card.dim {
+    opacity: 0.6;
+    pointer-events: none;
+    background-color: #f5f5f5;
+  }
+
+  .presentation-card.active {
+    background-color: #f3eade;
+  }
+
+  .thumbnail-container {
+    position: relative;
+    width: 100%;
+    height: 12rem;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+
+  @media (min-width: 1024px) {
+    .thumbnail-container {
+      height: 14rem;
     }
-  
-    .content h2 {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      color: var(--color-text-dark);
+  }
+
+  .thumbnail-container:hover .thumbnail {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+
+  .thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+    transition: all 0.3s ease;
+  }
+
+  .hover-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  .thumbnail-container:hover .hover-icon {
+    opacity: 1;
+  }
+
+  .title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #3d2e1e;
+    text-align: center;
+  }
+
+  .description {
+    font-size: 0.875rem;
+    color: #4b5563;
+    text-align: center;
+  }
+
+  @media (max-width: 639px) {
+    .description {
+      display: none;
     }
-  
-    .content p {
-      font-size: 1.75 rem;
-      color: var(--color-text-light);
-      margin-bottom: 1rem;
-      line-height: 1.5;
-    }
-  
-    .stats {
-      font-size: 0.875rem;
-      color: var(--color-text-muted);
-      border-top: 1px solid var(--color-border-light);
-      padding-top: 0.5rem;
-      display: flex;
-      gap: 1.5rem;
-    }
-  </style>
-  
+  }
+
+  .meta {
+    font-size: 0.875rem;
+    color: #6b7280;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .meta div {
+    white-space: nowrap;
+  }
+</style>
