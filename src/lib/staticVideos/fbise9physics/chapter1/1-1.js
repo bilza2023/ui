@@ -1,4 +1,4 @@
-import { DeckBuilder, GlobalThemes, GlobalBackgrounds } from "../editor";
+import { DeckBuilder, GlobalThemes, GlobalBackgrounds } from "../../editor";
 
 // Setup
 const theme = GlobalThemes.royalBlue;

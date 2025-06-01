@@ -5,7 +5,7 @@ export const lessons = [
     thumbnail: "/images/physics01.webp",
     timePeriod: "6 min",
     releaseDate: "June 2025",
-    link: "/vb?presentation=demo"
+    link: "/vb?presentation=physics1_1"
   },
   {
     title: "1.2 Physical Quantities: Base & Derived",
