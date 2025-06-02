@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
 
+  let loaded=false;
   export let currentTime = 0;
   export let maxEndTime = 1000;
 
@@ -31,10 +32,11 @@
 </script>
 
 <div class="text-white p-0 py-3 bg-[#111827] flex items-center gap-4">
+
+  {#if loaded }
   <button on:click={play}>▶ Play</button>
   <button on:click={pause}>⏸ Pause</button>
   <button on:click={reset}>⏹ Reset</button>
-
   <span class="text-sm font-mono text-yellow-500">
     {currentTime.toFixed(1)}/{Math.floor(maxEndTime)}&nbsp;s
   </span>
@@ -64,6 +66,11 @@
       />
     </div>
   </div>
+  {:else}
+  <button on:click={() => loaded = true} style="min-width: 80px;">🔓 Load</button>
+  {/if}
+
+
 </div>
 
 <style>

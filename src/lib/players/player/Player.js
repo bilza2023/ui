@@ -8,11 +8,23 @@ export default class Player {
     this.loopId = null;
   }
 
+  // play() {
+  //   this.sound.play();
+  //   this._startLoop();
+  // }
   play() {
-    this.sound.play();
-    this._startLoop();
+    if (this.sound.state() !== 'loaded') {
+      this.sound.once('load', () => {
+        this.sound.play();
+        this._startLoop();
+      });
+    } else {
+      this.sound.play();
+      this._startLoop();
+    }
   }
-
+  
+  
   pause() {
     this.sound.pause();
     cancelAnimationFrame(this.loopId);
