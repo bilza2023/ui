@@ -1,7 +1,7 @@
 // slide.js
 
-import { EqDeckBuilder } from "./EqDeckBuilder.js";
-import { Sp } from "./Sp.js";
+import { EqDeckBuilder } from "../eqsAIApi/EqDeckBuilder.js";
+import { Sp } from "../eqsAIApi/Sp.js";
 
 // Create a new deck
 const deck = new EqDeckBuilder();
