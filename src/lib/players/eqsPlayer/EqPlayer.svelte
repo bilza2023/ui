@@ -1,5 +1,5 @@
 <script>
-  
+
   import { onMount } from 'svelte';
   import Eq from './Eq.svelte';
   import SP from './Sp.svelte';
@@ -81,7 +81,7 @@
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     line-height: 1.6;
   }
 
