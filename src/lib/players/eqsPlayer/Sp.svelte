@@ -1,5 +1,6 @@
 
 <script>
+  import MathBlock from './MathBlock.svelte';
   export let sp = [];
 </script>
 
@@ -9,7 +10,7 @@
   {:else if item.type === 'text'}
     <p>{item.data.text}</p>
   {:else if item.type === 'math'}
-    <div class="math">{item.data.latex}</div>
+    <MathBlock latex={item.data.latex} />
   {:else if item.type === 'table'}
     <table>
       {#each item.data.rows as row}

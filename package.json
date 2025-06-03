@@ -23,6 +23,7 @@
     "howler": "^2.2.4",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
+    "katex": "^0.16.22",
     "mathjs": "^12.3.0",
     "nanoid": "^5.1.5",
     "pixi.js": "^6.5.10",
