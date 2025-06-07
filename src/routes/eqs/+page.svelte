@@ -13,19 +13,41 @@
   let maxEndTime;
   const data = PresentationData;
   const soundUrl = "sounds/music.opus";
+  let images;
 
   onMount(() => {
+ console.log("PresentationData" ,PresentationData);
+ 
+  images = {
+  default: "/images/taleemclass.webp",  
+  drops: "/images/drops.png",
+  femaleTeacher: "/images/female_teacher.jpg",
+  physicsClass: "/images/physicsClass.webp",
+  whatisforce: "/images/whatisforce.webp",
+  typesOfForce: "/images/typesOfForce.webp",
+  class: "/images/class.webp",
+  taleemclass: "/images/taleemclass.webp",
+  fbise9physicsChapter1Bg: "/images/fbise9physicsChapter1Bg.webp",
+  appleFallingFromTree: "/images/appleFallingFromTree.webp",
+  everyDayItems: "/images/everyDayItems.webp",
+  rocketTakeoff: "/images/rocketTakeoff.webp",
+  physicsArt: "/images/physicsArt.webp",
+};
+
+
+
     const sound = getHowler(soundUrl);
     maxEndTime = Math.max(...data.slide.map(eq => eq.endTime));
     player = new Player(sound);
-    player.onTick = (t) => {
-      currentTime = +t;
-      if (currentTime >= maxEndTime) {
-        player.pause();
-        player.seek(maxEndTime);
-        playing = false;
-      }
-    };
+          player.onTick = (t) => {
+        currentTime = +t;
+        if (currentTime >= maxEndTime) {
+          player.pause();
+          playing = false;
+          // no need to call seek again — it's already at maxEndTime
+        }
+      };
+
     reset();
     return () => player.pause();
   });
@@ -55,4 +77,8 @@
   />
 {/if}
 
-<EqPlayer slide={data} {currentTime} />
+{#if images}
+<!-- <EqPlayer slide={data} {currentTime} {images} /> -->
+<EqPlayer slide={data} {currentTime} {images} on:seek={(e) => seek(e.detail)} />
+
+{/if}

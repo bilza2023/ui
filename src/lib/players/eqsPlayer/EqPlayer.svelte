@@ -1,12 +1,14 @@
 <script>
-
   import { onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import Eq from './Eq.svelte';
   import SP from './Sp.svelte';
-
+  
   export let slide = [];
+  export let images = {};
   export let currentTime = 0;
-
+  
+  const dispatch = createEventDispatcher();
   let eqs = [];
   let defaultSp = [];
 
@@ -20,23 +22,38 @@
   });
 
   $: currentEq = eqs.find(eq => currentTime >= eq.startTime && currentTime < eq.endTime) || null;
+
+  // Only keep previous 2, current, and rest after
+  $: visibleEqs = (() => {
+    const index = eqs.findIndex(eq => eq === currentEq);
+    return index === -1 ? eqs : eqs.slice(Math.max(0, index - 2));
+  })();
 </script>
 
 <div class="eq-player-wrapper">
   <div class="eq-player-main">
     <div class="eq-panel">
-      {#each eqs as eq (eq.startTime)}
+      {#each visibleEqs as eq (eq.startTime)}
         <div class={eq === currentEq ? 'focused' : 'nonFocused'}>
-          <Eq eq={eq} />
+        
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
+          <div
+            class={eq === currentEq ? 'focused' : 'nonFocused'}
+            on:click={() => dispatch('seek', eq.startTime)}
+          >
+            <Eq eq={eq} />
+          </div>
+
         </div>
       {/each}
     </div>
 
     <div class="side-panel">
       {#if currentEq && currentEq.sp && currentEq.sp.length > 0}
-        <SP sp={currentEq.sp} />
+        <SP sp={currentEq.sp} {images} />
       {:else if defaultSp.length > 0}
-        <SP sp={defaultSp} />
+        <SP sp={defaultSp} {images} />
       {:else}
         <p>No side panel</p>
       {/if}
@@ -49,8 +66,8 @@
     background-color: rgb(2, 63, 2);
     color: white;
     border: 2px solid red;
-    padding: 5px;
-    font-size: 1.5em;
+    padding: 2px;
+    font-size: 1.1em;
     font-weight: bold;
     line-height: 1.5em;
     border-radius: 5px;
@@ -60,9 +77,9 @@
 
   .nonFocused {
     background-color: grey;
-    padding: 2px;
-    margin: 2px;
-    font-size: 1.25em;
+    padding: 1px;
+    margin: 1px;
+    font-size: 1em;
     transition: all 0.3s ease;
   }
 

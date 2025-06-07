@@ -13,7 +13,11 @@ export const nodes = [
 	() => import('./nodes/9'),
 	() => import('./nodes/10'),
 	() => import('./nodes/11'),
-	() => import('./nodes/12')
+	() => import('./nodes/12'),
+	() => import('./nodes/13'),
+	() => import('./nodes/14'),
+	() => import('./nodes/15'),
+	() => import('./nodes/16')
 ];
 
 export const server_loads = [];
@@ -22,14 +26,18 @@ export const dictionary = {
 		"/": [2],
 		"/about": [3],
 		"/blog": [4],
-		"/contact": [5],
-		"/courses/ai": [6],
-		"/courses/fbise9physics": [7],
-		"/courses/fbise9physics/chapter1": [8],
-		"/courses/it": [9],
-		"/eqs": [~10],
-		"/vb": [~11],
-		"/videoblog": [12]
+		"/change_forgot_password": [5],
+		"/contact": [6],
+		"/courses/ai": [7],
+		"/courses/fbise9physics": [8],
+		"/courses/fbise9physics/chapter1": [9],
+		"/courses/it": [10],
+		"/eqs": [~11],
+		"/forgot_password": [12],
+		"/login": [13],
+		"/register": [14],
+		"/vb": [~15],
+		"/videoblog": [16]
 	};
 
 export const hooks = {

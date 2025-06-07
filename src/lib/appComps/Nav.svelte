@@ -1,15 +1,26 @@
 <script>
     // @ts-nocheck
     import NavBtn from './NavBtn.svelte';
+    import NavBtn2 from './NavBtn2.svelte';
     import Logo from './Logo.svelte';
+    import {checkLogin} from '../config/index';
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     
-    // import chqLogin from "../../lib/loginFns/chqLogin";
-    // import logout from "../../lib/loginFns/logout";
     
-    
-    let isLogin = false;
+  let userName = "guest";  
+  onMount(async()=>{
+    const email = await checkLogin();
+  if(email !== null){
+    userName = email;
+  }
+  });
+
+function logout(){
+  localStorage.removeItem('token');
+  goto('/login'); // or home, or wherever you want
+}
+   
 
     </script>
                 <!-- ******************************** -->
@@ -73,7 +84,12 @@
       
        
         <!-- <NavBtn title='Payment' icon = '🚀' url='/payment'/> -->
-        <!-- <NavBtn title='Login' icon ='🔑'  url='/login'/> -->
+         {#if userName == "guest"}
+         <NavBtn title="register" icon ='🔓'  url='/register'/>
+         {:else}
+         <NavBtn2 title="logout" icon ='🔑'  clk={logout}  /> 
+         <NavBtn title={userName} icon ='👨‍🎓'  url='#'/> 
+         {/if}
         <!-- <NavBtn title='Signup' icon ='🔓'  url='/signup'/> -->
         </div>
     </div><!--outer most div-->

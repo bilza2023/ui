@@ -1,6 +1,7 @@
 <script>
   import MathBlock from './MathBlock.svelte';
   export let sp = [];
+  export let images = {};
 </script>
 
 {#each sp as item}
@@ -31,32 +32,33 @@
       {/each}
     </table>
   {:else if item.type === 'image'}
-    <img class="sp-image" src={item.data.src} alt={item.data.alt || 'image'} />
+    <img
+      class="sp-image"
+      src={images[item.data.src] || images.default}
+      alt={item.data.alt || 'image'}
+    />
   {:else if item.type === 'code'}
     <pre><code>{item.data.code}</code></pre>
   {:else}
     <p>Unsupported SP type: {item.type}</p>
   {/if}
 {/each}
-
 <style>
   .sp-title {
-    background-color: #3a250f;
+    background-color: #221100;
     border: 1px solid #a47000;
     padding: 8px;
-    text-align: center;
     margin-bottom: 8px;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .sp-text {
     background-color: #2a1a00;
     border: 1px solid #bb8800;
     padding: 10px;
-    text-align: center;
     margin-bottom: 10px;
-    font-size: 1.2rem;
+    font-size: 1rem;
     line-height: 1.6;
   }
 
@@ -75,5 +77,29 @@
     margin-bottom: 10px;
     border: 2px solid #333;
     background-color: #000;
+  }
+
+  .sp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    background-color: #1f1f1f;
+    border: 1px solid #666;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
+  }
+
+  .sp-table td,
+  .sp-table th {
+    border: 1px solid #444;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 1rem;
+    color: #eee;
+  }
+
+  .sp-table.code td {
+    background-color: #121212;
+    font-family: "Fira Code", monospace;
+    color: #96ff96;
   }
 </style>
