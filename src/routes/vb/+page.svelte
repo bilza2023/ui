@@ -1,7 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import { page } from '$app/stores';
-  import { Player, createTicker } from "./24may/player";
+  import {  createTicker } from "./ticker/createTicker";
+  import {Player} from "taleem-canvasplayer";
   import { pixiApp } from "./pixiApp.js";
  
   import staticVideos from "../../lib/staticVideos/staticVideos";
