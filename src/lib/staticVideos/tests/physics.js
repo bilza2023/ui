@@ -1,6 +1,5 @@
-import { DeckBuilder } from "../editor/TwoTemplates/DeckBuilder.js";
-import { GlobalThemes } from "../editor/theme/globalThemes.js";
-import { GlobalBackgrounds } from "../editor/theme/globalBackgrounds.js";
+import { DeckBuilder, GlobalThemes, GlobalBackgrounds } from "taleem-deckbuilders";
+
 
 // Setup
 const theme = GlobalThemes.royalBlue;

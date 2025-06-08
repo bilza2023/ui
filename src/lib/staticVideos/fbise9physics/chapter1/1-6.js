@@ -1,4 +1,5 @@
-import { DeckBuilder, GlobalThemes, GlobalBackgrounds } from "../../editor";
+import { DeckBuilder, GlobalThemes, GlobalBackgrounds } from "taleem-deckbuilders";
+
 
 // Setup
 const theme = GlobalThemes.royalBlue;
