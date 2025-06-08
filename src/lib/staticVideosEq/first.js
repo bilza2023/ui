@@ -1,7 +1,6 @@
 // slide.js
 
-import { EqDeckBuilder } from "../eqsAIApi/EqDeckBuilder.js";
-import { Sp } from "../eqsAIApi/Sp.js";
+import { EqDeckBuilder,Sp } from "taleem-eq-deckbuilder";
 
 // Create a new deck
 const deck = new EqDeckBuilder();

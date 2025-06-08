@@ -1,6 +1,6 @@
 // slide.js
 
-import { EqDeckBuilder } from "../eqsAIApi/EqDeckBuilder.js";
+import { EqDeckBuilder,Sp } from "taleem-eq-deckbuilder";
 
 // New deck to test all eq types
 const deck = new EqDeckBuilder();
