@@ -11,8 +11,11 @@ export class Question{
         this.questionPart = questionPart 
       }
       tcodeUrl() {
+        const chapterId = typeof this.chapter === "object" ? this.chapter.id : this.chapter;
         const safeExercise = this.exercise.replace(/\./g, "_"); // file-safe
         const suffix = this.questionPart ? `${this.questionNo}${this.questionPart}` : `${this.questionNo}`;
-        return `${this.tcodeName}-${this.chapter}-${safeExercise}-${suffix}`;
+        return `filename=${this.tcodeName}-chapter-${chapterId}-ex${safeExercise}-q${suffix}`;
       }
+      
+      
 }

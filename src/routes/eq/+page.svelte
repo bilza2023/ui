@@ -5,19 +5,39 @@
   import Player from '../../lib/players/player/Player';
   import SlideNav from '../../lib/players/SlideNav.svelte';
   import EqPlayer from '../../lib/players/eqsPlayer/EqPlayer.svelte';
-  import PresentationData from '../../lib/staticVideosEq/slide';
+  // import PresentationData from '../../lib/content/fbise9physics/fbise9physics-chapter-1-ex1_2-q1';
 
   let currentTime = 0;
   let playing = false;
   let player;
   let maxEndTime;
-  const data = PresentationData;
+  let PresentationData=null;
+
   const soundUrl = "sounds/music.opus";
   let images;
 
-  onMount(() => {
- console.log("PresentationData" ,PresentationData);
- 
+onMount(async() => {
+  // debugger;
+  const params = new URLSearchParams(window.location.search);
+  const filename = params.get("filename"); // e.g. fbise9physics-chapter-1-ex1_1-q1
+  if (!filename) return;
+
+  try {
+    const modules = import.meta.glob('/src/lib/content/**/*.js');
+    const matchingPath = Object.keys(modules).find(path => path.includes(`${filename}.js`));
+
+    if (matchingPath) {
+      const mod = await modules[matchingPath]();
+      // console.log("mod",mod);
+      PresentationData = mod.default;;
+    } else {
+      console.error("Slide file not found:", filename);
+    }
+  } catch (err) {
+    console.error("Error loading presentation:", err);
+  }
+
+///////////////////////////////
   images = {
   default: "/images/taleemclass.webp",  
   drops: "/images/drops.png",
@@ -37,7 +57,7 @@
 
 
     const sound = getHowler(soundUrl);
-    maxEndTime = Math.max(...data.slide.map(eq => eq.endTime));
+    maxEndTime = Math.max(...PresentationData.slide.map(eq => eq.endTime));
     player = new Player(sound);
           player.onTick = (t) => {
         currentTime = +t;
@@ -65,6 +85,7 @@
   }
 </script>
 
+{#if PresentationData}
 {#if maxEndTime}
   <SlideNav
     {playing}
@@ -78,7 +99,8 @@
 {/if}
 
 {#if images}
-<!-- <EqPlayer slide={data} {currentTime} {images} /> -->
-<EqPlayer slide={data} {currentTime} {images} on:seek={(e) => seek(e.detail)} />
+<!-- <EqPlayer slide={PresentationData} {currentTime} {images} /> -->
+<EqPlayer slide={PresentationData} {currentTime} {images} on:seek={(e) => seek(e.detail)} />
+{/if}
 
 {/if}

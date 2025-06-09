@@ -34,14 +34,14 @@ export const dictionary = {
 		"/courses/fbise9physics": [8],
 		"/courses/fbise9physics/chapter1": [9],
 		"/courses/it": [10],
-		"/eqs": [~11],
+		"/eq": [~11],
 		"/forgot_password": [12],
 		"/login": [13],
 		"/register": [14],
 		"/studio": [15],
 		"/syllabus/fbise9physics": [16],
-		"/vb": [~17],
-		"/videoblog": [18]
+		"/videoblog": [18],
+		"/video": [~17]
 	};
 
 export const hooks = {

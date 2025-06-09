@@ -30,7 +30,7 @@
 }
 ///////////////////////////////////////////////////
   onMount(async() => {
-    // debugger;
+ 
 
 const backgroundAssets = {
   drops: PIXI.Texture.from("images/drops.png"),
@@ -46,15 +46,22 @@ const backgroundAssets = {
   rocketTakeoff: PIXI.Texture.from("images/rocketTakeoff.webp"),
   physicsArt: PIXI.Texture.from("images/physicsArt.webp"),
 };
-    // console.log("presentationData",presentationData);
-////////////////////////////////////////////////////////////////////////
-// const name = $page.url.searchParams.get("presentation") || "userSlide";
-//    ({ presentationData } =
-//      await import(/* @vite-ignore */ `../../lib/staticVideos/tests/${name}.js`)); 
-const name = $page.url.searchParams.get("presentation") || "demo";
-  presentationData = staticVideos[name];
- if(!presentationData) throw new Error( `${name} file not found`);
- 
+   
+try {
+  debugger;
+  // const name = $page.url.searchParams.get("presentation") || "demo";
+  const filename =  "fbise9physics-chapter-1-ex1_1-q1";
+  const modules = import.meta.glob('/src/lib/content/**/*.js');
+  const match = Object.keys(modules).find(path => path.includes(`${filename}.js`));
+  if (match) {
+    const mod = await modules[match]();
+    presentationData = mod.presentationData;
+    console.log("presentationData",presentationData);
+  }
+
+} catch (err) {
+  console.error(`Slide not found for ${name}`, err);
+}
 ////////////////////////////////////////////////////////////////////////  
   
   
@@ -76,7 +83,7 @@ const name = $page.url.searchParams.get("presentation") || "demo";
     });
 
     // Inject assets
-    console.log("backgroundAssets" , backgroundAssets);
+    // console.log("backgroundAssets" , backgroundAssets);
     player.setAssets?.(backgroundAssets); 
     
     container.appendChild(app.view);
@@ -93,8 +100,7 @@ const name = $page.url.searchParams.get("presentation") || "demo";
     });
 
     player.setTime(0);
-    // player.pause();
-
+   
     // Sync currentTime with Player
     function syncTimeLoop() {
       const loop = () => {
