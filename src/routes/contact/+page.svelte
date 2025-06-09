@@ -1,6 +1,6 @@
 <script>
   import Nav from "../../lib/appComps/Nav.svelte";
-  import fbise9physics from "../../lib/TcodeSyllabus/fbise9physics";
+  import fbise9physics from "../../lib/syllabusData/fbise9physics";
   console.log("fbise9physics" ,fbise9physics);
 </script>
 

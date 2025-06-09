@@ -1,83 +1,61 @@
-// sp-demo.js
-
 import { EqDeckBuilder,Sp } from "taleem-eq-deckbuilder";
 
 const deck = new EqDeckBuilder();
 
-// Default SP: Used by slide 1 only
 const globalSp = new Sp()
-  .title("The Beauty of Physics")
-  .image("taleemclass", "Learning environment")
+  .title("Introduction to ChronoDynamics")
+  .text("A fictional field exploring the flow and manipulation of time.")
   .getComponents();
 deck.setGlobalSp(globalSp);
 
-// Slide 1: Uses global SP
-deck.math(3, "E = mc^2");
+deck.title(3, "What is ChronoDynamics?");
+deck.text(6, "ChronoDynamics studies time's flow across different reference frames.");
 
-// Slide 2: Lorentz factor with custom SP
-deck.math(6, "\\gamma = \\frac{1}{\\sqrt{1 - \\frac{v^2}{c^2}}}");
 deck.setSp(new Sp()
-  .title("Relativity Begins")
-  .image("physicsArt", "Lorentz transformation")
+  .title("Chrono Flow")
+  .image("timeStream", "Visualizing time as a stream")
   .getComponents());
+deck.math(9, "C_f = \\frac{dt}{d\\tau}");
 
-// Slide 3: Gravitational Force
-deck.math(9, "F = G \\frac{m_1 m_2}{r^2}");
 deck.setSp(new Sp()
-  .title("Newton’s Gravity")
-  .image("appleFallingFromTree", "Classic gravity story")
+  .title("Chrono Factor")
+  .text("C_f: Chrono flow factor, dt: observer time, dτ: proper time")
   .getComponents());
+deck.heading(12, "Temporal Refraction");
 
-// Slide 4: Kinetic Energy
-deck.math(12, "KE = \\frac{1}{2}mv^2");
 deck.setSp(new Sp()
-  .title("Motion Energy")
-  .image("rocketTakeoff", "Rocket lifting off")
+  .title("Time Prism")
+  .image("temporalPrism", "Illustration of time bending")
   .getComponents());
+deck.text(15, "Time can 'bend' when passing through dense chrono-fields.");
 
-// Slide 5: Quadratic Formula
-deck.math(15, "x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}");
 deck.setSp(new Sp()
-  .title("Solving Equations")
-  .image("drops", "Mathematical abstraction")
+  .title("Time Equation")
+  .math("T = T_0 e^{-\\lambda x}")
   .getComponents());
+deck.math(18, "T = T_0 e^{-\\lambda x}");
 
-// Slide 6: SP Table
-deck.text(18, "SP: Constants Table");
-deck.setSp(new Sp().table([
-  ["Constant", "Symbol", "Value"],
-  ["Speed of light", "c", "3.00×10^8 m/s"],
-  ["Gravitational", "G", "6.67×10^-11 N·m²/kg²"],
-  ["Planck", "h", "6.63×10^-34 J·s"]
-]).getComponents());
-
-// Slide 7: SP TableCode
-deck.text(21, "SP: Variables as Code");
-deck.setSp(new Sp().tableCode([
-  ["Variable", "Type", "Example"],
-  ["velocity", "float", "3.2"],
-  ["name", "string", "'Ali'"]
-]).getComponents());
-
-// Slide 8: Visual identity
-deck.text(24, "SP: Every Day Physics");
 deck.setSp(new Sp()
-  .title("Examples All Around")
-  .image("everyDayItems", "Items in motion")
+  .title("Decay Model")
+  .text("T: observed time, T₀: initial time, λ: chrono decay rate, x: distance")
   .getComponents());
+deck.text(21, "Chrono decay affects how quickly events are perceived.");
 
-// Slide 9: Visual identity 2
-deck.text(27, "SP: Female Teacher in Class");
 deck.setSp(new Sp()
-  .title("Educators at Work")
-  .image("femaleTeacher", "Teaching science")
+  .title("Applications")
+  .table([
+    ["Application", "Effect"],
+    ["Chrono-Therapy", "Slows cellular time"],
+    ["Time Mesh", "Stabilizes local time"],
+    ["Temporal Lens", "Magnifies history"]
+  ])
   .getComponents());
+deck.text(24, "Fictional tools inspired by ChronoDynamics.");
 
-// Slide 10: Visual identity 3
-deck.text(30, "SP: Forces in Action");
 deck.setSp(new Sp()
-  .title("Types of Force")
-  .image("typesOfForce", "Demonstration of physical forces")
+  .title("Summary")
+  .text("ChronoDynamics offers imaginative insights into time flow manipulation.")
   .getComponents());
+deck.title(27, "Conclusion: Time as a Tool");
 
 export default deck.build();
