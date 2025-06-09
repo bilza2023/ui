@@ -1,27 +1,22 @@
+<script>
+  export let name = "Taleem.Help";
+  export let description = "Education for Every Pakistani — we offer AI, IT, and Board classes built to empower the next generation.";
+  export let image = "/brand/taleem-banner.webp";
+  export let color = "rgba(61, 46, 30, 0.9)";
+</script>
 
-<div class="banner-container">
-
-  <!-- Left: Image -->
+<div class="banner-container" style="background-color: {color}">
   <div class="banner-image">
-    <img
-      src="/brand/taleem-banner.webp"
-      alt="Taleem Banner"
-      class="banner-img"
-    />
+    <img src={image} alt={name} class="banner-img" />
   </div>
 
-  <!-- Right: Text -->
   <div class="banner-text">
-    <h2 class="banner-title">taleem.help</h2>
-    <p class="banner-description">
-      Education for Every Pakistani — we offer AI, IT, and Board classes built to empower the next generation.
-      Learn at your own pace, with modern tools, and practical outcomes. For curious learners from schools to startups.
-    </p>
+    <h2 class="banner-title">{name}</h2>
+    <p class="banner-description">{description}</p>
     <div class="banner-note">
       🌍 Part of the <strong>Taleem.Help</strong> national learning initiative.
     </div>
   </div>
-
 </div>
 
 <style>
@@ -30,7 +25,6 @@
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    background-color: rgba(61, 46, 30, 0.9);
     padding: 3rem 3rem;
     gap: 8rem;
   }
@@ -47,16 +41,16 @@
   }
 
   .banner-img {
-     max-height: 300px;
-  width: 100%;
-  object-fit: contain;
-  border-radius: 12px;
-  border: none;
+    max-height: 300px;
+    width: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+    border: none;
   }
 
   .banner-text {
     flex: 1;
-    color:  rgba(248, 237, 224, 0.9);;
+    color: rgba(248, 237, 224, 0.9);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -72,9 +66,9 @@
   }
 
   .banner-description {
-    font-size: 1.75rem;     /* increased from 1.125rem */
-  font-weight: 600;       /* increased from 500 */
-  line-height: 1.7;       /* slightly looser line height */
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.7;
   }
 
   .banner-note {

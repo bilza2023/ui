@@ -15,7 +15,7 @@
         class:bg-gray-100={!isSubscribed}
         on:click={() => onSelectChapter(chapter)}
       >
-        <h2 class="text-xl font-bold mb-2">{chapter.title}</h2>
+        <h2 class="text-xl font-bold mb-2">{chapter.name}</h2>
         <p class="text-sm text-gray-600 line-clamp-3">{chapter.description}</p>
       </div>
     {/each}

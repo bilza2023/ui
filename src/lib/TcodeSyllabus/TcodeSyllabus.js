@@ -1,15 +1,22 @@
-// TcodeSyllabus.js
 import { Chapter } from "./chapter.js";
+import { SyllabusBase } from "./SyllabusBase.js";
 
-export default class TcodeSyllabus {
+export default class TcodeSyllabus extends SyllabusBase {
   constructor(tcodeName) {
+    super({
+      name: tcodeName,
+      description: "",
+      image: "/images/tcode-banner.webp",
+      color: "#3d2e1e",
+      tag: ""
+    });
+
     this.tcodeName = tcodeName;
-    this.descriptionText = "";
     this.chaptersMap = new Map();
   }
 
   description(text) {
-    this.descriptionText = text;
+    this.description = text;
   }
 
   addChapter(id, title = `Chapter ${id}`, description = "") {
@@ -49,8 +56,8 @@ export default class TcodeSyllabus {
 
   toJSON() {
     return {
-      name: this.tcodeName,
-      description: this.descriptionText,
+      name: this.name,
+      description: this.description,
       chapters: Array.from(this.chaptersMap.values()).map(ch => ch.toJSON())
     };
   }

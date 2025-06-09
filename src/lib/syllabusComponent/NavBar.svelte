@@ -17,7 +17,7 @@
         <span class="text-gray-500">›</span>
         <button class="text-blue-800 underline hover:text-blue-600"
                 on:click={onBackToExercises}>
-          {selectedChapter.title}
+          {selectedChapter.name}
         </button>
       {/if}
   
