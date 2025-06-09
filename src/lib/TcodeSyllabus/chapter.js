@@ -6,7 +6,7 @@ export class Chapter extends SyllabusBase {
     super({
       name: title,
       description,
-      image: "/images/chapter-banner.webp",
+      image:  "/tcodes/chapter-banner.webp",
       color: "#2c3e50",
       tag: `Chapter ${id}`
     });

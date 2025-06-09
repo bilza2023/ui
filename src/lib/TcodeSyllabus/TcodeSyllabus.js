@@ -18,13 +18,16 @@ export default class TcodeSyllabus extends SyllabusBase {
   description(text) {
     this.description = text;
   }
-
+//add image later--add chapter has nothing to do with image add that later
   addChapter(id, title = `Chapter ${id}`, description = "") {
     if (this.chaptersMap.has(id)) return this.chaptersMap.get(id);
+ 
     const chapter = new Chapter(id, title, description, this.tcodeName);
+  
     this.chaptersMap.set(id, chapter);
     return chapter;
   }
+  
 
   chapters(id) {
     if (!this.chaptersMap.has(id)) throw new Error(`Chapter ${id} not found`);

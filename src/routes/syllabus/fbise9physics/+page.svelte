@@ -1,6 +1,6 @@
 <script>
   import Nav from "../../../lib/appComps/Nav.svelte";
-  import TaleemBanner from "../../../lib/appComps/TaleemBanner.svelte";
+  import TaleemBanner from "../TaleemBanner.svelte";
   import Footer from "../../../lib/appComps/Footer.svelte";
   import NavBar from "../../../lib/syllabusComponent/NavBar.svelte";
   import ChaptersPage from "../../../lib/syllabusComponent/ChaptersPage.svelte";

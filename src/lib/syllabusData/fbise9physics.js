@@ -2,15 +2,13 @@
 
 import { TcodeSyllabus, slideTypes } from "../TcodeSyllabus/index";
 
-// ✅ Create syllabus for fbise9physics
-
 const fbise9physics = new TcodeSyllabus("fbise9physics");
 
 // 🛠️ FIXED: assign description as a property (not a method)
+// debugger
 fbise9physics.description = "Grade 9 Physics (FBISE)";
 
 const chapter1 = fbise9physics.addChapter(1, "Physical Quantities","Chapter Description");
-
 // Exercise 1.1 → Questions 1, 2
 const ex1_1 = chapter1.addEx("1.1");
 ex1_1.addQ(slideTypes.eq, 1);

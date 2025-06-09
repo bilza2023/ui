@@ -6,7 +6,7 @@ export class Exercise extends SyllabusBase {
     super({
       name: `Exercise ${exercise}`,
       description: "",
-      image: "/images/exercise-banner.webp",
+      image: "/tcodes/exercise-banner.webp",
       color: "#4b2e83",
       tag: `Exercise ${exercise}`
     });
