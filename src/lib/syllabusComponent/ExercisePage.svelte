@@ -1,25 +1,58 @@
-
 <script>
-    export let chapter = null;
-    export let selectedExercise = null;
-    export let isSubscribed = false;
-    export let onSelectExercise = (ex) => {};
-  </script>
-  
-  {#if chapter}
-    <h2 class="text-2xl font-semibold px-4 mt-4 mb-2">{chapter.name} — Exercises</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-      {#each Array.from(chapter.exercisesMap.values()) as ex (ex.exercise)}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
+  export let chapter = null;
+  export let onSelectExercise = (ex) => {};
+  export let isSubscribed = false;
+
+  const theme = {
+    bgCard: "bg-[#F3F4F6]",
+    bgCardAlt: "bg-[#F2D7AC]",
+    border: "border-[#93754b]",
+    text: "text-[#fff5e0]",
+    textDim: "text-[#c9b99d]",
+    badgeBg: "bg-[#3d2a18]",
+    badgeText: "text-[#e9d5a0]"
+  };
+</script>
+
+{#if chapter}
+  <div class="px-4">
+    <h2 class="text-2xl font-semibold mb-4 text-[#f6e3bf]">
+      {chapter.name} — Exercises
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+    {#each Array.from(chapter.exercisesMap.values()) as ex (ex.exercise)}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div
-          class="border rounded-lg p-4 bg-blue-50 hover:bg-blue-100 cursor-pointer transition"
-          on:click={() => onSelectExercise(ex)}
-        >
-          <h3 class="text-lg font-medium">Exercise {ex.exercise}</h3>
-          <p class="text-sm text-gray-700">Questions: {ex.questions.length}</p>
+      <div
+        on:click={() => onSelectExercise(ex)}
+        class={`group rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col
+                ${theme.bgCard} ${theme.border} border`}
+      >
+        <!-- Icon Area -->
+        <div class={`h-32 w-full flex items-center justify-center ${theme.bgCardAlt} border-b ${theme.border} rounded-t-xl`}>
+          <div class="text-5xl group-hover:scale-110 transition-transform duration-300">
+            🗃️
+          </div>
         </div>
-      {/each}
-    </div>
-  {/if}
-  
+
+        <!-- Card Content -->
+        <div class="p-4 flex flex-col flex-grow">
+          <h3 class={`text-lg font-semibold ${theme.text} line-clamp-1`}>
+            Exercise {ex.exercise}
+          </h3>
+          <p class={`text-sm ${theme.textDim} line-clamp-2 mt-1 flex-grow`}>
+            A set of questions to test your knowledge.
+          </p>
+
+          <div class="mt-4">
+            <span class={`inline-block ${theme.badgeBg} ${theme.badgeText} text-xs font-medium px-2.5 py-1 rounded-full`}>
+              {ex.questions.length} Questions
+            </span>
+          </div>
+        </div>
+      </div>
+    {/each}
+  </div>
+{/if}

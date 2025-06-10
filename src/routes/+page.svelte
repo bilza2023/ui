@@ -9,7 +9,7 @@
   import {tcodesList} from "../lib/appComps/homepage/tcodesList";
 
 </script>
-<div class="min-h-screen flex flex-col justify-start bg-[#291904]">
+<div class="min-h-screen flex flex-col justify-start bg-[#160c00]">
 
   <Nav />
 <!-- <TaleemBanner /> -->

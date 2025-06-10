@@ -6,7 +6,7 @@
     export let onBackToExercises = () => {};
   </script>
   
-  <nav class="w-full bg-[#c9b7a1] text-gray-800 px-6 py-3 border-b border-gray-200">
+  <nav class="w-full bg-[#c9b7a1] text-gray-800 px-6 py-3 border-b border-gray-200 ">
     <div class="text-lg font-semibold tracking-wide space-x-2">
       <button class="text-blue-800 underline hover:text-blue-600"
               on:click={onBackToChapters}>

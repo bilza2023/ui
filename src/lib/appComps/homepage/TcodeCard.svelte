@@ -6,7 +6,7 @@
     {#each tcodes as tcode (tcode.name)}
       <a
         href={tcode.link}
-        class="w-[280px] rounded-xl overflow-hidden shadow hover:shadow-md transition bg-[#fefcf8] border border-[#eee5db] no-underline"
+        class="w-[320px] rounded-xl overflow-hidden shadow hover:shadow-md transition bg-[#fefcf8] border border-[#eee5db] no-underline"
       >
         <!-- Thumbnail -->
         <div class="h-[160px] overflow-hidden">
@@ -33,4 +33,7 @@
       </a>
     {/each}
   </div>
-  
+<!--   
+  Dimensions: 560×315px (16:9 ratio) or 640×360px
+Aspect ratio: 16:9 landscape
+Format: WebP or high-quality JPEG -->
