@@ -4,7 +4,7 @@
   </script>
   
   <div class="flex flex-wrap gap-4 p-4 justify-center">
-    {#each tcodes as tcode (tcode.name)}
+    {#each tcodes as tcode (tcode.tcodeName)}
       <a
         href={tcode.link}
         class="w-[320px] rounded-xl overflow-hidden shadow hover:shadow-md transition bg-[#fefcf8] border border-[#eee5db] no-underline"
@@ -20,7 +20,7 @@
   
         <!-- Card Text -->
         <div class="p-4">
-          <h2 class="text-lg font-semibold text-gray-800 line-clamp-1">{tcode.name}</h2>
+          <h2 class="text-lg font-semibold text-gray-800 line-clamp-1">{tcode.tcodeName}</h2>
           <p class="text-sm text-gray-600 line-clamp-2">{tcode.description}</p>
   
           {#if tcode.tags}

@@ -21,12 +21,13 @@
       : selectedChapter
         ? selectedChapter
         : syllabus;
+
   </script>
   
   <Nav />
   
   <NavBar
-    tcode={syllabus.name}
+    tcode={syllabus.tcodeName}
     {selectedChapter}
     {selectedExercise}
     onBackToChapters={() => {

@@ -3,7 +3,7 @@
   export let url = 'https://taleem.help';
   export let icon = '🧪';
   export let title = 'Menu';
-
+  export let bgColor = "gray";
   export let bg = 'bg-transparent';
   export let hoverBg = 'hover:bg-[#bfa074]';
   export let titleColor = 'text-gray-900';
