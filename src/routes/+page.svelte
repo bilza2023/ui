@@ -10,6 +10,7 @@
   import fbise10physics from "../lib/syllabusData/fbise10physics";  
   import fbise9physics from "../lib/syllabusData/fbise9physics";  
   import mockSyllabus from "../lib/syllabusData/mockSyllabus";  
+
 </script>
 <div class="min-h-screen flex flex-col justify-start bg-[#160c00]">
 
