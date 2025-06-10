@@ -12,13 +12,13 @@ export class Exercise extends SyllabusBase {
     });
 
     this.exercise = exercise;
-    this.chapter = chapter;
+    this.chapterId = chapter.id;
     this.tcodeName = tcodeName;
     this.questions = [];
   }
 
   addQ(questionType, questionNo, questionPart = "") {
-    const q = new Question(this.tcodeName, this.chapter, this.exercise, questionNo, questionType, questionPart);
+    const q = new Question(this.tcodeName, this.chapterId, this.exercise, questionNo, questionType, questionPart);
     this.questions.push(q);
     return this;
   }
