@@ -5,47 +5,30 @@
   import Footer from "../lib/appComps/Footer.svelte";  
   import SubjectCard from "../lib/appComps/homepage/SubjectCard.svelte";  
   import SidebarCard from "../lib/appComps/homepage/SidebarCard.svelte";  
+  import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";
+  import {tcodesList} from "../lib/appComps/homepage/tcodesList";
 
 </script>
-
-<div class="min-h-screen flex flex-col justify-between bg-[#d5c3ab]">
+<div class="min-h-screen flex flex-col justify-start bg-[#291904]">
 
   <Nav />
-<TaleemBanner />
+<!-- <TaleemBanner /> -->
   
-<section class="w-full px-12 py-12 grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-12">
+<section class="w-full px-12 py-12 grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-12 min-h-screen">
 
   <!-- Left Column -->
-  <div class="bg-[#f3e8d9] p-6 rounded-xl shadow-inner flex flex-col space-y-6">
+  <div class={` p-6 rounded-xl shadow-inner flex flex-col space-y-6 border-2 border-[#93754b]  `}>
     
-
-    <SubjectCard
-    heading="🧠 AI Learning Tracks"
-    description="Learn to use, build, and earn with modern AI tools. From prompt basics to system design and business automation — tailored for Pakistani learners."
-    link="/courses/ai"
-    buttonText="View AI Courses →"
+    <TcodeCard
+    tcodes={tcodesList}
   />
   
-
-    <SubjectCard
-  heading="💻 IT Learning Tracks"
-  description="Master practical IT skills like file handling, system setup, and website basics. For jobs, freelancing, and self-reliance."
-  link="/courses/it"
-  buttonText="View IT Courses →"
-/>
-    <SubjectCard
-  heading="🇵🇰 FEBISE - Federal Board Courses"
-  description="At the moment we also offer class 9th Math, Physics and English Classes."
-  link="/courses/fbise"
-  buttonText="View FBISE Courses →"
-/>
-
 
   </div>
 
   <!-- Right Sidebar -->
-  <div class="bg-[#ecdcc6] p-4 rounded-xl shadow flex flex-col space-y-4">
-    <h4 class="text-lg font-bold text-[#3d2e1e] mb-2">📢 Updates & Insights</h4>
+  <div class={` p-4 rounded-xl shadow flex flex-col space-y-4 min-h-screen border-2  border-[#93754b] text-white`}>
+    <h4 class="text-lg font-bold  mb-2 text-white">📢 Updates & Insights</h4>
     <SidebarCard />
     <SidebarCard />
   </div>

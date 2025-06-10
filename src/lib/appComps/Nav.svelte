@@ -40,7 +40,7 @@ function logout(){
                 <!-- ******************************** -->
                 <!-- ******************************** -->
         <div class='flex'>
-      
+<!--       
           <NavBtn
           title="AI"
           icon="🧠 "
@@ -63,7 +63,7 @@ function logout(){
       url="/courses/fbise9physics"
       bgColor="bg-[#d6b88d]"
       titleColor="text-gray-900"
-    />
+    /> -->
 
     
         <!-- <NavBtn title='Payment' icon = '🚀' url='/payment'/> -->

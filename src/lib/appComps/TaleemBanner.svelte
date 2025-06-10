@@ -1,6 +1,6 @@
 <script>
-  export let name = "Taleem.Help";
-  export let description = "Education for Every Pakistani — we offer AI, IT, and Board classes built to empower the next generation.";
+  export let name = "Taleem.Help - Education for Every Pakistani";
+  // export let description = "We offer AI, IT, and Board classes built to empower the next generation.";
   export let image = "/brand/taleem-banner.webp";
   export let color = "rgba(61, 46, 30, 0.9)";
 </script>
@@ -12,10 +12,8 @@
 
   <div class="banner-text">
     <h2 class="banner-title">{name}</h2>
-    <p class="banner-description">{description}</p>
-    <div class="banner-note">
-      🌍 Part of the <strong>Taleem.Help</strong> national learning initiative.
-    </div>
+    <!-- <p class="banner-description">{description}</p> -->
+
   </div>
 </div>
 
@@ -25,7 +23,7 @@
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    padding: 3rem 3rem;
+    padding: 1rem 1rem;
     gap: 8rem;
   }
 

@@ -48,7 +48,7 @@ const backgroundAssets = {
 };
    
 try {
-  debugger;
+  // debugger;
   // const name = $page.url.searchParams.get("presentation") || "demo";
   const filename =  "fbise9physics-chapter-1-ex1_1-q1";
   const modules = import.meta.glob('/src/lib/content/**/*.js');

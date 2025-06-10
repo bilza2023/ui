@@ -7,7 +7,7 @@
   <a
     class="block border rounded-md p-4 transition hover:shadow-md relative bg-yellow-50 hover:bg-yellow-100"
     href={`/${question.questionType}?${question.tcodeUrl()}`}
-
+  target="_blank"
   >
     <div class="flex justify-between items-center">
       <h4 class="font-semibold text-base">Q{question.questionNo}{question.questionPart}</h4>
