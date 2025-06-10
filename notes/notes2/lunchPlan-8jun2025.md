@@ -88,3 +88,9 @@ This document defines how Taleem.Help handles user subscription checks across th
 ---
 
 This hybrid model ensures both **speed and security** in Taleem.Help's subscription system.
+
+10-jun
+Step 1: Browsable Learning Shell --done
+Step 2: Actual Content Feeding - done mockSyllabus
+Step 3: Lockdown + Monetization Hooks - login register hooked ---subs remain -- tomaroow or skip fpr now
+Step 4: Student Studio (Bonus Layer)-> remains --- 

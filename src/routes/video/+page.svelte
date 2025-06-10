@@ -4,7 +4,7 @@
   import {  createTicker } from "./ticker/createTicker";
   import {Player} from "taleem-canvasplayer";
   import { pixiApp } from "./pixiApp.js";
- 
+  import { presentationData as demoPresentationData } from "../../lib/staticVideos/demo.js"; // 👈 your fallback file
   import staticVideos from "../../lib/staticVideos/staticVideos";
   import SlideNav from "./SlideNav.svelte";
   import * as PIXI from "pixi.js";
@@ -57,6 +57,9 @@ try {
     const mod = await modules[match]();
     presentationData = mod.presentationData;
     console.log("presentationData",presentationData);
+  } else {
+    console.warn(`Module not found for ${filename}, loading demo`);
+    presentationData = demoPresentationData; // 👈 fallback line
   }
 
 } catch (err) {
