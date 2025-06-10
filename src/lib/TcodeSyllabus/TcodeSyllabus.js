@@ -1,23 +1,16 @@
 import { Chapter } from "./chapter.js";
-import { SyllabusBase } from "./SyllabusBase.js";
 
-export default class TcodeSyllabus extends SyllabusBase {
-  constructor(tcodeName) {
-    super({
-      name: tcodeName,
-      description: "",
-      image: "/images/tcode-banner.webp",
-      color: "#3d2e1e",
-      tag: ""
-    });
-
-    this.tcodeName = tcodeName;
+export default class TcodeSyllabus  {
+  constructor(tcodeName="defaultName") {
+    this.tcodeName = tcodeName;//maynot be required--10jun
+    this.description = "";
+    this.image = "";
+    this.color = "";
+    this.link  = "" ;
     this.chaptersMap = new Map();
+
   }
 
-  description(text) {
-    this.description = text;
-  }
 //add image later--add chapter has nothing to do with image add that later
   addChapter(id, title = `Chapter ${id}`, description = "") {
     if (this.chaptersMap.has(id)) return this.chaptersMap.get(id);

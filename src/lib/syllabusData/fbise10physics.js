@@ -2,14 +2,15 @@
 
 import { TcodeSyllabus, slideTypes } from "../TcodeSyllabus/index";
 
-const fbise9physics = new TcodeSyllabus("fbise9physics");
 
-fbise9physics.description = "Grade 9 Physics (FBISE)",
-fbise9physics.image = "/tcodes/fbise10math.webp",
-fbise9physics.link =  "/syllabus/fbise9physics"
+const fbise10physics = new TcodeSyllabus("fbise10physics");
+
+fbise10physics.description = "Grade 10 Physics",
+fbise10physics.image = "/tcodes/fbise10math.webp",
+fbise10physics.link =  "/syllabus/fbise10physics"
 
 // ---- Chapter 1 ----
-const chapter1 = fbise9physics.addChapter(1, "Physical Quantities and Measurement", "How we measure the world using physical quantities.");
+const chapter1 = fbise10physics.addChapter(1, "Basics Physics", "Physics...");
 const ex1_1 = chapter1.addEx("1.1");
 ex1_1.addQ(slideTypes.video, 1);
 
@@ -48,4 +49,4 @@ ex1_2.addQ(slideTypes.eq, 1);
 // ex5_1.addQ(slideTypes.eq, 3);
 
 // ✅ Done
-export default fbise9physics;
+export default fbise10physics;

@@ -6,8 +6,9 @@
   import SubjectCard from "../lib/appComps/homepage/SubjectCard.svelte";  
   import SidebarCard from "../lib/appComps/homepage/SidebarCard.svelte";  
   import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";
-  import {tcodesList} from "../lib/appComps/homepage/tcodesList";
-
+  // import {tcodesList} from "../lib/appComps/homepage/tcodesList";
+  import fbise10physics from "../lib/syllabusData/fbise10physics";  
+  import fbise9physics from "../lib/syllabusData/fbise9physics";  
 </script>
 <div class="min-h-screen flex flex-col justify-start bg-[#160c00]">
 
@@ -20,7 +21,10 @@
   <div class={` p-6 rounded-xl shadow-inner flex flex-col space-y-6 border-2 border-[#93754b]  `}>
     
     <TcodeCard
-    tcodes={tcodesList}
+    tcodes={[
+      fbise10physics,
+      fbise9physics
+    ]}
   />
   
 

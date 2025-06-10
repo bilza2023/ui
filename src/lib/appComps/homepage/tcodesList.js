@@ -1,4 +1,5 @@
 
+
 export const tcodesList = [
     {
       name: "Physics 9",
@@ -7,15 +8,9 @@ export const tcodesList = [
       image: "/tcodes/chapter-banner.webp",
     },
     {
-      name: "Math 9",
+      name: "Physics 10",
       description: "Learn concepts, solve exercises, and explore math interactively.",
-      link: "/syllabus/fbise9math",
+      link: "/syllabus/fbise10physics",
       image: "/tcodes/fbise9math.webp",
-    },
-    {
-      name: "English 9",
-      description: "Explore grammar, comprehension, and writing skills step-by-step.",
-      link: "/syllabus/fbise9english",
-      image: "/tcodes/chapter-banner.webp",
     }
   ];

@@ -1,5 +1,6 @@
 <script>
     export let tcodes = []; // Array of { name, description, image, link, tag }
+    debugger;
   </script>
   
   <div class="flex flex-wrap gap-4 p-4 justify-center">
@@ -22,11 +23,11 @@
           <h2 class="text-lg font-semibold text-gray-800 line-clamp-1">{tcode.name}</h2>
           <p class="text-sm text-gray-600 line-clamp-2">{tcode.description}</p>
   
-          {#if tcode.tag}
+          {#if tcode.tags}
             <div
               class="mt-2 text-xs inline-block bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded"
             >
-              {tcode.tag}
+              {tcode.tags}
             </div>
           {/if}
         </div>

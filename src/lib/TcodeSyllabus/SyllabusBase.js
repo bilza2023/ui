@@ -1,11 +1,12 @@
 
 export class SyllabusBase {
-    constructor({ name = "", description = "", image = "", color = "", tag = "" } = {}) {
+    constructor({ name = "", description = "", image = "", color = "", tags = "",link="/" } = {}) {
       this.name = name;
       this.description = description;
       this.image = image;
       this.color = color;
-      this.tag = tag;
+      this.tags = tags;
+      this.link = link ;
     }
   
     heroData() {
@@ -14,7 +15,8 @@ export class SyllabusBase {
         description: this.description,
         image: this.image,
         color: this.color,
-        tag: this.tag
+        tags: this.tags,
+        link: this.link
       };
     }
   }

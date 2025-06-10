@@ -42,7 +42,7 @@
   }}
 />
 
-<div class="min-h-screen bg-[#160c00]">
+<div class="min-h-screen bg-[#160c00] pl-8 ">
   {#if !selectedChapter}
     <ChaptersPage
       {chapters}
