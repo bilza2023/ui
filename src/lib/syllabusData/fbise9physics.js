@@ -5,7 +5,7 @@ import { TcodeSyllabus, slideTypes } from "../TcodeSyllabus/index";
 const fbise9physics = new TcodeSyllabus("fbise9physics");
 
 fbise9physics.description = "Grade 9 Physics (FBISE)",
-fbise9physics.image = "/tcodes/fbise10math.webp",
+fbise9physics.image = "/tcodes/box.webp",
 fbise9physics.link =  "/syllabus/fbise9physics"
 
 // ---- Chapter 1 ----
