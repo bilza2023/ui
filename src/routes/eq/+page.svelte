@@ -5,7 +5,7 @@
   import Player from '../../lib/players/player/Player';
   import SlideNav from '../../lib/players/SlideNav.svelte';
   import EqPlayer from '../../lib/players/eqsPlayer/EqPlayer.svelte';
-  // import PresentationData from '../../lib/content/fbise9physics/fbise9physics-chapter-1-ex1_2-q1';
+  import {default as demoPresentationData} from '../../lib/staticVideosEq/demo';
 
   let currentTime = 0;
   let playing = false;
@@ -31,7 +31,8 @@ onMount(async() => {
       // console.log("mod",mod);
       PresentationData = mod.default;;
     } else {
-      console.error("Slide file not found:", filename);
+      PresentationData = demoPresentationData;
+      // console.error("Slide file not found:", filename);
     }
   } catch (err) {
     console.error("Error loading presentation:", err);
