@@ -21,10 +21,7 @@ export const nodes = [
 	() => import('./nodes/17'),
 	() => import('./nodes/18'),
 	() => import('./nodes/19'),
-	() => import('./nodes/20'),
-	() => import('./nodes/21'),
-	() => import('./nodes/22'),
-	() => import('./nodes/23')
+	() => import('./nodes/20')
 ];
 
 export const server_loads = [];
@@ -46,12 +43,9 @@ export const dictionary = {
 		"/register": [15],
 		"/studio": [16],
 		"/syllabus/fbise10physics": [17],
-		"/syllabus/fbise9math": [18],
-		"/syllabus/fbise9physics": [19],
-		"/syllabus/mockSyllabus": [20],
-		"/v-static": [~21],
-		"/videoblog": [23],
-		"/video": [~22]
+		"/v-static": [~18],
+		"/videoblog": [20],
+		"/video": [~19]
 	};
 
 export const hooks = {

@@ -1,6 +1,5 @@
 <script>
   export let chapter = null;
-  debugger;
   export let onSelectExercise = (ex) => {};
   export let isSubscribed = false;
 

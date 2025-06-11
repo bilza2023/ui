@@ -4,10 +4,8 @@
   import SidebarCard from "../lib/appComps/homepage/SidebarCard.svelte";  
   import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";
 
-  import {fbise10physics} from "./syllabus/fbise10physics/fbise10physics"; 
-  // import fbise9physics from "../lib/syllabusData/fbise9physics.js";
-  // console.log("fbise9physics" , fbise9physics);  
-  // import fbise9math from "../lib/syllabusData/fbise9math";  
+  import {fbise10physics} from "./syllabus/fbise10physics/fbise9physicsSyllabus"; 
+ 
 
 </script>
 <div class="min-h-screen flex flex-col justify-start bg-[#160c00]">
@@ -22,9 +20,7 @@
     
     <TcodeCard
     tcodes={[
-      // fbise9physics,
       fbise10physics,
-      // fbise9math
     ]}
   />
   
