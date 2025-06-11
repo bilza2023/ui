@@ -1,4 +1,5 @@
 
+//GPT- attention EXAMPLE format for syllaus 
 //fbise9physics.js
 
 import { TcodeSyllabus, slideTypes } from "../TcodeSyllabus/index";

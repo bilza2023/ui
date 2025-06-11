@@ -1,7 +1,7 @@
 
 import TcodeSyllabus from "./TcodeSyllabus";
 
-const slideTypes = {eq:"eq" , video:"video", quiz:"quiz" ,md:"md"};
+const slideTypes = {eq:"eq" , video:"video" ,md:"md"};
 
 export {
     TcodeSyllabus,
