@@ -36,7 +36,9 @@
       Q{question.questionNo}
     </h3>
     <p class={`text-sm ${theme.textDim} line-clamp-2 mt-1 flex-grow`}>
-      {question.exercise}
+      {question.exercise
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase())}
     </p>
     <!-- <p class={`text-sm ${theme.textDim} line-clamp-2 mt-1 flex-grow`}>
       {question.questionType.toUpperCase()}

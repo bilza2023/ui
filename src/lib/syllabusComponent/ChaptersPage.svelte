@@ -5,14 +5,14 @@
   export let onSelectChapter = (ch) => {};
 </script>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-10">
   {#each chapters as chapter (chapter.id)}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
-      class="rounded-xl overflow-hidden shadow hover:shadow-md transition bg-[#fefcf8] border border-[#eee5db] cursor-pointer"
-      class:bg-gray-100={!isSubscribed}
+    <button
+      type="button"
       on:click={() => onSelectChapter(chapter)}
+      class="text-left rounded-xl overflow-hidden shadow transition-transform duration-200 bg-[#fefcf8] border border-[#eee5db]
+             hover:shadow-lg hover:-translate-y-1 active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+      class:bg-gray-100={!isSubscribed}
     >
       <!-- Thumbnail -->
       <div class="h-[180px] overflow-hidden">
@@ -34,6 +34,6 @@
           </div>
         {/if}
       </div>
-    </div>
+    </button>
   {/each}
 </div>
