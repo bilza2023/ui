@@ -18,8 +18,8 @@ export class Chapter extends SyllabusBase {
 
   addEx(name) {
     if (this.exercisesMap.has(name)) return this.exercisesMap.get(name);
-    // const ex = new Exercise(name, this.tcodeName, this.id);
-    const ex = new Exercise(name, this.tcodeName, this);
+    const safeName = name.replace(/[ .]/g, "_").toLowerCase();
+    const ex = new Exercise(safeName, this.tcodeName, this);
     this.exercisesMap.set(name, ex);
     return ex;
   }

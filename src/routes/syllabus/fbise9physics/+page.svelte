@@ -6,8 +6,8 @@
   import ChaptersPage from "../../../lib/syllabusComponent/ChaptersPage.svelte";
   import ExercisePage from "../../../lib/syllabusComponent/ExercisePage.svelte";
   import QuestionCard from "../../../lib/syllabusComponent/QuestionCard.svelte";
-
-  import fbise9physics from "../../../lib/syllabusData/fbise9physics";
+ 
+  import fbise9physics from "../../../lib/syllabusData/fbise9physics.js";
 
   // console.log("fbise9physics" ,fbise9physics);
 

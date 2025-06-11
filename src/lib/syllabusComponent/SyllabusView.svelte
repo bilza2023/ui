@@ -60,7 +60,7 @@
     {:else if selectedExercise}
       <div class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-10">
         {#each selectedExercise.questions as q (q.tcodeUrl())}
-          <QuestionCard question={q} {isSubscribed} />
+          <QuestionCard question={q} {isSubscribed} name={q.name()} />
         {/each}
       </div>
     {/if}

@@ -1,11 +1,10 @@
 <script>
   import { onMount } from "svelte";
-  import { page } from '$app/stores';
   import {  createTicker } from "./ticker/createTicker";
+  import { page } from '$app/stores';
   import {Player} from "taleem-canvasplayer";
   import { pixiApp } from "./pixiApp.js";
-  import { presentationData as demoPresentationData } from "../../lib/staticVideos/demo.js"; // 👈 your fallback file
-  import staticVideos from "../../lib/staticVideos/staticVideos";
+  import { presentationData as demoPresentationData } from "../../lib/content/demo.js";
   import SlideNav from "./SlideNav.svelte";
   import * as PIXI from "pixi.js";
 
@@ -31,8 +30,7 @@
 ///////////////////////////////////////////////////
   onMount(async() => {
  
-
-const backgroundAssets = {
+const assets = {
   drops: PIXI.Texture.from("images/drops.png"),
   femaleTeacher: PIXI.Texture.from("images/female_teacher.jpg"),
   physicsClass: PIXI.Texture.from("images/physicsClass.webp"),
@@ -49,8 +47,8 @@ const backgroundAssets = {
    
 try {
   // debugger;
-  // const name = $page.url.searchParams.get("presentation") || "demo";
-  const filename =  "fbise9physics-chapter-1-ex1_1-q1";
+  const filename = $page.url.searchParams.get("filename") || "demo";
+  // const filename =  "fbise9physics-chapter-1-ex1_1-q1";
   const modules = import.meta.glob('/src/lib/content/**/*.js');
   const match = Object.keys(modules).find(path => path.includes(`${filename}.js`));
   if (match) {
@@ -86,8 +84,8 @@ try {
     });
 
     // Inject assets
-    // console.log("backgroundAssets" , backgroundAssets);
-    player.setAssets?.(backgroundAssets); 
+    // console.log("assets" , assets);
+    player.setAssets?.(assets); 
     
     container.appendChild(app.view);
     container.appendChild(app.view);

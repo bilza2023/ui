@@ -1,6 +1,7 @@
 <script>
     export let tcodes = []; // Array of { name, description, image, link, tag }
-  </script>
+
+ </script>
   
   <div class="flex flex-wrap gap-4 p-4 justify-center">
     {#each tcodes as tcode (tcode.tcodeName)}

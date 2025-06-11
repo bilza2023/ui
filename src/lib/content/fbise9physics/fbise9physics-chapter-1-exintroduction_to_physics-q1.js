@@ -9,7 +9,7 @@ deck.setGlobalBackground(GlobalBackgrounds.defaultBg(theme));
 deck.setGlobalBackgroundImage("physicsClass", 0.07);
 
 // Slide 1: What is Physics?
-deck.addHeader("header", [{ text: "What is Physics?" }]);
+deck.addHeader("header", [{ text: "What is Physics Actually" }]);
 deck.half(
   6,
   "bullets", [
@@ -59,7 +59,7 @@ deck.half(
 );
 
 // Slide 3: Why Study Physics?
-deck.addHeader("header", [{ text: "Why Study Physics?" }]);
+deck.addHeader("header", [{ text: "Why Study Physics" }]);
 deck.full(16, "bullets", [
   { text: "Answers how and why things happen", showAt: 12 },
   { text: "Helps invent tools and machines", showAt: 13 },

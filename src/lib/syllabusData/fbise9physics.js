@@ -17,10 +17,11 @@ const chapter1 = fbise9physics.addChapter(
 );
 
 // 🔹 Section 1.1: Introduction to Physics
-const ex1_1 = chapter1.addEx("Introduction to Physics");
-ex1_1.addQ(slideTypes.video, 1); // What is Physics?
-ex1_1.addQ(slideTypes.md, 2);    // Branches of Physics
-ex1_1.addQ(slideTypes.md, 3);    // Importance of Physics in Daily Life
+const Introduction_to_Physics = chapter1.addEx("Introduction_to_Physics");
+Introduction_to_Physics.addQ(slideTypes.video, 1); // What is Physics?
+Introduction_to_Physics.addQ(slideTypes.md, 2);    // Branches of Physics
+Introduction_to_Physics.addQ(slideTypes.md, 3);    // Importance of Physics in Daily Life
+Introduction_to_Physics.addQ(slideTypes.video, 4);    //Test
 
 // 🔹 Section 1.2: Physical Quantities
 const ex1_2 = chapter1.addEx("Physical Quantities");
@@ -49,6 +50,6 @@ ex1_5.addQ(slideTypes.video, 2); // Measuring Density of Regular Objects
 ex1_5.addQ(slideTypes.video, 3); // Measuring Density of Irregular Solids
 ex1_5.addQ(slideTypes.video, 4); // Measuring Density of Liquids
 
-
+console.log("fbise9physics",fbise9physics.toJSON());
 // ✅ Done
 export default fbise9physics;
