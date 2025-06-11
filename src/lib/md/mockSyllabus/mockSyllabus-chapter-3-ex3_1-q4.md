@@ -11,7 +11,7 @@ hhhhhhhne.
 Answer: x = 2
 
 ::image-prompt::
-"jkjkjjjkkcting y-axis at 1"
+/images/chestBox.webp
 
 ::teacher-note::
 lklklkkl-9-98
