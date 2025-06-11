@@ -1,6 +1,8 @@
 <script>
+  // export let exercise;
   export let question;
-  export let name="??";
+  // console.log("questionCard",question);
+  // debugger;
   export let isSubscribed = false;
 
   const theme = {
@@ -29,9 +31,12 @@
 
   <!-- Card Content -->
   <div class="p-4 flex flex-col flex-grow">
-    <h3 class={`text-lg font-semibold ${theme.text} line-clamp-1`}>
-      Q{name}
+    <h3 class={`text-lg font-semibold ${theme.text} line-clamp-1 text-black`}>
+      Q{question.questionNo}
     </h3>
+    <p class={`text-sm ${theme.textDim} line-clamp-2 mt-1 flex-grow`}>
+      {question.exercise}
+    </p>
     <p class={`text-sm ${theme.textDim} line-clamp-2 mt-1 flex-grow`}>
       {question.questionType.toUpperCase()}
     </p>

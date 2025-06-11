@@ -12,6 +12,8 @@
   // console.log("fbise9physics" ,fbise9physics);
 
   const syllabus = fbise9physics;
+  // debugger;
+  console.log("syllabus",syllabus);
   const chapters = Array.from(syllabus.chaptersMap.values());
 
   let selectedChapter = null;

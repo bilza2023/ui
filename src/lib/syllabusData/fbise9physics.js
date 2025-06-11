@@ -50,6 +50,6 @@ ex1_5.addQ(slideTypes.video, 2); // Measuring Density of Regular Objects
 ex1_5.addQ(slideTypes.video, 3); // Measuring Density of Irregular Solids
 ex1_5.addQ(slideTypes.video, 4); // Measuring Density of Liquids
 
-console.log("fbise9physics",fbise9physics.toJSON());
+// console.log("fbise9physics",fbise9physics.toJSON());
 // ✅ Done
 export default fbise9physics;

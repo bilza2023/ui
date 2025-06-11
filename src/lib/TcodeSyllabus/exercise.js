@@ -26,7 +26,16 @@ export class Exercise extends SyllabusBase {
   toJSON() {
     return {
       exercise: this.exercise,
-      questions: this.questions
+      questions: this.questions.map(q => ({
+        ...q,
+        name: q.tcodeName + " " + q.chapterId + " " + q.exercise + " " + q.questionNo + " " + (q.questionPart || ""),
+        tcodeUrl: (() => {
+          const safeExercise = q.exercise.replace(/\./g, "_");
+          const suffix = q.questionPart ? `${q.questionNo}${q.questionPart}` : `${q.questionNo}`;
+          return `filename=${q.tcodeName}-chapter-${q.chapterId}-ex${safeExercise}-q${suffix}`;
+        })()
+      }))
     };
   }
+  
 }
