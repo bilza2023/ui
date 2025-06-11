@@ -37,13 +37,13 @@
     <p class={`text-sm ${theme.textDim} line-clamp-2 mt-1 flex-grow`}>
       {question.exercise}
     </p>
-    <p class={`text-sm ${theme.textDim} line-clamp-2 mt-1 flex-grow`}>
+    <!-- <p class={`text-sm ${theme.textDim} line-clamp-2 mt-1 flex-grow`}>
       {question.questionType.toUpperCase()}
-    </p>
+    </p> -->
 
     <div class="mt-4">
       <span class={`inline-block ${theme.badgeBg} ${theme.badgeText} text-xs font-medium px-2.5 py-1 rounded-full`}>
-        View Question
+        {question.questionType.toUpperCase()}
       </span>
     </div>
   </div>

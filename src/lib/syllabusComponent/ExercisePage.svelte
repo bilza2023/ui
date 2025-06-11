@@ -33,18 +33,18 @@
         <!-- Icon Area -->
         <div class={`h-32 w-full flex items-center justify-center ${theme.bgCardAlt} border-b ${theme.border} rounded-t-xl`}>
           <div class="text-5xl group-hover:scale-110 transition-transform duration-300">
-            🗃️
+            💼
           </div>
         </div>
 
         <!-- Card Content -->
         <div class="p-4 flex flex-col flex-grow">
-          <h3 class={`text-lg font-semibold ${theme.text} line-clamp-1`}>
-            Exercise {ex.exercise}
+          <h3 class={`text-lg font-semibold ${theme.text} line-clamp-1 text-black`}>
+            {ex.exercise
+              .replace(/_/g, " ")
+              .replace(/\b\w/g, (c) => c.toUpperCase())}
+
           </h3>
-          <p class={`text-sm ${theme.textDim} line-clamp-2 mt-1 flex-grow`}>
-            A set of questions to test your knowledge.
-          </p>
 
           <div class="mt-4">
             <span class={`inline-block ${theme.badgeBg} ${theme.badgeText} text-xs font-medium px-2.5 py-1 rounded-full`}>
