@@ -5,6 +5,7 @@
   // debugger;
   export let isSubscribed = false;
 
+  const icons = {md: "🗃️",video: "📷",eq: "🖥️"};
   const theme = {
     bgCard: "bg-[#F3F4F6]",
     bgCardAlt: "bg-[#F2D7AC]",
@@ -19,13 +20,13 @@
   class={`group rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col
           ${theme.bgCard} ${theme.border} border w-full max-w-[240px]`}
 
-  href={`/${question.questionType}?${question.tcodeUrl()}`}
+  href={`/${question.questionType}?${question.tcodeUrl}`}
   target="_blank"
 >
   <!-- Icon Area -->
   <div class={`h-32 w-full flex items-center justify-center ${theme.bgCardAlt} border-b ${theme.border} rounded-t-xl`}>
     <div class="text-5xl group-hover:scale-110 transition-transform duration-300">
-      🗃️
+      {icons[question.questionType] || "❓"}
     </div>
   </div>
 

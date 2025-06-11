@@ -1,5 +1,6 @@
 <script>
   export let chapter = null;
+  debugger;
   export let onSelectExercise = (ex) => {};
   export let isSubscribed = false;
 
@@ -22,7 +23,7 @@
   </div> -->
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
-    {#each Array.from(chapter.exercisesMap.values()) as ex (ex.exercise)}
+    {#each chapter.exercises as ex (ex.exerciseName)}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
@@ -40,7 +41,7 @@
         <!-- Card Content -->
         <div class="p-4 flex flex-col flex-grow">
           <h3 class={`text-lg font-semibold ${theme.text} line-clamp-1 text-black`}>
-            {ex.exercise
+            {ex.exerciseName
               .replace(/_/g, " ")
               .replace(/\b\w/g, (c) => c.toUpperCase())}
 

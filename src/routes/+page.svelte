@@ -1,14 +1,12 @@
 <script>
   import Nav from "../lib/appComps/Nav.svelte";  
-  import FlexBoxCom from "../lib/appComps/FlexBoxCom.svelte";  
-  import TaleemBanner from "../lib/appComps/TaleemBanner.svelte";  
   import Footer from "../lib/appComps/Footer.svelte";  
-  import SubjectCard from "../lib/appComps/homepage/SubjectCard.svelte";  
   import SidebarCard from "../lib/appComps/homepage/SidebarCard.svelte";  
   import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";
 
-  import fbise10physics from "../lib/syllabusData/fbise10physics";  
-  import fbise9physics from "../lib/syllabusData/fbise9physics.js";  
+  import {fbise10physics} from "./syllabus/fbise10physics/fbise10physics"; 
+  // import fbise9physics from "../lib/syllabusData/fbise9physics.js";
+  // console.log("fbise9physics" , fbise9physics);  
   // import fbise9math from "../lib/syllabusData/fbise9math";  
 
 </script>
@@ -24,7 +22,7 @@
     
     <TcodeCard
     tcodes={[
-      fbise9physics,
+      // fbise9physics,
       fbise10physics,
       // fbise9math
     ]}

@@ -6,12 +6,11 @@ import { TcodeSyllabus, slideTypes } from "../TcodeSyllabus/index";
 const fbise9physics = new TcodeSyllabus("fbise9physics");
 
 fbise9physics.description = "Grade 9 Physics (FBISE)",
-fbise9physics.image = "/tcodes/box.webp",
+fbise9physics.image = "/tcodes/fbise9physics.webp",
 fbise9physics.link =  "/syllabus/fbise9physics"
 
 // ---- Chapter 1 ----
-const chapter1 = fbise9physics.addChapter(
-  1,
+const chapter1 = fbise9physics.addChapter(1,
   "Physical Quantities and Measurement",
   "How we measure the world using physical quantities."
 );

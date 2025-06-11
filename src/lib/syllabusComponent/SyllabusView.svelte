@@ -7,6 +7,7 @@
   import QuestionCard from "./QuestionCard.svelte";
 
   export let syllabus;
+  console.log("syllabus" , syllabus);
   export let user = null;
   export let isSubscribed = false;
 

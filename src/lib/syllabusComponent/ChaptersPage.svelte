@@ -18,14 +18,14 @@
       <div class="h-[180px] overflow-hidden">
         <img
           src={chapter.image || "/tcodes/chapter-banner.webp"}
-          alt={chapter.name}
+          alt={chapter.chapterName}
           class="w-full h-full object-cover rounded-t-xl"
         />
       </div>
 
       <!-- Card Text -->
       <div class="p-4">
-        <h2 class="text-lg font-semibold line-clamp-1">{chapter.name}</h2>
+        <h2 class="text-lg font-semibold line-clamp-1">{chapter.chapterName}</h2>
         <p class="text-sm text-gray-600 line-clamp-2">{chapter.description}</p>
 
         {#if chapter.tag}
