@@ -35,6 +35,15 @@
     <h3 class={`text-lg font-semibold ${theme.text} line-clamp-1 text-black`}>
       Q{question.questionNo}
     </h3>
+
+    <p class={`text-sm ${theme.text} line-clamp-2 mt-1 flex-grow text-black`}>
+    {#if question.questionName}
+      {question.questionName} 
+      {:else}
+   ..
+      {/if}
+    </p>
+
     <p class={`text-sm ${theme.textDim} line-clamp-2 mt-1 flex-grow`}>
       {question.exercise
         .replace(/_/g, " ")

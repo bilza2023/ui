@@ -18,8 +18,9 @@ export class Exercise extends SyllabusBase {
     this.questions = [];
   }
 
-  addQ(questionType, questionNo, questionPart = "") {
+  addQ(questionType, questionNo, questionName=null , questionPart = "") {
     const q = new Question(this.tcodeName, this.chapterId, this.exercise, questionNo, questionType, questionPart);
+    if(questionName) q.questionName = questionName;
     this.questions.push(q);
     return this;
   }
@@ -29,7 +30,6 @@ export class Exercise extends SyllabusBase {
       exerciseName: this.exercise,
       questions: this.questions.map(q => ({
         ...q,
-        name: q.name(),
         tcodeUrl: q.tcodeUrl()
       }))
     };

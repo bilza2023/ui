@@ -9,7 +9,7 @@ export const fbise10physics = {
   "chapters": [
     {
       "id": 1,
-      "description": "Physical Quantities and Measurement",
+      "description": "How to  Measurement",
       "image": "/tcodes/box.webp",
       "chapterName": "Physical Quantities and Measurement",
       "exercises": [

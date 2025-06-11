@@ -8,10 +8,10 @@ export class Question{
         this.exercise = exercise;
         this.questionNo = questionNo;
         this.questionType = questionType;
-        this.questionPart = questionPart 
-      }
-      name(){
-        return this.tcodeName +" "+ this.chapterId +" "+ this.exercise +" "+ this.questionNo +" "+ this.questionPart;
+        this.questionPart = questionPart;
+        
+        this.stringName = this.tcodeName +" "+ this.chapterId +" "+ this.exercise +" "+ this.questionNo +" "+ this.questionPart;  
+        this.questionName = null;  
       }
       tcodeUrl() {
         const safeExercise = this.exercise.replace(/\./g, "_"); // file-safe
