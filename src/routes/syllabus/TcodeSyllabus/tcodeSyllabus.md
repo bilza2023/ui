@@ -1,152 +1,134 @@
+# Tcode Syllabus System — Developer Guide
 
+## 🧩 Overview
 
-# 📘 TcodeSyllabus Guide
+The `TcodeSyllabus` system defines a structured educational syllabus programmatically and exports it as a clean JSON object, used by the Taleem.Help frontend.
 
-This module defines a structured, navigable syllabus tree for educational content — chapters → exercises → questions — with URL-safe access to individual question files.
-
----
-
-## 🌱 Overview
-
-- Each syllabus corresponds to a single **book** (e.g., `"fbise9math"`)
-- It contains multiple **chapters**
-- Each chapter has **exercises**
-- Each exercise defines multiple **questions**
-- Each **question** maps to a unique slide file based on its ID and `questionType`
+Each syllabus is composed of chapters, each chapter contains exercises, and each exercise contains questions. The full structure is exportable as a static `.js` file with a JSON object.
 
 ---
 
-## 📁 File Path Convention
+## 🏗 Class Structure
 
-Each question is stored as:
-
-```
-
-\$lib/slides/{tcodeName}/{tcodeUrl}.js
-
-```
-
-Where `tcodeUrl()` returns a safe, deterministic string like:
-
-```
-
-fbise9math-1-1\_2-3b
-
-````
-
----
-
-## 🧠 Question ID System
-
-- `questionNo`: base number (e.g. 3)
-- `questionPart`: optional sub-identifier (e.g. "b")
-- `questionType`: slide format type — see below
-- `tcodeUrl()`: derived method that returns a file-safe string
-
----
-
-## 🎨 Slide Types
-
-Supported types are:
+### 1. TcodeSyllabus
 
 ```js
-const slideTypes = {
-  eq: "eq",           // EQ-style timeline builder
-  canvas: "canvas",   // full visual layout
-  quiz: "quiz",       // interactive question
-  md: "md"            // markdown/HTML
-};
-````
-
-These are used to determine how a slide should be rendered or edited.
-
----
-
-## 🧱 Classes
-
-### `TcodeSyllabus`
-
-```js
-const syllabus = new TcodeSyllabus("fbise9math");
-syllabus.description("Grade 9 Mathematics");
+new TcodeSyllabus(tcodeName)
 ```
 
-#### ➕ `addChapter(id, title?, desc?)`
+* `tcodeName`: unique identifier (e.g. `fbise9physics`)
+* Automatically adds internal chapter IDs
 
-Creates or returns an existing chapter.
+**Properties to set manually:**
 
-#### 📖 `qsInChapter(chapterId)`
+* `description`
+* `image`
+* `link`
 
-Returns **all questions** in a chapter.
+**Methods:**
 
-#### 📘 `qsInExercise(chapterId, exerciseId)`
-
-Returns all questions for a specific exercise.
-
-#### 🔍 `q(ch, ex, qNo, qPart?)`
-
-Returns a specific `Question` object, or `undefined`.
+* `addChapter(chapterName)` → returns `Chapter`
+* `toJSON()` → final exportable JSON
 
 ---
 
-### `Question` Object
+### 2. Chapter
 
-A `Question` instance contains:
+Created via `syllabus.addChapter()`
+
+**Fields:**
+
+* `id` (auto-incremented internally)
+* `chapterName`: required (e.g. `Physical Quantities and Measurement`)
+* `description`: optional
+* `image`: optional
+
+**Methods:**
+
+* `addEx(exerciseName)` → returns `Exercise`
+
+---
+
+### 3. Exercise
+
+Created via `chapter.addEx()`
+
+**Fields:**
+
+* `exerciseName`: unique name for the exercise (used in question URL)
+* `image`, `color`, `tag`: optional metadata
+
+**Methods:**
+
+* `addQ(type, number, questionName = null, part = '')` → returns self (for chaining)
+
+---
+
+### 4. Question
+
+Created via `exercise.addQ()`
 
 ```js
-{
-  tcodeName: "fbise9math",
-  chapter: 1,
-  exercise: "1.2",
-  questionNo: 3,
-  questionPart: "b",
-  questionType: "eq"
+addQ("video", 1, "What is Physics?")
+```
+
+**Fields:**
+
+* `tcodeName`
+* `chapterId`
+* `exercise` (exerciseName)
+* `questionNo`
+* `questionType`: one of `"md"`, `"video"`, or `"eq"`
+* `questionPart`: optional string (e.g. `a`, `b`)
+* `questionName`: optional (for readable display)
+* `stringName`: internally generated unique string
+* `tcodeUrl`: computed unique query param
+
+---
+
+## 🧾 Final JSON Format (Gold Standard)
+
+```js
+export const fbise10physics = {
+  tcodeName: "fbise10physics",
+  description: "Grade 10 Physics",
+  image: "/tcodes/fbise10physics.webp",
+  link: "/syllabus/fbise10physics",
+  chapters: [
+    {
+      id: 1,
+      chapterName: "Physical Quantities and Measurement",
+      description: "...",
+      image: "/tcodes/box.webp",
+      exercises: [
+        {
+          exerciseName: "introduction_to_physics",
+          questions: [
+            {
+              tcodeName: "fbise10physics",
+              chapterId: 1,
+              exercise: "introduction_to_physics",
+              questionNo: 1,
+              questionType: "video",
+              questionPart: "",
+              questionName: "What is Physics?",
+              stringName: "fbise10physics 1 introduction_to_physics 1",
+              tcodeUrl: "filename=fbise10physics-chapter-1-exintroduction_to_physics-q1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
 ```
 
-#### `.tcodeUrl()`
-
-Returns a file-safe string:
-
-```js
-"fbise9math-1-1_2-3b"
-```
-
 ---
 
-## ✅ Example
+## ✅ Best Practices
 
-```js
-const chapter1 = syllabus.addChapter(1, "Physical Quantities");
-const ex = chapter1.addEx("1.2");
-
-ex.addQ("eq", 3, "b");
-ex.addQ("canvas", 4); // no part
-
-const q = syllabus.q(1, "1.2", 3, "b");
-console.log(q.tcodeUrl()); // fbise9math-1-1_2-3b
-```
-
----
-
-## ❌ What TcodeSyllabus Does NOT Do
-
-* It does **not** contain slide data
-* It does **not** write to a database
-* It does **not** validate file presence
-
-Use `.tcodeUrl()` to look up slides from disk or DB:
-
-```js
-import slides from `$lib/slides/${q.tcodeName}/${q.tcodeUrl()}.js`;
-```
-
-===> Important the "chapter" , "exercise" and questions are just 3 levels of nesting used to create any book structure. Incase of a physics syllabus then a book Section = Exercise. and Question is alwasy  = 1 presentation 
----
-
-## 🔚 Summary
-
-`TcodeSyllabus` is a clean, declarative tree for rendering UIs and resolving file paths — powered by pure data and deterministic lookup rules. Now with `questionType` for flexible slide rendering.
-
-```
-```
+* Always export final syllabus with `.toJSON()` to ensure clean serializable output
+* Set `questionName` for all user-facing questions
+* Avoid manually setting chapter IDs
+* Use snake\_case for exercise names (`intro_to_biology`, `light_and_optics`, etc.)
+* You can skip optional fields like `image`, `description`, and `tag`, but include them if present in real syllabus

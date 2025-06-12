@@ -16,6 +16,6 @@
   ex1.addQ(slideTypes.md, 2);
   ex1.addQ(slideTypes.eq, 3);
   //  console.log("syllabusBuilder.toJSON()" ,syllabusBuilder.toJSON());
-  export const fbise10physics =  syllabusBuilder.toJSON(); // ✅ export in Gold Standard JSON
+  export const fbise10physics =  syllabusBuilder.toJSON(); //✅ export in Gold Standard JSON
 
   

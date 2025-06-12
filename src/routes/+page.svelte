@@ -1,10 +1,13 @@
+
 <script>
+
   import Nav from "../lib/appComps/Nav.svelte";  
   import Footer from "../lib/appComps/Footer.svelte";  
   import SidebarCard from "../lib/appComps/homepage/SidebarCard.svelte";  
   import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";
 
   import {fbise10physics} from "./syllabus/fbise10physics/fbise9physicsSyllabus"; 
+  import {testSyllabus} from "./syllabus/testSyllabus/testSyllabus"; 
  
 
 </script>
@@ -21,10 +24,9 @@
     <TcodeCard
     tcodes={[
       fbise10physics,
+      testSyllabus
     ]}
   />
-  
-
   </div>
 
   <!-- Right Sidebar -->
@@ -35,11 +37,6 @@
   </div>
 
 </section>
-
-
-
-
-  <!-- Footer -->
 
 <Footer />  
 </div>
