@@ -8,7 +8,7 @@
 
   import {fbise10physics} from "./syllabus/fbise10physics/fbise9physicsSyllabus"; 
   import {testSyllabus} from "./syllabus/testSyllabus/testSyllabus"; 
- 
+ console.log("fbise10physics" ,fbise10physics);
 
 </script>
 <div class="min-h-screen flex flex-col justify-start bg-[#160c00]">
