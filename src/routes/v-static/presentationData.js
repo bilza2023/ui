@@ -15,7 +15,7 @@ const data = {
     "Build ideas into reality"
   ],
   image: {
-    src: "assets/programming.png"
+    src: "appleFallingFromTree"
   }
 };
 

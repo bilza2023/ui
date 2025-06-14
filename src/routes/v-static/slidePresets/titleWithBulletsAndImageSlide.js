@@ -40,7 +40,7 @@ export function titleWithBulletsAndImageSlide(data, theme, deck, showAt = [], co
     imageItem.y = cfg.imageDy;
     imageItem.width = cfg.imageWidth;
     imageItem.height = cfg.imageHeight;
-    imageItem.showAt = showAt[data.bullets.length + 1] ?? 0;
+    imageItem.showAt = showAt[0] ?? 0;
     slide.addItem(imageItem);
   }
 
