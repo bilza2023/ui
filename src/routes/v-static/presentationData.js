@@ -1,30 +1,40 @@
-import { DeckBuilder, GobalThemes, GlobalBackgrounds } from "taleem-video-deckbuilder";
-import { titleWithBulletsAndImageSlide } from "./slidePresets/titleWithBulletsAndImageSlide";
+// /testDecks/testTwoSlidesClean.js
+import {
+  DeckBuilder,
+  GobalThemes,
+  GlobalBackgrounds
+} from "taleem-video-deckbuilder";
 
-// ===== SETUP =====
+import { imageLeftBulletsRight } from "./slidePresets/imageLeftBulletsRight.js";
+import { titleAndImageSlide } from "./slidePresets/titleAndImageSlide.js";
+
+// === SETUP ===
 const theme = GobalThemes.royalBlue;
 const deck = new DeckBuilder();
 deck.setGlobalBackground(GlobalBackgrounds.dotsBg(theme));
 
-// ===== DATA =====
-const data = {
-  title: "Why Learn Programming?",
+// === Timings===
+const slideEndTimes = [10, 20];
+// === Slide 1 ===
+// Duration: 6s → showAt must be < 6
+imageLeftBulletsRight({
+  image: { src: "rocketTakeoff" },
   bullets: [
-    "Think in systems",
-    "Automate boring tasks",
-    "Build ideas into reality"
-  ],
-  image: {
-    src: "appleFallingFromTree"
-  }
-};
+    "Ignition systems online",
+    "Fuel pressure stable",
+    "Launch stabilizers engaged"
+  ]
+}, theme, deck, slideEndTimes[0], {
+  showAt: [0, 1, 2, 3] // image at 0, bullets staggered
+});
 
-// ===== TIMING =====
-const showAt = [0, 1, 2.5, 4, 5.5]; // title, bullet 1–3, image
+// === Slide 2 ===
+// Duration: 5s → showAt must be < 5
+titleAndImageSlide({
+  title: "Liftoff Achieved",
+  image: { src: "rocketTakeoff" }
+}, theme, deck, slideEndTimes[1], {
+  showAt: [0] // title and image appear together
+});
 
-// ===== SLIDE =====
-titleWithBulletsAndImageSlide(data, theme, deck, showAt);
-
-
-// ===== EXPORT =====
 export const presentationData = deck.build();
