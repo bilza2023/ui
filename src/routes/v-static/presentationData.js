@@ -1,16 +1,12 @@
-
-import { DeckBuilder, GobalThemes,GlobalBackgrounds } from "taleem-video-deckbuilder";
+import { DeckBuilder, GobalThemes, GlobalBackgrounds } from "taleem-video-deckbuilder";
 import { titleWithBulletsSlide } from "./slidePresets/titleWithBulletsSlide.js";
 
-
-//////=====SETUP====////////////////////////////////////////////
+// ===== SETUP =====
 const theme = GobalThemes.royalBlue;
-
 const deck = new DeckBuilder();
-deck.setGlobalBackground(GlobalBackgrounds.dotsBg(theme) );
-//////////////////////////////////////////////////////
-//////////////////////////////////////////////////////
-//////////////////////////////////////////////////////
+deck.setGlobalBackground(GlobalBackgrounds.dotsBg(theme));
+
+// ===== DATA =====
 const data = {
   title: "Why Learn Programming?",
   bullets: [
@@ -20,8 +16,11 @@ const data = {
   ]
 };
 
-titleWithBulletsSlide(data, theme, deck);
+// ===== TIMELINE =====
+const showAt = [0, 1, 2.5, 4]; // title, bullet 1, 2, 3
 
-//////////////////////////////////////////////////////
+// ===== SLIDE =====
+titleWithBulletsSlide(data, theme, deck, showAt);
 
+// ===== EXPORT =====
 export const presentationData = deck.build();

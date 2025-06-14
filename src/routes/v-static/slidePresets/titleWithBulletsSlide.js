@@ -4,17 +4,27 @@
 import { textPresets } from "../presets/text.js";
 import { applyPos } from "../pos/applyPos.js";
 
-export function titleWithBulletsSlide(data, theme, deck) {
+const defaultConfig = {
+  titleDy: 40,
+  bulletBaseDy: 150,
+  bulletSpacing: 100,
+  bulletDx: 60
+};
+
+export function titleWithBulletsSlide(data, theme, deck, showAt = [], config = {}) {
+  const cfg = { ...defaultConfig, ...config };
   const slide = deck.addSlide(10);
 
   const title = textPresets.centerHeading({ text: data.title }, theme);
-  applyPos.topCenter(title, { dy: 40 });
+  applyPos.topCenter(title, { dy: cfg.titleDy });
+  if (showAt[0] != null) title.showAt = showAt[0];
   slide.addItem(title);
 
   data.bullets.forEach((text, index) => {
-    const bullet = textPresets.bulletLine({ text: `• ${text}` }, theme);
-    applyPos.topLeft(bullet, { dy: 150 + index * 100,dx: 60  });
-    console.log("bullet",bullet);
+    const bullet = textPresets.bulletLine({ text }, theme);
+    const bulletDy = cfg.bulletBaseDy + index * cfg.bulletSpacing;
+    applyPos.topLeft(bullet, { dy: bulletDy, dx: cfg.bulletDx });
+    if (showAt[index + 1] != null) bullet.showAt = showAt[index + 1];
     slide.addItem(bullet);
   });
 
