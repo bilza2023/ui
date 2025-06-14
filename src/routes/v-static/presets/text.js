@@ -1,5 +1,5 @@
 // =========================
-// File: /presets/text.js — final with appearance-only style presets
+// File: /presets/text.js — final with color-picked theme presets
 // =========================
 
 import { ItemBuilders } from "taleem-video-deckbuilder";
@@ -18,9 +18,10 @@ export const textPresets = {
   leftHeading({ text }, theme, { v = "top" } = {}) {
     return {
       ...ItemBuilders.text(text),
-      ...theme?.text,
       fontSize: 48,
       fontWeight: "bold",
+      fontFamily: theme?.fontFamilyHeading,
+      color: theme?.headingColor,
       x: 0,
       y: resolveY(v),
       showAt: 0,
@@ -31,9 +32,10 @@ export const textPresets = {
   centerHeading({ text }, theme, { v = "center" } = {}) {
     return {
       ...ItemBuilders.text(text),
-      ...theme?.text,
       fontSize: 64,
       fontWeight: "bold",
+      fontFamily: theme?.fontFamilyHeading,
+      color: theme?.headingColor,
       x: 0,
       width: DESIGN_W,
       y: resolveY(v),
@@ -46,9 +48,10 @@ export const textPresets = {
   rightHeading({ text }, theme, { v = "bottom" } = {}) {
     return {
       ...ItemBuilders.text(text),
-      ...theme?.text,
       fontSize: 48,
       fontWeight: "bold",
+      fontFamily: theme?.fontFamilyHeading,
+      color: theme?.headingColor,
       x: 0,
       width: DESIGN_W,
       y: resolveY(v),
@@ -58,32 +61,28 @@ export const textPresets = {
     };
   },
 
-////////////////////////////////////////////////////  
-////////////////////////////////////////////////////  
+  // Appearance-only text styles
+
   smallText({ text }, theme) {
     const base = ItemBuilders.text(text);
-    const themed = theme?.text || {};
-    const styled = {
+    return {
+      ...base,
       fontSize: 16,
       fontWeight: "normal",
+      fontFamily: theme?.fontFamilyBase,
+      color: theme?.baseTextColor,
       visible: true,
       showAt: 0
     };
-    return {
-      ...base,
-      ...themed,
-      ...styled
-    };
   },
-  
 
   caption({ text }, theme) {
     return {
       ...ItemBuilders.text(text),
-      ...theme?.text,
       fontSize: 14,
       fontStyle: "italic",
-      color: 0x666666,
+      fontFamily: theme?.fontFamilyBase,
+      color: theme?.secondaryColor,
       visible: true,
       showAt: 0
     };
@@ -92,10 +91,10 @@ export const textPresets = {
   footnote({ text }, theme) {
     return {
       ...ItemBuilders.text(text),
-      ...theme?.text,
       fontSize: 12,
-      color: 0x888888,
       fontWeight: "light",
+      fontFamily: theme?.fontFamilyBase,
+      color: theme?.bulletColor,
       visible: true,
       showAt: 0
     };
@@ -104,9 +103,10 @@ export const textPresets = {
   heroText({ text }, theme) {
     return {
       ...ItemBuilders.text(text),
-      ...theme?.text,
       fontSize: 72,
       fontWeight: "900",
+      fontFamily: theme?.fontFamilyHeading,
+      color: theme?.primaryColor,
       visible: true,
       showAt: 0
     };
@@ -115,13 +115,25 @@ export const textPresets = {
   quoteLine({ text }, theme) {
     return {
       ...ItemBuilders.text(text),
-      ...theme?.text,
-      fontSize: 20,
+      fontSize: 36,
       fontStyle: "italic",
       lineGap: 8,
-      color: 0x444444,
+      fontFamily: theme?.fontFamilyBase,
+      color: theme?.baseTextColor,
+      visible: true,
+      showAt: 0
+    };
+  },
+  bulletLine({ text }, theme) {
+    return {
+      ...ItemBuilders.text(`• ${text}`),
+      fontSize: 40,
+      fontWeight: "normal",
+      fontFamily: theme?.fontFamilyBase,
+      color: theme?.bulletColor,
       visible: true,
       showAt: 0
     };
   }
+////////////////////////////////////////  
 };

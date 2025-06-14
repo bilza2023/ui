@@ -1,6 +1,6 @@
 
 import { DeckBuilder, GobalThemes,GlobalBackgrounds } from "taleem-video-deckbuilder";
-import { titleWithBulletsSlide } from "./slidePresets/titleWithBulletsSlide.js";
+import { quoteSlide } from "./slidePresets/quoteSlide.js";
 
 
 //////=====SETUP====////////////////////////////////////////////
@@ -10,17 +10,16 @@ const deck = new DeckBuilder();
 deck.setGlobalBackground(GlobalBackgrounds.dotsBg(theme) );
 //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////
-//////////////////////////////////////////////////////
 const data = {
-  title: "Why Learn Programming?",
-  bullets: [
-    "Think in systems",
-    "Automate boring tasks",
-    "Build ideas into reality"
-  ]
-};
-
-titleWithBulletsSlide(data, theme, deck);
+    lines: [
+      "Education Is The Passport",
+      "To The Future,",
+      "For Tomorrow Belongs To Those Who Prepare For It Today."
+    ],
+    author: "— Malcolm X"
+  };
+  
+quoteSlide(data,theme,deck);
 
 //////////////////////////////////////////////////////
 
