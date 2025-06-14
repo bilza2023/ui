@@ -1,5 +1,5 @@
 import { DeckBuilder, GobalThemes, GlobalBackgrounds } from "taleem-video-deckbuilder";
-import { titleWithBulletsAndImageSlide } from "./slidePresets/titleWithBulletsAndImageSlide";
+import { titleWithBulletsSlide } from "./slidePresets/titleWithBulletsSlide.js";
 
 // ===== SETUP =====
 const theme = GobalThemes.royalBlue;
@@ -13,18 +13,14 @@ const data = {
     "Think in systems",
     "Automate boring tasks",
     "Build ideas into reality"
-  ],
-  image: {
-    src: "assets/programming.png"
-  }
+  ]
 };
 
-// ===== TIMING =====
-const showAt = [0, 1, 2.5, 4, 5.5]; // title, bullet 1–3, image
+// ===== TIMELINE =====
+const showAt = [0, 1, 2.5, 4]; // title, bullet 1, 2, 3
 
 // ===== SLIDE =====
-titleWithBulletsAndImageSlide(data, theme, deck, showAt);
-
+titleWithBulletsSlide(data, theme, deck, showAt);
 
 // ===== EXPORT =====
 export const presentationData = deck.build();
