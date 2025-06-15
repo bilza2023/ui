@@ -1,4 +1,6 @@
+
 export class IntervalTicker {
+   
     constructor() {
       this._time = 0;
       this._playing = false;

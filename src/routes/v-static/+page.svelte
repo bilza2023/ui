@@ -60,7 +60,6 @@
 
     player.setAssets?.(backgroundAssets);
     container.appendChild(app.view);
-    container.appendChild(app.view);
 
     if (container) {
       resize(app, presentationData.designWidth, presentationData.designHeight);
