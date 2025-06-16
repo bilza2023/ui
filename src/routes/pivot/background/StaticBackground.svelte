@@ -1,6 +1,6 @@
 <script>
     export let backgroundColor = "#0e490f";
-    export let backgroundImage = "/pivot/banner_brand_section.png";
+    export let backgroundImage = null;
     export let backgroundImageOpacity = 0.07;
     export let patternOpacity = 0.25;
     export let patternSize = 28;

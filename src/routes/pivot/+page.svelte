@@ -7,11 +7,12 @@
   import SlideWrapper from "./slides/SlideWrapper.svelte";
   import { deck } from "./deck.js";
  
-  ///////////////////////////////////////////////////////////
+
   let themeClass = "theme-neonDark";
   let backgroundColor = "#b3d8b4";
-  let backgroundImage = "/pivot/banner_brand_section.png"; // or "/pivot/banner.png"
-  let backgroundImageOpacity = 0.1;
+  let backgroundImage = "/pivot/defaultBg.png"; // or "/pivot/banner.png"
+  // let backgroundImage = null;
+  let backgroundImageOpacity = 1;
 
   let currentSlideIndex = 0;
   $: currentSlide = deck[currentSlideIndex];

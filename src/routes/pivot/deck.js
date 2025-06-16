@@ -11,7 +11,7 @@ export const deck = [
   },
   {
     type: "imageSlide",
-    data: [{ name: "image", content: "/pivot/defaultBg.png" }]
+    data: [{ name: "image", content: "/pivot/fbise9physics.webp" }]
   },
   {
     type: "cornerWordsSlide",
