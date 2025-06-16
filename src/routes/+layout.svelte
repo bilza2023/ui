@@ -1,10 +1,7 @@
-<svelte:head>
-  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4279476755172786"
-     crossorigin="anonymous"></script> -->
-     <!-- <link rel="stylesheet" href="node_modules/katex/dist/katex.min.css" /> -->
   
-</svelte:head>
-  
+<style>
+  @import '$lib/styles/themes.css';
+</style>
 
 
 <script>

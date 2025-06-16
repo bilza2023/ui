@@ -1,10 +1,16 @@
 <script>
   export let data;
+
+  const quoteLines = data.filter(d => d.name === "quoteLine");
+  const author = data.find(d => d.name === "author")?.content ?? "";
 </script>
 
 <div class="quote-slide">
-  <h1 class="quote">{data.quote}</h1>
-  <p class="author">— {data.author}</p>
+  {#each quoteLines as line}
+    <h1 class="heading">{line.content}</h1>
+  {/each}
+
+  <p class="text-primary author-text">{author}</p>
 </div>
 
 <style>
@@ -13,20 +19,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: black;
-    color: white;
-    padding: 60px;
+    height: 100%;
     text-align: center;
+    padding: 40px;
   }
 
-  .quote {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+  .heading {
+    font-size: 68px;
+    margin-bottom: 0.8rem;
   }
 
-  .author {
-    font-size: 1.5rem;
-    opacity: 0.8;
+  .author-text {
+    font-size: 28px;
+    opacity: 0.85;
+    margin-top: 1.6rem;
   }
 </style>

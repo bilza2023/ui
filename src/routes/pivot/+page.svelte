@@ -1,28 +1,135 @@
 <script>
   import Quote from "./slides/Quote.svelte";
   import CornerWords from "./slides/CornerWords.svelte";
-  
-  const slideTypeToRender = "cornerWordsSlide";
+  import SlideWrapper from "./slides/SlideWrapper.svelte";
+  // import {deck} from "./deck.js";
 
-const slide = {
-  type: "cornerWordsSlide",
-  data: {
-    words: ["Explore", "Build", "Share", "Learn"]
-  }
-};
+  let themeClass = "theme-neonDark"; // or any other
 
-  const theme = {
-    textColor: "#ffffff",
-    fontFamily: "Inter"
+  const defaultBackground = {
+    backgroundColor: "#d5edd5",           // ✅ CHANGE HERE
+    backgroundImage: null,
+    backgroundImageOpacity: 1
   };
+  const deck = [
+    {
+      type: "quoteSlide",
+      background: {
+        backgroundImage: "box.webp",
+        backgroundImageOpacity: 0.2
+      },
+      data: [
+        { name: "quoteLine", content: "Imagination is more important", start: 0 },
+        { name: "quoteLine", content: "than knowledge.", start: 2 },
+        { name: "author", content: "— Albert Einstein", start: 3 }
+      ]
+    },
+    {
+      type: "quoteSlide",
+      background: {
+        backgroundImage: "chalkboard.webp",
+        backgroundImageOpacity: 0.15
+      },
+      data: [
+        { name: "quoteLine", content: "The beautiful thing about learning", start: 0 },
+        { name: "quoteLine", content: "is that no one can take it away from you.", start: 2 },
+        { name: "author", content: "— B.B. King", start: 3 }
+      ]
+    },
+    {
+      type: "quoteSlide",
+      background: {
+        backgroundImage: "sunset.webp",
+        backgroundImageOpacity: 0.25
+      },
+      data: [
+        { name: "quoteLine", content: "Education is the passport to the future,", start: 0 },
+        { name: "quoteLine", content: "for tomorrow belongs to those who prepare for it today.", start: 2 },
+        { name: "author", content: "— Malcolm X", start: 3 }
+      ]
+    },
+    {
+      type: "cornerWordsSlide",
+      data: [
+        { name: "word1", content: "Explore" },
+        { name: "word2", content: "Build" },
+        { name: "word3", content: "Learn" },
+        { name: "word4", content: "Share" }
+      ]
+    }
+  ];
 
-  const currentTime = 1000; // Hardcoded for now — all showAt hit
+  let currentSlideIndex = 0;
+  $: currentSlide = deck[currentSlideIndex];
+
+  function next() {
+    if (currentSlideIndex < deck.length - 1) currentSlideIndex++;
+  }
+
+  function prev() {
+    if (currentSlideIndex > 0) currentSlideIndex--;
+  }
 </script>
 
-{#if slideTypeToRender === "quoteSlide"}
-  <Quote data={slide.data} />
-{:else if slideTypeToRender === "cornerWordsSlide"}
-  <CornerWords data={slide.data} />
-{:else}
-  <p>Unknown slide type</p>
-{/if}
+<div class="stage themeClass">
+  <SlideWrapper background={currentSlide.background ?? defaultBackground} key={currentSlideIndex}>
+
+    {#key currentSlideIndex}
+    {#if currentSlide.type === "quoteSlide"}
+      <Quote data={currentSlide.data} />
+    {:else if currentSlide.type === "cornerWordsSlide"}
+      <CornerWords data={currentSlide.data} />
+    {:else}
+      <p>Unknown slide type</p>
+    {/if}
+  {/key}
+  
+  </SlideWrapper>
+
+  <div class="nav-overlay">
+    <button on:click={prev} disabled={currentSlideIndex === 0}>⬅ Prev</button>
+    <span>Slide {currentSlideIndex + 1} of {deck.length}</span>
+    <button on:click={next} disabled={currentSlideIndex === deck.length - 1}>Next ➡</button>
+  </div>
+</div>
+
+<style>
+  .stage {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .nav-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.6);
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+    color: white;
+    font-family: sans-serif;
+    font-size: 1rem;
+    z-index: 10;
+  }
+
+  button {
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    background: #222;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+
+  button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+</style>
