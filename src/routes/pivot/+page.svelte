@@ -1,66 +1,30 @@
 <script>
   import Quote from "./slides/Quote.svelte";
   import CornerWords from "./slides/CornerWords.svelte";
+  import Title from "./slides/Title.svelte";
+  import Image from "./slides/Image.svelte";
   import SlideWrapper from "./slides/SlideWrapper.svelte";
-  // import {deck} from "./deck.js";
+  import { deck } from "./deck.js";
+  import { setup } from "./background/setupPresentation.js";
 
-  let themeClass = "theme-neonDark"; // or any other
-
-  const defaultBackground = {
-    backgroundColor: "#d5edd5",           // ✅ CHANGE HERE
-    backgroundImage: null,
-    backgroundImageOpacity: 1
-  };
-  const deck = [
-    {
-      type: "quoteSlide",
-      background: {
-        backgroundImage: "box.webp",
-        backgroundImageOpacity: 0.2
-      },
-      data: [
-        { name: "quoteLine", content: "Imagination is more important", start: 0 },
-        { name: "quoteLine", content: "than knowledge.", start: 2 },
-        { name: "author", content: "— Albert Einstein", start: 3 }
-      ]
-    },
-    {
-      type: "quoteSlide",
-      background: {
-        backgroundImage: "chalkboard.webp",
-        backgroundImageOpacity: 0.15
-      },
-      data: [
-        { name: "quoteLine", content: "The beautiful thing about learning", start: 0 },
-        { name: "quoteLine", content: "is that no one can take it away from you.", start: 2 },
-        { name: "author", content: "— B.B. King", start: 3 }
-      ]
-    },
-    {
-      type: "quoteSlide",
-      background: {
-        backgroundImage: "sunset.webp",
-        backgroundImageOpacity: 0.25
-      },
-      data: [
-        { name: "quoteLine", content: "Education is the passport to the future,", start: 0 },
-        { name: "quoteLine", content: "for tomorrow belongs to those who prepare for it today.", start: 2 },
-        { name: "author", content: "— Malcolm X", start: 3 }
-      ]
-    },
-    {
-      type: "cornerWordsSlide",
-      data: [
-        { name: "word1", content: "Explore" },
-        { name: "word2", content: "Build" },
-        { name: "word3", content: "Learn" },
-        { name: "word4", content: "Share" }
-      ]
-    }
-  ];
+  const { theme, background: defaultBackground } = setup("neonDark", "default");
+  let themeClass = "theme-neonDark";
 
   let currentSlideIndex = 0;
   $: currentSlide = deck[currentSlideIndex];
+
+  // ✅ Unified Background
+  let globalBackground = { ...defaultBackground };
+  $: {
+    if (currentSlide?.background) {
+      globalBackground = {
+        ...defaultBackground,
+        ...currentSlide.background
+      };
+    } else {
+      globalBackground = defaultBackground;
+    }
+  }
 
   function next() {
     if (currentSlideIndex < deck.length - 1) currentSlideIndex++;
@@ -71,19 +35,19 @@
   }
 </script>
 
-<div class="stage themeClass">
-  <SlideWrapper background={currentSlide.background ?? defaultBackground} key={currentSlideIndex}>
-
-    {#key currentSlideIndex}
+<div class="stage {themeClass}">
+  <SlideWrapper background={globalBackground} key={currentSlideIndex}>
     {#if currentSlide.type === "quoteSlide"}
       <Quote data={currentSlide.data} />
     {:else if currentSlide.type === "cornerWordsSlide"}
       <CornerWords data={currentSlide.data} />
+    {:else if currentSlide.type === "titleSlide"}
+      <Title data={currentSlide.data} />
+    {:else if currentSlide.type === "imageSlide"}
+      <Image data={currentSlide.data} />
     {:else}
       <p>Unknown slide type</p>
     {/if}
-  {/key}
-  
   </SlideWrapper>
 
   <div class="nav-overlay">
@@ -106,7 +70,7 @@
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     padding: 0.8rem 1.2rem;
     display: flex;
     justify-content: center;

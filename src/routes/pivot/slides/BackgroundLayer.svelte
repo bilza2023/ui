@@ -1,44 +1,30 @@
 <script>
   export let background = {
-    backgroundColor: "#000000",
+    backgroundColor: "#ffffff",
     backgroundImage: null,
-    backgroundImageOpacity: 1
+    backgroundImageOpacity: 1,
+    pattern: null
   };
-
-  const baseUrl = "/tcodes/";
-  $: bgImageUrl = background.backgroundImage
-    ? `${baseUrl}${background.backgroundImage}`
-    : null;
 </script>
 
-<div class="bg-base" style="background-color: {background.backgroundColor};"></div>
-
-{#if bgImageUrl}
-  <div
-    class="bg-image"
-    style="background-image: url('{bgImageUrl}'); opacity: {background.backgroundImageOpacity};"
-  />
-{/if}
+<div
+  class="background-layer"
+  style="
+    background-color: {background.backgroundColor};
+    background-image: {background.backgroundImage ? `url('images/${background.backgroundImage}')` : 'none'};
+    background-size: cover;
+    background-position: center;
+    opacity: 1;
+  "
+></div>
 
 <style>
-  .bg-base,
-  .bg-image {
+  .background-layer {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    z-index: 0;
-  }
-
-  .bg-base {
-    z-index: 0;
-  }
-
-  .bg-image {
     z-index: 1;
     pointer-events: none;
   }
