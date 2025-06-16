@@ -3,6 +3,7 @@
   import CornerWords from "./slides/CornerWords.svelte";
   import Title from "./slides/Title.svelte";
   import Image from "./slides/Image.svelte";
+  import StaticBackground from "./background/StaticBackground.svelte";
   import SlideWrapper from "./slides/SlideWrapper.svelte";
   import { deck } from "./deck.js";
   import { setup } from "./background/setupPresentation.js";
@@ -35,7 +36,17 @@
   }
 </script>
 
-<div class="stage {themeClass}">
+
+<div class={`stage ${themeClass}`}>
+
+  <StaticBackground
+  backgroundColor="#0e490f"
+  backgroundImage="/pivot/banner_brand_section.png"
+  backgroundImageOpacity={0.07}
+  patternOpacity={0.25}
+  patternSize={28}
+/>
+
   <SlideWrapper background={globalBackground} key={currentSlideIndex}>
     {#if currentSlide.type === "quoteSlide"}
       <Quote data={currentSlide.data} />

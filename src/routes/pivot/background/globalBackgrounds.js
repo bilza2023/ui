@@ -5,7 +5,7 @@
 export function dotsBg (globalTheme) {
     return {
         backgroundColor: globalTheme.backgroundColor, // or any hex
-        backgroundImage: null,
+        backgroundImage: "/pivot/banner_brand_section.png",
         backgroundImageOpacity: 1.0,
         pattern: {
           type: "dots",

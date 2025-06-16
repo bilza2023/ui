@@ -1,22 +1,21 @@
 <script>
   export let background = {
     backgroundColor: "#ffffff",
-    backgroundImage: null,
-    backgroundImageOpacity: 1,
-    pattern: null
+    backgroundImage: "/pivot/defaultBg.png", // must be valid
+    backgroundImageOpacity: 1
   };
+
+  // Construct style string with guaranteed safe syntax
+  $: inlineStyle = [
+    `background-color: ${background.backgroundColor}`,
+    `background-size: cover`,
+    `background-position: center`,
+    `opacity: ${background.backgroundImageOpacity}`,
+    background.backgroundImage ? `background-image: url('${background.backgroundImage}')` : ""
+  ].join("; ");
 </script>
 
-<div
-  class="background-layer"
-  style="
-    background-color: {background.backgroundColor};
-    background-image: {background.backgroundImage ? `url('images/${background.backgroundImage}')` : 'none'};
-    background-size: cover;
-    background-position: center;
-    opacity: 1;
-  "
-></div>
+{@html `<div class="background-layer" style="${inlineStyle}"></div>`}
 
 <style>
   .background-layer {
@@ -25,7 +24,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: 0;
     pointer-events: none;
   }
 </style>

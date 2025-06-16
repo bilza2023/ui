@@ -3,10 +3,6 @@
 export const deck = [
   {
     type: "quoteSlide",
-    background: {
-      backgroundImage: "defaultBg.png",
-      backgroundImageOpacity: 0.2
-    },
     data: [
       { name: "quoteLine", content: "Imagination is more important", start: 0 },
       { name: "quoteLine", content: "than knowledge.", start: 2 },
