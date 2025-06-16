@@ -1,73 +1,46 @@
 <script>
   import { onMount } from "svelte";
+  import { Howl } from "howler";
   import { Player } from "taleem-canvasplayer";
-  import { pixiApp } from "./pixiApp.js";
-  import { createTicker } from "./ticker/createTicker";
-  import * as PIXI from "pixi.js";
   import SlideNav from "./SlideNav.svelte";
-  import {  presentationData } from "./presentationData.js";
+  import { presentationData } from "./presentationData.js";
 
   export const prerender = true;
+
   let container;
   let player;
-  let ticker;
+  let sound;
   let currentTime = 0;
 
-  function resize(app, designWidth, designHeight) {
-    if (!container) return;
-    const parent = container;
-    const scaleX = parent.clientWidth / designWidth;
-    const scaleY = (parent.clientHeight * 0.9) / designHeight;
-    const scale = Math.min(scaleX, scaleY);
-
-    app.view.style.width = `${designWidth * scale}px`;
-    app.view.style.height = `${designHeight * scale}px`;
-    app.view.style.display = "block";
-    app.view.style.margin = "0 auto";
-  }
+  $: currentTime;
 
   onMount(() => {
-    const backgroundAssets = {
-      drops: PIXI.Texture.from("images/drops.png"),
-      femaleTeacher: PIXI.Texture.from("images/female_teacher.jpg"),
-      physicsClass: PIXI.Texture.from("images/physicsClass.webp"),
-      whatisforce: PIXI.Texture.from("images/whatisforce.webp"),
-      typesOfForce: PIXI.Texture.from("images/typesOfForce.webp"),
-      class: PIXI.Texture.from("images/class.webp"),
-      taleemclass: PIXI.Texture.from("images/taleemclass.webp"),
-      fbise9physicsChapter1Bg: PIXI.Texture.from("images/fbise9physicsChapter1Bg.webp"),
-      appleFallingFromTree: PIXI.Texture.from("images/appleFallingFromTree.webp"),
-      everyDayItems: PIXI.Texture.from("images/everyDayItems.webp"),
-      rocketTakeoff: PIXI.Texture.from("images/rocketTakeoff.webp"),
-      physicsArt: PIXI.Texture.from("images/physicsArt.webp"),
-    };
-
-    const app = pixiApp(
-      presentationData.slidesData[0].background?.backgroundColor || "#000000",
-      presentationData.designWidth,
-      presentationData.designHeight
-    );
-
-    let soundUrl = "sounds/music.opus";
-    ticker = createTicker(soundUrl);
-    ticker.volume(0.2);
+    sound = new Howl({
+      src: ["sounds/music.opus"],
+      html5: true
+    });
+    sound.volume(0.2);
 
     player = new Player({
-      app,
-      slides: presentationData.slidesData,
-      timeSource: ticker,
-    });
-
-    player.setAssets?.(backgroundAssets);
-    container.appendChild(app.view);
-
-    if (container) {
-      resize(app, presentationData.designWidth, presentationData.designHeight);
-    }
-
-    window.addEventListener("resize", () => {
-      if (container) {
-        resize(app, presentationData.designWidth, presentationData.designHeight);
+      mountEl: container,
+      deckData: presentationData.slidesData,
+      width: presentationData.designWidth,
+      height: presentationData.designHeight,
+      backgroundColor: presentationData.slidesData[0].background?.backgroundColor || "#000000",
+      sound,
+      assets: {
+        drops: "images/drops.png",
+        femaleTeacher: "images/female_teacher.jpg",
+        physicsClass: "images/physicsClass.webp",
+        whatisforce: "images/whatisforce.webp",
+        typesOfForce: "images/typesOfForce.webp",
+        class: "images/class.webp",
+        taleemclass: "images/taleemclass.webp",
+        fbise9physicsChapter1Bg: "images/fbise9physicsChapter1Bg.webp",
+        appleFallingFromTree: "images/appleFallingFromTree.webp",
+        everyDayItems: "images/everyDayItems.webp",
+        rocketTakeoff: "images/rocketTakeoff.webp",
+        physicsArt: "images/physicsArt.webp"
       }
     });
 
@@ -75,23 +48,27 @@
 
     function syncTimeLoop() {
       const loop = () => {
-        if (player) currentTime = player.getCurrentTime();
+        if (player) {
+          
+          currentTime = player.getCurrentTime();
+          // console.log("currentTime" , currentTime);
+        }
         requestAnimationFrame(loop);
       };
-      requestAnimationFrame(loop);
+      loop(); // Start loop immediately
     }
 
     syncTimeLoop();
   });
 </script>
 
-{#if player && ticker}
+{#if player}
   <div class="">
     <SlideNav
       {currentTime}
       maxEndTime={presentationData.totalDuration}
       on:play={() => player.play()}
-      on:pause={() => player.timeSource.pause()}
+      on:pause={() => player.pause()}
       on:reset={() => player.reset()}
       on:seek={(e) => player.setTime(e.detail)}
     />

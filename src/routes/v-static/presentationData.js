@@ -1,40 +1,34 @@
-// /testDecks/testTwoSlidesClean.js
-import {
-  DeckBuilder,
-  GobalThemes,
-  GlobalBackgrounds
-} from "taleem-video-deckbuilder";
+// /presentationData.js
+import { createKit } from "taleem-slidekit";
 
-import { imageLeftBulletsRight } from "./slidePresets/imageLeftBulletsRight.js";
-import { titleAndImageSlide } from "./slidePresets/titleAndImageSlide.js";
+// === Global Defaults ===
+createKit.setTheme("royalBlue");
+createKit.setPattern("dots");
+createKit.setBgImage("rocketTakeoff");
+createKit.setBgOpacity(0.2);
 
-// === SETUP ===
-const theme = GobalThemes.royalBlue;
-const deck = new DeckBuilder();
-deck.setGlobalBackground(GlobalBackgrounds.dotsBg(theme));
+// === SlideKit Instance ===
+const kit = createKit.create();
 
-// === Timings===
-const slideEndTimes = [10, 20];
 // === Slide 1 ===
-// Duration: 6s → showAt must be < 6
-imageLeftBulletsRight({
+kit.add("imageLeftBulletsRight", 10, {
   image: { src: "rocketTakeoff" },
   bullets: [
     "Ignition systems online",
     "Fuel pressure stable",
     "Launch stabilizers engaged"
   ]
-}, theme, deck, slideEndTimes[0], {
-  showAt: [0, 1, 2, 3] // image at 0, bullets staggered
+}, {
+  showAt: [0, 1, 2, 3]
 });
 
 // === Slide 2 ===
-// Duration: 5s → showAt must be < 5
-titleAndImageSlide({
+kit.add("titleAndImageSlide", 20, {
   title: "Liftoff Achieved",
   image: { src: "rocketTakeoff" }
-}, theme, deck, slideEndTimes[1], {
-  showAt: [0] // title and image appear together
+}, {
+  showAt: [0]
 });
 
-export const presentationData = deck.build();
+// === Final Output ===
+export const presentationData = kit.build();
