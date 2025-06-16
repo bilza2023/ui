@@ -2,6 +2,15 @@
 
 export const deck = [
   {
+    type: "imageLeftBulletsRight",
+    data: [
+      { name: "image", content: "/pivot/box.webp" },
+      { name: "bullet", content: "This is content Number 1" },
+      { name: "bullet", content: "This is content Number 2" },
+      { name: "bullet", content: "This is content Number 3" }
+    ]
+  },
+  {
     type: "quoteSlide",
     data: [
       { name: "quoteLine", content: "Imagination is more important", start: 0 },
@@ -16,12 +25,13 @@ export const deck = [
   {
     type: "cornerWordsSlide",
     data: [
-      { name: "word1", content: "Explore" },
-      { name: "word2", content: "Build" },
-      { name: "word3", content: "Learn" },
-      { name: "word4", content: "Share" }
+      { name: "card", icon: "🚀", label: "Explore" },
+      { name: "card", icon: "🛠️", label: "Build" },
+      { name: "card", icon: "📚", label: "Learn" },
+      { name: "card", icon: "🌍", label: "Share" }
     ]
   },
+  
   {
     type: "quoteSlide",
     background: {

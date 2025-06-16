@@ -1,28 +1,52 @@
 <script>
   export let data;
-  const word1 = data.find(d => d.name === "word1")?.content ?? "";
-  const word2 = data.find(d => d.name === "word2")?.content ?? "";
-  const word3 = data.find(d => d.name === "word3")?.content ?? "";
-  const word4 = data.find(d => d.name === "word4")?.content ?? "";
+
+  // Extract cards
+  const cards = data.filter(d => d.name === "card");
 </script>
 
-<div class="corner-words text-primary">
-  <div class="top-left">{word1}</div>
-  <div class="top-right">{word2}</div>
-  <div class="bottom-left">{word3}</div>
-  <div class="bottom-right">{word4}</div>
+<div class="card-flex text-primary">
+  {#each cards as card}
+    <div class="card">
+      <div class="icon">{card.icon}</div>
+      <div class="label">{card.label}</div>
+    </div>
+  {/each}
 </div>
 
 <style>
-  .corner-words {
-    position: relative;
-    height: 100vh;
-    font-size: 1.5rem;
-    font-family: var(--fontBase);
+  .card-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    width: 100%;
+    height: 100%;
+    padding: 60px;
+    box-sizing: border-box;
   }
 
-  .top-left     { position: absolute; top: 20px; left: 20px; }
-  .top-right    { position: absolute; top: 20px; right: 20px; }
-  .bottom-left  { position: absolute; bottom: 20px; left: 20px; }
-  .bottom-right { position: absolute; bottom: 20px; right: 20px; }
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid currentColor;
+    border-radius: 20px;
+    padding: 30px;
+    min-width: 200px;
+    max-width: 280px;
+    text-align: center;
+  }
+
+  .icon {
+    font-size: 100px;
+    margin-bottom: 20px;
+  }
+
+  .label {
+    font-size: 32px;
+    font-weight: bold;
+  }
 </style>
