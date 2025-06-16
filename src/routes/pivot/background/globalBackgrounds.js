@@ -2,10 +2,10 @@
 
 
 
-export function dotsBg (globalTheme) {
+export function dotsBg (backgroundColor="#FFFFFF") {
     return {
-        backgroundColor: globalTheme.backgroundColor, // or any hex
-        backgroundImage: "/pivot/banner_brand_section.png",
+        backgroundColor: backgroundColor, // or any hex
+        backgroundImage: null,
         backgroundImageOpacity: 1.0,
         pattern: {
           type: "dots",
@@ -18,17 +18,17 @@ export function dotsBg (globalTheme) {
         }
     };
 }
-export function defaultBg (globalTheme) {
+export function defaultBg (backgroundColor="#FFFFFF") {
     return {
-      backgroundColor: globalTheme.backgroundColor || "#000000", // fallback just in case
-      backgroundImage: null,
+      backgroundColor: backgroundColor || "#000000", // fallback just in case
+      backgroundImage: "/pivot/banner_brand_section.png",
       backgroundImageOpacity: 1.0,
       pattern: null
     };
 }
-export function gridBg(globalTheme) {
+export function gridBg(backgroundColor="#FFFFFF") {
   return {
-    backgroundColor: globalTheme.backgroundColor,
+    backgroundColor: backgroundColor,
     backgroundImage: null,
     backgroundImageOpacity: 1.0,
     pattern: {
@@ -44,9 +44,9 @@ export function gridBg(globalTheme) {
 }
 
 
-export function stripesBg(globalTheme) {
+export function stripesBg(backgroundColor="#FFFFFF") {
   return {
-    backgroundColor: globalTheme.backgroundColor,
+    backgroundColor: backgroundColor,
     backgroundImage: null,
     backgroundImageOpacity: 1.0,
     pattern: {
@@ -61,9 +61,9 @@ export function stripesBg(globalTheme) {
   };
 }
 
-export function wavesBg(globalTheme) {
+export function wavesBg(backgroundColor="#FFFFFF") {
   return {
-    backgroundColor: globalTheme.backgroundColor,
+    backgroundColor: backgroundColor,
     backgroundImage: null,
     backgroundImageOpacity: 1.0,
     pattern: {
@@ -79,9 +79,9 @@ export function wavesBg(globalTheme) {
     }
   };
 }
-export function crosshatchBg(globalTheme) {
+export function crosshatchBg(backgroundColor="#FFFFFF") {
   return {
-    backgroundColor: globalTheme.backgroundColor,
+    backgroundColor: backgroundColor,
     backgroundImage: null,
     backgroundImageOpacity: 1.0,
     pattern: {
@@ -95,9 +95,9 @@ export function crosshatchBg(globalTheme) {
     }
   };
 }
-export function bricksBg(globalTheme) {
+export function bricksBg(backgroundColor="#FFFFFF") {
   return {
-    backgroundColor: globalTheme.backgroundColor,
+    backgroundColor: backgroundColor,
     backgroundImage: null,
     backgroundImageOpacity: 1.0,
     pattern: {
@@ -113,9 +113,9 @@ export function bricksBg(globalTheme) {
   };
 }
 
-export function mosaicBg(globalTheme) {
+export function mosaicBg(backgroundColor="#FFFFFF") {
   return {
-    backgroundColor: globalTheme.backgroundColor,
+    backgroundColor: backgroundColor,
     backgroundImage: null,
     backgroundImageOpacity: 1.0,
     pattern: {
@@ -131,9 +131,9 @@ export function mosaicBg(globalTheme) {
   };
 }
 
-export function hexagonsBg(globalTheme) {
+export function hexagonsBg(backgroundColor="#FFFFFF") {
   return {
-    backgroundColor: globalTheme.backgroundColor,
+    backgroundColor: backgroundColor,
     backgroundImage: null,
     backgroundImageOpacity: 1.0,
     pattern: {
@@ -148,9 +148,9 @@ export function hexagonsBg(globalTheme) {
   };
 }
 
-export function tilesBg(globalTheme) {
+export function tilesBg(backgroundColor="#FFFFFF") {
   return {
-    backgroundColor: globalTheme.backgroundColor,
+    backgroundColor: backgroundColor,
     backgroundImage: null,
     backgroundImageOpacity: 1.0,
     pattern: {

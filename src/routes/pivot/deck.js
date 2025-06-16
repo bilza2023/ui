@@ -24,10 +24,10 @@ export const deck = [
   },
   {
     type: "quoteSlide",
-    // background: {
-    //   backgroundImage: "box.webp",
-    //   backgroundImageOpacity: 0.2
-    // },
+    background: {
+      backgroundImage: "/pivot/box.webp",
+      backgroundImageOpacity: 0.2
+    },
     data: [
       { name: "quoteLine", content: "This is Canvas Pivot", start: 0 },
       { name: "quoteLine", content: "A Life Saver!", start: 2 },

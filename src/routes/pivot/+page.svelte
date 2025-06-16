@@ -7,15 +7,16 @@
   import SlideWrapper from "./slides/SlideWrapper.svelte";
   import { deck } from "./deck.js";
   import { setup } from "./background/setupPresentation.js";
+  import * as globalBackgrounds  from "./background/globalBackgrounds";
 
-  const { theme, background: defaultBackground } = setup("neonDark", "default");
   let themeClass = "theme-neonDark";
+  let defaultBackground = globalBackgrounds.bricksBg();
+  let globalBackground = globalBackgrounds.bricksBg('green');
 
   let currentSlideIndex = 0;
   $: currentSlide = deck[currentSlideIndex];
 
   // ✅ Unified Background
-  let globalBackground = { ...defaultBackground };
   $: {
     if (currentSlide?.background) {
       globalBackground = {
