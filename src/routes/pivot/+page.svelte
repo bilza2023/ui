@@ -6,27 +6,16 @@
   import StaticBackground from "./background/StaticBackground.svelte";
   import SlideWrapper from "./slides/SlideWrapper.svelte";
   import { deck } from "./deck.js";
-  import { setup } from "./background/setupPresentation.js";
-  import * as globalBackgrounds  from "./background/globalBackgrounds";
-
+ 
+  ///////////////////////////////////////////////////////////
   let themeClass = "theme-neonDark";
-  let defaultBackground = globalBackgrounds.bricksBg();
-  let globalBackground = globalBackgrounds.bricksBg('green');
+  let backgroundColor = "#b3d8b4";
+  let backgroundImage = "/pivot/banner_brand_section.png"; // or "/pivot/banner.png"
+  let backgroundImageOpacity = 0.1;
 
   let currentSlideIndex = 0;
   $: currentSlide = deck[currentSlideIndex];
 
-  // ✅ Unified Background
-  $: {
-    if (currentSlide?.background) {
-      globalBackground = {
-        ...defaultBackground,
-        ...currentSlide.background
-      };
-    } else {
-      globalBackground = defaultBackground;
-    }
-  }
 
   function next() {
     if (currentSlideIndex < deck.length - 1) currentSlideIndex++;
@@ -35,12 +24,6 @@
   function prev() {
     if (currentSlideIndex > 0) currentSlideIndex--;
   }
-
-$: backgroundColor = globalBackground.backgroundColor;
-$: backgroundImage = globalBackground.backgroundImage;
-$: backgroundImageOpacity = globalBackground.backgroundImageOpacity ?? 0.25;
-$: patternOpacity = globalBackground.patternOpacity ?? 0.25;
-$: patternSize = globalBackground.patternSize ?? 28;
 
 </script>
 
@@ -51,12 +34,10 @@ $: patternSize = globalBackground.patternSize ?? 28;
   {backgroundColor}
   {backgroundImage}
   {backgroundImageOpacity}
-  {patternOpacity}
-  {patternSize}
 />
 
 
-  <SlideWrapper background={globalBackground} key={currentSlideIndex}>
+  <SlideWrapper key={currentSlideIndex}>
     {#if currentSlide.type === "quoteSlide"}
       <Quote data={currentSlide.data} />
     {:else if currentSlide.type === "cornerWordsSlide"}
