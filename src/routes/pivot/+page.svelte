@@ -34,18 +34,26 @@
   function prev() {
     if (currentSlideIndex > 0) currentSlideIndex--;
   }
+
+$: backgroundColor = globalBackground.backgroundColor;
+$: backgroundImage = globalBackground.backgroundImage;
+$: backgroundImageOpacity = globalBackground.backgroundImageOpacity ?? 0.25;
+$: patternOpacity = globalBackground.patternOpacity ?? 0.25;
+$: patternSize = globalBackground.patternSize ?? 28;
+
 </script>
 
 
 <div class={`stage ${themeClass}`}>
 
   <StaticBackground
-  backgroundColor="#0e490f"
-  backgroundImage="/pivot/banner_brand_section.png"
-  backgroundImageOpacity={0.07}
-  patternOpacity={0.25}
-  patternSize={28}
+  {backgroundColor}
+  {backgroundImage}
+  {backgroundImageOpacity}
+  {patternOpacity}
+  {patternSize}
 />
+
 
   <SlideWrapper background={globalBackground} key={currentSlideIndex}>
     {#if currentSlide.type === "quoteSlide"}
