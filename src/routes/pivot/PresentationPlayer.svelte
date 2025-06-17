@@ -7,6 +7,13 @@
     import StaticBackground from "./background/StaticBackground.svelte";
     import SlideWrapper from "./slides/SlideWrapper.svelte";
     import ImageRightBulletsLeft from "./slides/ImageRightBulletsLeft.svelte";
+    import ImageWithCaption from "./slides/ImageWithCaption.svelte";
+    import ImageWithTitle from "./slides/ImageWithTitle.svelte";
+    import Table from "./slides/Table.svelte";
+    import StatisticSlide from "./slides/StatisticSlide.svelte";
+    import BarChartSlide from "./slides/BarChartSlide.svelte";
+    import TwoColumnTextSlide from "./slides/TwoColumnTextSlide.svelte";
+    import DonutChartSlide from "./slides/DonutChartSlide.svelte";
  
 
     export let deck;
@@ -64,6 +71,20 @@ function handleMouseMove() {
         <ImageLeftBulletsRight data={currentSlide.data} />
       {:else if currentSlide.type === "imageRightBulletsLeft"}
         <ImageRightBulletsLeft data={currentSlide.data} />
+      {:else if currentSlide.type === "imageWithCaption"}
+        <ImageWithCaption data={currentSlide.data} />
+      {:else if currentSlide.type === "imageWithTitle"}
+        <ImageWithTitle data={currentSlide.data} />
+      {:else if currentSlide.type === "table"}
+        <Table data={currentSlide.data} />
+      {:else if currentSlide.type === "statistic"}
+        <StatisticSlide  data={currentSlide.data} />
+      {:else if currentSlide.type === "barChart"}
+        <BarChartSlide  data={currentSlide.data} />
+      {:else if currentSlide.type === "twoColumnText"}
+        <TwoColumnTextSlide  data={currentSlide.data} />
+      {:else if currentSlide.type === "donutChart"}
+        <DonutChartSlide  data={currentSlide.data} />
       {:else}
         <p>Unknown slide type</p>
       {/if}
