@@ -1,52 +1,58 @@
-export const deck = [
-  {
-    type: "titleAndSubtitle",
-    data: [
-      { name: "title", content: "Welcome to Pivot" },
-      { name: "subtitle", content: "Crafted Slides. Instant Impact." }
-    ]
-  },
-  {
-    type: "titleSlide",
-    data: [{ name: "title", content: "Welcome to Taleem.help" }]
-  },
-  {
-    type: "twoColumnText",
-    data: [
-      { name: "left", content: "Advantages:\n• Fast\n• Cheap" },
-      { name: "right", content: "Disadvantages:\n• Unstable\n• Short-term" },
-      { name: "title", content: "Pros and Cons" }
-    ]
-  },
-  {
-    type: "bulletList",
-    data: [
-      { name: "bullet", content: "Fast rendering" },
-      { name: "bullet", content: "Mobile responsive" },
-      { name: "bullet", content: "Simple syntax" }
-    ]
-  },
-  {
-    type: "bigNumber",
-    data: [
-      { name: "number", content: "82%" },
-      { name: "label", content: "User satisfaction rate" }
-    ]
-  },
-  {
-    type: "quoteWithImage",
-    data: [
-      { name: "quote", content: "Simplicity is the ultimate sophistication." },
-      { name: "author", content: "Leonardo da Vinci" },
-      { name: "image", content: "/pivot/author.webp" }
-    ]
-  },
-  {
-    type: "contactSlide",
-    data: [
-      { name: "headline", content: "Get in Touch" },
-      { name: "email", content: "hello@pivot.dev" },
-      { name: "phone", content: "+92 300 1234567" }
-    ]
-  }
-];
+import { DeckBuilder } from "deckbuilderpivot";
+const deckbuilder = new DeckBuilder();
+
+deckbuilder.setTheme("royalBlue");
+deckbuilder.setBackground({
+  backgroundColor: "#ffffff",
+  backgroundImage: "/pivot/defaultBg.png",
+  backgroundImageOpacity: 0.8,
+  pattern: null
+});
+
+deckbuilder.s.titleSlide([
+  { name: "title", content: "Electric Vehicles 101" }
+]);
+
+deckbuilder.s.twoColumnText([
+  { name: "left", content: "Benefits:\n• Zero emissions\n• Lower operating cost\n• Quiet and smooth drive" },
+  { name: "right", content: "Challenges:\n• Limited range\n• Charging infrastructure\n• Battery cost" },
+  { name: "title", content: "Pros and Cons" }
+]);
+
+deckbuilder.s.statistic([
+  { name: "number", content: "14 million" },
+  { name: "label", content: "EVs sold worldwide in 2023" }
+]);
+
+deckbuilder.s.barChart([
+  { name: "title", content: "Top EV Markets 2023" },
+  { name: "bar", label: "China", value: 8.1, color: "#4CAF50" },
+  { name: "bar", label: "Europe", value: 2.7, color: "#2196F3" },
+  { name: "bar", label: "USA", value: 1.4, color: "#FFC107" }
+]);
+
+deckbuilder.s.donutChart([
+  { name: "percent", content: 18 },
+  { name: "label", content: "EV share of new cars" },
+  { name: "color", content: "#673AB7" }
+]);
+
+deckbuilder.s.imageLeftBulletsRight([
+  { name: "image", content: "/pivot/box.webp" },
+  { name: "bullet", content: "No tailpipe pollution" },
+  { name: "bullet", content: "Renewable energy compatible" },
+  { name: "bullet", content: "Incentivized by governments" }
+]);
+
+deckbuilder.s.quoteSlide([
+  { name: "quoteLine", content: "The future is electric,", start: 0 },
+  { name: "quoteLine", content: "and it’s already here.", start: 2 },
+  { name: "author", content: "— Elon Musk", start: 3 }
+]);
+
+deckbuilder.s.imageWithCaption([
+  { name: "image", content: "/pivot/fbise9physics.webp" },
+  { name: "caption", content: "EVs rely on lithium-ion battery technology" }
+]);
+
+export const deck = deckbuilder.build();

@@ -1,9 +1,10 @@
 <script>
 
 import { deck } from "./deck.js";
-  import PresentationPlayer from "./PresentationPlayer.svelte";
+  // import PresentationPlayer from "./PresentationPlayer.svelte";
+  import { PivotPlayer } from "taleem-pivot-player";
 </script>
 
 {#if deck}
-<PresentationPlayer  {deck}/>
+<PivotPlayer  {deck}/>
 {/if}
