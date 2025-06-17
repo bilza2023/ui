@@ -20,6 +20,7 @@
   "type": "module",
   "dependencies": {
     "@zerodevx/svelte-toast": "^0.9.5",
+    "deckbuilderpivot": "^0.1.0",
     "howler": "^2.2.4",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",

@@ -14,6 +14,12 @@
     import BarChartSlide from "./slides/BarChartSlide.svelte";
     import TwoColumnTextSlide from "./slides/TwoColumnTextSlide.svelte";
     import DonutChartSlide from "./slides/DonutChartSlide.svelte";
+    import TitleAndSubtitle from "./slides/TitleAndSubtitle.svelte";
+
+    import BulletList from "./slides/BulletList.svelte";
+    import BigNumber from "./slides/BigNumber.svelte";
+    import QuoteWithImage from "./slides/QuoteWithImage.svelte";
+    import ContactSlide from "./slides/ContactSlide.svelte";
  
 
     export let deck;
@@ -85,6 +91,18 @@ function handleMouseMove() {
         <TwoColumnTextSlide  data={currentSlide.data} />
       {:else if currentSlide.type === "donutChart"}
         <DonutChartSlide  data={currentSlide.data} />
+      {:else if currentSlide.type === "titleAndSubtitle"}
+        <TitleAndSubtitle  data={currentSlide.data} />
+
+      {:else if currentSlide.type === "contactSlide"}
+        <ContactSlide  data={currentSlide.data} />
+      {:else if currentSlide.type === "quoteWithImage"}
+        <QuoteWithImage  data={currentSlide.data} />
+      {:else if currentSlide.type === "bigNumber"}
+        <BigNumber  data={currentSlide.data} />
+      {:else if currentSlide.type === "bulletList"}
+        <BulletList  data={currentSlide.data} />
+
       {:else}
         <p>Unknown slide type</p>
       {/if}
