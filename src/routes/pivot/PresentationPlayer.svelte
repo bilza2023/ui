@@ -27,10 +27,23 @@
     function prev() {
       if (currentSlideIndex > 0) currentSlideIndex--;
     }
+    let showNav = true;
+let hideTimeout;
+
+function handleMouseMove() {
+  clearTimeout(hideTimeout);
+  showNav = true;
+  hideTimeout = setTimeout(() => {
+    showNav = false;
+  }, 3000);
+}
+
   </script>
   
-  <div class={`stage ${themeClass}`}>
-  
+  <!-- <div class={`stage ${themeClass}`}> -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class={`stage ${themeClass}`} on:mousemove={handleMouseMove}>
+
     <StaticBackground
       {backgroundColor}
       {backgroundImage}
@@ -53,7 +66,8 @@
       {/if}
     </SlideWrapper>
   
-    <div class="nav-overlay">
+    <div class="nav-overlay" class:visible={showNav}>
+    <!-- <div class="nav-overlay"> -->
       <button on:click={prev} disabled={currentSlideIndex === 0}>⬅ Prev</button>
       <span>Slide {currentSlideIndex + 1} of {deck.length}</span>
       <button on:click={next} disabled={currentSlideIndex === deck.length - 1}>Next ➡</button>
@@ -68,6 +82,17 @@
       overflow: hidden;
     }
   
+    .nav-overlay {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.nav-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
     .nav-overlay {
       position: absolute;
       top: 0;
