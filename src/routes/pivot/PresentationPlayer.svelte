@@ -6,6 +6,7 @@
     import Image from "./slides/Image.svelte";
     import StaticBackground from "./background/StaticBackground.svelte";
     import SlideWrapper from "./slides/SlideWrapper.svelte";
+    import ImageRightBulletsLeft from "./slides/ImageRightBulletsLeft.svelte";
  
 
     export let deck;
@@ -61,6 +62,8 @@ function handleMouseMove() {
         <Image data={currentSlide.data} />
       {:else if currentSlide.type === "imageLeftBulletsRight"}
         <ImageLeftBulletsRight data={currentSlide.data} />
+      {:else if currentSlide.type === "imageRightBulletsLeft"}
+        <ImageRightBulletsLeft data={currentSlide.data} />
       {:else}
         <p>Unknown slide type</p>
       {/if}

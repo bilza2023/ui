@@ -5,59 +5,57 @@
   const bullets = data.filter(d => d.name === "bullet").map(b => b.content);
 </script>
 
-<div class="image-bullet-slide">
-  <div class="left-image">
+<div class="slide-grid">
+  <div class="image-zone">
     <img src={imageSrc} alt="Slide Image" />
   </div>
-  <div class="right-bullets">
-    {#each bullets as b}
-      <div class="bullet-item">• {b}</div>
+  <div class="bullets-zone">
+    {#each bullets as bullet}
+      <div class="bullet-item">{bullet}</div>
     {/each}
   </div>
 </div>
 
 <style>
-.image-bullet-slide {
-  display: flex;
-  width: 100%;
+.slide-grid {
+  display: grid;
+  grid-template-columns: 30% 70%;
   height: 100vh;
+  width: 100vw;
+  padding: 2rem;
+  padding-left: 12rem;
   box-sizing: border-box;
-  padding: 40px;
+  gap: 2rem;
 }
 
-.left-image {
-  flex: 0 0 40%;
-  padding-right: 40px;
+.image-zone {
   display: flex;
+  justify-content: flex-start;  /* Push content to the left edge */
   align-items: center;
-  justify-content: center;
+  overflow: hidden;
 }
 
-.left-image img {
-  width: 100%;
+.image-zone img {
+  display: block;               /* Removes inline spacing */
+  max-width: 100%;              /* Never overflow container */
   height: auto;
   object-fit: contain;
-  border-radius: 12px;
 }
 
-.right-bullets {
-  flex: 1;
+
+
+.bullets-zone {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 2rem;
+  padding-right: 1rem;
 }
 
 .bullet-item {
-  font-size: clamp(20px, 3vw, 36px);
-  line-height: 1.4;
-  margin-bottom: 16px;
-}
-
-/* Prevent wrapping */
-@media (max-width: 768px) {
-  .image-bullet-slide {
-    height: auto;
-    padding: 20px;
-  }
+  font-size: 4rem; /* Bigger text */
+  line-height: 2.5;
+  font-weight: 500;
 }
 </style>
+

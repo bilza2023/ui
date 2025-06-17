@@ -2,6 +2,16 @@
 
 export const deck = [
   {
+    type: "imageRightBulletsLeft",
+    data: [
+      { name: "image", content: "/pivot/fbise9physics.webp" },
+      { name: "bullet", content: "First point about the image" },
+      { name: "bullet", content: "Second insight, very sharp" },
+      { name: "bullet", content: "Third takeaway, well said" }
+    ]
+  },
+  
+  {
     type: "imageLeftBulletsRight",
     data: [
       { name: "image", content: "/pivot/box.webp" },
