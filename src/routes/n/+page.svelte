@@ -1,5 +1,6 @@
 <script>
   import {fbise9physics} from "../../lib/syllabusData/fbise9physics/index";
+
   const nestedView = fbise9physics.getNestedView();
   // debugger;
   console.log("fbise9physics",nestedView);
@@ -18,6 +19,7 @@
 
 </script>
 
+
 <div class="button-container">
   <button on:click={() => {selectedChapter = null;selectedExercise=null}} class="btn chapter-btn">
     {fbise9physics.tcodeName}
@@ -25,13 +27,13 @@
 
 
   {#if selectedChapter}
-   <button on:click={() => view = 'exercise'} class="btn exercise-btn">
+   <button on:click={() => selectedExercise = null} class="btn exercise-btn">
      {`Chapter >`}{selectedChapter.name} 
     </button>
     {/if}
 
   {#if selectedExercise}
-   <button on:click={() => view = 'exercise'} class="btn exercise-btn">
+   <button on:click={() => {}} class="btn exercise-btn">
      {`Exercise >`}{selectedExercise.name} 
     </button>
     {/if}
@@ -50,6 +52,7 @@
   {/if}
 
   {#if selectedChapter !==null && selectedExercise==null}
+  <h4 class="w-full text-left text-black  ">Exercises</h4>
   {#each selectedChapter.exercises as exercise}
   <button class="chapter-item" on:click={() => setSelectEx(exercise)}>
    {exercise.name}
@@ -61,6 +64,7 @@
   <!-- Questions -->
 
   {#if selectedExercise && selectedChapter}
+  <h4 class="w-full text-left text-black  ">Questions</h4>
   {#each selectedExercise.questions as question}
    <button class="chapter-item" on:click={() => {}}>
     {question.questionNo}
