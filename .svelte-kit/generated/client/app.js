@@ -24,7 +24,9 @@ export const nodes = [
 	() => import('./nodes/20'),
 	() => import('./nodes/21'),
 	() => import('./nodes/22'),
-	() => import('./nodes/23')
+	() => import('./nodes/23'),
+	() => import('./nodes/24'),
+	() => import('./nodes/25')
 ];
 
 export const server_loads = [];
@@ -43,15 +45,17 @@ export const dictionary = {
 		"/forgot_password": [12],
 		"/login": [13],
 		"/md": [14],
-		"/pivot": [15],
-		"/register": [16],
-		"/studio": [17],
-		"/syllabus/english": [18],
-		"/syllabus/fbise10physics": [19],
-		"/syllabus/testSyllabus": [20],
-		"/v-static": [~21],
-		"/videoblog": [23],
-		"/video": [~22]
+		"/n": [15],
+		"/pivot": [16],
+		"/register": [17],
+		"/studio": [18],
+		"/syllabus-old/english": [20],
+		"/syllabus-old/fbise10physics": [21],
+		"/syllabus-old/testSyllabus": [22],
+		"/syllabus/fbise9physics": [19],
+		"/v-static": [~23],
+		"/videoblog": [25],
+		"/video": [~24]
 	};
 
 export const hooks = {

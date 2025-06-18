@@ -3,17 +3,17 @@
     import NavBtn from './NavBtn.svelte';
     import NavBtn2 from './NavBtn2.svelte';
     import Logo from './Logo.svelte';
-    import {checkLogin} from '../config/index';
+    // import {checkLogin} from '../config/index';
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     
     
   let userName = "guest";  
   onMount(async()=>{
-    const email = await checkLogin();
-  if(email !== null){
-    userName = email;
-  }
+  //   const email = await checkLogin();
+  // if(email !== null){
+  //   userName = email;
+  // }
   });
 
 function logout(){
