@@ -1,6 +1,8 @@
 <script>
   import {fbise9physics} from "../../lib/syllabusData/fbise9physics/index";
 
+  import Nav from "$lib/appComps/Nav.svelte";  
+ import NavBar from "./NavBar.svelte";
   const nestedView = fbise9physics.getNestedView();
   // debugger;
   console.log("fbise9physics",nestedView);
@@ -12,15 +14,29 @@
   selectedChapter = chapter;
   console.log("selectedChapter" ,selectedChapter);
 }
+ function unSelectEx(){
+  selectedExercise = null;
+ }
+ function unSelectCh(){
+  selectedChapter = null;
+ }
  function setSelectEx(ex){
   selectedExercise = ex;
   console.log("selectedExercise", selectedExercise);
  }
 
 </script>
+<Nav />
 
+<NavBar
+{fbise9physics}
+{selectedChapter}
+{selectedExercise}
+{unSelectEx}
+{unSelectCh}
+/>
 
-<div class="button-container">
+<!-- <div class="button-container">
   <button on:click={() => {selectedChapter = null;selectedExercise=null}} class="btn chapter-btn">
     {fbise9physics.tcodeName}
   </button>
@@ -38,7 +54,8 @@
     </button>
     {/if}
 
-</div>
+</div> -->
+
 
 <div class="view-container">
   
@@ -75,38 +92,45 @@
 </div>
 
 <style>
-.button-container {
-  margin-bottom: 1rem;
+  .button-container {
   display: flex;
-  gap: 1rem;
+  align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
   background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  font-family: sans-serif;
+  font-size: 0.95rem;
 }
 
 .btn {
-  padding: 0.5rem 1rem;
+  background: none;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
-  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.btn:hover {
+  background-color: #e0e0e0;
 }
 
 .chapter-btn {
-  background-color: #007BFF;
-  color: white;
+  color: #007BFF;
 }
 
 .exercise-btn {
-  background-color: #28A745;
-  color: white;
+  color: #28A745;
 }
 
 .question-btn {
-  background-color: #FFC107;
-  color: black;
+  color: #FFC107;
 }
 
 .view-container {
@@ -126,4 +150,5 @@
 .question-heading {
   color: #FFC107;
 }
+
 </style>
