@@ -4,7 +4,7 @@
   import Nav from "$lib/appComps/Nav.svelte";  
   import Footer from "$lib/appComps/Footer.svelte";  
   import SidebarCard from "$lib/appComps/homepage/SidebarCard.svelte";  
-  import TcodeCard from "$lib/appComps/homepage/TcodeCard.svelte";  
+  import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";  
   import {fbise9physics} from "../lib/syllabusData/fbise9physics";
   
 

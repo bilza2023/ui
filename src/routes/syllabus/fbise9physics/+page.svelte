@@ -1,9 +1,9 @@
 <script>
-  import { fbise9physics } from "../../lib/syllabusData/fbise9physics/index";
-  import QuestionCard from "./QuestionCard.svelte";
-  import Card from "./Card.svelte";
+  import { fbise9physics } from "$lib/syllabusData/fbise9physics/index";
+  import QuestionCard from "../components/QuestionCard.svelte";
+  import Card from "../components/Card.svelte";
   import Nav from "$lib/appComps/Nav.svelte";  
-  import NavBar from "./NavBar.svelte";
+  import NavBar from "../components/NavBar.svelte";
 
   let selectedChapter = null;
   let selectedExercise = null;

@@ -41,7 +41,7 @@ export const dictionary = {
 		"/md": [15],
 		"/register": [16],
 		"/studio": [17],
-		"/syllabus": [18]
+		"/syllabus/fbise9physics": [18]
 	};
 
 export const hooks = {
