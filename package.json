@@ -32,7 +32,7 @@
     "simplerestclient2": "^1.0.5",
     "svelte-katex": "0.1.2",
     "sveltetools_bils": "^0.0.3",
-    "syllabusobject": "^1.0.0",
+    "syllabusobject": "^2.0.1",
     "tailwindcss": "^3.3.3",
     "taleem_ui_lib": "^0.0.6",
     "taleem-canvasplayer": "^0.0.7",

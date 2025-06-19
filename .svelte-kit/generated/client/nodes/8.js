@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/courses/fbise9physics/+page.svelte";
+export { default as component } from "../../../../src/routes/courses/ai/+page.svelte";

@@ -1,26 +1,46 @@
-import { questionTypes, Tcode } from "syllabusobject";
+import { SubjectBuilder } from "syllabusobject";
 
+const sb = new SubjectBuilder({
+  tcodeName: "fbise9physics",
+  filename: "fbise9physics",
+  description: "Federal Board Grade 9 Physics",
+  image: "/images/fbise9physics.png",
+  chapters: [
+    {
+      filename: "ch1_motion",
+      name: "Motion",
+      exercises: [
+        { filename: "ex1_intro", name: "Introduction" },
+        { filename: "ex2_numericals", name: "Numericals" }
+      ]
+    }
+  ]
+});
 
-export const fbise9physics = new Tcode("fbise9physics");
+// Add a few questions
+sb.getChExByFilename("ch1_motion", "ex1_intro").addQuestion({
+  filename: "q001_velocity",
+  name: "Define velocity",
+  type: "md"
+});
 
-fbise9physics.name = "Physics 9";
-fbise9physics.image = "pivot/box.webp";
-fbise9physics.description = "FBISE Grade 9 Physics";
-fbise9physics.link = "/syllabus/fbise9physics";
+sb.getChExByFilename("ch1_motion", "ex1_intro").addQuestion({
+  filename: "q002_acceleration",
+  name: "Define acceleration",
+  type: "md"
+});
 
-// Add Chapter
-const ch1 = fbise9physics.addChapter({ name: "Kinematics" });
+sb.bulkAddQuestions([
+  {
+    chapter: "ch1_motion",
+    exercise: "ex2_numericals",
+    question: {
+      filename: "q003_num1",
+      name: "A car moves with constant speed...",
+      type: "md"
+    }
+  }
+]);
 
-ch1.image = "/pivot/box.webp";
-
-const ex1 = ch1.addExercise({ name: "Introduction" });
-
-ex1.addQuestion("md", "Define velocity", 1);
-ex1.addQuestion("md", "Give examples of uniform motion", 2, "a");
-
-const ch2 = fbise9physics.addChapter({ name: "Dynamics" });
-ch2.image = "/pivot/banner_brand.png";
-
-const ex2 = ch2.addExercise({ name: "Newton's Laws" });
-
-ex2.addQuestion("slide", "State Newton's Second Law", 1);
+// Export the final syllabus
+export const fbise9physics = sb.toJSON();
