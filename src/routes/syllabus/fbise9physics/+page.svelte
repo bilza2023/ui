@@ -35,7 +35,7 @@
   {unSelectCh}
 />
 
-<div class="flex w-full justify-center gap-8 view-container">
+<div class="flex flex-wrap w-full justify-center gap-8 view-container">
 
   {#if !selectedChapter}
     {#each fbise9physics.chapters as chapter}
