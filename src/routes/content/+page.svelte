@@ -21,9 +21,9 @@
 
     if (modules[path]) {
       const mod = await modules[path]();
-      debugger;
-      deck = mod.default;
-      console.log("✅ Loaded deck module:", mod);
+      // debugger;
+      deck = mod.deck;
+      console.log("✅ Loaded deck module:", deck);
     } else {
       console.error(`❌ Could not find module at path: ${path}`);
     }

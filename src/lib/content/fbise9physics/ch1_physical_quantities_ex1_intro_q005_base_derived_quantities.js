@@ -2,7 +2,7 @@ import { DeckBuilder } from "deckbuilderpivot";
 const deckbuilder = new DeckBuilder();
 
 deckbuilder.s.titleSlide([
-  { name: "title", content: "Demo Demo Demo " }
+  { name: "title", content: "Derived Quantities" }
 ]);
 
 deckbuilder.s.imageLeftBulletsRight([

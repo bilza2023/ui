@@ -2,7 +2,7 @@ import { DeckBuilder } from "deckbuilderpivot";
 const deckbuilder = new DeckBuilder();
 
 deckbuilder.s.titleSlide([
-  { name: "title", content: "Understanding Acceleration" }
+  { name: "title", content: "What is Physics" }
 ]);
 
 deckbuilder.s.imageLeftBulletsRight([
