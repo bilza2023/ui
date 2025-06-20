@@ -2,41 +2,21 @@
   import { onMount, onDestroy } from 'svelte';
   import { deck } from './deck.js';
   import Player from "./player/Player.js";
-
-  // Slide components
-  import Quote from './slides/Quote.svelte';
-  import CornerWords from './slides/CornerWords.svelte';
-  import Title from './slides/Title.svelte';
-  import Image from './slides/Image.svelte';
-  import ImageLeftBulletsRight from './slides/ImageLeftBulletsRight.svelte';
-  import ImageRightBulletsLeft from './slides/ImageRightBulletsLeft.svelte';
-  import ImageWithCaption from './slides/ImageWithCaption.svelte';
-  import ImageWithTitle from './slides/ImageWithTitle.svelte';
-  import Table from './slides/Table.svelte';
-  import StatisticSlide from './slides/StatisticSlide.svelte';
-  import BarChartSlide from './slides/BarChartSlide.svelte';
-  import TwoColumnTextSlide from './slides/TwoColumnTextSlide.svelte';
-  import DonutChartSlide from './slides/DonutChartSlide.svelte';
-  import TitleAndSubtitle from './slides/TitleAndSubtitle.svelte';
-  import BulletList from './slides/BulletList.svelte';
-  import BigNumber from './slides/BigNumber.svelte';
-  import QuoteWithImage from './slides/QuoteWithImage.svelte';
-  import ContactSlide from './slides/ContactSlide.svelte';
-  import StaticBackground from './background/StaticBackground.svelte';
+  import SlideMap from './slides/SlideMap.js';
 
   let player;
   let currentTime = 0;
   let currentSlideIndex = 0;
-  $: console.log("currentTime" ,currentTime);
+
+  $: console.log( "currentTime" , currentTime );
+  $: console.log( "currentSlideIndex" , currentSlideIndex );
 
   onMount(() => {
     player = new Player('/sounds/music.opus');
     player.onTick(time => {
-      // const ms = time * 1000;
-      const ms = time;
-      currentTime = ms;
+      currentTime = time;
       for (let i = deck.length - 1; i >= 0; i--) {
-        if ((deck[i].start || 0) <= ms) {
+        if ((deck[i].start || 0) <= time) {
           currentSlideIndex = i;
           break;
         }
@@ -56,61 +36,27 @@
     player.pause();
   }
 
+  const getCurrentSlide = () => deck[currentSlideIndex];
 </script>
 
 
 <div class="stage">
-  {#if deck[currentSlideIndex].type === 'quoteSlide'}
-    <Quote data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'cornerWordsSlide'}
-    <CornerWords data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'titleSlide'}
-    <Title data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'imageSlide'}
-    <Image data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'imageLeftBulletsRight'}
-    <ImageLeftBulletsRight data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'imageRightBulletsLeft'}
-    <ImageRightBulletsLeft data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'imageWithCaption'}
-    <ImageWithCaption data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'imageWithTitle'}
-    <ImageWithTitle data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'table'}
-    <Table data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'statistic'}
-    <StatisticSlide data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'barChart'}
-    <BarChartSlide data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'twoColumnText'}
-    <TwoColumnTextSlide data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'donutChart'}
-    <DonutChartSlide data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'titleAndSubtitle'}
-    <TitleAndSubtitle data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'bulletList'}
-    <BulletList data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'bigNumber'}
-    <BigNumber data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'quoteWithImage'}
-    <QuoteWithImage data={deck[currentSlideIndex].data} currentTime={currentTime} />
-  {:else if deck[currentSlideIndex].type === 'contactSlide'}
-    <ContactSlide data={deck[currentSlideIndex].data} currentTime={currentTime} />
+  {#if SlideMap[getCurrentSlide().type]}
+    <svelte:component
+      this={SlideMap[getCurrentSlide().type]}
+      data={getCurrentSlide().data}
+      currentTime={currentTime}
+    />
   {:else}
-    <p>Unknown slide type: {deck[currentSlideIndex].type}</p>
+    <p>Unknown slide type: {getCurrentSlide().type}</p>
   {/if}
 </div>
 
 
-{#if player}
 <div class="controls">
-  <!-- <button on:click={prev}>Prev</button> -->
   <button on:click={play}>Play</button>
   <button on:click={pause}>Pause</button>
-  <!-- <button on:click={next}>Next</button> -->
 </div>
-{/if}
-
 
 <style>
   .controls {
