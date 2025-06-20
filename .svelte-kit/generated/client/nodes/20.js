@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/syllabus-old/english/+page.svelte";
+export { default as component } from "../../../../src/routes/v-static/+page.svelte";
