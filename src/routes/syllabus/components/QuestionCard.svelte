@@ -7,7 +7,7 @@
   const url = `${baseUrl}?tcode=${question.tcodeName}&filename=${filename}`;
 </script>
 
-<a class="qcard" href={url}>
+<a class="qcard" href={url} target="_blank">
   <div class="q-icon">❓</div>
   <div class="q-title">
     Q{question?.questionNo ?? "?"}: {question?.name?.slice(0, 60) ?? "Unnamed"}

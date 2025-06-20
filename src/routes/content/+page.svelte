@@ -1,5 +1,5 @@
 <script>
-  // import { deck } from "./deck.js";
+ 
   import { PivotPlayer } from "taleem-pivot-player";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
