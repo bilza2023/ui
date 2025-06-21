@@ -1,9 +1,10 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
-  import { deck } from './deck.js';
+  import { deck } from './deck-json';
+  console.log("deck" , deck);
   import Player from "./player/Player.js";
   import SlideMap from './slides/SlideMap.js';
-
+  import NavBar from './NavBar.svelte';
   let player;
   let currentTime = 0;
   let currentSlideIndex = 0;
@@ -11,17 +12,20 @@
   $: console.log( "currentTime" , currentTime );
   $: console.log( "currentSlideIndex" , currentSlideIndex );
 
+  function handleTick(time) {
+    currentTime = time;
+    for (let i = 0; i < deck.length; i++) {
+      const { start, end } = deck[i];
+      if (time >= start && time < end) {
+        currentSlideIndex = i;
+        break;
+      }
+    }
+  }
+
   onMount(() => {
     player = new Player('/sounds/music.opus');
-    player.onTick(time => {
-      currentTime = time;
-      for (let i = deck.length - 1; i >= 0; i--) {
-        if ((deck[i].start || 0) <= time) {
-          currentSlideIndex = i;
-          break;
-        }
-      }
-    });
+    player.onTick(handleTick);
   });
 
   onDestroy(() => {
@@ -39,6 +43,20 @@
   const getCurrentSlide = () => deck[currentSlideIndex];
 </script>
 
+<NavBar
+  {currentTime}
+  duration={deck.at(-1).end}
+  isPlaying={player?.sound?.playing()}
+  onPlay={play}
+  onPause={pause}
+  onStop={() => { player.sound.seek(0); pause(); }}
+  onSeek={(t) => {
+    player?.sound?.seek(t);
+    handleTick(t); // ← force immediate slide update
+  }}
+  
+/>
+
 
 <div class="stage">
   {#if SlideMap[getCurrentSlide().type]}
@@ -50,12 +68,6 @@
   {:else}
     <p>Unknown slide type: {getCurrentSlide().type}</p>
   {/if}
-</div>
-
-
-<div class="controls">
-  <button on:click={play}>Play</button>
-  <button on:click={pause}>Pause</button>
 </div>
 
 <style>
