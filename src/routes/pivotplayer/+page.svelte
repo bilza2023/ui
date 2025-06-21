@@ -1,16 +1,16 @@
 <script>
-  import { onMount, onDestroy } from 'svelte';
-  import { deck } from './deck-json';
-  console.log("deck" , deck);
+  import { onMount, onDestroy } from "svelte";
+  import { deck } from "./deck-json";
+  console.log("deck", deck);
   import Player from "./player/Player.js";
-  import SlideMap from './slides/SlideMap.js';
-  import NavBar from './NavBar.svelte';
+  import SlideMap from "./slides/SlideMap.js";
+  import NavBar from "./NavBar.svelte";
   let player;
   let currentTime = 0;
   let currentSlideIndex = 0;
 
-  $: console.log( "currentTime" , currentTime );
-  $: console.log( "currentSlideIndex" , currentSlideIndex );
+  $: console.log("currentTime", currentTime);
+  $: console.log("currentSlideIndex", currentSlideIndex);
 
   function handleTick(time) {
     currentTime = time;
@@ -24,7 +24,7 @@
   }
 
   onMount(() => {
-    player = new Player('/sounds/music.opus');
+    player = new Player("/sounds/music.opus");
     player.onTick(handleTick);
   });
 
@@ -32,15 +32,18 @@
     player.destroy();
   });
 
+  function stop() {
+    player.pause();
+  player.sound.seek(0);
+  currentTime = 0; // ← force scrollbar update
+  }
+  function back() {
+    history.back();
+  }
+
   function play() {
     player.play();
   }
-
-  function stop() {
-  player.pause();         // pause playback
-  player.sound.seek(0);   // reset time to start
-}
-
   function pause() {
     player.pause();
   }
@@ -51,24 +54,22 @@
 <NavBar
   {currentTime}
   duration={deck.at(-1).end}
-  isPlaying={player?.sound?.playing()}
   onPlay={play}
   onPause={pause}
   onStop={stop}
+  onBack={back}
   onSeek={(t) => {
     player?.sound?.seek(t);
     handleTick(t); // ← force immediate slide update
   }}
-  
 />
-
 
 <div class="stage">
   {#if SlideMap[getCurrentSlide().type]}
     <svelte:component
       this={SlideMap[getCurrentSlide().type]}
       data={getCurrentSlide().data}
-      currentTime={currentTime}
+      {currentTime}
     />
   {:else}
     <p>Unknown slide type: {getCurrentSlide().type}</p>
