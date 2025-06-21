@@ -1,6 +1,7 @@
 <script>
- 
-  import { PivotPlayer } from "taleem-pivot-player";
+   import PivotPlayer from '../../lib/PivotPlayer/PivotPlayer.svelte';
+
+   
   import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { get } from "svelte/store";
@@ -31,5 +32,14 @@
 </script>
 
 {#if deck}
-  <PivotPlayer {deck} />
+
+<PivotPlayer
+  {deck}
+  soundUrl="/sounds/music.opus"
+  background={{
+    backgroundColor: "#ffffff",
+    backgroundImage: "/pivot/defaultBg.png",
+    backgroundImageOpacity: 0.8
+  }}
+/>
 {/if}

@@ -1,11 +1,11 @@
 
 <!-- +page.svelte -->
 <script>
-  import PivotPlayerUI from '../../lib/PivotPlayer/PivotPlayer.svelte';
-  import { deck } from './deck-json.js';
+  import PivotPlayer from '../../lib/PivotPlayer/PivotPlayer.svelte';
+  import { deck } from './deck.js';
 </script>
 
-<PivotPlayerUI
+<PivotPlayer
   {deck}
   soundUrl="/sounds/music.opus"
   background={{

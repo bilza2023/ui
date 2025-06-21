@@ -1,83 +1,39 @@
-
-import { DeckBuilder } from "deckbuilderpivot";
-
+import { DeckBuilder } from "pivot-deckbuilder";
 const deckbuilder = new DeckBuilder();
 
-deckbuilder.setTheme("royalBlue");
-deckbuilder.setBackground({
-  backgroundColor: "#ffffff",
-  backgroundImage: "/pivot/defaultBg.png",
-  backgroundImageOpacity: 0.8,
-  pattern: null
-});
+deckbuilder.s.titleSlide(10, [
+  { name: "title", content: "Demo Player", showAt: 0 }
+]);
 
-// Slide durations: 10 seconds each
-deckbuilder.s.titleSlide(
-  [{ name: "title", content: "Electric Vehicles 101" }],
-  { start: 0 }
-);
+deckbuilder.s.twoColumnText(20, [
+  { name: "title", content: "Branches of Physics", showAt: 0 },
+  { name: "left", content: "• Mechanics\n• Thermodynamics\n• Electromagnetism", showAt: 1 },
+  { name: "right", content: "• Optics\n• Quantum Physics\n• Nuclear Physics", showAt: 2 }
+]);
 
-deckbuilder.s.twoColumnText(
-  [
-    { name: "left", content: "Benefits:\n• Zero emissions\n• Lower operating cost\n• Quiet and smooth drive" },
-    { name: "right", content: "Challenges:\n• Limited range\n• Charging infrastructure\n• Battery cost" },
-    { name: "title", content: "Pros and Cons" }
-  ],
-  { start: 10 }
-);
+deckbuilder.s.imageWithTitle(30, [
+  { name: "image", content: "/pivot/fbise9physics.webp", showAt: 0 },
+  { name: "title", content: "Understanding the Physical World", showAt: 1 }
+]);
 
-deckbuilder.s.statistic(
-  [
-    { name: "number", content: "14 million" },
-    { name: "label", content: "EVs sold worldwide in 2023" }
-  ],
-  { start: 20 }
-);
+deckbuilder.s.statistic(40, [
+  { name: "number", content: "9", showAt: 0 },
+  { name: "label", content: "Core Physics Chapters", showAt: 2 }
+]);
 
-deckbuilder.s.barChart(
-  [
-    { name: "title", content: "Top EV Markets 2023" },
-    { name: "bar", label: "China", value: 8.1, color: "#4CAF50" },
-    { name: "bar", label: "Europe", value: 2.7, color: "#2196F3" },
-    { name: "bar", label: "USA", value: 1.4, color: "#FFC107" }
-  ],
-  { start: 30 }
-);
+deckbuilder.s.quoteSlide(50, [
+  { name: "quoteLine", content: "Physics is the poetry of nature.", showAt: 0 },
+  { name: "author", content: "— Taleem.Help", showAt: 2 }
+]);
 
-deckbuilder.s.donutChart(
-  [
-    { name: "percent", content: 18 },
-    { name: "label", content: "EV share of new cars" },
-    { name: "color", content: "#673AB7" }
-  ],
-  { start: 40 }
-);
+deckbuilder.s.imageSlide(60, [
+  { name: "image", content: "/pivot/box.webp", showAt: 0 }
+]);
 
-deckbuilder.s.imageLeftBulletsRight(
-  [
-    { name: "image", content: "/pivot/box.webp" },
-    { name: "bullet", content: "No tailpipe pollution" },
-    { name: "bullet", content: "Renewable energy compatible" },
-    { name: "bullet", content: "Incentivized by governments" }
-  ],
-  { start: 50 }
-);
-
-deckbuilder.s.quoteSlide(
-  [
-    { name: "quoteLine", content: "The future is electric,", start: 0 },
-    { name: "quoteLine", content: "and it’s already here.", start: 2 },
-    { name: "author", content: "— Elon Musk", start: 3 }
-  ],
-  { start: 60 }
-);
-
-deckbuilder.s.imageWithCaption(
-  [
-    { name: "image", content: "/pivot/fbise9physics.webp" },
-    { name: "caption", content: "EVs rely on lithium-ion battery technology" }
-  ],
-  { start: 70 }
-);
+deckbuilder.s.contactSlide(70, [
+  { name: "headline", content: "Need Help with Physics?", showAt: 0 },
+  { name: "email", content: "support@taleem.help", showAt: 1 },
+  { name: "phone", content: "+92 300 0000000", showAt: 2 }
+]);
 
 export const deck = deckbuilder.build();

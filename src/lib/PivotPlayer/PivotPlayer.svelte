@@ -1,7 +1,7 @@
 <!-- PivotPlayerUI.svelte -->
 <script>
     import { onMount, onDestroy } from 'svelte';
-    import Player from './player/Player';
+    import Player from './Player';
     import SlideMap from './slides/SlideMap.js';
     import NavBar from './NavBar.svelte';
     import StaticBackground from './background/StaticBackground.svelte';
