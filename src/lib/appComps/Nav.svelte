@@ -84,12 +84,12 @@ function logout(){
       
        
         <!-- <NavBtn title='Payment' icon = '🚀' url='/payment'/> -->
-         {#if userName == "guest"}
-         <NavBtn title="register" icon ='🔓'  url='/register'/>
-         {:else}
-         <NavBtn2 title="logout" icon ='🔑'  clk={logout}  /> 
-         <NavBtn title={userName} icon ='👨‍🎓'  url='#'/> 
-         {/if}
+         <!-- {#if userName == "guest"} -->
+         <!-- <NavBtn title="register" icon ='🔓'  url='/register'/> -->
+         <!-- {:else} -->
+         <!-- <NavBtn2 title="logout" icon ='🔑'  clk={logout}  />  -->
+         <!-- <NavBtn title={userName} icon ='👨‍🎓'  url='#'/>  -->
+         <!-- {/if} -->
         <!-- <NavBtn title='Signup' icon ='🔓'  url='/signup'/> -->
         </div>
     </div><!--outer most div-->

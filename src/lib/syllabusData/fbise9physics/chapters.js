@@ -5,7 +5,7 @@ export const sb = new SubjectBuilder({
     tcodeName: "fbise9physics",
     filename: "fbise9physics",
     description: "Federal Board Grade 9 Physics",
-    image: "/images/fbise9physics.png",
+    image: "/pivot/fbise9physics.webp",
     chapters: [
       {
         filename: "ch1_physical_quantities",

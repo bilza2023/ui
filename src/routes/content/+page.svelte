@@ -1,10 +1,9 @@
 <script>
-   import PivotPlayer from '../../lib/PivotPlayer/PivotPlayer.svelte';
-
-   
   import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { get } from "svelte/store";
+  import PivotPlayer from "../../lib/PivotPlayer/PivotPlayer.svelte";
+  import {deck404} from "./deck404.js";
 
   const modules = import.meta.glob("/src/lib/content/**/*.js");
   let deck = null;
@@ -22,24 +21,23 @@
 
     if (modules[path]) {
       const mod = await modules[path]();
-      // debugger;
       deck = mod.deck;
-      console.log("✅ Loaded deck module:", deck);
+      // console.log("✅ Loaded deck module:", deck);
     } else {
-      console.error(`❌ Could not find module at path: ${path}`);
+      deck = deck404;
+      // console.error(`❌ Could not find module at path: ${path}`);
     }
   });
 </script>
 
 {#if deck}
-
-<PivotPlayer
-  {deck}
-  soundUrl="/sounds/music.opus"
-  background={{
-    backgroundColor: "#ffffff",
-    backgroundImage: "/pivot/defaultBg.png",
-    backgroundImageOpacity: 0.8
-  }}
-/>
+  <PivotPlayer
+    {deck}
+    soundUrl="/sounds/music.opus"
+    background={{
+      backgroundColor: "#ffffff",
+      backgroundImage: "/pivot/defaultBg.png",
+      backgroundImageOpacity: 0.8,
+    }}
+  />
 {/if}
