@@ -36,6 +36,11 @@
     player.play();
   }
 
+  function stop() {
+  player.pause();         // pause playback
+  player.sound.seek(0);   // reset time to start
+}
+
   function pause() {
     player.pause();
   }
@@ -49,7 +54,7 @@
   isPlaying={player?.sound?.playing()}
   onPlay={play}
   onPause={pause}
-  onStop={() => { player.sound.seek(0); pause(); }}
+  onStop={stop}
   onSeek={(t) => {
     player?.sound?.seek(t);
     handleTick(t); // ← force immediate slide update
