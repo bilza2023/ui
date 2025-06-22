@@ -38,9 +38,9 @@
   on:touchstart={handleMove}
 >
   <button on:click={onBack}>←</button>
-  <button on:click={onStop}>⏹️</button>
-  <button on:click={onPause}>⏸️</button>
   <button on:click={onPlay}> ▶️</button>
+  <button on:click={onPause}>⏸️</button>
+  <button on:click={onStop}>⏹️</button>
 
   <span class="timer">{formatTime(currentTime)} / {formatTime(duration)}</span>
   <input

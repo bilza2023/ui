@@ -1,60 +1,77 @@
 <script>
-    export let data;
-  
-    const imageSrc = data.find(d => d.name === "image")?.content ?? "";
-    const bullets = data.filter(d => d.name === "bullet").map(b => b.content);
-  </script>
-  
-  <div class="slide-flex">
-    <div class="bullets-zone">
+  export let data;
+  export let currentTime;
+
+  $: imageItem = data.find(d => d.name === "image" && d.showAt <= currentTime);
+
+  $: bullets = data
+    .filter(d => d.name === "bullet" && d.showAt <= currentTime)
+    .sort((a, b) => a.showAt - b.showAt)
+    .map(d => d.content);
+</script>
+
+<div class="slide-container">
+  <div class="bullets-left">
+    <ul>
       {#each bullets as bullet}
-        <div class="bullet-item">{bullet}</div>
+        <li>{bullet}</li>
       {/each}
-    </div>
-  
-    <div class="image-zone">
-      <img src={imageSrc} alt="Slide Image" />
-    </div>
+    </ul>
   </div>
-  
-  <style>
-.slide-flex {
+
+  {#if imageItem}
+    <div class="image-right">
+      <img src={imageItem.content} alt="Slide image" />
+    </div>
+  {/if}
+</div>
+
+<style>
+.slide-container {
   display: flex;
-  width: 100vw;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
   box-sizing: border-box;
-  padding: 8rem 10rem; /* ← Add side padding */
-  gap: 2rem;
+  padding: 40px;
+  gap: 60px;
 }
 
-  
-  .bullets-zone {
-    flex: 6;
-    display: flex;
+.image-right img {
+  max-height: 80vh;
+  max-width: 40vw;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.bullets-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bullets-left ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  font-size: 4.5rem;
+}
+
+.bullets-left li {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .slide-container {
     flex-direction: column;
-    justify-content: center;
-    gap: 2rem;
-  }
-  
-  .bullet-item {
-    font-size: 4rem;
-    font-weight: 500;
-    line-height: 2.5;
-  }
-  
-  .image-zone {
-    flex: 4;
-    display: flex;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
   }
-  
-  .image-zone img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    display: block;
+
+  .bullets-left ul {
+    font-size: 2rem;
   }
-  </style>
-  
+
+  .image-right img {
+    max-width: 80vw;
+  }
+}
+</style>

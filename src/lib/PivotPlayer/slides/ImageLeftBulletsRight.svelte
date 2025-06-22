@@ -1,61 +1,76 @@
 <script>
   export let data;
+  export let currentTime;
 
-  const imageSrc = data.find(d => d.name === "image")?.content ?? "";
-  const bullets = data.filter(d => d.name === "bullet").map(b => b.content);
+  $: imageItem = data.find(d => d.name === "image" && d.showAt <= currentTime);
+
+  $: bullets = data
+    .filter(d => d.name === "bullet" && d.showAt <= currentTime)
+    .sort((a, b) => a.showAt - b.showAt)
+    .map(d => d.content);
 </script>
 
-<div class="slide-grid">
-  <div class="image-zone">
-    <img src={imageSrc} alt="Slide Image" />
-  </div>
-  <div class="bullets-zone">
-    {#each bullets as bullet}
-      <div class="bullet-item">{bullet}</div>
-    {/each}
+<div class="slide-container">
+  {#if imageItem}
+    <div class="image-left">
+      <img src={imageItem.content} alt="Slide image" />
+    </div>
+  {/if}
+  <div class="bullets-right">
+    <ul>
+      {#each bullets as bullet}
+        <li>{bullet}</li>
+      {/each}
+    </ul>
   </div>
 </div>
 
 <style>
-.slide-grid {
-  display: grid;
-  grid-template-columns: 30% 70%;
-  height: 100vh;
-  width: 100vw;
-  padding: 2rem;
-  padding-left: 12rem;
+.slide-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
   box-sizing: border-box;
-  gap: 2rem;
+  padding: 40px;
+  gap: 60px;
 }
 
-.image-zone {
-  display: flex;
-  justify-content: flex-start;  /* Push content to the left edge */
-  align-items: center;
-  overflow: hidden;
-}
-
-.image-zone img {
-  display: block;               /* Removes inline spacing */
-  max-width: 100%;              /* Never overflow container */
-  height: auto;
+.image-left img {
+  max-height: 80vh;
+  max-width: 40vw;
   object-fit: contain;
+  border-radius: 12px;
 }
 
-
-
-.bullets-zone {
+.bullets-right {
+  flex: 1;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 2rem;
-  padding-right: 1rem;
 }
 
-.bullet-item {
-  font-size: 4rem; /* Bigger text */
-  line-height: 2.5;
-  font-weight: 500;
+.bullets-right ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  font-size: 4.5rem;
+}
+
+.bullets-right li {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .slide-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bullets-right ul {
+    font-size: 2rem;
+  }
+
+  .image-left img {
+    max-width: 80vw;
+  }
 }
 </style>
-

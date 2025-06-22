@@ -1,39 +1,21 @@
+
+
 import { DeckBuilder } from "pivot-deckbuilder";
 const deckbuilder = new DeckBuilder();
 
-deckbuilder.s.titleSlide(10, [
-  { name: "title", content: "Demo Player", showAt: 0 }
+deckbuilder.setBackground({
+  backgroundColor: "#1a1a1a",
+  backgroundImage: "/pivot/defaultBg.png",
+  backgroundImageOpacity: 0.8
+});
+
+deckbuilder.s.barChart(10, [
+  { name: "bar", label: "Physics", value: 70, color: "#3498db", showAt: 0 },
+  { name: "bar", label: "Chemistry", value: 55, color: "#2ecc71", showAt: 1 },
+  { name: "bar", label: "Biology", value: 60, color: "#f39c12", showAt: 2 },
+  { name: "bar", label: "Computer", value: 90, color: "#9b59b6", showAt: 3 }
 ]);
 
-deckbuilder.s.twoColumnText(20, [
-  { name: "title", content: "Branches of Physics", showAt: 0 },
-  { name: "left", content: "• Mechanics\n• Thermodynamics\n• Electromagnetism", showAt: 1 },
-  { name: "right", content: "• Optics\n• Quantum Physics\n• Nuclear Physics", showAt: 2 }
-]);
-
-deckbuilder.s.imageWithTitle(30, [
-  { name: "image", content: "/pivot/fbise9physics.webp", showAt: 0 },
-  { name: "title", content: "Understanding the Physical World", showAt: 1 }
-]);
-
-deckbuilder.s.statistic(40, [
-  { name: "number", content: "9", showAt: 0 },
-  { name: "label", content: "Core Physics Chapters", showAt: 2 }
-]);
-
-deckbuilder.s.quoteSlide(50, [
-  { name: "quoteLine", content: "Physics is the poetry of nature.", showAt: 0 },
-  { name: "author", content: "— Taleem.Help", showAt: 2 }
-]);
-
-deckbuilder.s.imageSlide(60, [
-  { name: "image", content: "/pivot/box.webp", showAt: 0 }
-]);
-
-deckbuilder.s.contactSlide(70, [
-  { name: "headline", content: "Need Help with Physics?", showAt: 0 },
-  { name: "email", content: "support@taleem.help", showAt: 1 },
-  { name: "phone", content: "+92 300 0000000", showAt: 2 }
-]);
+  
 
 export const deck = deckbuilder.build();

@@ -6,7 +6,7 @@
   import SidebarCard from "$lib/appComps/homepage/SidebarCard.svelte";  
   import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";  
   import {fbise9physics} from "../lib/syllabusData/fbise9physics";
-  
+  console.log("fbise9physics" , fbise9physics);
 
 </script>
 <div class="min-h-screen flex flex-col justify-start bg-[#160c00]">
