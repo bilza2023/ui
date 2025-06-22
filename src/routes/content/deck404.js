@@ -1,4 +1,4 @@
-import { DeckBuilder } from "pivot-deckbuilder";
+import { DeckBuilder } from "taleem-pivot-deckbuilder";
 const deckbuilder = new DeckBuilder();
 
 deckbuilder.s.titleSlide(10, [

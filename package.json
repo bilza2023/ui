@@ -20,7 +20,6 @@
   "type": "module",
   "dependencies": {
     "@zerodevx/svelte-toast": "^0.9.5",
-    "deckbuilderpivot": "^0.1.0",
     "howler": "^2.2.4",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
@@ -28,7 +27,6 @@
     "marked": "^15.0.12",
     "mathjs": "^12.3.0",
     "nanoid": "^5.1.5",
-    "pivot-deckbuilder": "^0.0.9",
     "pixi.js": "^6.5.10",
     "simplerestclient2": "^1.0.5",
     "svelte-katex": "0.1.2",
@@ -36,6 +34,7 @@
     "syllabusobject": "^2.0.1",
     "tailwindcss": "^3.3.3",
     "taleem_ui_lib": "^0.0.6",
+    "taleem-pivot-deckbuilder": "^0.9.0",
     "taleem-pivot-player": "^0.1.0",
     "taleemtools": "^1.0.5",
     "zod": "^3.24.4"

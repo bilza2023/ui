@@ -1,8 +1,8 @@
-import { DeckBuilder } from "pivot-deckbuilder";
+import { DeckBuilder } from "taleem-pivot-deckbuilder";
 const deckbuilder = new DeckBuilder();
 
 deckbuilder.s.titleSlide(10, [
-  { name: "title", content: "Demo Player", showAt: 0 }
+  { name: "title", content: "What is Physics", showAt: 0 }
 ]);
 
 deckbuilder.s.twoColumnText(20, [
