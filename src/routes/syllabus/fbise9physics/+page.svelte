@@ -1,79 +1,96 @@
 <script>
-  import { fbise9physics } from "$lib/syllabusData/fbise9physics/index";
-  import QuestionCard from "../components/QuestionCard.svelte";
-  import Card from "../components/Card.svelte";
-  import Nav from "$lib/appComps/Nav.svelte";  
+  import { onMount } from "svelte";
+  import { page } from "$app/stores";
+  import { get } from "svelte/store";
+  import { getSyllabus, getChapters } from "$lib/syllabus";
+  import Nav from "$lib/appComps/Nav.svelte";
   import NavBar from "../components/NavBar.svelte";
+  import Card from "../components/Card.svelte";
+  import QuestionCard from "../components/QuestionCard.svelte";
 
+  let syllabus = null;
   let selectedChapter = null;
   let selectedExercise = null;
+  let questions = null;
 
-  function setSelectChapter(chapter) {
-    selectedChapter = chapter;
+  onMount(() => {
+    const { pathname } = get(page).url;
+    const segments = pathname.split("/").filter(Boolean);
+    const tcodeName = segments[1] || "";
+    syllabus = getSyllabus(tcodeName) || null;
+    questions = syllabus.questions;
+    // if(!syllabus || !questions) {}
+    console.log("✅ syllabus loaded:", syllabus);
+  });
+
+  $: chapters = syllabus ? getChapters(syllabus.tcodeName) : [];
+  $: exercises = selectedChapter
+    ? syllabus.chapters.find((ch) => ch.filename === selectedChapter.filename)
+        ?.exercises || []
+    : [];
+
+  function chooseChapter(ch) {
+    selectedChapter = ch;
+    selectedExercise = null;
   }
 
+  function chooseExercise(ex) {
+    selectedExercise = ex;
+  }
+
+  function resetAll() {
+    selectedChapter = null;
+    selectedExercise = null;
+  }
   function unSelectEx() {
     selectedExercise = null;
   }
 
+  // Clears both chapter and exercise selections
   function unSelectCh() {
     selectedChapter = null;
-  }
-
-  function setSelectEx(ex) {
-    selectedExercise = ex;
+    selectedExercise = null;
   }
 </script>
 
 <Nav />
 
-<NavBar
-  {fbise9physics}
-  {selectedChapter}
-  {selectedExercise}
-  {unSelectEx}
-  {unSelectCh}
-/>
+{#if syllabus}
+  <NavBar {syllabus} {selectedChapter} {selectedExercise} on:reset={resetAll} {unSelectCh} {unSelectEx} />
+{/if}
 
-<div class="flex flex-wrap w-full justify-center gap-8 view-container">
-
+<div class="view-container">
   {#if !selectedChapter}
-    {#each fbise9physics.chapters as chapter}
-      <button class="chapter-item" on:click={() => setSelectChapter(chapter)}>
-        <Card
-          icon="🗃️"
-          description={chapter.description}
-          title={chapter.name}
-          color="#007BFF"
-        />
+    {#each chapters as ch}
+      <button on:click={() => chooseChapter(ch)}>
+        <Card title={ch.name} description="" icon="📁" />
       </button>
-      <br />
     {/each}
   {/if}
 
   {#if selectedChapter && !selectedExercise}
-    {#each selectedChapter.exercises as exercise}
-      <button class="chapter-item" on:click={() => setSelectEx(exercise)}>
-        <Card
-          icon="🏃"
-          description={exercise.description}
-          title={exercise.name}
-          color="#007BFF"
-        />
+    {#each exercises as ex}
+      <button on:click={() => chooseExercise(ex)}>
+        <Card title={ex.name} description="" icon="📂" />
       </button>
-      <br />
     {/each}
   {/if}
 
   {#if selectedChapter && selectedExercise}
-    {#each fbise9physics.questions.filter(q =>
-      q.chapterFilename === selectedChapter.filename &&
-      q.exerciseFilename === selectedExercise.filename
-    ) as question}
-      <button class="chapter-item">
-        <QuestionCard question={question} />
-      </button>
-      <br />
-    {/each}
+    <!-- {#each questions as q}
+      <QuestionCard {q} />
+      {/each} -->
+      <QuestionCard {questions} {selectedChapter} {selectedExercise}  />
   {/if}
 </div>
+
+
+<style>
+  .view-container {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  button {
+    margin: 0.5rem;
+  }
+</style>

@@ -5,8 +5,7 @@
   import Footer from "$lib/appComps/Footer.svelte";  
   import SidebarCard from "$lib/appComps/homepage/SidebarCard.svelte";  
   import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";  
-  import {fbise9physics} from "../lib/syllabusData/fbise9physics";
-  console.log("fbise9physics" , fbise9physics);
+  import { getAllTcodes } from '$lib/syllabus';
 
 </script>
 <div class="min-h-screen flex flex-col justify-start bg-[#160c00]">
@@ -19,11 +18,7 @@
   <!-- Left Column -->
   <div class={` p-6 rounded-xl shadow-inner flex flex-col space-y-6 border-2 border-[#93754b]  `}>
     
-    <TcodeCard
-    tcodes={[
-      fbise9physics,
-    ]}
-  />
+    <TcodeCard tcodes={getAllTcodes()} />
   </div>
 
   <!-- Right Sidebar -->

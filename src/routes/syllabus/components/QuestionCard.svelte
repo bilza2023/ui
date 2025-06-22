@@ -1,21 +1,31 @@
-
 <script>
-  export let question;
+  export let questions = [];
+  export let selectedChapter;
+  export let selectedExercise;
   export let baseUrl = "/content";
 
-  const filename = `${question.chapterFilename}_${question.exerciseFilename}_${question.filename}`;
-  const url = `${baseUrl}?tcode=${question.tcodeName}&filename=${filename}`;
+  // Filter questions for current chapter and exercise
+  $: filtered = questions.filter(q =>
+    q.chapterFilename === selectedChapter.filename &&
+    q.exerciseFilename === selectedExercise.filename
+  );
 </script>
 
-<a class="qcard" href={url} target="_blank">
-  <div class="q-icon">❓</div>
-  <div class="q-title">
-    Q{question?.questionNo ?? "?"}: {question?.name?.slice(0, 60) ?? "Unnamed"}
-    {#if question?.name?.length > 60}…{/if}
-  </div>
-</a>
-
-
+<div class="flex flex-wrap justify-center">
+{#each filtered as question}
+  <a
+    class="qcard"
+    href={`${baseUrl}?tcode=${question.tcodeName}&filename=${question.chapterFilename}_${question.exerciseFilename}_${question.filename}`}
+    target="_blank"
+  >
+    <div class="q-icon">❓</div>
+    <div class="q-title">
+      Q{question?.questionNo ?? "?"}: {question?.name?.slice(0, 60) ?? "Unnamed"}
+      {#if question?.name?.length > 60}…{/if}
+    </div>
+  </a>
+{/each}
+</div>
 <style>
   .qcard {
     display: block;
@@ -33,6 +43,7 @@
     text-align: center;
     font-family: sans-serif;
     color: inherit;
+    margin: 0.5rem auto;
   }
 
   .qcard:hover {
