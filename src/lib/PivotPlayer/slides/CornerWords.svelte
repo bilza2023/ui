@@ -1,12 +1,16 @@
 <script>
   export let data;
+  export let currentTime;
+
   const cards = data.filter(d => d.name === "card");
 </script>
 
 <div class="card-grid text-primary">
   {#each cards as card}
     <div class="card">
-      <div class="icon">{card.icon}</div>
+      {#if card.showAt <= currentTime}
+        <div class="icon">{card.icon}</div>
+      {/if}
       <div class="label">{card.label}</div>
     </div>
   {/each}
@@ -47,7 +51,6 @@
   line-height: 1.2;
 }
 
-/* Optional: Padding tweaks on small screens */
 @media (max-width: 600px) {
   .card {
     padding: 2px;
