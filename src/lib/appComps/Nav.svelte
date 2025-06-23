@@ -36,6 +36,7 @@ function logout(){
             titleColor="text-gray-900"
           />
           
+
         </div>
                 <!-- ******************************** -->
                 <!-- ******************************** -->
@@ -64,7 +65,6 @@ function logout(){
       bgColor="bg-[#d6b88d]"
       titleColor="text-gray-900"
     /> -->
-
     
         <!-- <NavBtn title='Payment' icon = '🚀' url='/payment'/> -->
         <NavBtn

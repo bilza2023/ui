@@ -1,39 +1,28 @@
 import { DeckBuilder } from "taleem-pivot-deckbuilder";
 const deckbuilder = new DeckBuilder();
 
-deckbuilder.s.titleSlide(10, [
-  { name: "title", content: "Presentation Under Review...", showAt: 0 }
+// Slide 1 - Title Slide
+deckbuilder.s.titleSlide(8, [
+  { name: "title", content: "404: Content Not Found", showAt: 0 }
 ]);
 
-deckbuilder.s.twoColumnText(20, [
-  { name: "title", content: "Branches of Physics", showAt: 0 },
-  { name: "left", content: "• Mechanics\n• Thermodynamics\n• Electromagnetism", showAt: 1 },
-  { name: "right", content: "• Optics\n• Quantum Physics\n• Nuclear Physics", showAt: 2 }
+// Slide 2 - Image with Caption
+deckbuilder.s.imageWithCaption(18, [
+  { name: "image", content: "/pivot/box.webp", showAt: 0 },
+  { name: "caption", content: "Oops! This page is empty.", showAt: 1 }
 ]);
 
-deckbuilder.s.imageWithTitle(30, [
-  { name: "image", content: "/pivot/fbise9physics.webp", showAt: 0 },
-  { name: "title", content: "Understanding the Physical World", showAt: 1 }
+// Slide 3 - Quote Slide
+deckbuilder.s.quoteSlide(28, [
+  { name: "quoteLine", content: "Not all those who wander are lost... but this page might be.", showAt: 0 },
+  { name: "author", content: "— Taleem.Help Bot", showAt: 2 }
 ]);
 
-deckbuilder.s.statistic(40, [
-  { name: "number", content: "9", showAt: 0 },
-  { name: "label", content: "Core Physics Chapters", showAt: 2 }
-]);
-
-deckbuilder.s.quoteSlide(50, [
-  { name: "quoteLine", content: "Physics is the poetry of nature.", showAt: 0 },
-  { name: "author", content: "— Taleem.Help", showAt: 2 }
-]);
-
-deckbuilder.s.imageSlide(60, [
-  { name: "image", content: "/pivot/box.webp", showAt: 0 }
-]);
-
-deckbuilder.s.contactSlide(70, [
-  { name: "headline", content: "Need Help with Physics?", showAt: 0 },
-  { name: "email", content: "support@taleem.help", showAt: 1 },
-  { name: "phone", content: "+92 300 0000000", showAt: 2 }
+// Slide 4 - Contact Slide
+deckbuilder.s.contactSlide(38, [
+  { name: "heading", content: "Need Assistance?", showAt: 0 },
+  { name: "subheading", content: "Visit our Help Center or Contact Support", showAt: 1 },
+  { name: "email", content: "support@taleem.help", showAt: 2 }
 ]);
 
 export const deck404 = deckbuilder.build();
