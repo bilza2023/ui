@@ -6,16 +6,14 @@
   import SidebarCard from "$lib/appComps/homepage/SidebarCard.svelte";  
   import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";  
   import { getAllTcodes } from '$lib/syllabus';
-
+  import BetaWarning from "$lib/appComps/BetaWarning.svelte"
 </script>
 
 <div class="min-h-screen flex flex-col justify-start bg-[#160c00]">
 
   <Nav />
 
-  <div class="bg-yellow-500 border-l-4 border-yellow-500 text-yellow-800 p-3 mx-4 my-2 text-center rounded shadow-md text-sm font-semibold">
-    🛠️ This App is in Beta Testing Mode.
-  </div>
+ <BetaWarning />
   
 <section class="w-full px-12 py-12 grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-12 min-h-screen">
 

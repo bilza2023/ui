@@ -7,6 +7,7 @@
   import NavBar from "../components/NavBar.svelte";
   import Card from "../components/Card.svelte";
   import QuestionCard from "../components/QuestionCard.svelte";
+  import BetaWarning from "$lib/appComps/BetaWarning.svelte"
 
   let syllabus = null;
   let selectedChapter = null;
@@ -54,9 +55,7 @@
 </script>
 
 <Nav />
-<div class="bg-yellow-500 border-l-4 border-yellow-500 text-yellow-800 p-3 mx-4 my-2 text-center rounded shadow-md text-sm font-semibold">
-  🛠️ This App is in Beta Testing Mode.
-</div>
+<BetaWarning />
 
 {#if syllabus}
   <NavBar {syllabus} {selectedChapter} {selectedExercise} on:reset={resetAll} {unSelectCh} {unSelectEx} />
