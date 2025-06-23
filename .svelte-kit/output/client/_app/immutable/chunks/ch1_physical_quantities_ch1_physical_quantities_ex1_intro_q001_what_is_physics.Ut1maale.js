@@ -1,0 +1,5 @@
+import{D as t}from"./6.B3SoXzBx.js";const e=new t;e.s.titleSlide(10,[{name:"title",content:"What is Physics",showAt:0}]);e.s.twoColumnText(20,[{name:"title",content:"Branches of Physics",showAt:0},{name:"left",content:`• Mechanics
+• Thermodynamics
+• Electromagnetism`,showAt:1},{name:"right",content:`• Optics
+• Quantum Physics
+• Nuclear Physics`,showAt:2}]);e.s.imageWithTitle(30,[{name:"image",content:"/pivot/fbise9physics.webp",showAt:0},{name:"title",content:"Understanding the Physical World",showAt:1}]);e.s.statistic(40,[{name:"number",content:"9",showAt:0},{name:"label",content:"Core Physics Chapters",showAt:2}]);e.s.quoteSlide(50,[{name:"quoteLine",content:"Physics is the poetry of nature.",showAt:0},{name:"author",content:"— Taleem.Help",showAt:2}]);e.s.imageSlide(60,[{name:"image",content:"/pivot/box.webp",showAt:0}]);e.s.contactSlide(70,[{name:"headline",content:"Need Help with Physics?",showAt:0},{name:"email",content:"support@taleem.help",showAt:1},{name:"phone",content:"+92 300 0000000",showAt:2}]);const s=e.build();export{s as deck};
