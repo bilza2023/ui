@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { get } from "svelte/store";
-  import PivotPlayer from "../../lib/PivotPlayer/PivotPlayer.svelte";
+  import {PivotPlayer} from "taleem-pivot-player";
   import {deck404} from "./deck404.js";
 
   const modules = import.meta.glob("/src/lib/content/**/*.js");
