@@ -5,8 +5,10 @@
   import Footer from "$lib/appComps/Footer.svelte";  
   import SidebarCard from "$lib/appComps/homepage/SidebarCard.svelte";  
   import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";  
-  import { getAllTcodes } from '$lib/syllabus';
+  // import { getAllTcodes } from '$lib/syllabus';
   import BetaWarning from "$lib/appComps/BetaWarning.svelte"
+  
+  export let data;
 </script>
 
 <div class="min-h-screen flex flex-col justify-start bg-[#160c00]">
@@ -20,7 +22,9 @@
   <!-- Left Column -->
   <div class={` p-6 rounded-xl shadow-inner flex flex-col space-y-6 border-2 border-[#93754b]  `}>
     
-    <TcodeCard tcodes={getAllTcodes()} />
+    <!-- <TcodeCard tcodes={getAllTcodes()} /> -->
+    <TcodeCard tcodes={data.tcodes} />
+
   </div>
 
   <!-- Right Sidebar -->

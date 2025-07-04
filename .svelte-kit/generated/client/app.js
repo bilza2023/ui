@@ -21,7 +21,7 @@ export const dictionary = {
 		"/contact": [5],
 		"/content": [6],
 		"/md": [7],
-		"/syllabus/fbise9physics": [8]
+		"/syllabus": [~8]
 	};
 
 export const hooks = {
