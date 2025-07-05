@@ -1,6 +1,7 @@
 
 <script>
-  import { PivotPlayer } from "taleem-pivot-player";
+  //--here is am using pivot-player from library and not from npm
+  import { PivotPlayer } from "../../lib/taleem-pivot-player";
   import { DeckBuilder } from 'taleem-pivot-deckbuilder';
 
   let deck = null;

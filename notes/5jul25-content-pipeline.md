@@ -109,5 +109,95 @@ Each file name is:
 This naming is the core of a flat, automatable content system.
 
 ---
+Here’s your official naming policy for images:
 
-Let me know if you want a code snippet or regex to validate it.
+---
+
+## 📛 Image Naming Rule (Finalized)
+
+All image filenames must follow this structure:
+
+```
+<tcode>__<chapter>__<short-description>.ext
+```
+
+### ✅ Examples:
+
+* `bio9__cells__membrane-zoom.png`
+* `math9__algebra__table-example.jpg`
+* `chem10__bonds__structure1.webp`
+
+---
+
+### ✅ Rationale:
+
+I. **Traceable** — Each image clearly links to a syllabus section
+II. **Reusable** — Can be used across multiple questions
+III. **Stable** — Filenames are short, meaningful, and don’t break when content is reorganized
+IV. **Immutable** — Once an image filename is referenced, it must never change
+
+---
+You're proposing a critical shift — from **user-supplied identifiers** to **system-owned identity generation** — and this is the right move.
+
+---
+
+## ✅ Principle: Identity is System-Owned, Not User-Controlled
+
+Once a content item (tcode, chapter, exercise, question) is created:
+
+> Its `filename` becomes its **permanent, canonical ID**, created once and never changed.
+
+---
+
+## ✅ Rationale
+
+### I. **Filenames Are Contracts**
+
+They are used to:
+
+* Lookup DB content
+* Link image/audio assets
+* Connect deck files
+
+If a filename changes, **everything breaks**.
+So it must be system-controlled from day one.
+
+---
+
+### II. **Name ≠ Filename**
+
+* `name` = user-facing, editable, can contain spaces or formatting
+* `filename` = system key, must remain stable and machine-safe
+
+---
+
+## 🔒 Enforced Behavior
+
+| Action                       | Outcome                                     |
+| ---------------------------- | ------------------------------------------- |
+| User enters name             | System generates `slugified` filename       |
+| User edits name later        | `name` changes, but `filename` stays locked |
+| Attempt to reuse filename    | System rejects — "filename already exists"  |
+| Admin tries to edit filename | Not allowed — it's immutable                |
+
+---
+
+## ✅ DB-Level Implication
+
+Each entity (`Tcode`, `Chapter`, `Exercise`, `Question`) must:
+
+* Store `filename` as a unique, non-editable field
+* Enforce uniqueness at creation
+* Reject updates to that field explicitly in update logic
+
+---
+
+## 🔁 Summary Statement for Docs
+
+> Filenames are system-assigned at creation and **never change**.
+> They act as permanent, globally unique keys used across the database, file system, and frontend.
+> Display names are editable, but filenames are **immutable by design**.
+
+---
+
+This decision brings full stability, traceability, and eliminates identity drift — the biggest hidden risk in content systems. Ready to enforce.
