@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import Database from 'better-sqlite3';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const db = new Database(path.resolve(__dirname, '../syllabus/dev.db'));
+const db = new Database(path.resolve(__dirname, '../db/dev.db'));
 
 // Return all tcodes
 export function getAllTcodes() {
@@ -19,7 +19,14 @@ export function getAllTcodes() {
       }));
   }
   
-
+  export function getQuestionByFilename(_, filename) {
+    return db.prepare(`
+      SELECT content FROM Question
+      WHERE filename = ?
+    `).get(filename);
+  }
+  
+  
 // Return full syllabus object
 export function getFullSyllabus(tcodeName) {
   const tcode = db.prepare('SELECT * FROM Tcode WHERE tcodeName = ?').get(tcodeName);

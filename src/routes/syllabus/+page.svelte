@@ -1,11 +1,10 @@
 <script>
   export let data;
-  console.log('PAGE DATA:', data);
-  import Nav        from '$lib/appComps/Nav.svelte';
-  import BetaWarning from '$lib/appComps/BetaWarning.svelte';
-  import NavBar     from './components/NavBar.svelte';
-  import Card       from './components/Card.svelte';
-  import QuestionCard from './components/QuestionCard.svelte';
+  import   Nav          from '$lib/appComps/Nav.svelte';
+  import   BetaWarning  from '$lib/appComps/BetaWarning.svelte';
+  import   NavBar       from './components/NavBar.svelte';
+  import   Card         from './components/Card.svelte';
+  import   QuestionCard from './components/QuestionCard.svelte';
 
   // pulled in from load()
   const { tcodes, syllabus } = data;

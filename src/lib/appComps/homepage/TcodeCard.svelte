@@ -5,7 +5,7 @@
 
 <div class="flex flex-wrap gap-10 justify-center ">
   {#each tcodes as t}
-  <a href={`/syllabus/${t.tcodeName}`}>
+  <a href={`/syllabus?tcode=${t.tcodeName}`}>
     <div class="block  max-w-sm mx-auto rounded-xl shadow-lg overflow-hidden hover:ring-2 ring-yellow-600 transition-all">
 
     <div class="block bg-white rounded-xl shadow-lg overflow-hidden hover:ring-2 ring-yellow-600 transition-all">

@@ -15,7 +15,7 @@
 {#each filtered as question}
   <a
     class="qcard"
-    href={`${baseUrl}?tcode=${question.tcodeName}&filename=${question.chapterFilename}_${question.exerciseFilename}_${question.filename}`}
+    href={`${baseUrl}?tcode=${question.tcodeName}&filename=${question.filename}`}
     target="_blank"
   >
     <div class="q-icon">❓</div>
