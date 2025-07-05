@@ -79,5 +79,35 @@ That’s it.
 No deploy scripts. No build steps. Just update files + restart = system updated.
 
 ---
+Here’s your rule, clean and ready to paste into your docs:
 
-Fully noted. Locked in.
+---
+
+### 📛 **Universal Filename Convention**
+
+> All content files follow this format:
+
+```
+<tcode>__<chapter>__<exercise>__<question>
+```
+
+This single filename is used across:
+
+| Type    | Example File Path                                |
+| ------- | ------------------------------------------------ |
+| Content | `content/electricity__basics__ohmslaw__q01.js`   |
+| Sound   | `sounds/electricity__basics__ohmslaw__q01.opus`  |
+| Image   | `images/electricity__basics__ohmslaw__birds.png` |
+
+Each file name is:
+
+* Globally unique
+* Matches its question key in the DB
+* Requires no folders
+* Carries full identity (`tcode → ch → ex → q`)
+
+This naming is the core of a flat, automatable content system.
+
+---
+
+Let me know if you want a code snippet or regex to validate it.
