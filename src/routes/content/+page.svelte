@@ -4,27 +4,43 @@
   import { PivotPlayer } from 'taleem-pivot-player';
   import { deck404 } from './deck404.js';
 
-  export let data;
-  let { deck } = data;
+  let deck     = null;
+  let soundUrl = '/sounds/music.opus';
+  let mounted  = false;
+  const modules = import.meta.glob('$lib/content/*.js', { eager: true });
 
-  let soundUrl = '/sounds/music.opus';  // default
-  let mounted  = false;                 // hide player until URL decided
+const deckMap = {};
+for (const path in modules) {
+  deckMap[path.split('/').pop().replace(/\\.js$/, '')] =
+    modules[path].default ?? modules[path];
+}
+
+function loadDeck(filename) {
+  const deckWrapper = deckMap[filename] ?? null;
+  deck =deckWrapper.deck;
+  console.log(" deck" ,  deck);
+}
 
   onMount(async () => {
     const params   = new URLSearchParams($page.url.search);
     const filename = params.get('filename');
 
     if (filename) {
+      // load the deck module
+      // debugger;
+      loadDeck(filename+ ".js");
+
+      // then check for a matching sound file
       try {
-        // quick HEAD request – no download, just existence check
-        const res = await fetch(`/sounds/${filename}.opus`, { method: 'HEAD' });
-        if (res.ok) soundUrl = `/sounds/${filename}.opus`;
+        const opusName = filename + '.opus';
+        const res = await fetch(`/sounds/${opusName}`, { method: 'HEAD' });
+        if (res.ok) soundUrl = `/sounds/${opusName}`;
       } catch {
-        /* network failure → keep default */
+        /* ignore */
       }
     }
 
-    mounted = true;   // now we know the correct URL; render player
+    mounted = true;
   });
 </script>
 

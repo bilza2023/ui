@@ -20,7 +20,7 @@
         {#each questions as q}
 
       <a
-        href={`/content/${q.filename}`}
+        href={`/content?filename=${q.filename}`}
         class="card-link"
         target="_blank"
         rel="noopener"

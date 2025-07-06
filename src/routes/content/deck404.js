@@ -24,5 +24,5 @@ deckbuilder.s.contactSlide(38, [
   { name: "subheading", content: "Visit our Help Center or Contact Support", showAt: 1 },
   { name: "email", content: "support@taleem.help", showAt: 2 }
 ]);
-console.log("deckbuilder.build()",deckbuilder.build());
+// console.log("deckbuilder.build()",deckbuilder.build());
 export const deck404 = deckbuilder.build();

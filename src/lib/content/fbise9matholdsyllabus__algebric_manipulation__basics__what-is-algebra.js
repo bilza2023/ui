@@ -1,4 +1,6 @@
 
+import { DeckBuilder } from "taleem-pivot-deckbuilder";
+const deckbuilder = new DeckBuilder();
 
 deckbuilder.s.titleSlide(18, [
   { name: "title", content: "What is Algebra?", showAt: 0 }
@@ -62,3 +64,5 @@ deckbuilder.s.bulletList(221, [
   { name: "bullet", content: "It helps spot patterns", showAt: 2 },
   { name: "bullet", content: "Trains you to solve problems step-by-step", showAt: 4 }
 ]);
+
+export const deck = deckbuilder.build();

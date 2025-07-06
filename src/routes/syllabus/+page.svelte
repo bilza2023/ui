@@ -1,26 +1,33 @@
 <script>
-  export let data;
-  import   Nav          from '$lib/appComps/Nav.svelte';
-  import   BetaWarning  from '$lib/appComps/BetaWarning.svelte';
-  import   NavBar       from './components/NavBar.svelte';
-  import   Card         from './components/Card.svelte';
-  import   QuestionCard from './components/QuestionCard.svelte';
-  import {syllabusMap} from "../../lib/syllabus/syllabus_json"; 
-  
-  // pulled in from load()
-  // const { tcodes, syllabus } = data;
-  const syllabus = syllabusMap["fbise9physics"];
+  import { onMount } from 'svelte';
+  import { page } from '$app/stores';
+  import { get } from 'svelte/store';
+  import Nav from '$lib/appComps/Nav.svelte';
+  import BetaWarning from '$lib/appComps/BetaWarning.svelte';
+  import NavBar from './components/NavBar.svelte';
+  import Card from './components/Card.svelte';
+  import QuestionCard from './components/QuestionCard.svelte';
+  import { syllabusMap } from '../../lib/syllabus/syllabus_json';
+
+  // will hold the current syllabus once we read the URL
+  let syllabus;
+
   // local UI state
   let selectedChapter  = null;
   let selectedExercise = null;
 
-  // derive lists
+  // on mount, read ?slug= from the URL and pick the right syllabus
+  onMount(() => {
+    const slug = get(page).url.searchParams.get('slug') || 'fbise9physics';
+    syllabus = syllabusMap[slug];
+  });
+
+  // derive lists only after syllabus is set
   $: chapters  = syllabus?.chapters  || [];
-  $: exercises = selectedChapter 
+  $: exercises = selectedChapter
     ? chapters.find(ch => ch.filename === selectedChapter.filename)?.exercises || []
     : [];
-
-$: questions = selectedExercise?.questions || [];
+  $: questions = selectedExercise?.questions || [];
 
   function chooseChapter(ch) {
     selectedChapter  = ch;
@@ -41,6 +48,7 @@ $: questions = selectedExercise?.questions || [];
     selectedExercise = null;
   }
 </script>
+
 
 <Nav />
 <BetaWarning />
