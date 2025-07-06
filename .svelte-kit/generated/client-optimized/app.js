@@ -23,7 +23,7 @@ export const dictionary = {
 		"/content": [~6],
 		"/editor": [7],
 		"/md": [8],
-		"/syllabus": [~9]
+		"/syllabus": [9]
 	};
 
 export const hooks = {

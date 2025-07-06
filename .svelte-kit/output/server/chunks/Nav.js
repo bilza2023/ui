@@ -1,4 +1,4 @@
-import { c as create_ssr_component, d as add_attribute, f as escape, v as validate_component } from "./ssr.js";
+import { c as create_ssr_component, b as add_attribute, e as escape, v as validate_component } from "./ssr.js";
 import "./client.js";
 const NavBtn = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { url = "https://taleem.help" } = $$props;

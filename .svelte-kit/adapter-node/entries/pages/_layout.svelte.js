@@ -1,4 +1,4 @@
-import { n as noop, a as assign, i as identity, c as create_ssr_component, b as subscribe, o as onDestroy, v as validate_component, m as missing_component, d as add_attribute, e as each, f as escape, g as null_to_empty } from "../../chunks/ssr.js";
+import { n as noop, i as assign, j as identity, c as create_ssr_component, a as subscribe, o as onDestroy, v as validate_component, m as missing_component, b as add_attribute, d as each, e as escape, k as null_to_empty } from "../../chunks/ssr.js";
 import { w as writable } from "../../chunks/index.js";
 const is_client = typeof window !== "undefined";
 let now = is_client ? () => window.performance.now() : () => Date.now();

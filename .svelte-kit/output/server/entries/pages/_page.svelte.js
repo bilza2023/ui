@@ -1,4 +1,4 @@
-import { c as create_ssr_component, e as each, f as escape, d as add_attribute, v as validate_component } from "../../chunks/ssr.js";
+import { c as create_ssr_component, d as each, e as escape, b as add_attribute, v as validate_component } from "../../chunks/ssr.js";
 import { N as Nav } from "../../chunks/Nav.js";
 import { B as BetaWarning } from "../../chunks/BetaWarning.js";
 const css = {
