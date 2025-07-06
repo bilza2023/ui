@@ -2,6 +2,7 @@ import { DeckBuilder } from "taleem-pivot-deckbuilder";
 import { c as create_ssr_component, a as subscribe } from "../../../chunks/ssr.js";
 import { p as page } from "../../../chunks/stores.js";
 import "howler";
+/* empty css                                                        */
 import "katex";
 const deckbuilder$3 = new DeckBuilder();
 deckbuilder$3.s.titleSlide(18, [
