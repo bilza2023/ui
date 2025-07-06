@@ -55,9 +55,6 @@
       "_client.js"
     ]
   },
-  "_syllabusService.js": {
-    "file": "chunks/syllabusService.js"
-  },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
     "file": "entries/fallbacks/error.svelte.js",
     "imports": [
@@ -96,9 +93,6 @@
   },
   "src/routes/+page.server.js": {
     "file": "entries/pages/_page.server.js",
-    "imports": [
-      "_syllabusService.js"
-    ],
     "isEntry": true,
     "src": "src/routes/+page.server.js"
   },
@@ -142,9 +136,6 @@
   },
   "src/routes/content/+page.server.js": {
     "file": "entries/pages/content/_page.server.js",
-    "imports": [
-      "_syllabusService.js"
-    ],
     "isEntry": true,
     "src": "src/routes/content/+page.server.js"
   },

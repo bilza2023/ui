@@ -20,7 +20,7 @@ export const dictionary = {
 		"/about": [3],
 		"/blog": [4],
 		"/contact": [5],
-		"/content": [~6],
+		"/content": [6],
 		"/editor": [7],
 		"/md": [8],
 		"/syllabus": [9]
