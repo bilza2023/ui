@@ -6,12 +6,14 @@ import { sveltekit } from '@sveltejs/kit/vite';
 export default defineConfig({
   resolve: {
     alias: {
-      // so `import { PivotPlayer } from 'taleem-pivot-player'` works
-      'taleem-pivot-player': path.resolve(__dirname, 'src/lib/taleem-pivot-player')
+      // point at the entry file, not the folder
+      'taleem-pivot-player': path.resolve(
+        __dirname,
+        'src/lib/taleem-pivot-player/index.js'
+      )
     }
   },
   ssr: {
-    // ensure svelte-katex (and your local player) get compiled into the SSR bundle
     noExternal: ['svelte-katex', 'taleem-pivot-player']
   },
   plugins: [sveltekit()]
