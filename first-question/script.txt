@@ -1,0 +1,101 @@
+
+
+# 🧭 Anchor Script — "What is Algebra?"
+
+This script matches the slide deck exactly: one title, ten EQ steps.  
+Each section includes a short teaching anchor — not full speech, not too brief — just enough to guide natural narration.
+
+---
+
+## 🎬 Title Slide
+
+**What is Algebra?**  
+→ Introduce that this lesson begins the journey into algebra — the language of unknowns and patterns.
+
+---
+
+## 🧮 Step 1: Known vs Unknown
+
+**Main idea:** Arithmetic uses known numbers; algebra allows unknowns.  
+→ Help students contrast: “5 + 3” vs “x + 3”.  
+→ Emphasize that algebra is not harder — it’s just more general.
+
+---
+
+## 🔤 Step 2: What is a Variable?
+
+**Main idea:** A variable is a symbol (like x) for a number we don’t know yet.  
+→ Say it’s just a placeholder — not mysterious.  
+→ We use it when the value can change or is not yet known.
+
+---
+
+## ❓ Step 3: x, y, z Are Just Numbers
+
+**Main idea:** Letters like x, y, z simply represent unknown numbers.  
+→ Reassure them: these are not special — just names for missing values.  
+→ Give a few quick examples: “x = 5”, “y = 10”.
+
+---
+
+## 🧾 Step 4: Algebraic Expressions
+
+**Main idea:** We write things like x + 2, or 3x – 7, to represent patterns.  
+→ These are called algebraic expressions.  
+→ They are made from variables, numbers, and operations.
+
+---
+
+## 🧩 Step 5: Solving for x
+
+**Main idea:** Algebra allows us to solve for the unknown.  
+→ Example: “x + 2 = 5” → we can figure out x = 3.  
+→ Solving means finding the number that makes both sides equal.
+
+---
+
+## 🔁 Step 6: Patterns and Rules
+
+**Main idea:** Algebra helps simplify repeated patterns.  
+→ For example: x + x + x = 3x  
+→ It gives us shortcuts and structure.
+
+---
+
+## ⚖️ Step 7: Equations Show Balance
+
+**Main idea:** Equations are like balance scales — both sides must be equal.  
+→ “x + 4 = 10” means something + 4 gives 10.  
+→ We solve to restore balance.
+
+---
+
+## 🌐 Step 8: General Rules for Any Number
+
+**Main idea:** Algebra creates formulas that work for all numbers.  
+→ Like: “a + b = b + a” — true for all values.  
+→ That’s why we call it general or symbolic math.
+
+---
+
+## 🛠️ Step 9: Algebra in Real Life
+
+**Main idea:** Algebra is used everywhere — science, business, logic.  
+→ Not just classroom math — it powers formulas, software, and physics.  
+→ It’s a universal tool, not just a subject.
+
+---
+
+## 🧠 Step 10: Why Learn Algebra?
+
+**Main idea:** Learning algebra improves how you think.  
+→ It trains your mind to find patterns, think clearly, and solve problems.  
+→ It’s not just about math — it’s about mental skill.
+
+---
+```
+
+---
+
+This version is precise, instructional, and deck-aligned.
+Would you like this as a downloadable `.md` file now?

@@ -5,10 +5,11 @@
   import   NavBar       from './components/NavBar.svelte';
   import   Card         from './components/Card.svelte';
   import   QuestionCard from './components/QuestionCard.svelte';
-
+  import {syllabusMap} from "../../lib/syllabus/syllabus_json"; 
+  
   // pulled in from load()
-  const { tcodes, syllabus } = data;
-
+  // const { tcodes, syllabus } = data;
+  const syllabus = syllabusMap["fbise9physics"];
   // local UI state
   let selectedChapter  = null;
   let selectedExercise = null;
@@ -18,11 +19,8 @@
   $: exercises = selectedChapter 
     ? chapters.find(ch => ch.filename === selectedChapter.filename)?.exercises || []
     : [];
-  $: questions = syllabus?.questions.filter(
-    q =>
-      (!selectedChapter  || q.chapterFilename  === selectedChapter.filename) &&
-      (!selectedExercise || q.exerciseFilename === selectedExercise.filename)
-  ) || [];
+
+$: questions = selectedExercise?.questions || [];
 
   function chooseChapter(ch) {
     selectedChapter  = ch;
