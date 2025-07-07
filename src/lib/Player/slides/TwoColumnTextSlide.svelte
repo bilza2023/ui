@@ -10,6 +10,7 @@
 </script>
 
 <SlideScaler>
+<div class="container">
   <div class="two-col-slide">
     {#if title}
       <h1 class="slide-title">{title}</h1>
@@ -20,12 +21,21 @@
       <div class="column">{right}</div>
     </div>
   </div>
+</div>
 </SlideScaler>
 
 <style>
+
+ .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;     /* or any other fixed height */
+ } 
 .two-col-slide {
   display: flex;
   flex-direction: column;
+  text-align: center;
   gap: clamp(1rem, 4vh, 3rem);
   padding: clamp(1rem, 4vw, 4rem);
   height: 100%;

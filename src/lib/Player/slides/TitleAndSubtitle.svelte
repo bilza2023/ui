@@ -42,10 +42,10 @@
 
 @media (max-width: 768px) {
   .slide-title {
-    font-size: 2rem;
+    font-size: 3rem;
   }
   .slide-subtitle {
-    font-size: 1rem;
+    font-size: 1.25rem;
   }
 }
 </style>

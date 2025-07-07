@@ -40,7 +40,7 @@
 
 @media (max-width: 768px) {
   .bullet-list {
-    font-size: 1rem;
+    font-size: 2rem;
   }
 }
 </style>
