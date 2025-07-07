@@ -38,14 +38,22 @@ deckbuilder.s.titleSlide(10, [
   
   deckbuilder.s.imageLeftBulletsRight(80, [
     { name: "image", content: "/images/box.webp", showAt: 71 },
-    { name: "bullet", content: "Left bullet one", showAt: 74 },
-    { name: "bullet", content: "Left bullet two", showAt: 78 }
+    { name: "bullet", content: "Left bullet one", showAt: 72 },
+    { name: "bullet", content: "Left bullet two", showAt: 73 },
+    { name: "bullet", content: "Left bullet Three", showAt: 74 },
+    { name: "bullet", content: "Left bullet Four", showAt: 75 },
+    { name: "bullet", content: "Left bullet Five", showAt: 76 },
+    { name: "bullet", content: "Left bullet Six", showAt: 77 },
   ]);
   
   deckbuilder.s.imageRightBulletsLeft(90, [
     { name: "image", content: "/images/box.webp", showAt: 81 },
-    { name: "bullet", content: "Right bullet one", showAt:84 },
-    { name: "bullet", content: "Right bullet two", showAt: 86 }
+    { name: "bullet", content: "Right bullet one", showAt:82 },
+    { name: "bullet", content: "Right bullet two", showAt: 83 },
+    { name: "bullet", content: "Right bullet Three", showAt: 84 },
+    { name: "bullet", content: "Right bullet Four", showAt: 85 },
+    { name: "bullet", content: "Right bullet Five", showAt: 86 },
+    { name: "bullet", content: "Right bullet Six", showAt: 87 },
   ]);
   
   deckbuilder.s.table(100, [
@@ -97,8 +105,8 @@ deckbuilder.s.titleSlide(10, [
   ]);
   
   deckbuilder.s.contactSlide(180, [
-    { name: "headline", content: "Need Help?", showAt: 0 },
+    { name: "headline", content: "Taleem.Help", showAt: 0 },
     { name: "email", content: "support@taleem.help", showAt: 1 },
-    { name: "phone", content: "+92 300 0000000", showAt: 2 }
+    { name: "phone", content: "03339724440", showAt: 2 }
   ]);
   

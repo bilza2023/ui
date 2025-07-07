@@ -28,14 +28,14 @@
 }
 
 .title {
-  font-size: clamp(2.5rem, 8vw, 4rem);
-  margin: clamp(0.5rem, 2vw, 1rem) 0;
+  font-size: clamp(2rem, 6vw, 3rem);
+  margin: clamp(0.25rem, 1.5vw, 0.75rem) 0;
   line-height: 1.1;
 }
 
 .subtitle {
-  font-size: clamp(1.5rem, 5vw, 2rem);
-  margin-bottom: clamp(1rem, 3vw, 2rem);
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
+  margin-bottom: clamp(0.5rem, 2vw, 1rem);
   opacity: 0.8;
 }
 

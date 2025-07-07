@@ -27,22 +27,22 @@
   }
   
   .headline {
-    font-size: 2.5rem;
+    font-size: 5.6rem;
     margin: 0 0 10px 0;
   }
   
   .contact-line {
-    font-size: 1.2rem;
+    font-size: 3.5rem;
     margin: 0;
   }
   
   @media (max-width: 768px) {
     .headline {
-      font-size: 1.6rem;
+      font-size: 3.6rem;
     }
   
     .contact-line {
-      font-size: 1rem;
+      font-size: 2rem;
     }
   }
   </style>

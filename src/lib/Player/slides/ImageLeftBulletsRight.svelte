@@ -24,53 +24,53 @@
     </ul>
   </div>
 </div>
-
 <style>
-.slide-container {
-  display: flex;
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 40px;
-  gap: 60px;
-}
-
-.image-left img {
-  max-height: 80vh;
-  max-width: 40vw;
-  object-fit: contain;
-  border-radius: 12px;
-}
-
-.bullets-right {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.bullets-right ul {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-  font-size: 4.5rem;
-}
-
-.bullets-right li {
-  margin-bottom: 1rem;
-}
-
-@media (max-width: 768px) {
+  /* ───────────────── slide frame ───────────────── */
   .slide-container {
-    flex-direction: column;
-    align-items: center;
+    display: flex;
+    flex-direction: row;        /* image left, bullets right */
+    flex-wrap: nowrap;          /* never stack vertically   */
+    align-items: center;        /* vertical centering       */
+    justify-content: center;    /* horizontal balance       */
+    gap: clamp(1rem, 3vw, 2rem);
+
+    height: 100%;
+    width: 100%;
+    padding: clamp(1rem, 3vw, 2rem);
+    box-sizing: border-box;
   }
 
-  .bullets-right ul {
-    font-size: 2rem;
+  /* ───────────────── image column ───────────────── */
+  .image-left {
+    flex: 0 0 40%;              /* ~40 % of slide, can shrink if needed */
+    max-width: 40%;
+    max-height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .image-left img {
-    max-width: 80vw;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
   }
-}
+
+  /* ───────────────── bullet column ──────────────── */
+  .bullets-right {
+    flex: 1 1 0;                /* take remaining width, allow shrink */
+    min-width: 0;               /* permit shrinking instead of wrap   */
+    font-size: clamp(1.2rem, 4vw, 2.5rem);
+    font-weight: bold;
+    line-height: 1.5;
+  }
+
+  .bullets-right ul {
+    margin: 0;
+    padding-left: 1em;
+  }
+
+  .bullets-right li {
+    margin-bottom: 0.5em;
+  }
 </style>

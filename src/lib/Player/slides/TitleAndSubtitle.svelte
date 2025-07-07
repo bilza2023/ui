@@ -30,12 +30,12 @@
 }
 
 .slide-title {
-  font-size: 3rem;
+  font-size: 6rem;
   margin: 0;
 }
 
 .slide-subtitle {
-  font-size: 1.5rem;
+  font-size: 3rem;
   margin: 0;
   opacity: 0.8;
 }
