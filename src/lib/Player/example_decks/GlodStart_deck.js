@@ -1,6 +1,9 @@
 // GoldStart_deck.js
 // A comprehensive test deck for mobile layout audit
 
+
+
+
 deckbuilder.s.titleSlide(10, [
     { name: "title", content: "GoldStart Deck", showAt: 0 }
   ]);
