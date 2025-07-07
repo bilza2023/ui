@@ -1,7 +1,7 @@
 
 <script>
   //--here is am using pivot-player from library and not from npm
-  import { PivotPlayer } from 'taleem-pivot-player'; 
+  import { SveltePlayer } from '../../lib/Player';
   import { DeckBuilder } from 'taleem-pivot-deckbuilder';
 
   let deck = null;
@@ -31,7 +31,7 @@
 
 <main class="player-container">
   {#if deck}
-    <PivotPlayer {deck} />
+    <SveltePlayer {deck} />
   {:else}
     <p class="placeholder">Please upload a deck JS file to start.</p>
   {/if}

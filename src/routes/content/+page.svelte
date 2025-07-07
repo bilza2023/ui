@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
-  import { PivotPlayer } from 'taleem-pivot-player'; 
+  import { SveltePlayer } from '../../lib/Player'; 
   import { deck404 } from './deck404.js';
 
   let deck     = null;

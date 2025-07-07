@@ -20,9 +20,9 @@
       "_client.js"
     ]
   },
-  "_PivotPlayer.svelte_svelte_type_style_lang.js": {
-    "file": "_app/immutable/assets/PivotPlayer.ClJlOgSe.css",
-    "src": "_PivotPlayer.svelte_svelte_type_style_lang.js"
+  "_SveltePlayer.svelte_svelte_type_style_lang.js": {
+    "file": "_app/immutable/assets/SveltePlayer.ClJlOgSe.css",
+    "src": "_SveltePlayer.svelte_svelte_type_style_lang.js"
   },
   "_client.js": {
     "file": "chunks/client.js",
@@ -81,7 +81,7 @@
   },
   "src/routes/+layout.svelte": {
     "css": [
-      "_app/immutable/assets/_layout.Di0VkE44.css"
+      "_app/immutable/assets/_layout.CuDAQdOb.css"
     ],
     "file": "entries/pages/_layout.svelte.js",
     "imports": [
@@ -141,7 +141,7 @@
   },
   "src/routes/content/+page.svelte": {
     "css": [
-      "_app/immutable/assets/PivotPlayer.ClJlOgSe.css"
+      "_app/immutable/assets/SveltePlayer.ClJlOgSe.css"
     ],
     "file": "entries/pages/content/_page.svelte.js",
     "imports": [
@@ -154,7 +154,7 @@
   "src/routes/editor/+page.svelte": {
     "css": [
       "_app/immutable/assets/_page.dnxOpdZO.css",
-      "_app/immutable/assets/PivotPlayer.ClJlOgSe.css"
+      "_app/immutable/assets/SveltePlayer.ClJlOgSe.css"
     ],
     "file": "entries/pages/editor/_page.svelte.js",
     "imports": [

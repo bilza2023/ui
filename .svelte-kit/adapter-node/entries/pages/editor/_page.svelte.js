@@ -1,6 +1,6 @@
 import { c as create_ssr_component } from "../../../chunks/ssr.js";
 import "howler";
-/* empty css                                                        */
+/* empty css                                                         */
 import "katex";
 import "taleem-pivot-deckbuilder";
 const css = {
