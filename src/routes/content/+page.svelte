@@ -45,7 +45,7 @@ function loadDeck(filename) {
 </script>
 
 {#if mounted}
-  <PivotPlayer
+  <SveltePlayer
     deck={deck ?? deck404}
     soundUrl={soundUrl}
     background={{
