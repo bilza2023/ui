@@ -23,6 +23,7 @@
       const wrapped = `${code}\nreturn deckbuilder.build();`;
       const func = new Function('deckbuilder', wrapped);
       deck = func(deckbuilder);
+      console.log("deck",deck);
     } catch (e) {
       alert('DeckBuilder error:\n' + e.message);
     }

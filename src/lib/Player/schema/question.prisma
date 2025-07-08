@@ -1,0 +1,24 @@
+
+
+enum QuestionStatus {
+  draft
+  ready
+  published
+  archived
+}
+
+
+model Question {
+  id          Int            @id @default(autoincrement())
+
+  name        String         @unique   // slug-style unique ID (used in file/URL)
+  description String                    // short human-readable summary
+  tags        String                    // JSON.stringify of string[] — must be parsed in code
+
+  status      QuestionStatus            // enum: controlled lifecycle
+  createdAt   DateTime       @default(now())
+  editedAt    DateTime       @updatedAt
+
+  deck        Json                      // versioned deck object (deck-v1)
+  meta        Json                      // versioned meta object (meta-v1)
+}

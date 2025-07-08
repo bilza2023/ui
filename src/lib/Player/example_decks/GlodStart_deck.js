@@ -1,6 +1,5 @@
 // GoldStart_deck.js with injected meta object
 // A comprehensive test deck for mobile layout audit
-
 const meta = {
   goldstart: { end: 10, items: [0], label: "GoldStart Deck" },
   welcome_physics: { end: 20, items: [0, 1], label: "Welcome to Physics" },
