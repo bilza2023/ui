@@ -2,8 +2,8 @@
 <script>
   //--here is am using pivot-player from library and not from npm
   import { SveltePlayer } from '../../lib/Player';
-  import { DeckBuilder } from 'taleem-pivot-deckbuilder';
-  import { zodSchemaV1} from '../../lib/Player/schema/zodSchemaV1';
+  import DeckBuilder      from '../../lib/deckbuilder/Deckbuilder';
+  import { zodSchemaV1}   from '../../lib/Player/schema/zodSchemaV1';
 
   let deck = null;
 
@@ -19,28 +19,6 @@
   }
 
 
-// function loadFromBuilder(code) {
-//   try {
-//     const deckbuilder = new DeckBuilder();
-//     const wrapped = `${code}\nreturn deckbuilder.build();`;
-//     const func = new Function('deckbuilder', wrapped);
-//     const candidate = func(deckbuilder);
-
-//     debugger;
-//     // ✅ Validate using Zod
-//     const result = zodSchemaV1.safeParse(candidate);
-//     if (!result.success) {
-//   console.error("❌ Zod validation failed:", result.error.errors);
-//   alert("Deck validation failed. Check console for details.");
-//   return;
-// }
-
-//     deck = result.data;
-//     console.log("✅ deck (validated):", deck);
-//   } catch (e) {
-//     alert('DeckBuilder error:\n' + e.message);
-//   }
-// }
 function loadFromBuilder(code) {
   try {
     const deckbuilder = new DeckBuilder();
@@ -48,18 +26,22 @@ function loadFromBuilder(code) {
     const func = new Function('deckbuilder', 'deck', wrapped);
     let candidate = null;
     func(deckbuilder, candidate);
-    
+    debugger;
     candidate = deckbuilder.build(); // force it
+    console.log("✅ candidate):", candidate);
     const result = zodSchemaV1.safeParse(candidate);
     if (!result.success) {
       const errorList = result.error.errors;
       console.error("❌ Zod validation failed:", errorList);
       alert("Validation failed at: " + errorList[0]?.path?.join('.') + " — " + errorList[0]?.message);
       return;
+    }else {
+      console.log("✅==>Zod Schema Checked V1",result);
     }
 
-    deck = result.data;
-    console.log("✅ deck (validated):", deck);
+    // deck = candidate;
+    deck = result.data.slides;
+   
   } catch (e) {
     alert('DeckBuilder error:\n' + e.message);
   }

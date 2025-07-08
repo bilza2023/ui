@@ -214,20 +214,30 @@ const contactSlide = baseSlide.extend({
 });
 
 // 19 Eq : eq schema
+// 19. EQ SLIDE
 const eqSlide = baseSlide.extend({
   type: z.literal("eq"),
   data: z.array(
     z.object({
-      name: z.literal("line"),
-      type: z.string(), // e.g., "text", "math"
+      name:    z.literal("line"),
+      type:    z.union([
+                  z.literal("heading"),
+                  z.literal("text"),
+                  z.literal("math")
+               ]),
       content: z.string(),
-      showAt: z.number(),
+      showAt:  z.number(),
       spItems: z.array(
         z.object({
-          type: z.string(),     // "text" | "math" | "image"
+          type:    z.union([
+                      z.literal("heading"),
+                      z.literal("text"),
+                      z.literal("math"),
+                      z.literal("image")
+                   ]),
           content: z.string()
         })
-      ).optional()
+      )
     })
   )
 });
