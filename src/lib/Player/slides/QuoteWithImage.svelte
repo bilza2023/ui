@@ -48,7 +48,7 @@
 }
 
 .image-container img {
-  width: clamp(50%, 70vw, 80%);
+  width: clamp(40%, 70vw, 70%);
   height: auto;
   object-fit: contain;
 }
