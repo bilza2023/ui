@@ -213,10 +213,42 @@ const contactSlide = baseSlide.extend({
   )
 });
 
+// 19 Eq : eq schema
+const eqSlide = baseSlide.extend({
+  type: z.literal("eq"),
+  data: z.array(
+    z.object({
+      name: z.literal("line"),
+      type: z.string(), // e.g., "text", "math"
+      content: z.string(),
+      showAt: z.number(),
+      spItems: z.array(
+        z.object({
+          type: z.string(),     // "text" | "math" | "image"
+          content: z.string()
+        })
+      ).optional()
+    })
+  )
+});
+
+const fillImage = baseSlide.extend({
+  type: z.literal("fillImage"),
+  data: z.array(
+    z.object({
+      name: z.literal("image"),
+      content: z.string(),
+      showAt: z.number()
+    })
+  )
+});
+
 export const deckV1Schema = z.object({
   version: z.literal("deck-v1"),
   slides: z.array(
     z.discriminatedUnion("type", [
+      eqSlide,
+      fillImage,
       titleSlide,
       titleAndSubtitle,
       bulletList,
