@@ -243,7 +243,7 @@ const fillImage = baseSlide.extend({
   )
 });
 
-export const deckV1Schema = z.object({
+export const zodSchemaV1 = z.object({
   version: z.literal("deck-v1"),
   slides: z.array(
     z.discriminatedUnion("type", [

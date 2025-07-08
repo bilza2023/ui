@@ -3,6 +3,7 @@
   //--here is am using pivot-player from library and not from npm
   import { SveltePlayer } from '../../lib/Player';
   import { DeckBuilder } from 'taleem-pivot-deckbuilder';
+  import { zodSchemaV1} from '../../lib/Player/schema/zodSchemaV1';
 
   let deck = null;
 
@@ -17,17 +18,53 @@
     loadFromBuilder(clean);
   }
 
-  function loadFromBuilder(code) {
-    try {
-      const deckbuilder = new DeckBuilder();
-      const wrapped = `${code}\nreturn deckbuilder.build();`;
-      const func = new Function('deckbuilder', wrapped);
-      deck = func(deckbuilder);
-      console.log("deck",deck);
-    } catch (e) {
-      alert('DeckBuilder error:\n' + e.message);
+
+// function loadFromBuilder(code) {
+//   try {
+//     const deckbuilder = new DeckBuilder();
+//     const wrapped = `${code}\nreturn deckbuilder.build();`;
+//     const func = new Function('deckbuilder', wrapped);
+//     const candidate = func(deckbuilder);
+
+//     debugger;
+//     // ✅ Validate using Zod
+//     const result = zodSchemaV1.safeParse(candidate);
+//     if (!result.success) {
+//   console.error("❌ Zod validation failed:", result.error.errors);
+//   alert("Deck validation failed. Check console for details.");
+//   return;
+// }
+
+//     deck = result.data;
+//     console.log("✅ deck (validated):", deck);
+//   } catch (e) {
+//     alert('DeckBuilder error:\n' + e.message);
+//   }
+// }
+function loadFromBuilder(code) {
+  try {
+    const deckbuilder = new DeckBuilder();
+    const wrapped = `${code}\ndeck = deckbuilder.build();`;
+    const func = new Function('deckbuilder', 'deck', wrapped);
+    let candidate = null;
+    func(deckbuilder, candidate);
+    
+    candidate = deckbuilder.build(); // force it
+    const result = zodSchemaV1.safeParse(candidate);
+    if (!result.success) {
+      const errorList = result.error.errors;
+      console.error("❌ Zod validation failed:", errorList);
+      alert("Validation failed at: " + errorList[0]?.path?.join('.') + " — " + errorList[0]?.message);
+      return;
     }
+
+    deck = result.data;
+    console.log("✅ deck (validated):", deck);
+  } catch (e) {
+    alert('DeckBuilder error:\n' + e.message);
   }
+}
+
 </script>
 
 <main class="player-container">
