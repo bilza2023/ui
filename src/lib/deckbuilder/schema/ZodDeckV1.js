@@ -1,6 +1,4 @@
 
-import { zodMetaV1 } from './zodMetaV1';
-
 import { z } from 'zod';
 
 // Base shared slide structure
@@ -239,8 +237,8 @@ const eqSlide = baseSlide.extend({
                       z.literal("image")
                    ]),
           content: z.string()
-        }).optional()
-      )
+        })
+      ).optional()
     })
   )
 });
@@ -258,30 +256,35 @@ const fillImage = baseSlide.extend({
 
 //////////////===> Final Deck Object
 export const zodDeckV1 = z.object({
-  version: z.literal("deck-v1"),
-  slides: z.array(
-    z.discriminatedUnion("type", [
-      eqSlide,
-      fillImage,
-      titleSlide,
-      titleAndSubtitle,
-      bulletList,
-      twoColumnText,
-      imageSlide,
-      imageWithTitle,
-      imageWithCaption,
-      imageLeftBulletsRight,
-      imageRightBulletsLeft,
-      table,
-      statistic,
-      donutChart,
-      bigNumber,
-      barChart,
-      quoteSlide,
-      quoteWithImage,
-      cornerWordsSlide,
-      contactSlide
-    ])
-  ),
-  meta: zodMetaV1.optional() 
-});
+    name:        z.string().optional(),
+    description: z.string().optional(),
+    tags:        z.array(z.string()).optional(),
+    status:      z.enum(['draft','ready','published','archived']).optional(),
+    createdAt:   z.string().datetime().optional(),
+    editedAt:    z.string().datetime().optional(),
+    version:     z.literal("deck-v1"),
+    deck:        z.array(
+      z.discriminatedUnion("type", [
+        eqSlide,
+        fillImage,
+        titleSlide,
+        titleAndSubtitle,
+        bulletList,
+        twoColumnText,
+        imageSlide,
+        imageWithTitle,
+        imageWithCaption,
+        imageLeftBulletsRight,
+        imageRightBulletsLeft,
+        table,
+        statistic,
+        donutChart,
+        bigNumber,
+        barChart,
+        quoteSlide,
+        quoteWithImage,
+        cornerWordsSlide,
+        contactSlide
+      ])
+    )
+  });  

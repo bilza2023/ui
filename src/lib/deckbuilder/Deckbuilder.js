@@ -45,6 +45,25 @@ export default class DeckBuilder {
     this.background = background;
   }
 
+  addDetails({
+    name = "unnamed_deck",
+    description = "",
+    tags = [],
+    status = "draft",
+    createdAt = new Date().toISOString(),
+    editedAt = new Date().toISOString()
+  } = {}) {
+    this.details = {
+      name,
+      description,
+      tags,
+      status,
+      createdAt,
+      editedAt
+    };
+  }
+  
+  
   eq(end) {
     const start = this.currentTime;
     if (end <= start) {
@@ -94,10 +113,15 @@ export default class DeckBuilder {
     }
   
     build() {
+      if (!this.details) {
+        this.addDetails({ name: "unnamed_deck" });
+      }
       return {
+        ...this.details,
         version: "deck-v1",
-        slides: this.slidesArray
+        deck: this.slidesArray
       };
     }
+    
   }
   

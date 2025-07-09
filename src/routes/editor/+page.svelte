@@ -38,9 +38,8 @@ function loadFromBuilder(code) {
     }else {
       console.log("✅==>Zod Schema Checked V1",result);
     }
-
-    // deck = candidate;
-    deck = result.data.slides;
+///////////////////////get the deck
+    deck = result.data.deck;
    
   } catch (e) {
     alert('DeckBuilder error:\n' + e.message);
