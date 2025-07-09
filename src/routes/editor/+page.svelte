@@ -19,28 +19,70 @@
   }
 
 
+// function loadFromBuilder(code) {
+//   try {
+//     const deckbuilder = new DeckBuilder();
+//     const wrapped = `${code}\ndeck = deckbuilder.build();`;
+//     const func = new Function('deckbuilder', 'deck', wrapped);
+//     let candidate = null;
+//     func(deckbuilder, candidate);
+//     // debugger;
+//     candidate = deckbuilder.build(); // force it
+//     console.log("✅ candidate):", candidate);
+//     const result = zodDeckV1.safeParse(candidate);
+//     if (!result.success) {
+//       const errorList = result.error.errors;
+//       console.error("❌ Zod validation failed:", errorList);
+//       alert("Validation failed at: " + errorList[0]?.path?.join('.') + " — " + errorList[0]?.message);
+//       return;
+//     }else {
+//       console.log("✅==>Zod Schema Checked V1",result);
+//     }
+// ///////////////////////get the deck
+//     deck = result.data.deck;
+   
+//   } catch (e) {
+//     alert('DeckBuilder error:\n' + e.message);
+//   }
+// }
+
 function loadFromBuilder(code) {
+  // Strip out editor‐only markers and extraneous imports/exports
+  const cleaned = code
+    .replace(/^import\s.*$/gm, '')
+    .replace(/^export\s.*$/gm, '')
+    .replace(/^const\s+deckbuilder\s*=.*$/gm, '')
+    .replace(/\/\* EDITOR-ONLY-START \*\/[\s\S]*?\/\* EDITOR-ONLY-END \*\//g, '');
+
   try {
     const deckbuilder = new DeckBuilder();
-    const wrapped = `${code}\ndeck = deckbuilder.build();`;
+    const wrapped = `${cleaned}\ndeck = deckbuilder.build();`;
     const func = new Function('deckbuilder', 'deck', wrapped);
     let candidate = null;
     func(deckbuilder, candidate);
-    // debugger;
-    candidate = deckbuilder.build(); // force it
-    console.log("✅ candidate):", candidate);
+
+    // Force a fresh build
+    candidate = deckbuilder.build();
+    console.log("✅ candidate:", candidate);
+
+    // Validate with Zod
     const result = zodDeckV1.safeParse(candidate);
     if (!result.success) {
       const errorList = result.error.errors;
       console.error("❌ Zod validation failed:", errorList);
-      alert("Validation failed at: " + errorList[0]?.path?.join('.') + " — " + errorList[0]?.message);
+      alert(
+        "Validation failed at: " +
+        errorList[0]?.path?.join('.') +
+        " — " +
+        errorList[0]?.message
+      );
       return;
-    }else {
-      console.log("✅==>Zod Schema Checked V1",result);
+    } else {
+      console.log("✅ Zod Schema Checked V1", result);
     }
-///////////////////////get the deck
+
+    // Extract the deck for the player
     deck = result.data.deck;
-   
   } catch (e) {
     alert('DeckBuilder error:\n' + e.message);
   }

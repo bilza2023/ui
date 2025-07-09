@@ -21,7 +21,7 @@ export function dotsBg (backgroundColor="#FFFFFF") {
 export function defaultBg (backgroundColor="#FFFFFF") {
     return {
       backgroundColor: backgroundColor || "#000000", // fallback just in case
-      backgroundImage: "/pivot/banner_brand_section.png",
+      backgroundImage: "/images/banner_brand_section.png",
       backgroundImageOpacity: 1.0,
       pattern: null
     };

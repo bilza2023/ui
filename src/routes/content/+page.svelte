@@ -16,8 +16,9 @@ for (const path in modules) {
 }
 
 function loadDeck(filename) {
+  // debugger;
   const deckWrapper = deckMap[filename] ?? null;
-  deck =deckWrapper.deck;
+  deck =deckWrapper.question.deck;
   console.log(" deck" ,  deck);
 }
 
@@ -50,7 +51,7 @@ function loadDeck(filename) {
     soundUrl={soundUrl}
     background={{
       backgroundColor: '#ffffff',
-      backgroundImage: '/pivot/defaultBg.png',
+      backgroundImage: '/images/defaultBg.png',
       backgroundImageOpacity: 0.8
     }}
   />

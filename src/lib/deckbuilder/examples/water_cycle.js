@@ -1,6 +1,15 @@
 // GoldStart_WaterCycle_Deck.js
 // A simple 6-slide deck on the Water Cycle
 
+deckbuilder.addDetails({
+  name:        "water_cycle",
+  description: "A simple 6-slide deck on the Water Cycle",
+  tags:        ["water", "environment", "cycle"],
+  status:      "draft",
+  createdAt:   "2025-07-09T00:00:00Z",
+  editedAt:    "2025-07-09T00:00:00Z"
+});
+
 deckbuilder.s.titleSlide(10, [
     { name: "title",   content: "The Water Cycle",          showAt: 0 }
   ]);

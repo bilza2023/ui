@@ -1,6 +1,21 @@
 // GoldStart_deck.js
 // A comprehensive test deck for mobile layout audit
 
+
+/* EDITOR‐ONLY‐START */
+import DeckBuilder from "$lib/deckbuilder/Deckbuilder.js";
+const deckbuilder = new DeckBuilder();
+/* EDITOR‐ONLY‐END */
+
+deckbuilder.addDetails({
+  name:        "goldstart_deck",
+  description: "A comprehensive test deck for mobile layout audit",
+  tags:        ["mobile", "audit", "gold-standard"],
+  status:      "draft",
+  createdAt:   "2025-07-09T00:00:00Z",
+  editedAt:    "2025-07-09T00:00:00Z"
+});
+
 deckbuilder.s.titleSlide(10, [
     { name: "title", content: "GoldStart Deck", showAt: 0 }
   ]);
@@ -102,3 +117,8 @@ deckbuilder.s.titleSlide(10, [
     { name: "phone", content: "+92 300 0000000", showAt: 2 }
   ]);
   
+
+
+/* EDITOR‐ONLY‐START */
+export const question = deckbuilder.build();
+/* EDITOR‐ONLY‐END */

@@ -1,6 +1,15 @@
 // GoldStart_EQ_All_SP_Types.js
 // EQ slide with all sidebar types per step
 
+deckbuilder.addDetails({
+  name:        "goldstandard_eq_sp",
+  description: "EQ slide with all sidebar types per step",
+  tags:        ["eq", "sidebar", "gold-standard"],
+  status:      "draft",
+  createdAt:   "2025-07-09T00:00:00Z",
+  editedAt:    "2025-07-09T00:00:00Z"
+});
+
 const eq = deckbuilder.eq(50);
 
 // STEP 1
