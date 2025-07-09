@@ -1,3 +1,6 @@
+
+import { zodMetaV1 } from './zodMetaV1';
+
 import { z } from 'zod';
 
 // Base shared slide structure
@@ -236,7 +239,7 @@ const eqSlide = baseSlide.extend({
                       z.literal("image")
                    ]),
           content: z.string()
-        })
+        }).optional()
       )
     })
   )
@@ -253,7 +256,8 @@ const fillImage = baseSlide.extend({
   )
 });
 
-export const zodSchemaV1 = z.object({
+//////////////===> Final Deck Object
+export const zodDeckV1 = z.object({
   version: z.literal("deck-v1"),
   slides: z.array(
     z.discriminatedUnion("type", [
@@ -278,5 +282,6 @@ export const zodSchemaV1 = z.object({
       cornerWordsSlide,
       contactSlide
     ])
-  )
+  ),
+  meta: zodMetaV1.optional() 
 });

@@ -9,7 +9,7 @@ const metaEntrySchema = z.object({
   images: z.array(z.string()).optional()
 });
 
-export const metaV1Schema = z.object({
+export const zodMetaV1 = z.object({
   version: z.literal("meta-v1"),
   entries: z.array(metaEntrySchema)
 });

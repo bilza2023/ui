@@ -3,7 +3,7 @@
   //--here is am using pivot-player from library and not from npm
   import { SveltePlayer } from '../../lib/Player';
   import DeckBuilder      from '../../lib/deckbuilder/Deckbuilder';
-  import { zodSchemaV1}   from '../../lib/Player/schema/zodSchemaV1';
+  import { zodDeckV1}   from '../../lib/deckbuilder/schema/ZodDeckV1';
 
   let deck = null;
 
@@ -26,10 +26,10 @@ function loadFromBuilder(code) {
     const func = new Function('deckbuilder', 'deck', wrapped);
     let candidate = null;
     func(deckbuilder, candidate);
-    debugger;
+    // debugger;
     candidate = deckbuilder.build(); // force it
     console.log("✅ candidate):", candidate);
-    const result = zodSchemaV1.safeParse(candidate);
+    const result = zodDeckV1.safeParse(candidate);
     if (!result.success) {
       const errorList = result.error.errors;
       console.error("❌ Zod validation failed:", errorList);

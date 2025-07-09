@@ -20,5 +20,5 @@ model Question {
   editedAt    DateTime       @updatedAt
 
   deck        Json                      // versioned deck object (deck-v1)
-  meta        Json                      // versioned meta object (meta-v1)
+ 
 }

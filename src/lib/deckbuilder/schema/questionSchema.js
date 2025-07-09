@@ -1,7 +1,6 @@
 
 import { z } from 'zod';
-import { deckV1Schema } from './deckSchemas';
-import { metaV1Schema } from './metaSchemas';
+import { zodDeckV1 } from './ZodDeckV1';
 
 export const questionSchema = z.object({
   name: z.string().regex(/^[a-z0-9_-]+$/, "Invalid slug format"),
@@ -12,6 +11,6 @@ export const questionSchema = z.object({
   createdAt: z.string().datetime(),
   editedAt: z.string().datetime(),
 
-  deck: deckV1Schema,
-  meta: metaV1Schema
+  deck: zodDeckV1,
+
 });

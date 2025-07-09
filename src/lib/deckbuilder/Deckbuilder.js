@@ -32,8 +32,10 @@ export default class DeckBuilder {
           (end, data) => this._add(type, end, data)
         ])
       );
+////===>Add Eq as well ti the same style
+      this.s.eq = this.eq.bind(this);
     }
-  
+
 
   setTheme(themeName) {
     this.theme = themeName;
