@@ -1,6 +1,7 @@
 // GoldStart_WaterCycle_Deck.js
 // A simple 6-slide deck on the Water Cycle
 
+export function defineDeck(deckbuilder){
 deckbuilder.addDetails({
   name:        "water_cycle",
   description: "A simple 6-slide deck on the Water Cycle",
@@ -45,3 +46,4 @@ deckbuilder.s.titleSlide(10, [
     { name: "phone",    content: "+92 300 1234567",           showAt: 2 }
   ]);
   
+}

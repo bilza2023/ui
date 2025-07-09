@@ -1,6 +1,8 @@
 // GoldStart_EQ_All_SP_Types.js
 // EQ slide with all sidebar types per step
 
+export function defineDeck(deckbuilder){
+
 deckbuilder.addDetails({
   name:        "goldstandard_eq_sp",
   description: "EQ slide with all sidebar types per step",
@@ -60,3 +62,5 @@ eq.addLine({
   showAt: 40
 });
 eq.addSp({ type: "text", content: "Thanks for testing EQ format!" });
+
+}

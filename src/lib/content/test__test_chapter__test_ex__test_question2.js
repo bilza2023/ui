@@ -1,7 +1,8 @@
 
 
-import { DeckBuilder } from "taleem-pivot-deckbuilder";
-const deckbuilder = new DeckBuilder();
+
+
+export function defineDeck(deckbuilder){
 
 deckbuilder.s.titleSlide(10, [
     { name: "title", content: "--Test2--222222--Test2", showAt: 0 }
@@ -38,5 +39,5 @@ deckbuilder.s.titleSlide(10, [
     { name: "phone", content: "+92 300 0000000", showAt: 2 }
   ]);
   
-
-export const deck = deckbuilder.build();
+  /////////////////////////////////////////////////////
+}

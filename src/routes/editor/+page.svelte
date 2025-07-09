@@ -1,98 +1,68 @@
-
 <script>
-  //--here is am using pivot-player from library and not from npm
   import { SveltePlayer } from '../../lib/Player';
   import DeckBuilder      from '../../lib/deckbuilder/Deckbuilder';
-  import { zodDeckV1}   from '../../lib/deckbuilder/schema/ZodDeckV1';
+  import { zodDeckV1 }    from '../../lib/deckbuilder/schema/ZodDeckV1';
 
   let deck = null;
+
+  // ───────────────────────── Helper ─────────────────────────
+  function cleanDeckSource(src) {
+    return src
+      // remove any import line (with possible indent)
+      .replace(/^\s*import\s.*$/gm, '')
+      // remove “export …” or “export default …” (keep the rest of the line)
+      .replace(/^\s*export\s+(default\s+)?/gm, '')
+      .trim();
+  }
 
   async function handleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
-    const text = await file.text();
-    const clean = text
-      .replace(/^import\s.*$/gm, '')
-      .replace(/^export\s.*$/gm, '')
-      .replace(/^const\s+deckbuilder\s*=.*$/gm, '');
-    loadFromBuilder(clean);
-  }
 
+    const rawText  = await file.text();
+    const cleaned  = cleanDeckSource(rawText);
 
-// function loadFromBuilder(code) {
-//   try {
-//     const deckbuilder = new DeckBuilder();
-//     const wrapped = `${code}\ndeck = deckbuilder.build();`;
-//     const func = new Function('deckbuilder', 'deck', wrapped);
-//     let candidate = null;
-//     func(deckbuilder, candidate);
-//     // debugger;
-//     candidate = deckbuilder.build(); // force it
-//     console.log("✅ candidate):", candidate);
-//     const result = zodDeckV1.safeParse(candidate);
-//     if (!result.success) {
-//       const errorList = result.error.errors;
-//       console.error("❌ Zod validation failed:", errorList);
-//       alert("Validation failed at: " + errorList[0]?.path?.join('.') + " — " + errorList[0]?.message);
-//       return;
-//     }else {
-//       console.log("✅==>Zod Schema Checked V1",result);
-//     }
-// ///////////////////////get the deck
-//     deck = result.data.deck;
-   
-//   } catch (e) {
-//     alert('DeckBuilder error:\n' + e.message);
-//   }
-// }
-
-function loadFromBuilder(code) {
-  // Strip out editor‐only markers and extraneous imports/exports
-  const cleaned = code
-    .replace(/^import\s.*$/gm, '')
-    .replace(/^export\s.*$/gm, '')
-    .replace(/^const\s+deckbuilder\s*=.*$/gm, '')
-    .replace(/\/\* EDITOR-ONLY-START \*\/[\s\S]*?\/\* EDITOR-ONLY-END \*\//g, '');
-
-  try {
-    const deckbuilder = new DeckBuilder();
-    const wrapped = `${cleaned}\ndeck = deckbuilder.build();`;
-    const func = new Function('deckbuilder', 'deck', wrapped);
-    let candidate = null;
-    func(deckbuilder, candidate);
-
-    // Force a fresh build
-    candidate = deckbuilder.build();
-    console.log("✅ candidate:", candidate);
-
-    // Validate with Zod
-    const result = zodDeckV1.safeParse(candidate);
-    if (!result.success) {
-      const errorList = result.error.errors;
-      console.error("❌ Zod validation failed:", errorList);
-      alert(
-        "Validation failed at: " +
-        errorList[0]?.path?.join('.') +
-        " — " +
-        errorList[0]?.message
+    try {
+      // build a Function that *returns* defineDeck
+      const getDefineDeck = new Function(
+        'deckbuilder',
+        cleaned + '\nreturn defineDeck;'
       );
-      return;
-    } else {
-      console.log("✅ Zod Schema Checked V1", result);
+
+      // we call it once (without argument) just to obtain defineDeck itself
+      const defineDeck = getDefineDeck(undefined);
+
+      if (typeof defineDeck !== 'function') {
+        throw new Error('defineDeck is not a function after parsing.');
+      }
+
+      // now build & validate
+      const builder   = new DeckBuilder();
+      defineDeck(builder);
+      const candidate = builder.build();
+
+      const check = zodDeckV1.safeParse(candidate);
+      if (!check.success) {
+        const err = check.error.errors[0];
+        throw new Error(`Zod failed at ${err.path.join('.')}: ${err.message}`);
+      }
+
+      deck = check.data.deck;
+    } catch (e) {
+      // show alert, but also log cleaned code for inspection
+      console.error('─── Cleaned deck source that failed ───\n', cleaned);
+      console.error(e);
+      alert('Deck load error:\n' + e.message);
     }
-
-    // Extract the deck for the player
-    deck = result.data.deck;
-  } catch (e) {
-    alert('DeckBuilder error:\n' + e.message);
   }
-}
-
 </script>
+
 
 <main class="player-container">
   {#if deck}
+  {#key deck}
     <SveltePlayer {deck} />
+  {/key}
   {:else}
     <p class="placeholder">Please upload a deck JS file to start.</p>
   {/if}
@@ -106,27 +76,21 @@ function loadFromBuilder(code) {
 </div>
 
 <style>
-  /* Player area styling */
   .player-container {
-    padding: 0rem;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 80vh;
   }
-
   .placeholder {
     color: #6c757d;
     font-size: 1.2rem;
   }
-
-  /* Upload button container */
   .upload-container {
     text-align: center;
     margin: 1rem 0;
   }
-
-  /* Big button style */
   .upload-button {
     position: relative;
     display: inline-block;
@@ -139,7 +103,6 @@ function loadFromBuilder(code) {
     border-radius: 4px;
     cursor: pointer;
   }
-
   .upload-button input[type="file"] {
     position: absolute;
     top: 0;
