@@ -14,7 +14,7 @@ export const syllabusMap = {
             "name": "Introduction to Physics",
             "questions" : [
               { filename: "fbise9matholdsyllabus__algebric_manipulation__basics__what-is-algebra", name: "What is Albegra" },
-              { filename: "test__test_chapter__test_ex__test_question", name: "Test 1" },
+              { filename: "test__test_chapter__test_ex__test_question", name: "Test 1!!" },
               { filename: "test__test_chapter__test_ex__test_question2", name: "Test 2" },
             ]
           },

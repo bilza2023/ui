@@ -1,6 +1,7 @@
 // GoldStart_EQ_All_SP_Types.js
 // EQ slide with all sidebar types per step
 
+
 export function defineDeck(deckbuilder){
 
 deckbuilder.addDetails({

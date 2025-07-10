@@ -7,7 +7,8 @@
   import NavBar from './components/NavBar.svelte';
   import Card from './components/Card.svelte';
   import QuestionCard from './components/QuestionCard.svelte';
-  import { syllabusMap } from '../../lib/syllabus/syllabus_json';
+  // import { syllabusMap } from '../../lib/syllabus/syllabus_json';
+  import { syllabusMap } from '../../lib/syllabus/syllabus';
 
   // will hold the current syllabus once we read the URL
   let syllabus;
@@ -16,11 +17,11 @@
   let selectedChapter  = null;
   let selectedExercise = null;
 
-  // on mount, read ?slug= from the URL and pick the right syllabus
+  
   onMount(() => {
-    const slug = get(page).url.searchParams.get('slug') || 'fbise9physics';
-    syllabus = syllabusMap[slug];
-  });
+  const slug = get(page).url.searchParams.get('tcode') || 'fbise9physics';
+  syllabus = syllabusMap[slug];
+});
 
   // derive lists only after syllabus is set
   $: chapters  = syllabus?.chapters  || [];
