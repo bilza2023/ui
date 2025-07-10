@@ -1,3 +1,9 @@
+Confirmed. Starting now.
+
+---
+
+## ✅ FILE 1 — `api.md` (DeckBuilder API v1, updated for flat EQ)
+
 ````markdown
 # DeckBuilder API (v1)
 
@@ -9,6 +15,8 @@ Provide a programmatic interface for generating valid `deck-v1` objects. DeckBui
 2. Assign correct `name`, `content`, and `showAt` fields  
 3. Sequence timing via `start` (injected) and `end`  
 4. Wrap the result in a `{ version: "deck-v1", slides: [...] }` object  
+
+---
 
 ## ✅ Top-Level Format
 
@@ -26,95 +34,131 @@ Every deck must be exactly:
         name: string,
         content: string | number | string[],
         showAt: number,
-        /* and for eq only: spItems?: Array<{ type, content }> */
+        // For eq only: spText, spMath, spImage, spHeading
       }>
     },
     // …
   ]
 }
-````
+```
+
+---
 
 ## ✅ 20 Canonical Slide Types
 
-1. `titleSlide`
-2. `titleAndSubtitle`
-3. `bulletList`
-4. `twoColumnText`
-5. `imageSlide`
-6. `imageWithTitle`
-7. `imageWithCaption`
-8. `imageLeftBulletsRight`
-9. `imageRightBulletsLeft`
-10. `table`
-11. `statistic`
-12. `donutChart`
-13. `bigNumber`
-14. `barChart`
-15. `quoteSlide`
-16. `quoteWithImage`
-17. `cornerWordsSlide`
-18. `contactSlide`
-19. `eq`
+1. `titleSlide`  
+2. `titleAndSubtitle`  
+3. `bulletList`  
+4. `twoColumnText`  
+5. `imageSlide`  
+6. `imageWithTitle`  
+7. `imageWithCaption`  
+8. `imageLeftBulletsRight`  
+9. `imageRightBulletsLeft`  
+10. `table`  
+11. `statistic`  
+12. `donutChart`  
+13. `bigNumber`  
+14. `barChart`  
+15. `quoteSlide`  
+16. `quoteWithImage`  
+17. `cornerWordsSlide`  
+18. `contactSlide`  
+19. `eq`  
 20. `fillImage`
+
+---
 
 ## ✅ Slide Construction Rules
 
-* **Timing**
+### Timing
 
-  * `start` is set automatically from the previous slide’s `end`.
-  * `end` is provided by your call (must be greater than the injected `start`).
+* `start`: injected from the previous slide’s `end`
+* `end`: required when defining the slide  
+* `showAt`: must satisfy `start ≤ showAt ≤ end`  
+* Omitted `showAt` defaults to `start`
 
-* **Data Array**
+### Data Array
 
-  * Each entry in `data` must include:
+Each entry must include:
 
-    * `name`: the semantic slot name (e.g. `"title"`, `"bullet"`, `"line"`)
-    * `content`: string, number, or array of strings (depending on type)
-    * `showAt`: absolute timestamp (in seconds) when the item appears
-  * **EQ slides only** (`type: "eq"`) may include an optional `spItems` array on each `"line"` object:
+```ts
+{
+  name: "title" | "bullet" | "line" | "bar" | ...,
+  content: string | string[] | number,
+  showAt: number
+}
+```
 
-    ```ts
+---
+
+## ✅ EQ Slides (flat format)
+
+Use flat `data[]` entries with special `sp*` types for sidebar items.
+
+```ts
+deckbuilder.s.eq(50, [
+  { type: "math", content: "E = mc^2", showAt: 10 },
+  { type: "spHeading", content: "Einstein's Law" },
+  { type: "spText", content: "Energy-mass equivalence" },
+  { type: "spImage", content: "/img/box.webp" }
+]);
+```
+
+This will be transformed into:
+
+```ts
+{
+  type: "eq",
+  start: 0,
+  end: 50,
+  data: [
     {
       name: "line",
-      type: "text" | "math" | "heading",
-      content: string,
-      showAt: number,
-      spItems?: Array<{
-        type: "text" | "math" | "heading" | "image",
-        content: string
-      }>
+      type: "math",
+      content: "E = mc^2",
+      showAt: 10,
+      spItems: [
+        { type: "spHeading", content: "Einstein's Law" },
+        { type: "spText", content: "Energy-mass equivalence" },
+        { type: "spImage", content: "/img/box.webp" }
+      ]
     }
-    ```
+  ]
+}
+```
+
+---
 
 ## ✅ Builder API
 
-Use the **declarative** registry or the **imperative** EQ helper:
+All slides:
 
-```js
-// Declarative (all non-eq)
-deckbuilder.s.titleSlide(10, [ { name:"title", content:"Hello", showAt:0 } ]);
-// …
+```ts
+deckbuilder.s.titleSlide(10, [
+  { name: "title", content: "Hello", showAt: 0 }
+]);
 
-// Imperative (eq slides)
-const eq = deckbuilder.eq(50);
-eq.addLine({ type:"math", content:"x^2+y^2=z^2", showAt:0 });
-eq.addSp({ type:"text", content:"Pythagorean theorem" });
+deckbuilder.s.eq(30, [
+  { type: "text", content: "Definition", showAt: 10 },
+  { type: "spText", content: "Context or notes" }
+]);
 ```
 
-> Calling `deckbuilder.build()` returns the final `{ version, slides }` object.
+Call `deckbuilder.build()` to output the final deck object.
+
+---
 
 ## ✅ Validation
 
-All decks must pass the strict Zod schema:
-
 ```ts
 import { zodSchemaV1 } from 'deckbuild';
-zodSchemaV1.parse(deck);
+zodSchemaV1.parse(deck); // top-level validation
 ```
 
-This enforces correct field names, allowed `type`/`name` values, array shapes, and the top-level `version` literal.
+---
 
 ## 🔒 Freeze Notice
 
-This `deck-v1` format is frozen.
-Any additions (new slide types, fields, behaviors) will be released as `deck-v2`.
+This `deck-v1` format is locked. Any changes will be published under `deck-v2`.
+````

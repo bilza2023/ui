@@ -1,39 +1,39 @@
+Here is:
+
+---
+
+## ✅ FILE 2 — `eq.md` (Flat EQ Slide Format, aligned with latest system)
+
 ````markdown
 # EQ Slide Format (v1)
 
 ## ✅ Objective
 
-Define the structure and builder pattern for **equation slides** (`type: "eq"`) that include a main content line plus optional sidebar panels.
+Define the flat structure for **equation slides** (`type: "eq"`) where each `line` is followed by optional sidebar `sp*` items. This version removes all imperative APIs.
 
-## ✅ Builder Pattern
+---
 
-Use the **imperative** API on your `DeckBuilder` instance:
+## ✅ Builder Pattern (flat form)
 
-```js
-// Start an EQ slide ending at 50s
-const eq = deckbuilder.eq(50);
+Use a single call with a flat array:
 
-// Add main line content with a “showAt” timestamp
-eq.addLine({
-  type: "heading" | "text" | "math",
-  content: string,
-  showAt: number
-});
+```ts
+deckbuilder.s.eq(50, [
+  { type: "math", content: "E = mc^2", showAt: 10 },
+  { type: "spHeading", content: "Einstein's Law" },
+  { type: "spText", content: "Energy-mass equivalence" },
+  { type: "spImage", content: "/images/box.webp" },
 
-// (Optional) Add one or more sidebar items to the **last** line
-eq.addSp({ 
-  type: "heading" | "text" | "math" | "image", 
-  content: string 
-});
+  { type: "text", content: "Final line", showAt: 40 },
+  { type: "spText", content: "Summary note" }
+]);
+```
 
-// Repeat addLine() / addSp() for multiple steps
-````
+Each non-`sp*` entry starts a new `line`. All following `sp*` entries (with no `showAt`) are attached to that line.
 
-> The `start` time is injected automatically from the previous slide’s `end`.
+---
 
-## ✅ Output JSON Structure
-
-An EQ slide in the final deck looks like:
+## ✅ Internal JSON Format (after build)
 
 ```json
 {
@@ -43,61 +43,62 @@ An EQ slide in the final deck looks like:
   "data": [
     {
       "name": "line",
-      "type": "heading",
-      "content": "Test Sidebar",
-      "showAt": 0,
+      "type": "math",
+      "content": "E = mc^2",
+      "showAt": 10,
       "spItems": [
-        { "type": "heading", "content": "SP Heading" },
-        { "type": "text",    "content": "Note about step" },
-        { "type": "math",    "content": "a^2 + b^2 = c^2" },
-        { "type": "image",   "content": "/images/diagram.png" }
+        { "type": "spHeading", "content": "Einstein's Law" },
+        { "type": "spText", "content": "Energy-mass equivalence" },
+        { "type": "spImage", "content": "/images/box.webp" }
       ]
     },
     {
       "name": "line",
-      "type": "math",
-      "content": "E = mc^2",
-      "showAt": 10
-      /* spItems omitted when no sidebar content */
+      "type": "text",
+      "content": "Final line",
+      "showAt": 40,
+      "spItems": [
+        { "type": "spText", "content": "Summary note" }
+      ]
     }
   ]
 }
 ```
 
-* The **`spItems`** array is **optional**.
-* If a line has no sidebar panels, simply omit `spItems` or set it to `[]`.
+> Only `line` entries carry `showAt`. `sp*` items are attached automatically.
 
-## ✅ Field Definitions
+---
 
-| Field            | Type                                             | Required | Description                                      |
-| ---------------- | ------------------------------------------------ | -------- | ------------------------------------------------ |
-| `type`           | `"eq"`                                           | ✅        | Indicates an equation slide                      |
-| `start`          | number                                           | ✅        | Slide start time (in seconds, injected)          |
-| `end`            | number                                           | ✅        | Slide end time (in seconds, provided)            |
-| `data`           | Array of line objects                            | ✅        | Sequence of main lines with optional side panels |
-| **Line object**  |                                                  |          |                                                  |
-| `name`           | `"line"`                                         | ✅        | Fixed slot name for EQ line                      |
-| `type`           | `"heading"` \| `"text"` \| `"math"`              | ✅        | Content type of the main line                    |
-| `content`        | string                                           | ✅        | Main text or math expression                     |
-| `showAt`         | number                                           | ✅        | Timestamp when the line appears                  |
-| `spItems?`       | Array of sidebar items                           | ❌        | Optional sidebar panels attached to this line    |
-| **Sidebar item** |                                                  |          |                                                  |
-| `type`           | `"heading"` \| `"text"` \| `"math"` \| `"image"` | ✅        | Type of sidebar content                          |
-| `content`        | string                                           | ✅        | Text, math, or image URL                         |
+## ✅ Allowed `type` values
+
+| For main lines    | `type`         |
+|------------------|----------------|
+| Line types       | `"text"`, `"math"`, `"heading"` |
+
+| For sidebar items | `type`         |
+|------------------|----------------|
+| Sidebar types    | `"spText"`, `"spMath"`, `"spImage"`, `"spHeading"` |
+
+---
+
+## ✅ Timing Rules
+
+* Only the `line` requires a `showAt` value
+* All `sp*` items are attached to the most recent `line`
+* If `sp*` has its own `showAt`, it is ignored
+
+---
 
 ## ✅ Validation
 
-Your `eq` slide must pass the `eqSlide` branch of the strict Zod schema:
-
 ```ts
 import { zodSchemaV1 } from 'deckbuild';
-zodSchemaV1.parse(deck); // deck including eq slides
+zodSchemaV1.parse(deck); // deck includes flat EQ slide
 ```
+
+---
 
 ## 🔒 Freeze Notice
 
-This EQ slide pattern is locked in `deck-v1`.
-Any future changes (e.g., additional sidebar types) will be part of a new version.
-
-```
-```
+This EQ pattern is frozen under `deck-v1`. Future changes (e.g., spItem timing or grouping) will be released in `deck-v2`.
+````

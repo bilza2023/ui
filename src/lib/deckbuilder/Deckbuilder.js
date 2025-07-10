@@ -8,6 +8,7 @@ export default class DeckBuilder {
       // Declarative slide registry
       this.s = Object.fromEntries(
         [
+          "eq",
           "titleSlide",
           "titleAndSubtitle",
           "bulletList",
@@ -33,7 +34,7 @@ export default class DeckBuilder {
         ])
       );
 ////===>Add Eq as well ti the same style
-      this.s.eq = this.eq.bind(this);
+      // this.s.eq = this.eq.bind(this);
     }
 
 
@@ -63,41 +64,33 @@ export default class DeckBuilder {
     };
   }
   
-  
-  eq(end) {
-    const start = this.currentTime;
-    if (end <= start) {
-      throw new Error(`Invalid slide timing: end (${end}) must be greater than start (${start})`);
-    }
-    this.currentTime = end;
 
-    const slide = {
-      type: "eq",
-      start,
-      end,
-      data: []
-    };
-    this.slidesArray.push(slide);
+  buildEq(data) {
+    const lines = [];
+    let currentLine = null;
 
-    return {
-      addLine({ type, content, showAt }) {
-        slide.data.push({
-          name: "line",
-          type,
-          content,
-          showAt,
+    for (const item of data) {
+      if (!item.type.startsWith('sp')) {
+        // start a new line
+        currentLine = {
+          name: 'line',
+          type:    item.type,
+          content: item.content,
+          showAt:  item.showAt,
           spItems: []
+        };
+        lines.push(currentLine);
+      } else if (currentLine) {
+        // collect sidebar items
+        currentLine.spItems.push({
+          type:    item.type,
+          content: item.content
         });
-      },
-      addSp({ type, content }) {
-        if (slide.data.length === 0) {
-          throw new Error("Call addLine() before addSp()");
-        }
-        slide.data[slide.data.length - 1].spItems.push({ type, content });
       }
-    };
+    }
+
+    return lines;
   }
-  
     _add(type, end, data) {
       const start = this.currentTime;
       if (end <= start) {
@@ -105,6 +98,13 @@ export default class DeckBuilder {
       }
       this.currentTime = end;
   
+      if (type === 'eq') {
+        // use our new helper to transform flat EQ data
+        const nested = this.buildEq(data);
+        this.slidesArray.push({ type, start, end, data: nested });
+        return;
+      }
+
       const patchedData = data.map((item) =>
         item.showAt === undefined ? { ...item, showAt: 0 } : item
       );

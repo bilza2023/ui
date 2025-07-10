@@ -6,15 +6,15 @@
 
 <div class="eq-sidebar">
   {#each spItems as item}
-    {#if item.type === 'math'}
+    {#if item.type === 'spMath'}
       <div class="sp-item math">
         <Katex displayMode>{item.content}</Katex>
       </div>
 
-    {:else if item.type === 'heading'}
+    {:else if item.type === 'spHeading'}
       <div class="sp-item title">{item.content}</div>
 
-    {:else if item.type === 'image'}
+    {:else if item.type === 'spImage'}
       <div class="sp-item image">
         <img src={item.content} alt="" />
       </div>

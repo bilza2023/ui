@@ -1,3 +1,9 @@
+Here is:
+
+---
+
+## ✅ FILE 3 — `GPT-instructions.md` (Aligned with flat EQ format and meta rules)
+
 ````markdown
 # DeckBuilder + Meta GPT Instructions (v1)
 
@@ -18,7 +24,7 @@ GPT should output an object with both a **deck** and its **meta**:
     entries: [ /* timing & item/label entries… */ ]
   }
 }
-````
+```
 
 All generated slides and metadata must pass the strict Zod schemas.
 
@@ -53,40 +59,39 @@ No extra wrappers or commentary.
    * `start`: injected from previous slide’s `end`
    * `end`: provided by the call, in seconds
    * `showAt`: absolute timestamp (in seconds, ≥ `start` and ≤ `end`)
-     If `showAt` is omitted, DeckBuilder defaults it to the slide’s `start`.
+   * If `showAt` is omitted, DeckBuilder will assign `start`
 
 3. **Data items**
-   Each entry in `data[]` must include:
+
+   Each item in `data[]` must have:
 
    * `name`: semantic slot (e.g. `"title"`, `"bullet"`, `"line"`)
-   * `content`: string, number, or array of strings
-   * `showAt`: number
+   * `content`: string, number, or string array
+   * `showAt`: number (omit only if using DeckBuilder default)
 
-4. **EQ slides (`type: "eq"`)**
-   Must be built with the builder pattern:
+4. **EQ Slides (`type: "eq"`)**
+
+   EQ slides are now flat arrays. Use this structure:
 
    ```ts
-   const eq = builder.eq(30);
-   eq.addLine({ type:"math", content:"x²+y²=z²", showAt:0 });
-   eq.addSp({ type:"text", content:"Explanation here" });
+   deckbuilder.s.eq(30, [
+     { type: "math", content: "x²+y²=z²", showAt: 5 },
+     { type: "spText", content: "This is the Pythagorean theorem" },
+     { type: "spImage", content: "/images/triangle.png" }
+   ]);
    ```
+
+   - Only main lines (`type: "math" | "text" | "heading"`) use `showAt`
+   - All following `sp*` items attach to the most recent line
+   - No imperative API (`addLine`, `addSp`) is allowed in GPT output
 
 ---
 
 ## ✅ Meta Construction Rules
 
 1. **Entries**
-   One entry per slide; each entry must include:
 
-   * `label`: string (inferred or provided)
-   * `end`: slide’s `end` time
-   * `items`: array of that slide’s `showAt` times
-   * `images?`: optional image URLs
-
-2. **Label inference**
-   Use slide titles or fallback to `"slide_XXX"`.
-
-3. **Example entry**
+   One entry per slide:
 
    ```ts
    {
@@ -97,33 +102,48 @@ No extra wrappers or commentary.
    }
    ```
 
+2. **Label inference**
+   Infer from slide title or fallback to `"slide_001"`, `"slide_002"`, etc.
+
+3. **Fields**
+
+   | Field   | Type     | Description                        |
+   |---------|----------|------------------------------------|
+   | label   | string   | Short identifier for the slide     |
+   | end     | number   | Slide end time                     |
+   | items   | number[] | All `showAt` values in `slide.data`|
+   | images? | string[] | Optional image URLs                |
+
 ---
 
 ## ✅ Validation
 
-After generation, run:
-
 ```ts
 import { zodSchemaV1, metaV1Schema } from "deckbuild";
-zodSchemaV1.parse({ version:"deck-v1", slides, meta: undefined }); // deck only
-metaV1Schema.parse(meta);                                         // meta only
+zodSchemaV1.parse({ version:"deck-v1", slides });      // Deck only
+metaV1Schema.parse(meta);                              // Meta only
 ```
 
-Or validate the combined object with your integrated schema if available.
+Or validate combined:
+
+```ts
+fullDeck = { version: "deck-v1", slides, meta };
+zodSchemaV1.parse(fullDeck); // If schema allows
+```
 
 ---
 
 ## ✅ Style Guidelines
 
-* **Natural phrasing**: slide content should read like real text.
-* **No extra keys**: only include fields defined by the schemas.
-* **Ordering**: slides must be in chronological order; meta entries must match slides one-to-one.
-* **No commentary**: output must be pure JSON/JS object.
+* Use natural, well-written content
+* No extra keys — use only defined fields
+* Keep slides strictly in timeline order
+* No explanations, comments, or wrapper text — raw object only
 
 ---
 
 ## 🔒 Freeze Notice
 
-This combined `deck-v1` + `meta-v1` format is locked.
-Any future enhancements will be under a new version (e.g. `deck-v2`, `meta-v2`).
+This `deck-v1` + `meta-v1` format is locked. Any enhancements will be published under a new version.
+````
 

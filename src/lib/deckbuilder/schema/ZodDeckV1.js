@@ -231,10 +231,10 @@ const eqSlide = baseSlide.extend({
       spItems: z.array(
         z.object({
           type:    z.union([
-                      z.literal("heading"),
-                      z.literal("text"),
-                      z.literal("math"),
-                      z.literal("image")
+                      z.literal("spHeading"),
+                      z.literal("spText"),
+                      z.literal("spMath"),
+                      z.literal("spImage")
                    ]),
           content: z.string()
         })
