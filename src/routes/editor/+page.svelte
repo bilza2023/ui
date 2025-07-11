@@ -4,6 +4,7 @@
   import { zodDeckV1 }    from '../../lib/deckbuilder/schema/ZodDeckV1';
 
   let deck = null;
+  let background = {};
 
   // ───────────────────────── Helper ─────────────────────────
   function cleanDeckSource(src) {
@@ -39,6 +40,7 @@
       // now build & validate
       const builder   = new DeckBuilder();
       defineDeck(builder);
+      debugger;
       const candidate = builder.build();
 
       const check = zodDeckV1.safeParse(candidate);
@@ -46,8 +48,11 @@
         const err = check.error.errors[0];
         throw new Error(`Zod failed at ${err.path.join('.')}: ${err.message}`);
       }
-
+      /////
       deck = check.data.deck;
+      background = check.data.background;
+      console.log('background', background);
+      
     } catch (e) {
       // show alert, but also log cleaned code for inspection
       console.error('─── Cleaned deck source that failed ───\n', cleaned);
@@ -61,7 +66,7 @@
 <main class="player-container">
   {#if deck}
   {#key deck}
-    <SveltePlayer {deck} />
+    <SveltePlayer {deck} {background}/>
   {/key}
   {:else}
     <p class="placeholder">Please upload a deck JS file to start.</p>

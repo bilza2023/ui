@@ -1,11 +1,17 @@
 // Unified DeckBuilder.js
 
+
 export default class DeckBuilder {
     constructor() {
       this.slidesArray = [];
       this.currentTime = 0;
-  
-      // Declarative slide registry
+      this.background = {
+        backgroundColor : "#0e490f",
+        backgroundImage : "/images/bg.png",
+        backgroundImageOpacity : 0.07,
+      } 
+
+ // Declarative slide registry
       this.s = Object.fromEntries(
         [
           "eq",
@@ -33,18 +39,25 @@ export default class DeckBuilder {
           (end, data) => this._add(type, end, data)
         ])
       );
-////===>Add Eq as well ti the same style
-      // this.s.eq = this.eq.bind(this);
-    }
+}
 
 
   setTheme(themeName) {
     this.theme = themeName;
   }
 
-  setBackground(background) {
-    this.background = background;
+  setBackgroundImage(url) {
+    this.background.backgroundImage = url;
   }
+  
+  setBackgroundColor(color) {
+    this.background.backgroundColor = color;
+  }
+  
+  setBackgroundOpacity(value) {
+    this.background.backgroundImageOpacity = value;
+  }
+  
 
   addDetails({
     name = "unnamed_deck",
@@ -91,26 +104,26 @@ export default class DeckBuilder {
 
     return lines;
   }
-    _add(type, end, data) {
-      const start = this.currentTime;
-      if (end <= start) {
-        throw new Error(`Invalid slide timing: end (${end}) must be greater than start (${start})`);
-      }
-      this.currentTime = end;
-  
-      if (type === 'eq') {
-        // use our new helper to transform flat EQ data
-        const nested = this.buildEq(data);
-        this.slidesArray.push({ type, start, end, data: nested });
-        return;
-      }
-
-      const patchedData = data.map((item) =>
-        item.showAt === undefined ? { ...item, showAt: 0 } : item
-      );
-  
-      this.slidesArray.push({ type, start, end, data: patchedData });
+  _add(type, end, data) {
+    const start = this.currentTime;
+    if (end <= start) {
+      throw new Error(`Invalid slide timing: end (${end}) must be greater than start (${start})`);
     }
+    this.currentTime = end;
+
+    if (type === 'eq') {
+      // use our new helper to transform flat EQ data
+      const nested = this.buildEq(data);
+      this.slidesArray.push({ type, start, end, data: nested });
+      return;
+    }
+
+    const patchedData = data.map((item) =>
+      item.showAt === undefined ? { ...item, showAt: 0 } : item
+    );
+
+    this.slidesArray.push({ type, start, end, data: patchedData });
+  }
   
     build() {
       if (!this.details) {
@@ -119,6 +132,7 @@ export default class DeckBuilder {
       return {
         ...this.details,
         version: "deck-v1",
+        background: this.background ?? null,
         deck: this.slidesArray
       };
     }

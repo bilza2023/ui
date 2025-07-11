@@ -263,6 +263,13 @@ export const zodDeckV1 = z.object({
     createdAt:   z.string().datetime().optional(),
     editedAt:    z.string().datetime().optional(),
     version:     z.literal("deck-v1"),
+    background: z
+    .object({
+      backgroundColor: z.string().optional(),
+      backgroundImage: z.string().optional(),
+      backgroundImageOpacity: z.number().optional()
+    })
+    .optional(),
     deck:        z.array(
       z.discriminatedUnion("type", [
         eqSlide,

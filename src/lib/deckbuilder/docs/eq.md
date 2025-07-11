@@ -1,10 +1,4 @@
-Here is:
 
----
-
-## ✅ FILE 2 — `eq.md` (Flat EQ Slide Format, aligned with latest system)
-
-````markdown
 # EQ Slide Format (v1)
 
 ## ✅ Objective

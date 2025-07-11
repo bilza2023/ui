@@ -9,10 +9,11 @@
   export let deck = [];
   export let soundUrl = "";
   export let background = {
-    backgroundColor: "#ffffff",
-    backgroundImage: "",
-    backgroundImageOpacity: 1,
-  };
+  backgroundColor: "#ffffff",
+  backgroundImage: "",
+  backgroundImageOpacity: 1,
+ };
+
 
   let player;
   let currentTime = 0;
@@ -39,9 +40,11 @@
   }
 
   onMount(() => {
-    player = new Player(soundUrl);
-    player.onTick(handleTick);
-  });
+    debugger;
+  player = new Player(soundUrl);
+  player.onTick(handleTick);
+});
+
 
   onDestroy(() => {
     player.destroy();
@@ -74,7 +77,14 @@
 </script>
 
 <div class="stage-wrapper">
-  <StaticBackground {...background} />
+
+  <StaticBackground
+  backgroundColor={background.backgroundColor}
+  backgroundImage={background.backgroundImage}
+  backgroundImageOpacity={background.backgroundImageOpacity}
+/>
+
+
 
   <div class="stage">
     {#if SlideMap[getCurrentSlide().type]}

@@ -1,6 +1,8 @@
 <script>
-    export let backgroundColor = "#0e490f";
+    export let backgroundColor = "#FFFDD0";
+    //--this is the default image
     export let backgroundImage = null;
+    // export let backgroundImage = null;
     export let backgroundImageOpacity = 0.07;
     export let patternOpacity = 0.25;
     export let patternSize = 28;

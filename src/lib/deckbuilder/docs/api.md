@@ -1,10 +1,4 @@
-Confirmed. Starting now.
 
----
-
-## ✅ FILE 1 — `api.md` (DeckBuilder API v1, updated for flat EQ)
-
-````markdown
 # DeckBuilder API (v1)
 
 ## ✅ Objective

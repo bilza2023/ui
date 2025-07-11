@@ -1,10 +1,5 @@
-Here is:
 
----
 
-## ✅ FILE 4 — `timings.md` (Slide Timing Rules, finalized for flat EQ)
-
-````markdown
 # Slide Timing Rules (v1)
 
 ## ✅ Objective
