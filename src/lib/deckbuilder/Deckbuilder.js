@@ -6,8 +6,8 @@ export default class DeckBuilder {
       this.slidesArray = [];
       this.currentTime = 0;
       this.background = {
-        backgroundColor : "#0e490f",
-        backgroundImage : "/images/bg.png",
+        backgroundColor : "#F3E5AB",
+        backgroundImage : "/images/taleem.webp",
         backgroundImageOpacity : 0.07,
       } 
 
@@ -41,6 +41,8 @@ export default class DeckBuilder {
       );
 }
 
+// deckbuilder.setBackgroundImage("/images/taleem.webp");
+// deckbuilder.setBackgroundColor("#F3E5AB");
 
   setTheme(themeName) {
     this.theme = themeName;

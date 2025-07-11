@@ -12,8 +12,6 @@ export function defineDeck(deckbuilder) {
       editedAt:    "2025-07-11T00:00:00Z"
     });
     
-    deckbuilder.setBackgroundImage("/images/taleem.webp");
-    deckbuilder.setBackgroundColor("#F3E5AB");
     
     deckbuilder.s.titleSlide(10, [
       { name: "title", content: "What is Algebra?", showAt: 0 }
