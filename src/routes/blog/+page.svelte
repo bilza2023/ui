@@ -24,6 +24,13 @@
   <ul class="space-y-6">
 
     <li class="bg-[#f8f2dd] p-5 rounded-lg shadow hover:shadow-md transition">
+      <a href="/blog/why-frontend-frameworks-are-a-scam.html" class="text-2xl text-[#023047] font-semibold hover:underline">
+        📢 Why Modern Frontend Frameworks Are a Scam
+      </a>
+      <p class="text-sm text-gray-500 mt-1">A Critique on modern UI frameworks.</p>
+    </li>
+
+    <li class="bg-[#f8f2dd] p-5 rounded-lg shadow hover:shadow-md transition">
       <a href="/blog/ai-foundation-track-brochure.html" class="text-2xl text-[#023047] font-semibold hover:underline">
         📢 Introducting AI Foundation Track - Taleem.Help
       </a>

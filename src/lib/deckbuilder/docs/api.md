@@ -1,38 +1,34 @@
+Here's the updated and cleaned version of the **DeckBuilder API (v1)** doc reflecting the new `background` methods and removing the deprecated `setBackground`.
 
-# DeckBuilder API (v1)
+---
 
-## ✅ Objective
+# ✅ DeckBuilder API (v1)
 
-Provide a programmatic interface for generating valid `deck-v1` objects. DeckBuilder calls should:
+## 🎯 Objective
 
-1. Use only the **20 canonical slide types**  
-2. Assign correct `name`, `content`, and `showAt` fields  
-3. Sequence timing via `start` (injected) and `end`  
-4. Wrap the result in a `{ version: "deck-v1", slides: [...] }` object  
+Provide a programmatic interface for generating valid `deck-v1` objects. A *deck* represents a full question unit in Taleem.Help — including slides, metadata, background, and other presentation details.
 
 ---
 
 ## ✅ Top-Level Format
 
-Every deck must be exactly:
+Every deck must look like:
 
 ```ts
 {
   version: "deck-v1",
-  slides: [
-    {
-      type: string,      // one of the 20 canonical types
-      start: number,     // injected by DeckBuilder
-      end: number,
-      data: Array<{
-        name: string,
-        content: string | number | string[],
-        showAt: number,
-        // For eq only: spText, spMath, spImage, spHeading
-      }>
-    },
-    // …
-  ]
+  name: string,
+  description?: string,
+  tags?: string[],
+  status?: "draft" | "ready" | "published" | "archived",
+  createdAt?: ISODateString,
+  editedAt?: ISODateString,
+  background?: {
+    backgroundColor?: string,
+    backgroundImage?: string,
+    backgroundImageOpacity?: number
+  },
+  deck: Slide[]
 }
 ```
 
@@ -40,25 +36,25 @@ Every deck must be exactly:
 
 ## ✅ 20 Canonical Slide Types
 
-1. `titleSlide`  
-2. `titleAndSubtitle`  
-3. `bulletList`  
-4. `twoColumnText`  
-5. `imageSlide`  
-6. `imageWithTitle`  
-7. `imageWithCaption`  
-8. `imageLeftBulletsRight`  
-9. `imageRightBulletsLeft`  
-10. `table`  
-11. `statistic`  
-12. `donutChart`  
-13. `bigNumber`  
-14. `barChart`  
-15. `quoteSlide`  
-16. `quoteWithImage`  
-17. `cornerWordsSlide`  
-18. `contactSlide`  
-19. `eq`  
+1. `titleSlide`
+2. `titleAndSubtitle`
+3. `bulletList`
+4. `twoColumnText`
+5. `imageSlide`
+6. `imageWithTitle`
+7. `imageWithCaption`
+8. `imageLeftBulletsRight`
+9. `imageRightBulletsLeft`
+10. `table`
+11. `statistic`
+12. `donutChart`
+13. `bigNumber`
+14. `barChart`
+15. `quoteSlide`
+16. `quoteWithImage`
+17. `cornerWordsSlide`
+18. `contactSlide`
+19. `eq`
 20. `fillImage`
 
 ---
@@ -67,39 +63,44 @@ Every deck must be exactly:
 
 ### Timing
 
-* `start`: injected from the previous slide’s `end`
-* `end`: required when defining the slide  
-* `showAt`: must satisfy `start ≤ showAt ≤ end`  
-* Omitted `showAt` defaults to `start`
+* `start`: injected by DeckBuilder from previous slide’s `end`
+* `end`: must be defined explicitly per slide
+* `showAt`: must satisfy `start ≤ showAt ≤ end`
+* If `showAt` is omitted, it defaults to `start`
 
-### Data Array
+### Slide Format
 
-Each entry must include:
+Each slide has:
 
 ```ts
 {
-  name: "title" | "bullet" | "line" | "bar" | ...,
-  content: string | string[] | number,
-  showAt: number
+  type: string,
+  start: number,
+  end: number,
+  data: Array<{
+    name: string,
+    content: string | number | string[],
+    showAt: number
+  }>
 }
 ```
 
 ---
 
-## ✅ EQ Slides (flat format)
+## ✅ EQ Slides (Flat Input Format)
 
-Use flat `data[]` entries with special `sp*` types for sidebar items.
+Flat array structure using `type: "math" | "text" | "heading"` for main lines, and `sp*` types for sidebar items.
 
 ```ts
 deckbuilder.s.eq(50, [
   { type: "math", content: "E = mc^2", showAt: 10 },
   { type: "spHeading", content: "Einstein's Law" },
   { type: "spText", content: "Energy-mass equivalence" },
-  { type: "spImage", content: "/img/box.webp" }
+  { type: "spImage", content: "/images/box.webp" }
 ]);
 ```
 
-This will be transformed into:
+Transformed internally into:
 
 ```ts
 {
@@ -115,7 +116,7 @@ This will be transformed into:
       spItems: [
         { type: "spHeading", content: "Einstein's Law" },
         { type: "spText", content: "Energy-mass equivalence" },
-        { type: "spImage", content: "/img/box.webp" }
+        { type: "spImage", content: "/images/box.webp" }
       ]
     }
   ]
@@ -126,33 +127,70 @@ This will be transformed into:
 
 ## ✅ Builder API
 
-All slides:
+### Add Slides
 
 ```ts
 deckbuilder.s.titleSlide(10, [
   { name: "title", content: "Hello", showAt: 0 }
 ]);
-
-deckbuilder.s.eq(30, [
-  { type: "text", content: "Definition", showAt: 10 },
-  { type: "spText", content: "Context or notes" }
-]);
 ```
 
-Call `deckbuilder.build()` to output the final deck object.
+### Set Metadata
+
+```ts
+deckbuilder.addDetails({
+  name: "what_is_algebra",
+  description: "Intro to Algebra",
+  tags: ["math", "algebra"],
+  status: "draft"
+});
+```
+
+### Set Background
+
+Use new granular background setters:
+
+```ts
+deckbuilder.setBackgroundImage("/images/taleem.webp");
+deckbuilder.setBackgroundColor("#F3E5AB");
+deckbuilder.setBackgroundOpacity(0.1);
+```
+
+---
+
+## ✅ Finalize Deck
+
+```ts
+const deck = deckbuilder.build(); // returns validated deck-v1 JSON
+```
 
 ---
 
 ## ✅ Validation
 
 ```ts
-import { zodSchemaV1 } from 'deckbuild';
-zodSchemaV1.parse(deck); // top-level validation
+import { zodDeckV1 } from 'deckbuild';
+zodDeckV1.parse(deck); // Throws on schema error
 ```
+
+---
+
+## ❌ Deprecated
+
+The following method has been removed:
+
+```ts
+deckbuilder.setBackground(...) // ❌ DO NOT USE
+```
+
+Use the specific methods listed above.
 
 ---
 
 ## 🔒 Freeze Notice
 
-This `deck-v1` format is locked. Any changes will be published under `deck-v2`.
-````
+This `deck-v1` format is locked. Any future additions (e.g., transitions, animations) will be released under `deck-v2`.
+
+---
+
+Ready to save as your official updated `api.md`?
