@@ -1,6 +1,16 @@
-import { DeckBuilder } from "taleem-pivot-deckbuilder";
-const deckbuilder = new DeckBuilder();
 
+export function defineDeck(deckbuilder){
+
+  deckbuilder.addDetails({
+    name:        "deck_404",
+    description: "Missing Content",
+    tags:        [],
+    status:      "draft",
+    createdAt:   "2025-07-09T00:00:00Z",
+    editedAt:    "2025-07-09T00:00:00Z"
+  });
+  
+    
 // Slide 1 - Title Slide
 deckbuilder.s.titleSlide(8, [
   { name: "title", content: "404: Content Not Found", showAt: 0 }
@@ -24,5 +34,5 @@ deckbuilder.s.contactSlide(38, [
   { name: "subheading", content: "Visit our Help Center or Contact Support", showAt: 1 },
   { name: "email", content: "support@taleem.help", showAt: 2 }
 ]);
-// console.log("deckbuilder.build()",deckbuilder.build());
-export const deck404 = deckbuilder.build();
+    
+  }

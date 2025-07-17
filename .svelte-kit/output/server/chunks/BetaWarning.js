@@ -259,7 +259,7 @@ function defineFbise9physics(builder2) {
 function defineFbise9matholdSyllabus(builder2) {
   const fbise9mathold = builder2.addTcode("fbise9mathold", {
     description: "Math Class 9 Old Course",
-    image: "/images/box.webp"
+    image: "/bookcovers/math_9thFBSIE.png"
   });
   const ch1 = fbise9mathold.addChapter("Theorems", "theorems");
   const ex1 = ch1.addExercise("Theorems -1", "theorems_1");

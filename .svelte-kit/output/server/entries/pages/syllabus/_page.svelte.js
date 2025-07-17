@@ -1,12 +1,12 @@
 import { c as create_ssr_component, e as escape, v as validate_component, d as each } from "../../../chunks/ssr.js";
 import "../../../chunks/client.js";
 import { N as Nav } from "../../../chunks/Nav.js";
-import { s as syllabus, B as BetaWarning } from "../../../chunks/BetaWarning.js";
+import { B as BetaWarning } from "../../../chunks/BetaWarning.js";
 const css$1 = {
-  code: ".card.svelte-g5urb7{width:240px;min-height:180px;background-color:#ffffff;border:2px solid var(--card-color);border-top:8px solid var(--card-color);padding:1.2rem 1rem;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.06);cursor:pointer;transition:transform 0.15s ease, box-shadow 0.15s ease;display:flex;flex-direction:column;align-items:center;justify-content:space-between;font-family:sans-serif;text-align:center}.card.svelte-g5urb7:hover{transform:translateY(-4px);box-shadow:0 6px 16px rgba(0,0,0,0.12);background-color:#fdfdfd}.card-icon.svelte-g5urb7{font-size:3rem;margin-bottom:0.75rem;color:var(--card-color)}.card-title.svelte-g5urb7{font-size:1.2rem;font-weight:600;margin-bottom:0.5rem}.card-desc.svelte-g5urb7{font-size:0.9rem;color:#555;opacity:0.85;margin-top:auto}",
+  code: ".card.svelte-ozmayb{width:240px;min-height:180px;background-color:#ffffff;border:2px solid var(--card-color);border-top:8px solid var(--card-color);padding:1.2rem 1rem;border-radius:12px;box-shadow:0 2px 6px rgba(0, 0, 0, 0.06);cursor:pointer;transition:transform 0.15s ease,\n      box-shadow 0.15s ease;display:flex;flex-direction:column;align-items:center;justify-content:space-between;font-family:sans-serif;text-align:center}.card.svelte-ozmayb:hover{transform:translateY(-4px);box-shadow:0 6px 16px rgba(0, 0, 0, 0.12);background-color:#fdfdfd}.card-icon.svelte-ozmayb{font-size:3rem;margin-bottom:0.75rem;color:var(--card-color)}.card-title.svelte-ozmayb{font-size:1.2rem;font-weight:600;margin-bottom:0.5rem}.card-desc.svelte-ozmayb{font-size:0.9rem;color:#555;opacity:0.85;margin-top:auto}",
   map: null
 };
-const Card = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+const CardChapters = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { icon = "📘" } = $$props;
   let { title = "Untitled" } = $$props;
   let { description = "" } = $$props;
@@ -20,7 +20,7 @@ const Card = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   if ($$props.color === void 0 && $$bindings.color && color !== void 0)
     $$bindings.color(color);
   $$result.css.add(css$1);
-  return `  <div class="card svelte-g5urb7" style="${"--card-color: " + escape(color, true)}"><div class="card-icon svelte-g5urb7">${escape(icon)}</div> <div class="card-title svelte-g5urb7">${title ? `${escape(title.slice(0, 20))}${escape(title.length > 20 ? "…" : "")}` : ``}</div> ${description ? `<div class="card-desc svelte-g5urb7">${escape(description)}</div>` : ``} </div>`;
+  return `  <div class="card svelte-ozmayb" style="${"--card-color: " + escape(color, true)}"><div class="card-icon svelte-ozmayb">${escape(icon)}</div> <div class="card-title svelte-ozmayb">${title ? `${escape(title.slice(0, 20))}${escape(title.length > 20 ? "…" : "")}` : ``}</div> ${description ? `<div class="card-desc svelte-ozmayb">${escape(description)}</div>` : ``} </div>`;
 });
 const css = {
   code: ".view-container.svelte-124hnu0{text-align:center;margin-top:2rem}button.svelte-124hnu0{margin:0.5rem}",
@@ -28,11 +28,10 @@ const css = {
 };
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let chapters;
-  console.log("syllabusArray", syllabus);
   $$result.css.add(css);
   chapters = [];
   return `${validate_component(Nav, "Nav").$$render($$result, {}, {}, {})} ${validate_component(BetaWarning, "BetaWarning").$$render($$result, {}, {}, {})} ${``} <div class="view-container svelte-124hnu0">${`${each(chapters, (ch) => {
-    return `<button class="svelte-124hnu0">${validate_component(Card, "Card").$$render(
+    return `<button class="svelte-124hnu0">${validate_component(CardChapters, "CardChapters").$$render(
       $$result,
       {
         title: ch.name,

@@ -83,7 +83,7 @@
   },
   "src/routes/+layout.svelte": {
     "css": [
-      "_app/immutable/assets/_layout.CbSKbu3w.css"
+      "_app/immutable/assets/_layout.DiyogiAr.css"
     ],
     "file": "entries/pages/_layout.svelte.js",
     "imports": [
@@ -182,7 +182,7 @@
   },
   "src/routes/syllabus/+page.svelte": {
     "css": [
-      "_app/immutable/assets/_page.DprQlTmV.css"
+      "_app/immutable/assets/_page.B8lEp6m0.css"
     ],
     "file": "entries/pages/syllabus/_page.svelte.js",
     "imports": [

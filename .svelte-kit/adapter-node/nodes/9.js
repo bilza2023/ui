@@ -5,6 +5,6 @@ let component_cache;
 export const component = async () => component_cache ??= (await import('../entries/pages/syllabus/_page.svelte.js')).default;
 export { server };
 export const server_id = "src/routes/syllabus/+page.server.js";
-export const imports = ["_app/immutable/nodes/9.CwL2KJ8N.js","_app/immutable/chunks/scheduler.B7UmRXhB.js","_app/immutable/chunks/index.9hrlMsO0.js","_app/immutable/chunks/each.BIHJqMB2.js","_app/immutable/chunks/stores.C5nfd1Aw.js","_app/immutable/chunks/entry.C3h-Uk3m.js","_app/immutable/chunks/index.CmETmuT8.js","_app/immutable/chunks/Nav.CszafaYL.js","_app/immutable/chunks/BetaWarning.Jwu0kR9g.js"];
-export const stylesheets = ["_app/immutable/assets/9.DprQlTmV.css"];
+export const imports = ["_app/immutable/nodes/9.D01W2DBk.js","_app/immutable/chunks/scheduler.CaW-J3HZ.js","_app/immutable/chunks/index.CJqlTs1C.js","_app/immutable/chunks/each.D7GNDiAv.js","_app/immutable/chunks/stores.BmFUAVWb.js","_app/immutable/chunks/entry.CUHYG1cN.js","_app/immutable/chunks/index.BcZXew59.js","_app/immutable/chunks/Nav.BNfW4cQp.js","_app/immutable/chunks/BetaWarning.DW--4AC-.js"];
+export const stylesheets = ["_app/immutable/assets/9.B8lEp6m0.css"];
 export const fonts = [];
