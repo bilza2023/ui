@@ -1,12 +1,21 @@
 <script>
+  import {onMount} from "svelte";
   import Nav from "$lib/appComps/Nav.svelte";
   import Footer from "$lib/appComps/Footer.svelte";
   import SidebarCard from "$lib/appComps/homepage/SidebarCard.svelte";
   import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";
-  import { syllabus } from "../lib/syllabus/syllabus";
   import BetaWarning from "$lib/appComps/BetaWarning.svelte";
-  console.log("syllabus", syllabus);
-  // export let data;
+
+  // import { syllabus } from "../lib/syllabus/syllabus";
+  // import syllabus from '/data/syllabus.json';
+  // console.log("syllabus", syllabus);
+  let syllabus = [];
+
+onMount(async () => {
+  const res = await fetch('/data/syllabus.json');
+  syllabus = await res.json();
+});
+
 </script>
 
 <div class="min-h-screen flex flex-col justify-start bg-[#160c00]">

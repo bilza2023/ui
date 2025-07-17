@@ -9,20 +9,21 @@
   import CardChapters from './components/CardChapters.svelte';
   import QuestionCard from './components/QuestionCard.svelte';
   // import { syllabusMap } from '../../lib/syllabus/syllabus_json';
-  import { syllabus as syllabusArray } from '../../lib/syllabus/syllabus';
+  // import { syllabus as syllabusArray } from '../../lib/syllabus/syllabus';
   // console.log("syllabusArray", syllabusArray);
   // will hold the current syllabus once we read the URL
-  let syllabus;
-
+  // let syllabus;
+  let syllabus = [];
   // local UI state
   let selectedChapter  = null;
   let selectedExercise = null;
 
   
-  onMount(() => {
-    // debugger;
+  onMount(async() => {
     const slug = get(page).url.searchParams.get('tcode') ?? 'fbise9physics';
-    syllabus = syllabusArray.find(s => s.tcodeName === slug);
+    const res = await fetch('/data/syllabus.json');
+    const res2 = await res.json();
+    syllabus = res2.find(s => s.tcodeName === slug);
 });
 
   // derive lists only after syllabus is set
