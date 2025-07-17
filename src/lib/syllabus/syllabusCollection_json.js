@@ -1,7 +1,7 @@
 
-export const syllabusMap = {
+export const syllabusMap = [
 
-        "fbise9physics": {
+        {
             "tcodeName": "fbise9physics",
             "filename": "fbise9physics",
             "description": "",
@@ -61,4 +61,4 @@ export const syllabusMap = {
                 }
             ]
         }
-    }
+];

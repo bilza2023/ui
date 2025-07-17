@@ -36,18 +36,28 @@
       }
       return tcode;
     }
-  
-    /**
-     * Build and return the final nested JSON object of all tcodes
-     * @returns {object}
-     */
-    build() {
-      const result = {};
-      for (const [tcodeName, tcode] of this.tcodeMap.entries()) {
-        result[tcodeName] = tcode.toJSON();
-      }
-      return result;
-    }
+ 
+      /**
+   * Build and return the final nested JSON *array* of all tcodes
+   * @returns {Array<object>}
+   */
+  build() {
+    // take each Tcode instance, call toJSON(), collect into an array
+    return Array.from(this.tcodeMap.values())
+                .map(tcode => tcode.toJSON());
+  }
+
+    // /**
+    //  * Build and return the final nested JSON object of all tcodes
+    //  * @returns {object}
+    //  */
+    // build() {
+    //   const result = {};
+    //   for (const [tcodeName, tcode] of this.tcodeMap.entries()) {
+    //     result[tcodeName] = tcode.toJSON();
+    //   }
+    //   return result;
+    // }
   }
   
   class Tcode {

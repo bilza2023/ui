@@ -4,7 +4,7 @@
 export default function defineFbise9physics(builder) {
     const fbise9physics = builder.addTcode("fbise9physics", {
       description: "Federal Board Grade 9 Physics",
-      image: "/pivot/fbise9physics.webp"
+      image: "/bookcovers/physics_10thFBSIE.png"
     });
   
     const ch1 = fbise9physics.addChapter("Physical Quantities and Measurement", "ch1_physical_quantities");
