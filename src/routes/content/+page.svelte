@@ -1,44 +1,40 @@
 <script>
-  import { onMount }      from 'svelte';
-  import { page }         from '$app/stores';
+  import { onMount } from 'svelte';
+  import { page }      from '$app/stores';
   import { SveltePlayer } from '../../lib/Player';
-  import DeckBuilder      from '../../lib/deckbuilder/Deckbuilder';
-  import { zodDeckV1 }    from '../../lib/deckbuilder/schema/ZodDeckV1';
 
-  let deck      = null;
-  let notFound  = false;
-  let soundUrl  = '/sounds/music.opus';
-  let mounted   = false;
+  let deck       = null;        // slide array for the player
+  let background = null;        // background config   
+  let notFound   = false;
+  let soundUrl   = '/sounds/music.opus';
+  let mounted    = false;
 
-  // Eagerly load all deck modules
-  const modules = import.meta.glob('$lib/content/*.js', { eager: true });
-  const deckMap = {};
-  for (const path in modules) {
-    const name = path.split('/').pop().replace(/\.js$/, '');
-    const mod  = modules[path];
-    deckMap[name] = mod.defineDeck ?? mod.default;
-  }
+  /**
+   * Fetch a pre‑built deck JSON by name.
+   * Expects the file to live at: /data/content/<name>.json
+   */
+  async function loadDeckJson (name) {
+    try {
+      const res = await fetch(`/data/content/${name}.json`);
+      if (!res.ok) {
+        notFound = true;
+        return;
+      }
 
-  async function loadDeckByName(name) {
-    const defineDeck = deckMap[name];
-    if (typeof defineDeck !== 'function') {
+      const json = await res.json();
+      deck       = json.deck;                     // core deck array
+      background = json.background ?? {           // fallback background
+        backgroundColor: '#ffffff',
+        backgroundImage: '/images/defaultBg.png',
+        backgroundImageOpacity: 0.8
+      };
+    } catch (err) {
+      console.error('Deck fetch error:', err);
       notFound = true;
-      return;
-    }
-
-    const builder = new DeckBuilder();
-    defineDeck(builder);
-    const candidate = builder.build();
-    const result = zodDeckV1.safeParse(candidate);
-
-    if (!result.success) {
-      console.error('Deck validation error:', result.error);
-      notFound = true;
-    } else {
-      deck = result.data.deck;
     }
   }
 
+  // Run once after the component mounts
   onMount(() => {
     const params   = new URLSearchParams($page.url.search);
     const filename = params.get('filename');
@@ -46,12 +42,12 @@
     if (!filename) {
       notFound = true;
     } else {
-      loadDeckByName(filename);
+      loadDeckJson(filename);
 
-      // optional: load matching .opus if it exists
+      // Optionally look for a matching .opus file
       const opusName = `${filename}.opus`;
       fetch(`/sounds/${opusName}`, { method: 'HEAD' })
-        .then(res => { if (res.ok) soundUrl = `/sounds/${opusName}`; })
+        .then((res) => { if (res.ok) soundUrl = `/sounds/${opusName}`; })
         .catch(() => {});
     }
 
@@ -64,17 +60,33 @@
     <div class="flex items-center justify-center h-full p-8">
       <p class="text-lg font-semibold text-gray-700">Content not found.</p>
     </div>
-  {:else}
+  {:else if deck}
     {#key soundUrl}
       <SveltePlayer
         {deck}
         {soundUrl}
-        background={{
-          backgroundColor: '#ffffff',
-          backgroundImage: '/images/defaultBg.png',
-          backgroundImageOpacity: 0.8
-        }}
+        {background}
       />
     {/key}
+  {:else}
+    <div class="flex items-center justify-center h-full p-8">
+      <p class="text-lg font-medium text-gray-600">Loading…</p>
+    </div>
   {/if}
 {/if}
+
+<style>
+  /* Basic centering helpers */
+  .flex {
+    display: flex;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .justify-center {
+    justify-content: center;
+  }
+  .h-full {
+    height: 100%;
+  }
+</style>
