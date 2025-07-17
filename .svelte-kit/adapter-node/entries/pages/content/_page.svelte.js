@@ -4,7 +4,93 @@ import "howler";
 import "../../../chunks/ZodDeckV1.js";
 import "katex";
 import { DeckBuilder } from "taleem-pivot-deckbuilder";
-function defineDeck$2(deckbuilder2) {
+function defineDeck$5(deckbuilder2) {
+  deckbuilder2.addDetails({
+    name: "common_identities",
+    description: "Explainer on three algebraic identities with sidebar support",
+    tags: ["algebra", "identities", "eq", "class9"],
+    status: "draft",
+    createdAt: "2025-07-12T00:00:00Z",
+    editedAt: "2025-07-12T00:00:00Z"
+  });
+  deckbuilder2.s.titleSlide(10, [
+    { name: "title", content: "Common Algebraic Identities", showAt: 0 }
+  ]);
+  deckbuilder2.s.imageWithCaption(20, [
+    { name: "image", content: "/images/box.webp", showAt: 0 },
+    { name: "caption", content: "Identities help in expanding and simplifying expressions.", showAt: 1 }
+  ]);
+  deckbuilder2.s.eq(50, [
+    // Identity 1
+    { type: "math", content: "(a + b)^2 = a^2 + 2ab + b^2", showAt: 20 },
+    { type: "spHeading", content: "Identity 1" },
+    { type: "spText", content: "Square of sum" },
+    { type: "spMath", content: "(x + 3)^2 = x^2 + 6x + 9" },
+    // Identity 2
+    { type: "math", content: "(a - b)^2 = a^2 - 2ab + b^2", showAt: 30 },
+    { type: "spHeading", content: "Identity 2" },
+    { type: "spText", content: "Square of difference" },
+    { type: "spMath", content: "(x - 4)^2 = x^2 - 8x + 16" },
+    // Identity 3
+    { type: "math", content: "a^2 - b^2 = (a + b)(a - b)", showAt: 40 },
+    { type: "spHeading", content: "Identity 3" },
+    { type: "spText", content: "Difference of squares" },
+    { type: "spMath", content: "x^2 - 9 = (x + 3)(x - 3)" }
+  ]);
+  deckbuilder2.s.titleSlide(60, [
+    { name: "title", content: "That’s It — Practice These!", showAt: 0 }
+  ]);
+}
+const __vite_glob_0_0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  defineDeck: defineDeck$5
+}, Symbol.toStringTag, { value: "Module" }));
+function defineDeck$4(deckbuilder2) {
+  deckbuilder2.addDetails({
+    name: "algebra_equation_vs_expression",
+    description: "Intro to algebraic expressions and equations",
+    tags: ["algebra", "expression", "equation"],
+    status: "draft",
+    createdAt: "2025-07-12T00:00:00Z",
+    editedAt: "2025-07-12T00:00:00Z"
+  });
+  deckbuilder2.s.titleSlide(10, [
+    { name: "title", content: "What is an Algebraic Expression and Equation", showAt: 0 }
+  ]);
+  deckbuilder2.s.imageLeftBulletsRight(25, [
+    { name: "image", content: "/images/expression_example_labeled.webp", showAt: 10 },
+    { name: "bullet", content: "An expression combines numbers, variables, and operations", showAt: 12 },
+    { name: "bullet", content: "It does NOT have an equals sign", showAt: 15 },
+    { name: "bullet", content: "Example: 3x + 5", showAt: 18 }
+  ]);
+  deckbuilder2.s.imageLeftBulletsRight(40, [
+    { name: "image", content: "/images/equation_balance_scale_labeled.webp", showAt: 25 },
+    { name: "bullet", content: "An equation shows equality between two expressions", showAt: 27 },
+    { name: "bullet", content: "It includes an equals sign", showAt: 30 },
+    { name: "bullet", content: "Example: 3x + 5 = 11", showAt: 33 }
+  ]);
+  deckbuilder2.s.table(55, [
+    { name: "headers", content: ["Expression", "Equation"], showAt: 40 },
+    { name: "rows", content: [
+      ["3x + 5", "3x + 5 = 11"],
+      ["No equals sign", "Has equals sign"],
+      ["Not solvable", "Solvable"],
+      ["A phrase", "A full sentence"]
+    ], showAt: 42 }
+  ]);
+  deckbuilder2.s.imageWithCaption(70, [
+    { name: "image", content: "/images/student_solving_equation_blackboard.webp", showAt: 55 },
+    { name: "caption", content: "Solving equations reveals unknowns — this is real algebra", showAt: 57 }
+  ]);
+  deckbuilder2.s.titleSlide(80, [
+    { name: "title", content: "Expression vs Equation — Know the Difference", showAt: 0 }
+  ]);
+}
+const __vite_glob_0_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  defineDeck: defineDeck$4
+}, Symbol.toStringTag, { value: "Module" }));
+function defineDeck$3(deckbuilder2) {
   deckbuilder2.addDetails({
     name: "goldstart_deck",
     description: "A comprehensive test deck for mobile layout audit",
@@ -97,11 +183,11 @@ function defineDeck$2(deckbuilder2) {
     { name: "phone", content: "+92 300 0000000", showAt: 2 }
   ]);
 }
-const __vite_glob_0_0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  defineDeck: defineDeck$2
+  defineDeck: defineDeck$3
 }, Symbol.toStringTag, { value: "Module" }));
-function defineDeck$1(deckbuilder2) {
+function defineDeck$2(deckbuilder2) {
   deckbuilder2.s.titleSlide(10, [
     { name: "title", content: "--Test--Test--Test", showAt: 0 }
   ]);
@@ -131,11 +217,11 @@ function defineDeck$1(deckbuilder2) {
     { name: "phone", content: "+92 300 0000000", showAt: 2 }
   ]);
 }
-const __vite_glob_0_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  defineDeck: defineDeck$1
+  defineDeck: defineDeck$2
 }, Symbol.toStringTag, { value: "Module" }));
-function defineDeck(deckbuilder2) {
+function defineDeck$1(deckbuilder2) {
   deckbuilder2.s.titleSlide(10, [
     { name: "title", content: "--Test2--222222--Test2", showAt: 0 }
   ]);
@@ -165,7 +251,49 @@ function defineDeck(deckbuilder2) {
     { name: "phone", content: "+92 300 0000000", showAt: 2 }
   ]);
 }
-const __vite_glob_0_2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  defineDeck: defineDeck$1
+}, Symbol.toStringTag, { value: "Module" }));
+function defineDeck(deckbuilder2) {
+  deckbuilder2.addDetails({
+    name: "what_is_algebra",
+    description: "Introductory deck on the concept and purpose of Algebra",
+    tags: ["algebra", "math", "class9"],
+    status: "draft",
+    createdAt: "2025-07-11T00:00:00Z",
+    editedAt: "2025-07-11T00:00:00Z"
+  });
+  deckbuilder2.s.titleSlide(10, [
+    { name: "title", content: "What is Algebra?", showAt: 0 }
+  ]);
+  deckbuilder2.s.imageLeftBulletsRight(20, [
+    { name: "bullet", content: "The word Algebra comes from Arabic — “al-jabr” — meaning “reunion of broken parts”.", showAt: 10 },
+    { name: "bullet", content: "Originally referred to fixing things, like bones or equations.", showAt: 12 },
+    { name: "bullet", content: "Now used for mathematical restoration.", showAt: 14 }
+  ]);
+  deckbuilder2.s.bulletList(30, [
+    { name: "bullet", content: "total cost = price × quantity", showAt: 21 },
+    { name: "bullet", content: "area = length × width", showAt: 23 }
+  ]);
+  deckbuilder2.s.titleAndSubtitle(40, [
+    { name: "title", content: "What Problems Does Algebra Solve?", showAt: 30 },
+    { name: "subtitle", content: "Unknowns, formulas, and patterns", showAt: 32 }
+  ]);
+  deckbuilder2.s.twoColumnText(50, [
+    { name: "left", content: "“I think of a number. I add 3. The result is 7.”", showAt: 40 },
+    { name: "right", content: "Finding missing parts using simple rules.", showAt: 42 }
+  ]);
+  deckbuilder2.s.twoColumnText(60, [
+    { name: "left", content: "Area = length × width", showAt: 50 },
+    { name: "right", content: "Speed = distance / time\nTotal = rate × time", showAt: 52 }
+  ]);
+  deckbuilder2.s.imageWithCaption(70, [
+    { name: "image", content: "/images/pythagoras_diagram.webp", showAt: 60 },
+    { name: "caption", content: "a² + b² = c² — the Pythagorean Theorem in any right triangle.", showAt: 62 }
+  ]);
+}
+const __vite_glob_0_5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   defineDeck
 }, Symbol.toStringTag, { value: "Module" }));
@@ -190,7 +318,7 @@ deckbuilder.build();
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$unsubscribe_page;
   $$unsubscribe_page = subscribe(page, (value) => value);
-  const modules = /* @__PURE__ */ Object.assign({ "/src/lib/content/fbise9matholdsyllabus__algebric_manipulation__basics__what-is-algebra.js": __vite_glob_0_0, "/src/lib/content/test__test_chapter__test_ex__test_question.js": __vite_glob_0_1, "/src/lib/content/test__test_chapter__test_ex__test_question2.js": __vite_glob_0_2 });
+  const modules = /* @__PURE__ */ Object.assign({ "/src/lib/content/algebra_common_identities_deck.js": __vite_glob_0_0, "/src/lib/content/algebra_equation_vs_expression.js": __vite_glob_0_1, "/src/lib/content/fbise9matholdsyllabus__algebric_manipulation__basics__what-is-algebra.js": __vite_glob_0_2, "/src/lib/content/test__test_chapter__test_ex__test_question.js": __vite_glob_0_3, "/src/lib/content/test__test_chapter__test_ex__test_question2.js": __vite_glob_0_4, "/src/lib/content/what_is_algebra.js": __vite_glob_0_5 });
   for (const path in modules) {
     path.split("/").pop().replace(/\.js$/, "");
     const mod = modules[path];

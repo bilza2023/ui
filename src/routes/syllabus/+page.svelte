@@ -6,10 +6,11 @@
   import BetaWarning from '$lib/appComps/BetaWarning.svelte';
   import NavBar from './components/NavBar.svelte';
   import Card from './components/Card.svelte';
+  import CardChapters from './components/CardChapters.svelte';
   import QuestionCard from './components/QuestionCard.svelte';
   // import { syllabusMap } from '../../lib/syllabus/syllabus_json';
   import { syllabus as syllabusArray } from '../../lib/syllabus/syllabus';
-  console.log("syllabusArray", syllabusArray);
+  // console.log("syllabusArray", syllabusArray);
   // will hold the current syllabus once we read the URL
   let syllabus;
 
@@ -19,7 +20,7 @@
 
   
   onMount(() => {
-    debugger;
+    // debugger;
     const slug = get(page).url.searchParams.get('tcode') ?? 'fbise9physics';
     syllabus = syllabusArray.find(s => s.tcodeName === slug);
 });
@@ -70,13 +71,14 @@
   {#if !selectedChapter}
     {#each chapters as ch}
       <button on:click={() => chooseChapter(ch)}>
-        <Card title={ch.name} description="" icon="📁" />
+        <CardChapters title={ch.name} description="" icon="📁" />
       </button>
     {/each}
 
   {:else if selectedChapter && !selectedExercise}
     {#each exercises as ex}
       <button on:click={() => chooseExercise(ex)}>
+        <!-- <h5 class="text-left   text-red-800   ">Exercises</h5> -->
         <Card title={ex.name} description="" icon="📂" />
       </button>
     {/each}

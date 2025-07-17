@@ -13,6 +13,7 @@
 </script>
 
 <main class="questions">
+<h5 class="text-left   text-red-800   ">Questions</h5>  
   {#if selectedExercise}
 
     {#if questions.length}

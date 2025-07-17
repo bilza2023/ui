@@ -4,7 +4,7 @@
 export default function defineFbise9matholdSyllabus(builder) {
     const fbise9mathold = builder.addTcode("fbise9mathold", {
       description: "Math Class 9 Old Course",
-      image: "/images/box.webp"
+      image: "/bookcovers/math_9thFBSIE.png"
     });
   
     const ch1 = fbise9mathold.addChapter("Theorems", "theorems");
