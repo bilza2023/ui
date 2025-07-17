@@ -8,8 +8,8 @@
   import Card from './components/Card.svelte';
   import QuestionCard from './components/QuestionCard.svelte';
   // import { syllabusMap } from '../../lib/syllabus/syllabus_json';
-  import { syllabusMap } from '../../lib/syllabus/syllabus';
-
+  import { syllabus as syllabusArray } from '../../lib/syllabus/syllabus';
+  console.log("syllabusArray", syllabusArray);
   // will hold the current syllabus once we read the URL
   let syllabus;
 
@@ -19,8 +19,9 @@
 
   
   onMount(() => {
-  const slug = get(page).url.searchParams.get('tcode') || 'fbise9physics';
-  syllabus = syllabusMap[slug];
+    debugger;
+    const slug = get(page).url.searchParams.get('tcode') ?? 'fbise9physics';
+    syllabus = syllabusArray.find(s => s.tcodeName === slug);
 });
 
   // derive lists only after syllabus is set
