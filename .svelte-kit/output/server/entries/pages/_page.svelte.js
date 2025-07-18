@@ -1,6 +1,6 @@
 import { c as create_ssr_component, d as each, e as escape, b as add_attribute, v as validate_component } from "../../chunks/ssr.js";
 import { N as Nav } from "../../chunks/Nav.js";
-import { s as syllabus, B as BetaWarning } from "../../chunks/BetaWarning.js";
+import { B as BetaWarning } from "../../chunks/BetaWarning.js";
 const css = {
   code: ".footer.svelte-1w1amng{background-color:#504234;color:#f1e9df;padding:2rem;font-size:0.9rem}.footer-top.svelte-1w1amng{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;border-bottom:1px solid #c4a77f;padding-bottom:1rem;margin-bottom:1rem}.brand.svelte-1w1amng{font-weight:bold;font-size:1.25rem;color:#c4a77f}.nav-links.svelte-1w1amng{display:flex;gap:1rem;flex-wrap:wrap}.footer-link.svelte-1w1amng{color:#f1e9df;text-decoration:none;transition:color 0.2s}.footer-link.svelte-1w1amng:hover{color:#c4a77f}.footer-bottom.svelte-1w1amng{display:flex;justify-content:space-between;flex-wrap:wrap;font-size:0.85rem;opacity:0.9}.credits.svelte-1w1amng{font-style:italic}",
   map: null
@@ -36,7 +36,7 @@ const TcodeCard = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   })}</div>`;
 });
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  console.log("syllabus", syllabus);
+  let syllabus = [];
   return `<div class="min-h-screen flex flex-col justify-start bg-[#160c00]">${validate_component(Nav, "Nav").$$render($$result, {}, {}, {})} ${validate_component(BetaWarning, "BetaWarning").$$render($$result, {}, {}, {})} <section class="w-full px-12 py-12 grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-12 min-h-screen"> <div${add_attribute("class", ` p-6 rounded-xl shadow-inner flex flex-col space-y-6 border-2 border-[#93754b]  `, 0)}> ${validate_component(TcodeCard, "TcodeCard").$$render($$result, { tcodes: syllabus }, {}, {})}</div>  <div${add_attribute("class", ` p-4 rounded-xl shadow flex flex-col space-y-4 min-h-screen border-2  border-[#93754b] text-white`, 0)}><h4 class="text-lg font-bold mb-2 text-white" data-svelte-h="svelte-1nme1y6">📢 Updates &amp; Insights</h4> ${validate_component(SidebarCard, "SidebarCard").$$render(
     $$result,
     {

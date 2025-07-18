@@ -312,6 +312,10 @@
               {
                 "name": "Sample Question",
                 "filename": "test__test_ch1__test_ex1__q1"
+              },
+              {
+                "name": "Deck 404",
+                "filename": "deck404"
               }
             ]
           }
