@@ -37,7 +37,7 @@
 {#if mounted}
   {#if notFound}
   <!-- dont remove this text-black -->
-    <div class="flex items-center justify-center h-full p-8 text-black">
+    <div class="flex items-center justify-center h-full p-8">
       <p class="text-lg font-semibold text-gray-700">Content not found.</p>
     </div>
   {:else if deck}

@@ -13,50 +13,5 @@ model Deck {
   filename  String     @unique
   content   Json
   createdAt DateTime   @default(now())
-  // back-relation: one Deck → many Exercises
-  exercises Exercise[]
-}
 
-model Tcode {
-  id          Int     @id @default(autoincrement())
-  tcodeName   String  @unique
-  title       String
-  description String?
-  image       String?
-
-  // one Tcode → many Chapters
-  chapters Chapter[]
-}
-
-model Chapter {
-  id          Int     @id @default(autoincrement())
-  filename    String  @unique
-  name        String
-  description String?
-  image       String?
-  order       Int     @default(0)
-
-  // optional FK so you can detach from parent
-  tcodeId Int?
-  tcode   Tcode? @relation(fields: [tcodeId], references: [id])
-
-  // one Chapter → many Exercises
-  exercises Exercise[]
-}
-
-model Exercise {
-  id          Int     @id @default(autoincrement())
-  filename    String  @unique
-  name        String
-  description String?
-  image       String?
-  order       Int     @default(0)
-
-  // optional FK so you can detach from Chapter
-  chapterId Int?
-  chapter   Chapter? @relation(fields: [chapterId], references: [id])
-
-  // link to Deck by filename --> from deck point of view Exercise is the many side -since many exercise can hold 1 deck --thats why exercise holds deck FK. 
-  deckFilename String?
-  deck         Deck?   @relation(fields: [deckFilename], references: [filename])
 }

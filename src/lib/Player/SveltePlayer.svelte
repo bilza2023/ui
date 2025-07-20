@@ -120,6 +120,7 @@
   .stage {
     position: absolute;
     top: 0;
+    color:black;
     left: 0;
     width: 100%;
     height: 100%;
