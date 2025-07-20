@@ -12,7 +12,7 @@
     const form = new FormData();
     files.forEach((f) => form.append('files', f));
 
-    const res = await fetch('/upload', {
+    const res = await fetch('/admin/upload', {
       method: 'POST',
       body: form
     });

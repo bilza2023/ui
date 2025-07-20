@@ -1,6 +1,6 @@
 
 import { json } from '@sveltejs/kit';
-import * as deckService from '../../lib/services/deckService';
+import * as deckService from '../../../lib/services/deckService';
 
 
 export async function POST({ request }) {

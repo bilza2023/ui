@@ -101,7 +101,7 @@ background-color: #0f4502;
             <td>{deck.filename}</td>
             <td>{new Date(deck.createdAt).toLocaleString()}</td>
             <td class="actions">
-              <!-- <a href={`/player/?filename=${deck.filename}`}><button class="btn-play">Player</button></a> -->
+              <a href={`/player/?filename=${deck.filename}`}><button class="btn-play">Player</button></a>
               <!-- <a href={`/clone`}><button class="btn-clone">Clone</button></a> -->
               <a href={`/admin/timings?filename=${deck.filename}`}><button class="btn-edit">Timings</button></a>
               <a href={`/admin/delete?filename=${deck.filename}`}><button class="btn-delete">Delete</button></a>

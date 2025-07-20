@@ -38,3 +38,9 @@ export async function deleteDeck(id) {
     where: { id }
   });
 }
+export async function deleteDeckByFilename(filename) {
+  return await prisma.deck.delete({
+    where: { filename }
+  });
+}
+
