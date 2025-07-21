@@ -310,6 +310,10 @@
             "filename": "theorems_1",
             "questions": [
               {
+                "name": "Congruent Triangles",
+                "filename": "congruent_triangles"
+              },
+              {
                 "name": "SAS Postulate",
                 "filename": "posultate_and_SAS_postulate"
               },

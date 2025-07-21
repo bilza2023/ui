@@ -10,6 +10,7 @@ export default  function defineFbise9matholdSyllabus(builder) {
     const ch1 = fbise9mathold.addChapter("Theorems", "theorems");
     const ex1 = ch1.addExercise("Theorems -1", "theorems_1");
 
+    ex1.addQuestion("Congruent Triangles", "congruent_triangles");
     ex1.addQuestion("SAS Postulate", "posultate_and_SAS_postulate");
     ex1.addQuestion("Th 10.1.1 - SSA", "theorem_10_1_1_deck");
     ex1.addQuestion("Th 10.1.2", "theorem_10_1_2");
