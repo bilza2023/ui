@@ -310,12 +310,20 @@
             "filename": "theorems_1",
             "questions": [
               {
-                "name": "Sample Question",
-                "filename": "test__test_ch1__test_ex1__q1"
+                "name": "SAS Postulate",
+                "filename": "posultate_and_SAS_postulate"
               },
               {
-                "name": "Deck 404",
-                "filename": "deck404"
+                "name": "Th 10.1.1 - SSA",
+                "filename": "theorem_10_1_1_deck"
+              },
+              {
+                "name": "Th 10.1.2",
+                "filename": "theorem_10_1_2"
+              },
+              {
+                "name": "Th 10.1.3",
+                "filename": "theorem_10_1_3"
               }
             ]
           }

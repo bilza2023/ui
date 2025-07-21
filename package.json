@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "gen:syllabus": "node syllabus/genSyllabus.js"
   },
   "devDependencies": {
     "@sveltejs/adapter-node": "^4.0.1",
