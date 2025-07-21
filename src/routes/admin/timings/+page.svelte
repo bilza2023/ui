@@ -184,7 +184,7 @@
 
       {#each slide.data as item}
         <div class="item">
-          • {item.name || item.type}: "{item.content}"<br />
+          
           showAt:
           <input type="number" bind:value={item.showAt} step="0.0" />
           <button class=" set-show-zero" on:click={() => setShowAtZero(item)}>
@@ -193,6 +193,7 @@
           <button class="set-show" on:click={() => setShowAt(item)}>
             ShowAt = Now
           </button>
+          • {item.name || item.type}: "{item.content}" 
         </div>
       {/each}
 

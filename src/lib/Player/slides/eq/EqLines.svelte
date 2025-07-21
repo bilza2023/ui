@@ -28,6 +28,8 @@
         <Katex displayMode>{line.content}</Katex>
       {:else if line.type === 'text'}
         {line.content}
+      {:else if line.type === 'heading'}
+        <span class="eq-heading">{line.content}</span>
       {:else}
         {@html line.content}
       {/if}
@@ -36,6 +38,20 @@
 </div>
 
 <style>
+  .eq-heading{
+    display: block;
+  margin: 0 0 0.5rem 0;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  background-color: #f5ebe0;
+  border-left: 4px solid #d18b5a;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  }
   .eq-lines {
     display: flex;
     flex-direction: column;
