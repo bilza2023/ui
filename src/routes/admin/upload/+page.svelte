@@ -1,28 +1,28 @@
 <script>
   import Nav from "$lib/Nav.svelte";
   let files = [];
-  let message = '';
+  let message = "";
 
   async function upload() {
     if (!files.length) {
-      message = 'Please select at least one deck file.';
+      message = "Please select at least one deck file.";
       return;
     }
 
     const form = new FormData();
-    files.forEach((f) => form.append('files', f));
+    files.forEach((f) => form.append("files", f));
 
-    const res = await fetch('/admin/upload', {
-      method: 'POST',
-      body: form
+    const res = await fetch("/admin/upload", {
+      method: "POST",
+      body: form,
     });
 
     const data = await res.json();
     if (res.ok) {
-      message = '✅ Upload successful!';
+      message = "✅ Upload successful!";
       files = [];
     } else {
-      message = `Error: ${data.error || 'Unknown error'}`;
+      message = `Error: ${data.error || "Unknown error"}`;
     }
   }
 </script>
@@ -40,15 +40,13 @@
   <input
     type="file"
     multiple
-    accept=".json"
-    on:change="{e => files = Array.from(e.target.files)}"
+    accept=".json,.js"
+    on:change={(e) => (files = Array.from(e.target.files))}
   />
   <button on:click|preventDefault={upload}>
-    Upload {files.length > 0 ? `(${files.length})` : ''}
+    Upload {files.length > 0 ? `(${files.length})` : ""}
   </button>
 </div>
-
-
 
 <style>
   :global(body) {

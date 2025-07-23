@@ -1,22 +1,39 @@
-// src/routes/timings/+page.server.js
-import * as deckService from '../../lib/services/deckService';
+// src/routes/player/+page.server.js
+import * as questionService from '../../lib/services/questionServices';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ url }) {
   const filename = url.searchParams.get('filename');
+
+  // ── guard: query param is mandatory ───────────────────────────────
   if (!filename) {
-    return { deck: null, error: 'Filename parameter is required.' };
+    return {
+      deck:        null,
+      background:  null,
+      timed:       false,
+      error:       'Filename parameter is required.'
+    };
   }
 
-  const record = await deckService.getDeckByFilename(filename);
+  // ── fetch from DB via new QuestionServices layer ─────────────────
+  const record = await questionService.getQuestionByFilename(filename);
+
   if (!record) {
-    return { deck: null, error: 'Deck not found.' };
+    return {
+      deck:        null,
+      background:  null,
+      timed:       false,
+      error:       'Deck not found.'
+    };
   }
 
-  // unwrap the JSON content column
+  // record.deck holds our canonical DeckBuilder JSON blob
+  const meta = record.deck;
+
   return {
-    deck: record.content.deck,
-    background: record.content.background,
-    error: null
+    deck:       meta.deck,        // slides array
+    background: meta.background,  // { backgroundColor, backgroundImage, … }
+    timed:      record.timed,     // boolean flag from Question row
+    error:      null
   };
 }

@@ -1,7 +1,9 @@
-
+// File: src/routes/admin/upload/+server.js
 import { json } from '@sveltejs/kit';
-import * as deckService from '../../../lib/services/deckService';
-
+import DeckDoctor from '../../../lib/deckdoctor/DeckDoctor.js';
+import DeckBuilder from '../../../lib/deckbuilder/Deckbuilder.js';
+import { insertFullQuestionFromDeck } from '../../../lib/services/questionServices.js';
+import { Buffer } from 'buffer';
 
 export async function POST({ request }) {
   const form = await request.formData();
@@ -14,21 +16,63 @@ export async function POST({ request }) {
   const failed = [];
 
   for (const file of /** @type {File[]} */ (files)) {
+    const name = file.name;
+    const filename = name.replace(/\.(json|js)$/i, '');
+
     try {
-      const raw = await file.text();
-      const data = JSON.parse(raw);
-      const filename = file.name.replace(/\.json$/i, '');
+      let deckRaw;
 
-      // Try to create; Prisma will throw on duplicate filename
-      await deckService.createDeck({ filename, content: data });
-    } catch (err) {
-      console.error(`Upload error for ${file.name}:`, err);
+      if (/\.js$/i.test(name)) {
+        // DeckBuilder DSL (.js)
+        const rawCode = await file.text();
+        const base64 = Buffer.from(rawCode, 'utf8').toString('base64');
+        const mod = await import(`data:application/javascript;base64,${base64}`);
+        const defineDeck = mod.defineDeck ?? mod.default;
 
-      // Prisma unique constraint error code
-      if (err.code === 'P2002') {
-        failed.push(`${file.name} (deck already exists)`);
+        if (typeof defineDeck !== 'function') {
+          throw new Error('No defineDeck() export found');
+        }
+
+        const builder = new DeckBuilder();
+        defineDeck(builder);
+        deckRaw = builder.build();
       } else {
-        failed.push(`${file.name} (failed to process)`);
+        // Raw JSON
+        const rawJson = await file.text();
+        deckRaw = JSON.parse(rawJson);
+      }
+
+      // Clean and validate
+      const deckNorm = DeckDoctor.normalise(deckRaw);
+      const validation = DeckDoctor.validate(deckNorm);
+      if (!validation.ok) {
+        const msgs = validation.errors.map(e => e.message).join('; ');
+        throw new Error(`Validation failed: ${msgs}`);
+      }
+      const deck = validation.value;
+
+      // Extract metadata
+      const { name: qName, description, tags, status } = deck;
+      const timed = DeckDoctor.getTotalDuration(deck) > 0;
+
+      // Insert into DB
+      await insertFullQuestionFromDeck({
+        filename,
+        name: qName,
+        description,
+        tags,
+        status,
+        timed,
+        deck
+      });
+
+    } catch (err) {
+      console.error(`Upload error for ${name}:`, err);
+
+      if (err.code === 'P2002') {
+        failed.push(`${name} (question already exists)`);
+      } else {
+        failed.push(`${name} (${err.message})`);
       }
     }
   }
