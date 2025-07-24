@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
+  import PointerEditor from './PointerEditor.svelte';
   import Nav from '../../../lib/Nav.svelte';
 
   let deck: any = null;
@@ -92,7 +93,11 @@
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
-
+ let deckDirty = false;
+  function handlePointerEdit({ detail }) {
+  // detail can include { action, itemIndex } if you chose to dispatch it
+  deckDirty = true;
+}
 
   let soundExists = false;
   onMount(async () => {
@@ -180,7 +185,15 @@
         </button>
       </div>
 
-   
+      {#if slide.type === 'pointerSlide'}
+      <PointerEditor
+        bind:slide         
+        {currentTime}    
+        on:edit={() => deckDirty = true} 
+      />
+     {/if}
+      
+      
 
       {#each slide.data as item}
         <div class="item">
