@@ -40,7 +40,7 @@
   }
 
   onMount(() => {
-   
+  //  debugger;
   player = new Player(soundUrl);
   player.onTick(handleTick);
 });

@@ -20,10 +20,12 @@ import QuoteWithImage from './slides/QuoteWithImage.svelte';
 import ContactSlide from './slides/ContactSlide.svelte';
 import FillImage from './slides/FillImage.svelte';
 import Eq from './slides/eq/Eq.svelte';
+import Pointer from './slides/Pointer.svelte';
 
 export default {
   fillImage:FillImage,
   eq: Eq,
+  pointerSlide:Pointer,
   quoteSlide: Quote,
   cornerWordsSlide: CornerWords,
   titleSlide: Title,

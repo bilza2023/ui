@@ -215,7 +215,6 @@ const contactSlide = baseSlide.extend({
 });
 
 // 19 Eq : eq schema
-// 19. EQ SLIDE
 const eqSlide = baseSlide.extend({
   type: z.literal("eq"),
   data: z.array(
@@ -243,6 +242,7 @@ const eqSlide = baseSlide.extend({
   )
 });
 
+// 20 : Full image slide
 const fillImage = baseSlide.extend({
   type: z.literal("fillImage"),
   data: z.array(
@@ -253,6 +253,38 @@ const fillImage = baseSlide.extend({
     })
   )
 });
+
+// 21 - pointer slide 
+// POINTER SLIDE
+// pointer item
+const pointerItem = z.object({
+  name:   z.literal("pointer"),
+  showAt: z.number(),
+  hideAt: z.number().optional(),
+  x:      z.number(),
+  y:      z.number(),
+  type:   z.enum(["arrow","circle","dot","crosshair"]).optional(),
+  blink:  z.boolean().optional(),
+  wiggle: z.boolean().optional()
+});
+
+// image item (shared with other slides)
+const imageItem = z.object({
+  name:    z.literal("image"),
+  content: z.string(),
+  showAt:  z.number().optional()
+});
+
+// pointerSlide
+const pointerSlide = baseSlide.extend({
+  type: z.literal("pointerSlide"),
+  data: z.array(z.union([pointerItem, imageItem]))
+});
+
+
+
+
+
 
 //////////////===> Final Deck Object
 export const zodAQuestionV1 = z.object({
@@ -272,6 +304,7 @@ export const zodAQuestionV1 = z.object({
     .optional(),
     deck:        z.array(
       z.discriminatedUnion("type", [
+        pointerSlide,
         eqSlide,
         fillImage,
         titleSlide,
