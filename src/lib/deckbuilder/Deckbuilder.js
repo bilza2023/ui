@@ -14,7 +14,7 @@ export default class DeckBuilder {
  // Declarative slide registry
       this.s = Object.fromEntries(
         [
-          "pointer",
+          "pointerSlide",
           "eq",
           "titleSlide",
           "titleAndSubtitle",

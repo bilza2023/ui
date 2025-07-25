@@ -14,7 +14,7 @@ export default  function defineFbise9matholdSyllabus(builder) {
     ex1.addQuestion("SAS Postulate", "posultate_and_SAS_postulate");
     ex1.addQuestion("Th 10.1.1 - SSA", "theorem_10_1_1_deck");
     ex1.addQuestion("Th 10.1.2", "theorem_10_1_2");
-    ex1.addQuestion("Th 10.1.3", "theorem_10_1_3");
+    ex1.addQuestion("Th 10.1.3", "math9old_theorem10_1_3");
   
     return fbise9mathold;
   }
