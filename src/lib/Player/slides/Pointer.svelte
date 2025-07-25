@@ -23,30 +23,14 @@
     (p) => currentTime >= p.showAt && currentTime < p.hideAt
   );
 
-  /* adaptive scaling */
-  let imgEl;
-  let scaleX = 1, scaleY = 1;
 
-  function updateScale() {
-    if (!imgEl) return;
-    const { naturalWidth: w0, naturalHeight: h0 } = imgEl;
-    const { width: w, height: h } = imgEl.getBoundingClientRect();
-    scaleX = w0 ? w / w0 : 1;
-    scaleY = h0 ? h / h0 : 1;
-  }
-
-  onMount(() => {
-    if (imgEl?.complete) updateScale();
-    else imgEl?.addEventListener('load', updateScale);
-    window.addEventListener('resize', updateScale);
-    return () => window.removeEventListener('resize', updateScale);
-  });
 </script>
 
 <div class="slide-outer">
   <div class="wrapper">
     {#if bgUrl}
-      <img bind:this={imgEl} class="bg" src={bgUrl} alt="slide image" />
+      <!-- svelte-ignore a11y-img-redundant-alt -->
+      <img  class="bg" src={bgUrl} alt="slide image" />
     {/if}
 
     {#each visiblePointers as p}
@@ -54,7 +38,7 @@
         class={`pointer ${p.type ?? 'circle'} ${p.blink ? 'blink' : ''} ${
           p.wiggle ? 'wiggle' : ''
         }`}
-        style="left: {p.x * scaleX}px; top: {p.y * scaleY}px;"
+        style="left: {p.x}% ; top: {p.y}% ;"
       ></div>
     {/each}
   </div>
