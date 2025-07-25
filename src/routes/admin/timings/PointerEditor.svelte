@@ -1,163 +1,200 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher } from "svelte";
 
-  /**
-   * PointerEditor – visual editor for `pointerSlide` items on the Timings page.
-   *
-   * Props:
-   *   slide        → the full slide object (expects data[] array)
-   *   currentTime  → global playback clock (seconds)
-   *
-   * Behaviour:
-   *   • Click on the image to drop a pointer using the current toolbar presets.
-   *   • Each pointer icon shows delete "×" badge to remove it.
-   *   • Emits a bare `edit` event on any mutation so parent can set deckDirty.
+  /** PointerEditor – visual tool for adding/removing timed pointers
+   *  Works only inside admin/timings on slides with type "pointerSlide".
+   *  Supported shapes: "arrow" and "circle" (hard‑locked).
    */
   export let slide;
   export let currentTime = 0;
 
   const dispatch = createEventDispatcher();
 
-  /* ── reactive look‑ups ─────────────────────────────────────────────── */
-  $: imgItem = slide?.data?.find((d) => d.name === 'image');
-  $: imgUrl  = imgItem?.content || imgItem?.image || imgItem?.imageUrl || null;
-  $: pointerItems = slide?.data?.filter((d) => d.name === 'pointer') ?? [];
-
-  /* ── toolbar presets for new pointers ─────────────────────────────── */
+  /* Toolbar presets (applied to the *next* pointer the user drops) */
   let defaults = {
-    type:   'arrow',   // 'arrow' | 'circle'
-    blink:  false,
-    wiggle: false
+    type: "arrow", // 'arrow' | 'circle'
+    blink: false,
+    wiggle: false,
   };
 
-  /* ── helpers ───────────────────────────────────────────────────────── */
+  /* derived helpers */
+  $: imgItem = slide?.data?.find((d) => d.name === "image");
+  $: imgUrl = imgItem?.content ?? imgItem?.image ?? imgItem?.imageUrl ?? null;
+  $: pointerItems = slide?.data?.filter((d) => d.name === "pointer") ?? [];
+
+  $: console.log("pointerItems", pointerItems);
+
+  /* Utils */
   function toPercent(xPx, yPx, rect) {
     return {
-      x: Math.round((xPx / rect.width)  * 100),
-      y: Math.round((yPx / rect.height) * 100)
+      x: Math.round((xPx / rect.width) * 100),
+      y: Math.round((yPx / rect.height) * 100),
     };
   }
 
+  /* Add pointer on image click */
   function addPointer(evt) {
     if (!imgUrl) return;
     const rect = evt.currentTarget.getBoundingClientRect();
-    const pct  = toPercent(evt.clientX - rect.left, evt.clientY - rect.top, rect);
+    const { x, y } = toPercent(
+      evt.clientX - rect.left,
+      evt.clientY - rect.top,
+      rect
+    );
 
-    const newItem = {
-      name:   'pointer',
-      ...defaults,               // use toolbar presets
-      x:      pct.x,
-      y:      pct.y,
-      showAt: Math.round(currentTime)
-    };
-
-    slide.data = [...slide.data, newItem];
-    dispatch('edit');
+    slide.data = [
+      ...slide.data,
+      {
+        name: "pointer",
+        x,
+        y,
+        showAt: Math.round(currentTime),
+        hideAt: undefined,
+        ...defaults, // type / blink / wiggle
+      },
+    ];
+    dispatch("edit");
   }
 
+  /* Remove pointer */
   function deletePointer(target) {
     slide.data = slide.data.filter((d) => d !== target);
-    dispatch('edit');
+    dispatch("edit");
   }
 
+  /* Timing visibility */
   function isActive(item) {
     const from = item.showAt ?? slide.start;
-    const to   = item.hideAt ?? slide.end;
+    const to = item.hideAt ?? slide.end;
     return currentTime >= from && currentTime <= to;
   }
 </script>
 
 {#if imgUrl}
-  <!-- Wrapper captures clicks for new pointers -->
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- wrapper -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div class="wrapper" on:click|stopPropagation={addPointer}>
-    <img src={imgUrl} alt="slide background" />
+    <img src={imgUrl} alt="slide" class="bg" />
 
-    <!-- Pointer overlay -->
     <div class="overlay">
       {#each pointerItems as item}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
-          class="pointer {item.type} {item.blink ? 'blink' : ''} {item.wiggle ? 'wiggle' : ''}"
-          style="left:{item.x}%; top:{item.y}%; opacity:{isActive(item) ? 1 : 0};">
-
-          {#if item.type === 'circle'}
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>
+          class="pointer {item.type} {item.blink ? 'blink' : ''} {item.wiggle
+            ? 'wiggle'
+            : ''}"
+          style="left:{item.x}% ; top:{item.y}% ; opacity:{isActive(item)
+            ? 1
+            : 0}"
+        >
+          {#if item.type === "circle"}
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /></svg>
           {:else}
-            <svg viewBox="0 0 24 24"><path d="M2 12h20M14 6l8 6-8 6"/></svg>
+            <svg viewBox="0 0 24 24"
+              ><path
+                d="M2 12l20 0M14 6l8 6-8 6"
+                stroke-width="2"
+                fill="none"
+              /></svg
+            >
           {/if}
-
-          <!-- delete badge -->
           <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <span class="delete" on:click|stopPropagation={() => deletePointer(item)}>×</span>
+          <span
+            class="delete"
+            on:click|stopPropagation={() => deletePointer(item)}>×</span
+          >
         </div>
       {/each}
     </div>
   </div>
 
-  <!-- Toolbar presets -->
-  <div class="pointer-toolbar">
-    <label>Type:
-      <select bind:value={defaults.type}>
-        <option value="arrow">Arrow</option>
-        <option value="circle">Circle</option>
-      </select>
-    </label>
-
-    <label><input type="checkbox" bind:checked={defaults.blink}> Blink</label>
-    <label><input type="checkbox" bind:checked={defaults.wiggle}> Wiggle</label>
+  <!-- toolbar -->
+  <div class="toolbar">
+    Type:
+    <select bind:value={defaults.type}>
+      <option value="arrow">Arrow</option>
+      <option value="circle">Circle</option>
+    </select>
+    <label><input type="checkbox" bind:checked={defaults.blink} /> Blink</label>
+    <label
+      ><input type="checkbox" bind:checked={defaults.wiggle} /> Wiggle</label
+    >
   </div>
 {:else}
-  <p class="text-sm italic text-gray-500">No image found in this slide.</p>
+  <p class="text-sm italic text-gray-500">No image in this slide.</p>
+{/if}
+
+<!-- 👇 Add just below the toolbar -->
+{#if pointerItems.length}
+  <div class="pointer-list">
+    {#each pointerItems as p, idx}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <span class="pill" on:click={() => deletePointer(p)}>
+        {idx + 1}. {p.type} ×
+      </span>
+    {/each}
+  </div>
 {/if}
 
 <style>
-  /* Image wrapper */
+  .pointer-list {
+  margin: 0.25rem auto 0.75rem;
+  max-width: 600px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill {
+  background: #1c0c0c;
+  padding: 0.2rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pill:hover { background: #ffb4b4; }
+
   .wrapper {
     position: relative;
     max-width: 600px;
     margin: 1rem auto;
     cursor: crosshair;
   }
-  .wrapper img {
+  .bg {
     display: block;
     width: 100%;
     height: auto;
+    user-select: none;
   }
-  /* Overlay container */
   .overlay {
     position: absolute;
     inset: 0;
     pointer-events: none;
   }
-  /* Pointer icon */
   .pointer {
     position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
     width: 24px;
     height: 24px;
-    transform: translate(-50%, -50%);
-    pointer-events: auto; /* allow delete click */
+  }
+  .pointer svg {
+    width: 100%;
+    height: 100%;
+    stroke: #ffda00;
   }
   .pointer.circle svg {
-    fill: #ffda00;
-    stroke: #000;
-    stroke-width: 2;
+    fill: transparent;
+    stroke-width: 3;
   }
   .pointer.arrow svg {
     fill: none;
-    stroke: #ffda00;
     stroke-width: 3;
   }
-  /* blink */
-  @keyframes blink { 0%{opacity:1} 50%{opacity:0} 100%{opacity:1} }
-  .blink { animation: blink 1s infinite; }
-
-  /* wiggle */
-  @keyframes wiggle { 0%{transform:translate(-50%,-50%) rotate(-5deg);} 50%{transform:translate(-50%,-50%) rotate(5deg);} 100%{transform:translate(-50%,-50%) rotate(-5deg);} }
-  .wiggle { animation: wiggle 0.6s infinite; }
-
-  /* delete badge */
   .delete {
     position: absolute;
     top: -6px;
@@ -172,16 +209,39 @@
     text-align: center;
     cursor: pointer;
   }
-
-  /* toolbar */
-  .pointer-toolbar {
-    margin: 0.5rem auto 1rem;
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  .blink {
+    animation: blink 0.8s step-start infinite;
+  }
+  @keyframes wiggle {
+    0% {
+      transform: translate(-50%, -50%) rotate(-5deg);
+    }
+    50% {
+      transform: translate(-50%, -50%) rotate(5deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(-5deg);
+    }
+  }
+  .wiggle {
+    animation: wiggle 0.4s ease-in-out infinite;
+  }
+  .toolbar {
     max-width: 600px;
+    margin: 0.5rem auto 1rem;
     display: flex;
     gap: 1rem;
     font-size: 0.9rem;
-    justify-content: center;
+    align-items: center;
   }
-  .pointer-toolbar label { display: flex; align-items: center; gap: 0.25rem; }
-  .pointer-toolbar select { padding: 2px 6px; }
+  .toolbar select,
+  .toolbar input {
+    background-color: #1c0c0c;
+    cursor: pointer;
+  }
 </style>
