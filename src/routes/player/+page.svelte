@@ -1,3 +1,15 @@
+<svelte:head>
+  <meta name="robots" content="index,follow" />
+</svelte:head>
+
+<img
+  src="/images/taleem.webp"
+  alt="Taleem Slide Preview"
+  style="display: none;"
+  width="1200"
+  height="630"
+/>
+
 <script>
   import { onMount } from 'svelte';
   import { page }      from '$app/stores';
