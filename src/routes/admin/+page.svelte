@@ -59,8 +59,8 @@
 }
 
     /* Color-coded buttons */
-    .btn-clone { background-color: #2f855a; }   /* green */
-    .btn-edit  { background-color: #3182ce; }   /* blue */
+    .btn-editor { background-color: #636e02; }   /* green */
+    .btn-timings  { background-color: #3182ce; }   /* blue */
     .btn-delete{ background-color: #e53e3e; }   /* red */
     .btn-play  { background-color: #718096; }   /* gray */
   </style>
@@ -102,8 +102,11 @@ background-color: #0f4502;
             <td>{new Date(deck.createdAt).toLocaleString()}</td>
             <td class="actions">
               <a href={`/player/?filename=${deck.filename}`}><button class="btn-play">Player</button></a>
-              <!-- <a href={`/clone`}><button class="btn-clone">Clone</button></a> -->
-              <a href={`/admin/timings?filename=${deck.filename}`}><button class="btn-edit">Timings</button></a>
+            
+              <a href={`/admin/timings?filename=${deck.filename}`}><button class="btn-timings">Timings</button></a>
+            
+              <a href={`/admin/editor?filename=${deck.filename}`}><button class="btn-editor">Editor</button></a>
+            
               <a href={`/admin/delete?filename=${deck.filename}`}><button class="btn-delete">Delete</button></a>
             </td>
           </tr>

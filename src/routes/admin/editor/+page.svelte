@@ -1,189 +1,308 @@
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { page } from '$app/stores';
+  import Nav from '../../../lib/Nav.svelte';
 
-<script>
-  export let data;                // from load()
-  const { slideTypes } = data;
+  let deck: any = null;
+  let deckLoaded = false;
+  let error = '';
 
-  // ── Deck meta state ───────────────────────────────────────────
-  let filename     = '';
-  let name         = '';
-  let description  = '';
-  let tagsCsv      = '';
-  let status       = 'draft';
-  let background   = {
-    backgroundColor: '#F3E5AB',
-    backgroundImage: '/images/taleem.webp',
-    backgroundImageOpacity: 0.07
+  let audio: HTMLAudioElement | null = null;
+  let currentTime = 0;
+  let soundUrl = '/sounds/default.opus';
+
+  // Continuously update currentTime
+  const tick = () => {
+    if (audio) currentTime = audio.currentTime;
+    requestAnimationFrame(tick);
   };
 
-  // ── Deck builder state ───────────────────────────────────────
-  let slides = [];
-  let newSlideType = slideTypes[0];
-  let newSlideEnd  = 10;
-
-  // Add a slide with end time only (start computed automatically)
-  function addSlide() {
-    const start = slides.length ? slides[slides.length - 1].end : 0;
-    const slide = {
-      start,
-      end:   Number(newSlideEnd),
-      type:  newSlideType,
-      data:  []
-    };
-    slides = [...slides, slide];
+  // Set end time of slide i
+  function setSlideEnd(i: number) {
+    if (!deck?.deck) return;
+    const t = parseFloat(currentTime.toFixed(2));
+    deck.deck[i].end = t;
+    if (deck.deck[i + 1]) deck.deck[i + 1].start = t;
+    deck = { ...deck };
   }
 
-  // ── Add item to slide ────────────────────────────────────────
-  function addItem(idx) {
-    const slide = slides[idx];
-    slide.data.push({
-      name: 'bullet',
-      content: 'Sample content',
-      showAt: slide.start + 1
+  // Set start time of slide i (and previous slide’s end)
+  function setSlideStart(i: number) {
+    if (!deck?.deck || i === 0) return;
+    const t = parseFloat(currentTime.toFixed(2));
+    deck.deck[i - 1].end = t;
+    deck.deck[i].start = t;
+    deck = { ...deck };
+  }
+
+  // Set showAt for a slide item
+  function setShowAt(item: any) {
+    item.showAt = parseFloat(currentTime.toFixed(1));
+    deck = { ...deck };
+  }
+
+  function setShowAtZero(item: any) {
+    item.showAt = 0;
+    deck = { ...deck };
+  }
+
+  // Delete an item from the slide's data
+  function deleteItem(slideIndex: number, itemIndex: number) {
+    if (!deck?.deck) return;
+    deck.deck[slideIndex].data.splice(itemIndex, 1);
+    deck = { ...deck };
+  }
+
+  async function saveTimings(): Promise<boolean> {
+    const filename = $page.url.searchParams.get('filename') ?? '';
+    const res = await fetch(`/admin/timings?filename=${encodeURIComponent(filename)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(deck)
     });
-    slides = [...slides]; // trigger reactivity
+
+    if (!res.ok) {
+      let errMsg: string;
+      try {
+        const data = await res.json();
+        errMsg = data.error ?? JSON.stringify(data);
+      } catch {
+        errMsg = await res.text();
+      }
+      alert(`❌ Save failed: ${errMsg}`);
+      return false;
+    }
+
+    alert('✅ Save successful');
+    return true;
   }
 
-  // ── Save deck to server ──────────────────────────────────────
-  async function saveDeck() {
+  async function saveAndDownload() {
+    const ok = await saveTimings();
+    if (ok) {
+      downloadTimings();
+    }
+  }
+
+  function downloadTimings() {
+    const filename = $page.url.searchParams.get('filename') ?? 'deck';
+    const blob = new Blob([JSON.stringify(deck, null, 2)], {
+      type: 'application/json'
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${filename}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  let soundExists = false;
+  onMount(async () => {
+    tick();
+
+    const filename = $page.url.searchParams.get('filename');
     if (!filename) {
-      alert('Filename is required');
+      error = 'No filename provided';
       return;
     }
 
-    const deck = {
-      name,
-      description,
-      tags: tagsCsv.split(',').map(t => t.trim()).filter(Boolean),
-      status,
-      version: 'deck-v1',
-      background,
-      deck: slides
-    };
-
-    const res = await fetch('/admin/editor', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filename, deck })
-    });
-
-    const out = await res.json();
-    if (out.success) {
-      alert('Deck saved! Preview it in the player.');
-    } else {
-      alert(`Error: ${out.error || 'unknown'}`);
+    // Attempt to load audio from /sounds/<filename>.opus
+    try {
+      const head = await fetch(`/sounds/${filename}.opus`, { method: 'HEAD' });
+      if (head.ok) {
+        soundUrl = `/sounds/${filename}.opus`;
+        soundExists = true;
+      }
+    } catch {
+      // Ignore, fallback stays
     }
-  }
+
+    // Fetch deck JSON from your server endpoint
+    try {
+      const res = await fetch(`/admin/timings?filename=${encodeURIComponent(filename)}`);
+      if (!res.ok) {
+        const body = await res.json();
+        throw new Error(body.error || res.statusText);
+      }
+      deck = await res.json();
+      deckLoaded = true;
+    } catch (e) {
+      error = (e as Error).message;
+    }
+  });
 </script>
 
-<div class="mx-12 p-12 border-2 border-gray-500 mt-12">
-<h1>Create Deck (Quick Editor)</h1>
+<Nav />
+<h1 style="width: 100%; border: 2px solid #facc15; border-radius: 0.375rem; text-align: center; font-size: 1.2rem; padding:6px; margin:2px; background-color: #0f4502">
+  💡 Timing Page
+</h1>
 
-<section class="meta">
-  <label>Filename <input bind:value={filename}/></label>
-  <label>Name <input bind:value={name}/></label>
-  <label>Description <input bind:value={description}/></label>
-  <label>Tags (csv) <input bind:value={tagsCsv}/></label>
-</section>
+<div class="timing-actions" style="margin: 1rem 0;">
+  <button on:click={saveTimings} class="btn">
+    Save
+  </button>
+  <button
+    on:click={saveAndDownload}
+    class="btn"
+    style="margin-left: 0.5rem;"
+  >
+    Save and Download
+  </button>
+</div>
 
-<section class="add-slide">
-  <h2>Add Slide</h2>
-  <select bind:value={newSlideType}>
-    {#each slideTypes as type}
-      <option value={type}>{type}</option>
-    {/each}
-  </select>
-  <label>End&nbsp;<input type="number" bind:value={newSlideEnd} min="1"/></label>
-  <button on:click={addSlide}>Add Slide</button>
-</section>
+{#if error}
+  <p class="error">Error: {error}</p>
+{:else if !deckLoaded}
+  <p class="centered">Loading deck…</p>
+{:else}
+  {#if soundExists}
+    <div class="audio-panel">
+      <audio bind:this={audio} src={soundUrl} controls class="w-full"></audio>
+    </div>
+  {:else}
+    <h1 style="width: 100%; border: 2px solid #facc15; border-radius: 0.375rem; text-align: center; font-size: 1.2rem; padding:6px; margin:2px; background-color: #0f4502">
+      💡 Sound not found
+    </h1>
+  {/if}
 
-<section class="slides">
-  <h2>Slides ({slides.length})</h2>
-  {#each slides as slide, idx}
-    <div class="slide-card">
-      <strong>{idx + 1}. {slide.type}</strong> ({slide.start}→{slide.end}s)
-      <button on:click={() => addItem(idx)}>+ Add Item</button>
-      <ul>
-        {#each slide.data as item}
-          <li>{item.name}: {item.content} @ {item.showAt}s</li>
-        {/each}
-      </ul>
+  <div class="time-display">
+    Current Time: {currentTime.toFixed(2)}s
+  </div>
+
+  {#each deck.deck as slide, slideIndex}
+    <div class="slide">
+      <div class="slide-header">
+        <strong>Slide {slideIndex + 1} — {slide.type}</strong>
+        <button
+          class="set-start"
+          on:click={() => setSlideStart(slideIndex)}
+          disabled={slideIndex === 0}
+        >
+          Set Start = Now
+        </button>
+      </div>
+
+      {#each slide.data as item, itemIndex}
+        <div class="item">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span>showAt:</span>
+            <input type="number" bind:value={item.showAt} step="0.0" />
+            <button class="set-show-zero" on:click={() => setShowAtZero(item)}>
+              0
+            </button>
+            <button class="set-show" on:click={() => setShowAt(item)}>
+              Now
+            </button>
+            <span class="bg-red-950 ">{item.name || item.type}:</span>
+            <input type="text" bind:value={item.content} placeholder="Edit content" />
+            <button class="delete-item" on:click={() => deleteItem(slideIndex, itemIndex)}>
+              Delete
+            </button>
+          </div>
+        </div>
+      {/each}
+
+      <div style="display: flex; align-items: center; margin-top: 0.5rem;">
+        <label>
+          Start:
+          <input type="number" bind:value={slide.start} step="0.01" />
+        </label>
+        <label style="margin-left: 1rem;">
+          End:
+          <input type="number" bind:value={slide.end} step="0.01" />
+        </label>
+        <button class="set-end" on:click={() => setSlideEnd(slideIndex)}>
+          Set End = Now
+        </button>
+      </div>
     </div>
   {/each}
-</section>
+{/if}
 
-<button class="save" on:click={saveDeck}>💾 Save Deck</button>
-</div>
 <style>
-  /* ── Dark-theme palette ───────────────────────────── */
   :global(body) {
-    background: #121212;
-    color: #e0e0e0;
-    font-family: system-ui, sans-serif;
+    background-color: #1f2937; /* gray-800 */
+    color: #f3f4f6; /* gray-100 */
   }
-
-  h1, h2 {
-    color: #fafafa;
-    margin-bottom: 0.75rem;
+  .audio-panel {
+    padding: 1rem;
   }
-
-  /* ── Form controls ───────────────────────────────── */
-  input,
-  select,
-  button {
-    background: #1e1e1e;
-    color: #e0e0e0;
-    border: 1px solid #333;
-    padding: 0.4rem 0.6rem;
-    border-radius: 4px;
+  .time-display {
+    padding: 0 1rem 1rem;
+    font-size: 0.875rem;
+    color: #a0aec0; /* gray-400 */
   }
-  input:hover,
-  select:hover,
-  button:hover {
-    border-color: #555;
+  .slide {
+    padding: 1rem;
+    border-bottom: 1px solid #374151; /* gray-700 */
   }
-  label {
+  .slide-header {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 0.9rem;
+    justify-content: space-between;
+    align-items: center;
   }
-
-  /* ── Layout sections ─────────────────────────────── */
-  section.meta,
-  section.add-slide,
-  section.slides {
-    margin-bottom: 1.5rem;
+  .item {
+    padding-left: 1.5rem;
+    font-size: 0.875rem;
+    color: #e5e7eb; /* gray-200 */
+    margin-top: 0.5rem;
   }
-
-  /* ── Slide cards ─────────────────────────────────── */
-  .slide-card {
-    background: #1c1c1c;
-    border: 1px solid #333;
-    padding: 0.75rem;
-    border-radius: 6px;
-    margin: 0.6rem 0;
+  input[type="number"], input[type="text"] {
+    width: 4.5rem;
+    background-color: #374151;
+    color: #f3f4f6;
+    border: none;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    text-align: right;
   }
-  .slide-card strong {
-    color: #ffd54f;
+  input[type="text"] {
+    width: 100%; /* Make text input full width for better editing */
+    text-align: left;
   }
-  .slide-card ul {
-    margin: 0.5rem 0 0;
-    padding-left: 1rem;
-    list-style-type: square;
-  }
-
-  /* ── Buttons ─────────────────────────────────────── */
   button {
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background-color: #4a5568; /* gray-600 */
+    color: #edf2f7;
+    border: none;
     cursor: pointer;
-    transition: background 0.15s ease;
-  }
-  button.save {
-    font-size: 1.1rem;
-    padding: 0.55rem 1.2rem;
-    margin-top: 1.5rem;
-    background: #2d2d2d;
-    border: 1px solid #444;
+    font-size: 0.75rem;
   }
   button:hover {
-    background: #262626;
+    background-color: #2d3748; /* gray-700 */
+  }
+  button.set-start {
+    background-color: #6b7280; /* gray-500 */
+  }
+  button.set-start:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  button.set-end {
+    font-size: smaller;
+    background-color: #16a34a; /* green-600 */
+  }
+  button.set-show {
+    background-color: #7c3607; /* blue-500 */
+  }
+  button.set-show-zero {
+    background-color: #11038f; /* blue-500 */
+  }
+  button.delete-item {
+    background-color: #e53e3e; /* red-600 */
+  }
+  .centered {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  .error {
+    color: #e53e3e; /* red-600 */
+    text-align: center;
+    margin-top: 1rem;
   }
 </style>
