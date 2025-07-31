@@ -14,10 +14,10 @@ export  function defineDeck(b) {
 b.s.svgPointer(90, [
     { type: "image",  content: "/images/theorems9old_11.1.5.svg" },
   
-    { type: "arrow",  x: 120, y:  80, showAt: 15, duration: 5 },
-    { type: "circle", x: 200, y: 100, showAt: 30               },
-    { type: "cross",  x: 140, y: 140, showAt: 45, duration: 3 }
-  ]);
+    { type: "arrow",  x: 120, y:  80, showAt: 5, duration: 90 },
+    { type: "circle", x: 200, y: 100, showAt: 10, duration: 90               },
+    { type: "dot", x: 100, y: 100, showAt: 10, duration: 90               },
+  ])
   
 
 }

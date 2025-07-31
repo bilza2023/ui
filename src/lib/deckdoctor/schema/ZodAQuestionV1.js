@@ -301,7 +301,7 @@ const svgPointer = baseSlide.extend({
 
       /* pointer overlay items */
       z.object({
-        type:     z.enum(["arrow", "circle", "cross"]),
+        type:     z.enum(["arrow", "circle", "dot"]),
         x:        z.number(),
         y:        z.number(),
         showAt:   z.number(),
