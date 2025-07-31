@@ -16,7 +16,7 @@ export default class DeckBuilder {
 
     /* registry: every slide type simply pushes raw data */
     const types = [
-      "pointerSlide","eq","titleSlide","titleAndSubtitle","bulletList","twoColumnText",
+      "eq","titleSlide","titleAndSubtitle","bulletList","twoColumnText",
       "imageSlide","imageWithTitle","imageWithCaption","imageLeftBulletsRight",
       "imageRightBulletsLeft","table","statistic","donutChart","bigNumber","barChart",
       "quoteSlide","quoteWithImage","cornerWordsSlide","contactSlide","fillImage","svgPointer"
