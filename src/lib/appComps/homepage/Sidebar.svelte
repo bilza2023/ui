@@ -9,6 +9,13 @@ class={` p-4 rounded-xl shadow flex flex-col space-y-4 min-h-screen border-2  bo
 <h4 class="text-lg font-bold mb-2 text-white">📢 Updates & Insights</h4>
 
 <SidebarCard
+  icon="🏆"
+  title="Collection of Class 9th Theorems"
+  details="Collection of Class 9th Theorems along with Images for revision of students. From Chpater 10 ,11 and 12."
+  url="/blog/class9_all_theorems_pt1.html"
+/>
+
+<SidebarCard
   icon="🚀"
   title="Be Part of AI Revolution"
   details="World is entering into a new era. This is a time to act for Pakistani Students. AI bring new oppertunities."

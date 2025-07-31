@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Group: Triangle ABC -->
+  <g id="triangle_ABC" stroke="black" fill="none">
+    <line x1="100" y1="100" x2="300" y2="100" />
+    <line x1="300" y1="100" x2="200" y2="300" />
+    <line x1="200" y1="300" x2="100" y2="100" />
+    <text x="90" y="90" font-size="16">A</text>
+    <text x="310" y="90" font-size="16">B</text>
+    <text x="200" y="320" font-size="16">C</text>
+  </g>
+
+  <!-- Group: Axis with labels -->
+  <g id="axis" stroke="gray">
+    <line x1="0" y1="500" x2="800" y2="500" />
+    <line x1="400" y1="0" x2="400" y2="600" />
+    <text x="790" y="490" font-size="14">X</text>
+    <text x="410" y="20" font-size="14">Y</text>
+  </g>
+
+  <!-- Group: Highlight Circle -->
+  <g id="highlight">
+    <circle cx="600" cy="150" r="40" fill="yellow" stroke="black"/>
+    <text x="600" y="155" text-anchor="middle" font-size="16" fill="black">Point</text>
+  </g>
+
+</svg>
