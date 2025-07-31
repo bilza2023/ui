@@ -281,7 +281,39 @@ const pointerSlide = baseSlide.extend({
   data: z.array(z.union([pointerItem, imageItem]))
 });
 
+//////////////////////--->SvgPointer
+// 22 --- SVG POINTER SLIDE  -----------------------------------------------
+/**
+ * data[] must contain **exactly one** { type:"image" } entry
+ * followed by any number of pointer entries.
+ */
+const svgPointer = baseSlide.extend({
+  type: z.literal("svgPointer"),
 
+  data: z.array(
+    z.union([
+      /* base SVG image (inline-loaded by the component) */
+      z.object({
+        type:    z.literal("image"),
+        content: z.string(),        // path to .svg file
+        showAt:  z.number().optional()  // default 0
+      }),
+
+      /* pointer overlay items */
+      z.object({
+        type:     z.enum(["arrow", "circle", "cross"]),
+        x:        z.number(),
+        y:        z.number(),
+        showAt:   z.number(),
+        duration: z.number().optional()  // defaults to 5 s in component
+      })
+    ])
+  )
+  /* ---- custom refinement: enforce single image entry ------------------ */
+  .refine(arr => arr.filter(d => d.type === "image").length === 1, {
+    message: "svgPointer slide must include exactly one image entry"
+  })
+});
 
 
 
@@ -304,6 +336,7 @@ export const zodAQuestionV1 = z.object({
     .optional(),
     deck:        z.array(
       z.discriminatedUnion("type", [
+        svgPointer,
         pointerSlide,
         eqSlide,
         fillImage,

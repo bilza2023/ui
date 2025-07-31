@@ -19,7 +19,7 @@ export default class DeckBuilder {
       "pointerSlide","eq","titleSlide","titleAndSubtitle","bulletList","twoColumnText",
       "imageSlide","imageWithTitle","imageWithCaption","imageLeftBulletsRight",
       "imageRightBulletsLeft","table","statistic","donutChart","bigNumber","barChart",
-      "quoteSlide","quoteWithImage","cornerWordsSlide","contactSlide","fillImage"
+      "quoteSlide","quoteWithImage","cornerWordsSlide","contactSlide","fillImage","svgPointer"
     ];
     this.s = Object.fromEntries(types.map(t => [t, (end, data) => this.#add(t, end, data)]));
   }

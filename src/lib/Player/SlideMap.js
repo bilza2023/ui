@@ -21,9 +21,11 @@ import ContactSlide from './slides/ContactSlide.svelte';
 import FillImage from './slides/FillImage.svelte';
 import Eq from './slides/eq/Eq.svelte';
 import Pointer from './slides/Pointer.svelte';
+import SvgPointer from './slides/SvgPointer.svelte';
 
 export default {
   fillImage:FillImage,
+  svgPointer: SvgPointer,
   eq: Eq,
   pointerSlide:Pointer,
   quoteSlide: Quote,
