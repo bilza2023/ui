@@ -1,17 +1,66 @@
 <script>
   export let tcodes = [];
-   let folderName = "subject";
+  let folderName = "subject";
 </script>
 
-<div class="grid grid-cols-[repeat(auto-fill,_minmax(220px,_1fr))] gap-6 px-4 py-8">
-  {#each tcodes as t}
-    <a href={`/${folderName}?tcode=${t.tcodeName}`}>
-      <div class="bg-[#2d2d2d] border border-gray-700 rounded-xl shadow-md hover:ring-2 hover:ring-yellow-500 transition-all overflow-hidden">
-        <img src={t.image} alt={t.tcodeName} class="w-full h-48 object-cover border-b border-gray-600" />
-        <div class="p-4 text-center bg-[#6d4d26]    ">
-          <h2 class="text-white font-semibold text-lg">{t.tcodeName}</h2>
+<style>
+  :global(body) {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #ffffff;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .gallery-item {
+    background-color: #C4A77F;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+
+  .gallery-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    border: 1px solid #555;
+    display: block; /* Ensures image is centered within the container */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .details {
+    font-size: 0.9rem;
+    color: #291701;
+    font-weight: bold;
+  }
+</style>
+
+<div>
+  <h2>Courses</h2>
+  <div class="gallery">
+    {#each tcodes as t}
+      <a href={`/${folderName}?tcode=${t.tcodeName}`}>
+        <div class="gallery-item">
+          <img src={t.image} alt={t.tcodeName} />
+          <div class="details">{t.tcodeName}</div>
         </div>
-      </div>
-    </a>
-  {/each}
+      </a>
+    {/each}
+  </div>
 </div>

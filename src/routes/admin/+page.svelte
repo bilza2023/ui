@@ -96,9 +96,9 @@ background-color: #0f4502;
         </tr>
       </thead>
       <tbody>
-        {#each decks as deck}
+        {#each decks as deck,i}
           <tr>
-            <td>{deck.filename}</td>
+            <td>{i+1} : {deck.filename}</td>
             <td>{new Date(deck.createdAt).toLocaleString()}</td>
             <td class="actions">
               <a href={`/player/?filename=${deck.filename}`}><button class="btn-play">Player</button></a>
