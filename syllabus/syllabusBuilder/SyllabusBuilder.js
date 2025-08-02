@@ -1,6 +1,7 @@
 
 // SyllabusBuilder.js
 // Helper to programmatically build syllabus JSON in nested format
+import Exercise from "./Exercise.js";
 
  class SyllabusBuilder {
     constructor() {
@@ -47,19 +48,8 @@
                 .map(tcode => tcode.toJSON());
   }
 
-    // /**
-    //  * Build and return the final nested JSON object of all tcodes
-    //  * @returns {object}
-    //  */
-    // build() {
-    //   const result = {};
-    //   for (const [tcodeName, tcode] of this.tcodeMap.entries()) {
-    //     result[tcodeName] = tcode.toJSON();
-    //   }
-    //   return result;
-    // }
   }
-  
+/////////////////////////////////////////////////////  
   class Tcode {
     constructor(tcodeName, { description = "", image = "" } = {}) {
       this.tcodeName = tcodeName;
@@ -163,46 +153,7 @@
       };
     }
   }
-  
-  class Exercise {
-    constructor(name, filename) {
-      this.name = name;
-      this.filename = filename;
-      this.questions = [];
-    }
-  
-    /**
-     * Add a question to this exercise
-     * @param {string} name
-     * @param {string} filename
-     */
-    addQuestion(name, filename) {
-      this.questions.push({ name, filename });
-    }
-  
-    /**
-     * Get all questions array
-     * @returns {Array<{name: string, filename: string}>}
-     */
-    getAllQuestions() {
-      return [...this.questions];
-    }
-  
-    /**
-     * Convert to plain JSON structure
-     * @returns {object}
-     */
-    toJSON() {
-      const json = {
-        name: this.name,
-        filename: this.filename
-      };
-      if (this.questions.length > 0) {
-        json.questions = this.questions;
-      }
-      return json;
-    }
-  }
+
   
   export default SyllabusBuilder;
   
