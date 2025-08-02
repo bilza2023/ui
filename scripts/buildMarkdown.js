@@ -9,7 +9,7 @@ import { marked } from 'marked';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const SRC_DIR  = path.resolve(__dirname, '../static/md');
-const OUT_DIR  = path.resolve(__dirname, '../static/html_content');
+const OUT_DIR  = path.resolve(__dirname, '../src/routes/notes');
 
 await mkdir(OUT_DIR, { recursive: true });
 

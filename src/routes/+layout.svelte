@@ -1,8 +1,10 @@
 <!-- src/routes/+layout.svelte -->
+<style>
+  @import '/data/global-blog.css';
 
+</style>
 <script>
   // import '$lib/styles/themes.css';
-  // import '$lib/styles/global-blog.css';   // ← global, not scoped
   import 'katex/dist/katex.min.css';
 
 

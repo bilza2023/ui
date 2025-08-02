@@ -1,0 +1,70 @@
+{
+  "filename": "full_demo",
+  "name": "Taleem.Help Note — Everything Demo",
+  "description": "A long-form note that touches every supported block type.",
+  "tags": ["demo", "notes"],
+  "status": "draft",
+  "createdAt": "2025-08-02T18:00:00Z",
+  "editedAt": "2025-08-02T18:00:00Z",
+  "blocks": [
+    {
+      "type": "title",
+      "content": "Taleem.Help — Complete Renderer Demo"
+    },
+    {
+      "type": "p",
+      "content": "*A single page that showcases headings, paragraphs, images, code, and tables in one go.*"
+    },
+
+    {
+      "type": "image",
+      "content": "/images/box.webp"
+    },
+
+    {
+      "type": "p",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dignissim, nulla sit amet malesuada laoreet, magna mi egestas erat, non molestie lectus libero sed nisl. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer <strong>pharetra</strong> eros vitae libero ultricies, at venenatis elit iaculis. Donec ultricies gravida orci, vitae facilisis nisl viverra eget. Quisque pellentesque nunc quis neque vestibulum, sed ultrices nulla tempor. Suspendisse potenti. <em>Aliquam erat volutpat.</em>"
+    },
+
+    {
+      "type": "p",
+      "content": "<strong>Section&nbsp;2 — Lists &amp; Inline Markup</strong>"
+    },
+    {
+      "type": "p",
+      "content": "Below is an unordered list expressed as raw HTML so the inline renderer keeps bullets:"
+    },
+    {
+      "type": "p",
+      "content": "<ul><li>First <strong>bold</strong> item</li><li>Second <em>italic</em> item</li><li>Third item linking to <a href=\"https://taleem.help\">Taleem.Help</a></li></ul>"
+    },
+
+    {
+      "type": "table",
+      "content": {
+        "header": ["Block", "Example Purpose", "Visual Cue"],
+        "rows": [
+          ["title", "Big intro heading", "H1 style"],
+          ["p", "Paragraph of body text", "Standard text"],
+          ["image", "Show concept art", "Picture"],
+          ["code", "Display sample code", "Monospace box"]
+        ]
+      }
+    },
+
+    {
+      "type": "code",
+      "content": "// Simple Fibonacci – iterative version\nfunction fib(n) {\n  let a = 0, b = 1;\n  for (let i = 0; i < n; i++) {\n    [a, b] = [b, a + b];\n  }\n  return a;\n}\nconsole.log(fib(10)); // → 55"
+    },
+
+    {
+      "type": "image",
+      "content": "![Taleem Background](/images/taleem.webp)"
+    },
+
+    {
+      "type": "p",
+      "content": "<em>End of file — Happy testing! 🎉</em>"
+    }
+  ]
+}
