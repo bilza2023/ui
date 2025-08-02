@@ -12,7 +12,7 @@ export default  function defineFbise9matholdSyllabus(builder) {
 
     ch10_theorems.addQuestion("Congruent Triangles", "congruent_triangles");
     ch10_theorems.addQuestion("SAS Postulate", "posultate_and_SAS_postulate");
-    ch10_theorems.addQuestion("Th 10.1.3", "math9old_theorem10_1_3");
+    // ch10_theorems.addQuestion("Th 10.1.3", "math9old_theorem10_1_3");
 /////////////////////////////////////////////////////////////////////
 const ch11 = fbise9mathold.addChapter("Ch-11", "Ch-11 Parallelograms and Triangles");
 const ch11_theorems = ch11.addExercise("Theorems", "theorems");
