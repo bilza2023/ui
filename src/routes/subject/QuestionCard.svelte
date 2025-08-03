@@ -9,12 +9,12 @@
     {#each questions as question}
       {#if question.type == "slide"}
         <a class="card" href={`/player?filename=${question.filename}`}>
-          <img class="thumb" src="/images/box.webp" alt={question.name} />
+          <img class="thumb" src="/images/slide.webp" alt={question.name} />
           <div class="title">{question.name}</div>
         </a>
       {:else if question.type == "note"}
         <a class="card" href={`/notes?filename=${question.filename}`}>
-          <img class="thumb" src="/images/taleem.webp" alt={question.name} />
+          <img class="thumb" src="/images/beakers2.webp" alt={question.name} />
           <div class="title">{question.name}</div>
         </a>
       {/if}
@@ -43,7 +43,7 @@
     text-decoration: none;
     color: inherit;
     transition: transform 0.2s;
-    width: 180px; /* Fixed width for consistency */
+    width: 240px; /* Fixed width for consistency */
   }
 
   .card:hover {
@@ -52,15 +52,13 @@
 
   .thumb {
     width: 100%;
-    height: 100px;
     object-fit: cover;
-
     /* background: #2e2e2e; */
   }
 
   .title {
-    color: #291701;
-    /* background-color: #C4A77F; */
+    color: #d5bd9b;
+    background-color: #2E1C02;
     padding: 0.6rem;
     font-size: 0.9rem;
   }
