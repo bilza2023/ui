@@ -1,8 +1,8 @@
 <script>
-  export let content = '';
+  export let block;
 </script>
 
-<pre class="note-code"><code>{content}</code></pre>
+<pre class="note-code"><code>{block.content}</code></pre>
 
 <style>
   .note-code {

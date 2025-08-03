@@ -23,7 +23,7 @@
 {:else}
 <div class="notes_container">
 
-  <Notes blocks={data.note.blocks} />
+  <Notes blocks={note.blocks} />
 </div>
 {/if}
 

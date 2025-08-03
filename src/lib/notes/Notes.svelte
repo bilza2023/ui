@@ -1,11 +1,16 @@
 <script>
-  import { componentMap } from './componentMap';  // your index.js
-  export let blocks = [];
+  import { componentMap } from './componentMap';
+
+
+  // Safe default so SSR/HMR never explodes
+  export let blocks =  [];
 </script>
 
-{#each blocks as block}
-  <svelte:component
-    this={componentMap[block.type] ?? componentMap.p}
-    content={block.content ?? block}   
-  />
+{#each blocks as block,i}
+  <!--  -->
+    <!-- All other blocks keep original API -->
+    <svelte:component
+      this={componentMap[block.type]}
+      block={blocks[i]} />
+  
 {/each}

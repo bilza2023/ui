@@ -1,8 +1,8 @@
 <script>
-  export let content = '';
+  export let block;
 </script>
 
-<h1 class="note-title">{content}</h1>
+<h1 class="note-title">{block.content}</h1>
 
 <style>
   .note-title {
