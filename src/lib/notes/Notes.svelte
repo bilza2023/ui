@@ -1,5 +1,5 @@
 <script>
-  import { componentMap } from '$lib/htmlComponents';  // your index.js
+  import { componentMap } from './componentMap';  // your index.js
   export let blocks = [];
 </script>
 

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev:deploy": "nodemon index.js",
-    "build:md": "node scripts/buildMarkdown.js",
+    "build:html": "node scripts/html2json.js",
     "dev": "vite dev",
     "build": "vite build && postbuild",
     "postbuild": "rm -rf build/client/{images,sounds,md}",

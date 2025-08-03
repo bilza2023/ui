@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import NoteRenderer from '../../lib/htmlComponents/NoteRenderer.svelte';
+  import Notes from '../../lib/notes/Notes.svelte';
   import Nav from "$lib/appComps/Nav.svelte";
   export let data;
 
@@ -23,7 +23,7 @@
 {:else}
 <div class="notes_container">
 
-  <NoteRenderer blocks={data.note.blocks} />
+  <Notes blocks={data.note.blocks} />
 </div>
 {/if}
 
