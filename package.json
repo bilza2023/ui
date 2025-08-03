@@ -9,7 +9,7 @@
     "build": "vite build && postbuild",
     "postbuild": "rm -rf build/client/{images,sounds,md}",
     "preview": "vite preview",
-    "gen:syllabus": "node syllabus/genSyllabus.js"
+    "build:syllabus": "node syllabus/genSyllabus.js"
   },
   "devDependencies": {
     "@sveltejs/adapter-node": "^4.0.1",

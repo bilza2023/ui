@@ -13,7 +13,7 @@
           <div class="title">{question.name}</div>
         </a>
       {:else if question.type == "note"}
-        <a class="card" href={`/notes?filename=${question.filename}`}>
+        <a class="card" href={`/notes/${question.filename}`}>
           <img class="thumb" src="/images/beakers2.webp" alt={question.name} />
           <div class="title">{question.name}</div>
         </a>

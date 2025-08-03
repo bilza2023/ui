@@ -1,169 +1,93 @@
-# 📝 Taleem.Help Notes JSON Specification (v1)
 
-## 1  Purpose
+# 📝 Taleem.Help Notes JSON Specification (v1)
 
-These **notes files** capture polished research directly from the textbook.  Each note is a self‑contained HTML‑to‑JSON snapshot that can be rendered by the Svelte `NoteRenderer` or later transformed into decks.  No CSS, JavaScript, or timing metadata is stored here—**only pure content**.
+## 1  Purpose
 
-## 2  Top‑Level Shape
+All **notes** are plain `.json` files containing polished textbook research.  
+They load directly into Svelte’s `Notes.svelte` renderer—**no HTML**, **no Markdown**, **no conversion layer**.
 
-```jsonc
-{
-  "filename": "string  // unique anchor (no extension)",
-  "name": "string      // display title",
-  "description": "string",
-  "tags": ["string"],
-  "status": "draft | ready | published | archived",
-  "createdAt": "ISO‑8601",
-  "editedAt": "ISO‑8601",
-  "blocks": [ /* see Section 3 */ ]
-}
-```
-
-*(Fields may grow, but never disappear — existing parsers remain valid.)*
-
-## 3  `blocks[]` Array
-
-Each block is the JSON mirror of a single structural HTML element.  The minimal contract is:
-
-```ts
-interface Block {
-  type: "title" | "p" | "image" | "math" | "code" | "table"; // current set
-  content: string | TableContent;                                  // payload
-}
-```
-
-| HTML element       | `type` value | `content` format                                      | Renderer component |
-| ------------------ | ------------ | ----------------------------------------------------- | ------------------ |
-| `<h1>`             | `title`      | `string`                                              | `Title.svelte`     |
-| `<p>…</p>`         | `p`          | RAW HTML string (inline anchors, `<em>`, lists, etc.) | `P.svelte`         |
-| KaTeX / LaTeX span | `math`       | LaTeX string (rendered by KaTeX)                      | `Math.svelte`      |
-| `<img src="…"/>`   | `image`      | Image URL (absolute or `/images/...`)                 | `Image.svelte`     |
-| `js …` fence       | `code`       | Full code literal (language fences optional)          | `Code.svelte`      |
-| `<table>…</table>` | `table`      | `{ header: string[], rows: string[][] }`              | `Table.svelte`     |
-
-> The live component map hard‑codes these six types.
-
-### 3.1  Tables
+## 2  Top-Level Shape
 
 ```jsonc
 {
-  "type": "table",
-  "content": {
-    "header": ["Col 1", "Col 2"],
-    "rows": [
-      ["A1", "B1"],
-      ["A2", "B2"]
-    ]
-  }
+  "filename": "string",               // unique anchor (snake_case, no extension)
+  "name": "string",                   // display title
+  "description"?: "string",           // optional summary
+  "tags"?: ["string"],                // searchable labels
+  "status"?: "draft|ready|published", // workflow state
+  "createdAt"?: "ISO-8601 timestamp", // when first authored
+  "editedAt"?: "ISO-8601 timestamp",  // when last modified
+  "blocks": [ /* see Section 3 */ ]
 }
-```
+````
 
-## 4  Design Principles
+> Fields may grow in future versions but will **never** be removed to preserve backward compatibility.
 
-* **Append‑only vocabulary** – new `type` values may be added, but existing ones will **never be removed or altered**.
-* **Pure content** – no CSS classes, inline styles, or JavaScript hooks are allowed inside `content`.
-* **HTML‑inside‑JSON** – for rich text (lists, inline `<strong>`, etc.) simply embed raw HTML in the `content` string of a `p` block; the renderer sanitises / renders it.
-* **Images first‑class** – every `<img>` becomes its own `image` block; captions live in adjacent `p` blocks.
-* **One‑way pipeline** – PDF → research → SVG/AI images → `.html` → `.json`.  A later tool may up‑convert `.json` into DeckBuilder slides, but that is optional and out‑of‑scope.
+## 3  `blocks[]` Array
 
-## 5  Gold Standard Example
+Each element of `blocks` is one **atomic** unit. Supported block types:
 
-A minimal but complete file that exercises **every current block type**.
+| `type`  | Required Props                           | Renderer Component |
+| ------- | ---------------------------------------- | ------------------ |
+| `title` | `content: string`                        | `Title.svelte`     |
+| `p`     | `content: string`                        | `P.svelte`         |
+| `image` | `src: string`<br>`alt: string`           | `Image.svelte`     |
+| `table` | `header: string[]`<br>`rows: string[][]` | `Table.svelte`     |
+| `code`  | `content: string`<br>`lang?: string`     | `Code.svelte`      |
+
+> *Example: image block uses top‐level `src`/`alt`, not a nested `content` field.*&#x20;
+> *Example: table block uses top‐level `header`/`rows`.*&#x20;
+
+### 3.1  Append-Only Vocabulary
+
+* New block `type` values (e.g. `quote`, `math`, `list`) may be **added** over time.
+* **Existing** types will **never** be removed or redefined.
+
+## 4  Design Principles
+
+1. **Pure JSON** — no inline styles, CSS classes, or timing metadata.
+2. **One-way pipeline** — author in JSON; downstream tools consume but never mutate.
+3. **Atomicity** — each paragraph, image, table, or code snippet is its own block.
+4. **Filename = Identity** — the `filename` field anchors all related assets (JSON, images, future decks).
+
+## 5  Gold-Standard Sample
 
 ```jsonc
 {
-  "filename": "angles_sum_note",
-  "name": "Sum of Angles in a Triangle — Gold Standard Note",
-  "description": "Demonstrates all supported block types in one note.",
-  "tags": ["demo", "geometry", "triangle"],
+  "filename": "triangle_medians_note",
+  "name": "Medians of a Triangle Are Concurrent",
+  "tags": ["geometry","triangle","median"],
   "status": "ready",
-  "createdAt": "2025-08-03T10:00:00Z",
-  "editedAt": "2025-08-03T10:00:00Z",
+  "createdAt": "2025-08-03T12:00:00Z",
+  "editedAt": "2025-08-03T12:00:00Z",
   "blocks": [
-    { "type": "title",  "content": "Sum of Angles in a Triangle" },
-
-    { "type": "p",     "content": "According to Euclidean geometry, **the three interior angles of any triangle sum to 180°**." },
-
-    { "type": "image", "content": "/images/triangle.svg" },
-
-    { "type": "math",  "content": "\\angle A + \\angle B + \\angle C = 180^\\circ" },
-
-    { "type": "code",  "content": "// Quick proof sketch in JavaScript\nconst sum = (A, B, C) => A + B + C;\nconsole.log(sum(60, 60, 60)); // 180" },
-
-    { "type": "table", "content": {
-      "header": ["Symbol", "Meaning"],
-      "rows": [
-        ["A, B, C", "Interior angles"],
-        ["180°", "Straight angle / half‑turn"]
+    { "type": "title",   "content": "Medians of a Triangle Are Concurrent" },
+    { "type": "p",       "content": "Every triangle’s medians intersect at the <strong>centroid</strong>." },  
+    { "type": "image",   "src": "/images/theorems9old_11.1.4.svg", "alt": "Triangle with medians" },  
+    { "type": "p",       "content": "The centroid divides each median in a 2 : 1 ratio (vertex → centroid : centroid → midpoint)." },
+    { "type": "code",    "lang": "latex", "content": "AG = 2 \\times GD" },
+    { "type": "table",   "header": ["Term","Definition"], "rows": [
+        ["Concurrent","Lines intersecting at one point"],
+        ["Centroid","Intersection of median lines"]
       ]
-    } },
-
-    { "type": "p",     "content": "<em>Note — This gold example proves every renderer branch works.</em>" }
+    }
   ]
 }
 ```
 
----
+> This matches exactly the patterns in **`fbise9mathold_theorem_11.1.4.json`** (paragraphs and titles use `content`) .
 
-## 6 GPT Authoring Guidelines for **`.html`** Notes
+## 6  Authoring Checklist
 
-1. **Stay Inside the Approved Tag Set**
-   Use only the elements listed in the current spec:
-   `h1` (title), `p`, `img`, `code` (inside `<pre>`), inline math (LaTeX delimiters: `\\( ... \\)` or KaTeX-compatible), and `table`.
-
-   * If you believe another structural tag (e.g., `blockquote`, `hr`, `ul/ol`) is essential, **explicitly call it out in a comment** so the team can add the matching Svelte component later.
-   * Never insert CSS classes, inline styles, or JavaScript—content only.
-
-2. **One Logical Flow Per File**
-   Begin with exactly one `<h1>` title, then flow top-to-bottom in the order the student should read.
-
-   * Keep each concept self-contained; if the topic needs to branch, start a new file.
-
-3. **Image Discipline**
-
-   * Place every visual as its own `<img src=\"/images/...\" alt=\"…\" />` block on a new line.
-   * Follow each image with an explanatory `<p>` or `<math>` line so the renderer can tie meaning to visuals.
-
-4. **Math Blocks**
-   Inline math: `\\( a^2 + b^2 = c^2 \\)`
-   Display math (stand-alone line):
-
-   ```html
-   <p>\\[ E = mc^2 \\]</p>
-   ```
-
-   Do **not** wrap equations in custom tags; the renderer parses LaTeX directly from `<p>` content.
-
-5. **Tables**
-   Use standard HTML `<table>`, `<thead>`, `<tbody>`. Keep cells text-only (no nested lists or images).
-
-6. **Code Samples**
-   Wrap code in a fenced block inside `<pre><code class=\"language-xyz\"> … </code></pre>` exactly—no extra markup.
-
-7. **Zero Presentation Logic**
-   Remember: this HTML is the **source of truth** for JSON extraction. Anything non-semantic (layout, styling) is out of scope.
-
-8. **Suggesting New Elements**
-   When you notice a pattern that warrants a new tag:
-
-   > `<!-- Suggest: add <blockquote> support for textbook quotes -->`
-   > The comment makes the need discoverable without breaking the current pipeline.
-
-9. **Validation Checklist Before Finishing**
-
-   * ✅ One `<h1>` present
-   * ✅ No forbidden tags or inline styles
-   * ✅ Images use absolute or `/images/...` paths
-   * ✅ Math compiles in KaTeX playground
-   * ✅ Tables have headers if meaningful
-   * ✅ File passes an HTML linter (tidy/beautify) without errors
-
-Follow these rules and your `.html` file will convert cleanly to JSON while remaining forward-compatible as the element vocabulary grows.
-
-## 7  Future Extensions
-
-New structural elements (e.g., `blockquote`, `list`, `hr`) will be introduced **by adding new `type` constants** and corresponding Svelte components.  Existing notes remain fully valid because unrecognised fields are ignored by the parser.
+* ✅ Unique, snake\_case `filename`.
+* ✅ Exactly one `title` block at the top.
+* ✅ Paragraphs (`p`) and titles (`title`) carry text under `content`.
+* ✅ Images use `src` + `alt` at the block root.
+* ✅ Tables use top-level `header` & `rows`.
+* ✅ Code blocks include `content` and optional `lang`.
+* ✅ No presentation logic in JSON—styles belong in components.
 
 ---
 
-*Last updated — 03 Aug 2025.*
+*Last updated: 03 Aug 2025.*
+Future extensions will appear in **v2**, but **v1** notes remain evergreen.
