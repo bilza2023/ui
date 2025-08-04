@@ -261,6 +261,7 @@ const fillImage = baseSlide.extend({
  * data[] must contain **exactly one** { type:"image" } entry
  * followed by any number of pointer entries.
  */
+// 22 — SVG POINTER SLIDE  (v2: supports window & blink)
 const svgPointer = baseSlide.extend({
   type: z.literal("svgPointer"),
 
@@ -269,25 +270,46 @@ const svgPointer = baseSlide.extend({
       /* base SVG image (inline-loaded by the component) */
       z.object({
         type:    z.literal("image"),
-        content: z.string(),        // path to .svg file
-        showAt:  z.number().optional()  // default 0
+        content: z.string(),                // path to .svg file
+        showAt:  z.number().optional()      // default 0
       }),
 
-      /* pointer overlay items */
+      /* pointer overlay primitives */
       z.object({
         type:     z.enum(["arrow", "circle", "dot"]),
         x:        z.number(),
         y:        z.number(),
         showAt:   z.number(),
-        duration: z.number().optional()  // defaults to 5 s in component
+        duration: z.number().optional()     // defaults inside component
+      }),
+
+      /* NEW — focus rectangle */
+      z.object({
+        type:     z.literal("window"),
+        x:        z.number(),
+        y:        z.number(),
+        width:    z.number(),
+        height:   z.number(),
+        showAt:   z.number(),
+        duration: z.number().optional()
+      }),
+
+      /* NEW — blink an inline-SVG element by id */
+      z.object({
+        type:     z.literal("blink"),
+        targetId: z.string(),
+        rate:     z.number().optional(),    // Hz, default 2
+        showAt:   z.number(),
+        duration: z.number().optional()
       })
     ])
   )
-  /* ---- custom refinement: enforce single image entry ------------------ */
+  /* deck must include exactly one image entry */
   .refine(arr => arr.filter(d => d.type === "image").length === 1, {
     message: "svgPointer slide must include exactly one image entry"
   })
 });
+
 
 //////////////===> Final Deck Object
 export const zodAQuestionV1 = z.object({

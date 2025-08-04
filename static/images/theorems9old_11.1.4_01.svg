@@ -28,14 +28,14 @@
      inkscape:document-units="px"
      showgrid="false"
      inkscape:zoom="0.88"
-     inkscape:cx="583.52273"
-     inkscape:cy="343.75"
+     inkscape:cx="584.09091"
+     inkscape:cy="344.88636"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer6" />
+     inkscape:current-layer="layer5" />
   <defs
      id="defs2" />
   <g
@@ -77,8 +77,7 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="step01"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <text
        xml:space="preserve"
        style="font-style:italic;font-weight:bold;font-size:16.9793px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';fill:#ff6600;stroke:none;stroke-width:0.664103;stroke-dasharray:none;stroke-opacity:1"
@@ -115,6 +114,18 @@
          style="fill:#ff6600;stroke:none;stroke-width:0.664103;stroke-dasharray:none"
          x="170.12743"
          y="109.54863">G</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-weight:bold;font-size:16.9793px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';display:inline;fill:#ff6600;stroke:none;stroke-width:0.664103;stroke-dasharray:none;stroke-opacity:1"
+       x="192.80338"
+       y="99.575546"
+       id="text1405-5-7-9-4-9"
+       transform="scale(1.1746842,0.85129262)"><tspan
+         sodipodi:role="line"
+         id="tspan1403-3-5-7-7-4"
+         style="fill:#ff6600;stroke:none;stroke-width:0.664103;stroke-dasharray:none"
+         x="192.80338"
+         y="99.575546">E</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:italic;font-weight:bold;font-size:16.9793px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';fill:#d40000;stroke:none;stroke-width:0.664103;stroke-dasharray:none;stroke-opacity:1"
