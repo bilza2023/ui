@@ -1,0 +1,65 @@
+<script>
+  import Nav from "$lib/appComps/Nav.svelte";
+</script>
+
+<svelte:head>
+  <link rel="stylesheet" href="/data/css/notes.css" />
+</svelte:head>
+
+<Nav />
+<main class="notes">
+
+  <!-- ───── Title & First Image ───── -->
+  <h1>Theorem&nbsp;13.1.1 – In a Triangle, the Longer Side Has the Greater Opposite Angle</h1>
+
+  <img src="/images/theorems9old_13.1.1.svg"
+       alt="Triangle ABC with AC &gt; AB; point D on AC so that AD = AB; BD drawn"
+       style="max-width:50%;">
+
+  <!-- ───── Book Statement ───── -->
+  <h2>Book Statement</h2>
+  <p>If two sides of a triangle are unequal in length, the longer side has an angle of greater measure opposite to it.</p>
+
+  <!-- ───── Key Vocabulary ───── -->
+  <h2>Key Vocabulary</h2>
+  <ul>
+    <li><strong>Exterior Angle:</strong> An angle formed by one side of a triangle and the extension of an adjacent side.</li>
+    <li><strong>Isosceles Triangle:</strong> A triangle with two equal sides and two equal base angles.</li>
+  </ul>
+
+  <!-- ───── Construction (as per page 218) ───── -->
+  <h2>Construction</h2>
+  <ol>
+    <li>In △<em>ABC</em>, take a point <em>D</em> on side <em>AC</em> such that <strong>AD = AB</strong>.</li>
+    <li>Join <em>BD</em>; thus △<em>ADB</em> is isosceles.</li>
+    <li>Label base angles: ∠<em>ABD</em> = ∠<em>BDA</em> (call them ∠1 and ∠2).</li>
+  </ol>
+
+  <!-- ───── Proof Table (SAA) ───── -->
+  <h2>Proof</h2>
+  <table>
+    <thead><tr><th>Statements</th><th>Reasons</th></tr></thead>
+    <tbody>
+      <tr><td><strong>AD = AB</strong></td><td>Construction</td></tr>
+      <tr><td><strong>∠1 = ∠2</strong></td><td>Base angles of isosceles △ADB</td></tr>
+      <tr><td><em>∠ACB &lt; ∠2</em></td><td>Exterior-angle inequality in △BDC</td></tr>
+      <tr><td><em>∠ABC = ∠1 &gt; ∠2</em></td><td>∠1 = base angle at B</td></tr>
+      <tr><td><strong>∠ABC &gt; ∠ACB</strong></td><td>Transitive (∠1 &gt; ∠2 &gt; ∠ACB)</td></tr>
+    </tbody>
+  </table>
+
+  <img src="/images/theorems9old_13.1.1.svg"
+       alt="Diagram repeated before conclusion"
+       style="max-width:50%; margin-top:1rem;">
+
+  <!-- ───── Conclusion ───── -->
+  <h2>Conclusion</h2>
+  <p>
+    In △<em>ABC</em>, side <em>AC</em> is longer than <em>AB</em>; we have proved the angle opposite <em>AC</em> (namely ∠<em>ABC</em>) is greater than the angle opposite <em>AB</em> (namely ∠<em>ACB</em>).  
+    Hence, the longer side indeed subtends the larger angle.
+  </p>
+
+  <hr>
+  <small>Generated 2025-08-05 • Chapter 13, triangle-inequality path.</small>
+
+</main>
