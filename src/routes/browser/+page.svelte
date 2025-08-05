@@ -3,62 +3,58 @@
 </svelte:head>
 
 <script lang="ts">
-  import { onMount }     from 'svelte';
-  import { page }        from '$app/stores';
-  import { writable }    from 'svelte/store';
+  import { onMount }  from 'svelte';
+  import { page }     from '$app/stores';
+  import { writable } from 'svelte/store';
 
-  import SlideMap        from '../../lib/Player/SlideMap';
-  import Navbar          from './Navbar.svelte';
+  import StaticBackground from '../../lib/Player/background/StaticBackground.svelte';
+  import SlideMap         from '../../lib/Player/SlideMap';
+  import Navbar           from './Navbar.svelte';
 
-  /* ---------- reactive stores ---------- */
-  const deck         = writable(null);          // full deck object
-  const currentIndex = writable(0);             // slide pointer
-  const loadError    = writable('');            // fetch / validation error
+  /* ───────── stores ───────── */
+  const deck         = writable(null);   // full deck object
+  const currentIndex = writable(0);      // slide pointer
+  const loadError    = writable('');     // fetch / validation error
 
-  /* ---------- navigation helpers ---------- */
+  /* ───────── navigation ───── */
   const goFirst = () => currentIndex.set(0);
   const goPrev  = () => currentIndex.update(i => Math.max(i - 1, 0));
-  const goNext  = () => currentIndex.update(i => Math.min(i + 1, ($deck.deck.length - 1)));
+  const goNext  = () => currentIndex.update(i => Math.min(i + 1, $deck.deck.length - 1));
   const goLast  = () => currentIndex.set($deck.deck.length - 1);
+/* ───────── fetch deck ───── */
+onMount(async () => {
+  const params   = new URLSearchParams($page.url.search);
+  const filename = params.get('filename');
 
-  /* ---------- fetch deck once on mount ---------- */
-  onMount(async () => {
-    const params   = new URLSearchParams($page.url.search);
-    const filename = params.get('filename');
+  if (!filename) {
+    loadError.set('No ?filename query provided.');
+    return;
+  }
 
-    if (!filename) {
-      loadError.set('No ?filename query provided.');
-      return;
+  const url = `/decks_test/${filename}.json`;
+
+  try {
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error('404');
+
+    const json = await res.json();
+    if (json.version !== 'deck-v1' || !Array.isArray(json.deck)) {
+      throw new Error('Invalid deck-v1 JSON');
     }
 
-    // try /decks_test/ first, then fallback to /decks/
-    const candidates = [
-      `/decks_test/${filename}.json`,
-      `/decks/${filename}.json`
-    ];
+    deck.set(json);           // ✅ success
+  } catch (err) {
+    loadError.set(`Deck "${filename}" not found in /decks_test.`);
+  }
+});
 
-    for (const url of candidates) {
-      try {
-        const res = await fetch(url);
-        if (!res.ok) continue;
-        const json = await res.json();
 
-        if (json.version !== 'deck-v1' || !Array.isArray(json.deck)) {
-          throw new Error('Invalid deck-v1 JSON');
-        }
-        deck.set(json);   // 🎉 success
-        return;
-      } catch (_) { /* try next */ }
-    }
-
-    loadError.set(`Deck "${filename}" not found in /decks_test or /decks.`);
-  });
-
-  /* ---------- derived values ---------- */
+  /* ───────── derived ─────── */
   $: totalSlides = $deck?.deck?.length ?? 0;
+  // $: background  = $deck?.background ?? {};
 </script>
 
-<!-- ---------- Slide Display Area ---------- -->
+<!-- ───────── main render ───────── -->
 {#if $loadError}
   <div class="center"><p>{$loadError}</p></div>
 
@@ -66,16 +62,25 @@
   <div class="center"><p>Loading …</p></div>
 
 {:else}
-  {#if $deck.deck[$currentIndex]}
-    <svelte:component
+  <!-- deck loaded successfully -->
+  <StaticBackground
+  backgroundImage="/images/taleem.webp"
+   />
+
+  <div class="slide-frame">
+    <!-- <svelte:component
       this={SlideMap[$deck.deck[$currentIndex].type]}
-      {...$deck.deck[$currentIndex]}   
-      background={$deck.background}
-    />
-  {/if}
+      {...$deck.deck[$currentIndex]}
+    /> -->
+ <svelte:component
+   this={SlideMap[$deck.deck[$currentIndex].type]}
+   {...$deck.deck[$currentIndex]}
+   currentTime={$deck.deck[$currentIndex].end}   
+ />
+  </div>
 {/if}
 
-<!-- ---------- Bottom Navigation Bar ---------- -->
+<!-- ───────── bottom nav bar ───────── -->
 <Navbar
   current={$currentIndex}
   total={totalSlides}
@@ -90,6 +95,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 100vh;
+  }
+
+  .slide-frame {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 56px); /* 56 px = navbar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 1rem;
+    box-sizing: border-box;
   }
 </style>
