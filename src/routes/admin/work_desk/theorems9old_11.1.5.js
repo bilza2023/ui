@@ -1,25 +1,17 @@
 export function defineDeck(b) {
   b.addDetails({
     name: "theorem_11_1_5",
-    description: "Slide series for Theorem 11.1.5 (dual-window demo)",
+    description: "Parallel Line Segment in Triangle – DE ∥ BC",
     tags: ["theorem", "geometry", "class9"],
     status: "draft"
   });
 
-  /* ───────────────────────── Slide 1 (0 → 30 s) */
-  b.s.svgPointer(50, [
-    { type: "image",  content: "/images/theorems9old_11.1.5.svg" },
+  // 🔹 Slide 1 — SVG Pointer
+  b.s.svgPointer(20, [
+    { type: "image", content: "/images/theorems9old_11.1.5.svg" },
 
-    { type: "circle", x: 180, y: 95, showAt: 1,  duration: 10, label: "DE" },
-    { type: "circle", x: 120, y: 80, showAt: 2,  duration: 10, label: "AD" },
-    { type: "dot",    x: 100, y: 50, showAt: 3, duration: 10, label: "A" },
-
-
-    { type: "circle", x: 10, y: 10, showAt:  15,   duration: 20, label: "DE" },
-    { type: "circle", x: 120, y: 80, showAt: 15,   duration: 20, label: "AD" },
-    { type: "dot",    x: 100, y: 50, showAt: 15,  duration:  20, label: "A" },
-
+    { type: "arrow", x: 160, y: 110, showAt: 2, duration: 10, label: "DE" },
+    { type: "arrow", x: 190, y: 140, showAt: 7, duration: 10, label: "BC" },
+    { type: "arrow", x: 150, y: 130, showAt: 12, duration: 10, label: "AD" }
   ]);
-  
-  /* deck ends at 90 s */
 }

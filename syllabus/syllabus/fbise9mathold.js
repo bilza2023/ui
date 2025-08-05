@@ -26,6 +26,7 @@ const ch11_theorems = ch11.addExercise("Theorems", "theorems");
   ch11_theorems.addQuestion("Th 11_1_3", "theorems9old_11.1.3");
 
   ch11_theorems.addNote("Th 11_1_4" , "fbise9mathold_theorem11_1_4")
+  ch11_theorems.addNote("Th 11_1_5" , "fbise9mathold_theorem11_1_5")
   
   // ch11_theorems.addQuestion("Th 11_1_5", "theorems9old_11.1.5");
 //images
