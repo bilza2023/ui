@@ -52,6 +52,17 @@ ch12_theorems.addNote("Th 12_1_5" , "fbise9mathold_theorem12_1_5")
 ch12_theorems.addNote("Th 12_1_6" , "fbise9mathold_theorem12_1_6")
 
 //////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////
+const ch13 = fbise9mathold.addChapter("Ch-13", "Ch-13 Sides and Angles of a Triangle");
+const ch13_theorems = ch13.addExercise("Theorems", "theorems");
+
+
+ch13_theorems.addNote("Th 13_1_1" , "fbise9mathold_theorem13_1_1");
+ch13_theorems.addNote("Th 13_1_2" , "fbise9mathold_theorem13_1_2");
+ch13_theorems.addNote("Th 13_1_3" , "fbise9mathold_theorem13_1_3");
+ch13_theorems.addNote("Th 13_1_4" , "fbise9mathold_theorem13_1_4");
+//////////////////////////////////////////////////////////////////////////////////////////
     return fbise9mathold;
   }
   

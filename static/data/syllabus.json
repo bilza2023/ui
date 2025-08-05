@@ -120,6 +120,38 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Ch-13",
+        "filename": "Ch-13 Sides and Angles of a Triangle",
+        "exercises": [
+          {
+            "name": "Theorems",
+            "filename": "theorems",
+            "questions": [
+              {
+                "name": "Th 13_1_1",
+                "filename": "fbise9mathold_theorem13_1_1",
+                "type": "note"
+              },
+              {
+                "name": "Th 13_1_2",
+                "filename": "fbise9mathold_theorem13_1_2",
+                "type": "note"
+              },
+              {
+                "name": "Th 13_1_3",
+                "filename": "fbise9mathold_theorem13_1_3",
+                "type": "note"
+              },
+              {
+                "name": "Th 13_1_4",
+                "filename": "fbise9mathold_theorem13_1_4",
+                "type": "note"
+              }
+            ]
+          }
+        ]
       }
     ]
   }
