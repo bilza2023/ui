@@ -40,6 +40,17 @@ const ch11_theorems = ch11.addExercise("Theorems", "theorems");
   // traversal.webp	Alternate transversal view (optional use)
 
 //////////////////////////////////////////////////////////////////////////////////////////
+const ch12 = fbise9mathold.addChapter("Ch-12", "Ch-12 Line Bisectors and Angle Bisectors");
+const ch12_theorems = ch12.addExercise("Theorems", "theorems");
+
+
+ch12_theorems.addNote("Th 12_1_1" , "fbise9mathold_theorem12_1_1")
+ch12_theorems.addNote("Th 12_1_2" , "fbise9mathold_theorem12_1_2")
+ch12_theorems.addNote("Th 12_1_3" , "fbise9mathold_theorem12_1_3")
+ch12_theorems.addNote("Th 12_1_4" , "fbise9mathold_theorem12_1_4")
+ch12_theorems.addNote("Th 12_1_5" , "fbise9mathold_theorem12_1_5")
+ch12_theorems.addNote("Th 12_1_6" , "fbise9mathold_theorem12_1_6")
+
 //////////////////////////////////////////////////////////////////////////////////////////
     return fbise9mathold;
   }

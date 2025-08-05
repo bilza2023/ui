@@ -14,7 +14,7 @@
   <h1>Theorem 12.1.5 – A Point Inside an Angle, Equidistant from Its Arms, Lies on the Angle Bisector</h1>
 
   <img src="/images/theorems9old_12.1.5.svg"
-       alt="Point P inside ∠ABC with equal perpendiculars to both arms"
+       alt="PQ = PR and point P lies on the angle bisector of ∠QOR"
        style="max-width:50%;">
 
   <h2>Book Statement</h2>
@@ -22,55 +22,54 @@
 
   <h2>Key Vocabulary</h2>
   <ul>
-    <li><strong>Interior Point:</strong> A point located between the two arms of an angle.</li>
-    <li><strong>Angle Bisector:</strong> Ray that divides an angle into two equal parts.</li>
+    <li><strong>Interior Point:</strong> A point that lies inside the opening of an angle.</li>
+    <li><strong>Angle Bisector:</strong> A ray that divides an angle into two equal angles.</li>
+    <li><strong>Distance from a line:</strong> Length of the perpendicular from the point to that line.</li>
   </ul>
 
-  <p>
-    This theorem is the converse of 12.1.4: equal perpendiculars imply the point is on the bisector.
-  </p>
-
-  <h2>What We Will Prove</h2>
+  <h2>Construction</h2>
   <ol>
-    <li>Construct equal right triangles using the given perpendicular distances.</li>
-    <li>Show the adjacent acute angles are congruent.</li>
-    <li>Hence the point lies on the bisector.</li>
+    <li>Let point <em>P</em> lie inside angle ∠<em>QOR</em>.</li>
+    <li>Draw perpendiculars: <em>PQ ⊥ OQ</em> and <em>PR ⊥ OR</em>.</li>
+    <li>Given: <strong>PQ = PR</strong></li>
   </ol>
 
-  <h2>Proof Road-Map (Top-Level Steps)</h2>
+  <h2>What We Will Prove</h2>
   <table>
-    <thead><tr><th>Step</th><th>Core Idea</th><th>Tool Used</th></tr></thead>
+    <thead><tr><th>Statements</th><th>Reasons</th></tr></thead>
     <tbody>
-      <tr><td>1</td><td>Drop equal perpendiculars <em>PM</em>, <em>PN</em></td><td>Given</td></tr>
-      <tr><td>2</td><td>Compare right triangles <em>△PMB</em> &amp; <em>△PNB</em></td><td>RHS / HL</td></tr>
-      <tr><td>3</td><td>Obtain <em>∠MBP = ∠PBN</em></td><td>CPCTC</td></tr>
-      <tr><td>4</td><td>Therefore <em>BP</em> bisects <em>∠ABC</em></td><td>Definition</td></tr>
+      <tr><td><em>PQ = PR</em></td><td>Given</td></tr>
+      <tr><td><em>∠PQO = ∠PRO</em></td><td>Construction (right angles)</td></tr>
+      <tr><td><em>OP = OP</em></td><td>Common side</td></tr>
+      <tr><td><strong>△POQ ≅ △POR</strong></td><td>S.A.A. congruence</td></tr>
+      <tr><td><strong>∠POQ = ∠POR</strong></td><td>CPCTC</td></tr>
+      <tr><td><strong>OP bisects ∠QOR</strong></td><td>Definition of angle bisector</td></tr>
     </tbody>
   </table>
 
   <img src="/images/theorems9old_12.1.5.svg"
-       alt="Same diagram repeated for proof"
+       alt="Repeat diagram before proof"
        style="max-width:50%; margin-top:1rem;">
 
   <h2>Detailed Proof</h2>
 
-  <h3>Given</h3>
-  <p>Perpendiculars <em>PM</em> and <em>PN</em> from an interior point <em>P</em> to lines <em>BA</em> and <em>BC</em> respectively are equal.</p>
-
-  <h3>Congruent Triangles</h3>
   <p>
-    In right triangles <em>△PMB</em> and <em>△PNB</em>:  
-    <em>PM = PN</em> (given), <em>MB = NB</em> (common), and each has a right angle.  
-    By RHS the triangles are congruent.
+    In triangles △<em>POQ</em> and △<em>POR</em>:
   </p>
 
-  <h3>Equal Acute Angles</h3>
-  <p>Corresponding angles <em>∠MBP</em> and <em>∠PBN</em> are equal; hence ray <em>BP</em> bisects <em>∠ABC</em>.</p>
+  <ul>
+    <li><em>PQ = PR</em> (given)</li>
+    <li><em>∠PQO = ∠PRO = 90°</em> (construction)</li>
+    <li><em>OP = OP</em> (common side)</li>
+  </ul>
 
-  <h3>Conclusion</h3>
-  <p>Therefore any interior point equidistant from an angle’s arms must lie on its bisector.</p>
+  <p>
+    So, △<em>POQ</em> ≅ △<em>POR</em> by <strong>SAA</strong>.  
+    By CPCTC, <em>∠POQ = ∠POR</em>.  
+    Therefore, ray <em>OP</em> bisects angle ∠<em>QOR</em>.
+  </p>
 
   <hr>
-  <small>Generated 2025-08-05.</small>
+  <small>Generated 2025-08-05 using textbook-congruent structure.</small>
 
 </main>

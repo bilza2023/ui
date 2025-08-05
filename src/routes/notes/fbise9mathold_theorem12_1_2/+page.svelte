@@ -11,81 +11,75 @@
 <Nav/>
 <main class="notes">
 
-  <h1>Theorem 12.1.2 – A Point Equidistant from the End Points of a Line Segment Lies on Its Right Bisector</h1>
+  <!-- ───── Title & First Image ───── -->
+  <h1>Theorem 12.1.2 – A Point Equidistant from the End Points of a Line Segment Lies on Its Perpendicular Bisector</h1>
 
   <img src="/images/theorems9old_12.1.2.svg"
-       alt="Point P equidistant from A and B; perpendicular bisector LM passes through P"
+       alt="Point P with PA = PB on the perpendicular bisector of AB"
        style="max-width:50%;">
 
+  <!-- ───── Book Statement ───── -->
   <h2>Book Statement</h2>
-  <p>If a point is equidistant from the end points of a line segment, it lies on the right (perpendicular) bisector of that segment.</p>
+  <p>If a point is equidistant from the end points of a line segment, it lies on the perpendicular bisector of that segment.</p>
 
+  <!-- ───── Key Vocabulary ───── -->
   <h2>Key Vocabulary</h2>
   <ul>
-    <li><strong>Equidistant:</strong> Having the same distance from two points.</li>
-    <li><strong>Right Bisector:</strong> A line perpendicular to a segment at its midpoint.</li>
-    <li><strong>Locus:</strong> Set of points satisfying a given condition.</li>
+    <li><strong>Equidistant:</strong> Same distance from two points.</li>
+    <li><strong>Perpendicular&nbsp;Bisector:</strong> Line through the midpoint of a segment and perpendicular to it.</li>
   </ul>
 
-  <p>
-    This theorem is the converse of 12.1.1.  Instead of starting on the right bisector,
-    we start with equal distances and prove the point must fall on that line.
-  </p>
+  <!-- ───── One-Sentence Intuition ───── -->
+  <p>Equal lengths <em>PA</em> and <em>PB</em> “force” point <em>P</em> to balance exactly over segment <em>AB</em>, making <em>P</em> sit on the segment’s perpendicular bisector.</p>
 
+  <!-- ───── What We Will Prove (1 Step) ───── -->
   <h2>What We Will Prove</h2>
   <ol>
-    <li>Right triangles <em>△PA C</em> and <em>△PB C</em> are congruent.</li>
-    <li>Their congruence forces <em>∠PCA = ∠PCB = 90°</em>, so <em>P</em> is on a line perpendicular to <em>AB</em> at its midpoint.</li>
+    <li>Triangles <em>△PCA</em> and <em>△PCB</em> are congruent by <strong>SSS</strong>; this forces the angle at <em>C</em> to be a right angle, placing <em>P</em> on the perpendicular bisector.</li>
   </ol>
 
-  <h2>Proof Road-Map (Top-Level Steps)</h2>
+  <!-- ───── Proof Road-Map ───── -->
+  <h2>Proof Road-Map</h2>
   <table>
     <thead>
-      <tr><th>Step</th><th>Core Idea</th><th>Tool / Theorem Used</th></tr>
+      <tr><th>Given / Construct</th><th>Reason</th></tr>
     </thead>
     <tbody>
-      <tr><td>1</td><td>Assume <em>PA = PB</em></td><td>Given</td></tr>
-      <tr><td>2</td><td>Let <em>C</em> be midpoint of <em>AB</em></td><td>Construction</td></tr>
-      <tr><td>3</td><td>Show <em>AC = CB</em></td><td>Definition of midpoint</td></tr>
-      <tr><td>4</td><td>Compare triangles <em>△PCA</em> &amp; <em>△PCB</em></td><td>SSS congruence</td></tr>
-      <tr><td>5</td><td>Deduce <em>∠PCA = ∠PCB</em></td><td>CPCTC</td></tr>
-      <tr><td>6</td><td>Therefore <em>P</em> lies on right bisector</td><td>Definition</td></tr>
+      <tr><td><strong>PA = PB</strong></td><td>Given</td></tr>
+      <tr><td><em>C</em> is midpoint of <em>AB</em> → <em>AC = CB</em></td><td>Construction</td></tr>
+      <tr><td>Join <em>PC</em></td><td>Construction</td></tr>
+      <tr><td><em>PC</em> common side</td><td>Shared side</td></tr>
+      <tr><td><em>△PCA ≅ △PCB</em> (SSS)</td><td>Side–Side–Side</td></tr>
+      <tr><td><em>∠PCA = ∠PCB</em></td><td>CPCTC</td></tr>
+      <tr><td>Angles form a straight line → each 90°</td><td>Linear-pair property</td></tr>
+      <tr><td><strong>P lies on the perpendicular bisector of AB</strong></td><td>Definition</td></tr>
     </tbody>
   </table>
 
+  <!-- ───── Second Image ───── -->
   <img src="/images/theorems9old_12.1.2.svg"
-       alt="Same diagram re-shown before detailed proof"
+       alt="Diagram repeated before proof"
        style="max-width:50%; margin-top:1rem;">
 
+  <!-- ───── Detailed Proof (Concise) ───── -->
   <h2>Detailed Proof</h2>
 
-  <h3>Step&nbsp;1 — Initial Data</h3>
-  <p>Given a line segment <em>AB</em> and a point <em>P</em> such that <strong>PA = PB</strong>.</p>
-
-  <h3>Step&nbsp;2 — Midpoint Construction</h3>
-  <p>Choose <em>C</em> as the midpoint of <em>AB</em>; hence <em>AC = CB</em>.</p>
-
-  <h3>Step&nbsp;3 — Congruent Triangles</h3>
   <p>
-    In triangles <em>△PCA</em> and <em>△PCB</em> we have  
-    <em>PC</em> common, <em>AC = CB</em>, and <em>PA = PB</em>.  
-    By <strong>SSS</strong> the two triangles are congruent.
+    Let <em>P</em> be a point such that <strong>PA = PB</strong>.  
+    Mark <em>C</em> as the midpoint of <em>AB</em> (so <em>AC = CB</em>) and join <em>PC</em>.
   </p>
 
-  <h3>Step&nbsp;4 — Right Angle at C</h3>
-  <p>
-    Corresponding parts give <em>∠PCA = ∠PCB</em>.  
-    But these angles form a linear pair, so each must be 90°.  
-    Therefore line <em>PC</em> is perpendicular to <em>AB</em>.
-  </p>
+  <ul>
+    <li><strong>SSS congruence:</strong> In triangles <em>△PCA</em> and <em>△PCB</em>, we have <em>PA = PB</em> (given), <em>AC = CB</em> (midpoint), and <em>PC</em> common. Hence the triangles are congruent.</li>
+    <li><strong>Equal base angles:</strong> From congruence, <em>∠PCA = ∠PCB</em>. These two angles form a linear pair, so each is 90°.</li>
+  </ul>
 
-  <h3>Conclusion</h3>
   <p>
-    Line <em>PC</em> is both perpendicular to <em>AB</em> and passes through its midpoint; hence it is the right bisector.  
-    Therefore point <em>P</em> lies on the right bisector of <em>AB</em>.
+    Therefore <em>PC</em> is perpendicular to <em>AB</em> and passes through its midpoint.  
+    By definition, <em>P</em> lies on the perpendicular bisector of <em>AB</em>.
   </p>
 
   <hr>
-  <small>Generated 2025-08-05.</small>
+  <small>Re-generated 2025-08-05.</small>
 
 </main>

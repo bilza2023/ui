@@ -1,82 +1,101 @@
+<script>
+  import Nav from "$lib/appComps/Nav.svelte";
+</script>
+
 <svelte:head>
-  <link rel="stylesheet" href="/data/css/notes.css">
+  <link rel="stylesheet" href="/data/css/notes.css" />
 </svelte:head>
 
-<script>
-
-  import Nav from "$lib/appComps/Nav.svelte";
-
-  </script>
-
-<Nav/>
+<Nav />
 <main class="notes">
+  <h1>
+    Theorem 12.1.6 – The Bisectors of the Angles of a Triangle Are Concurrent
+  </h1>
 
-  <h1>Theorem 12.1.6 – The Bisectors of the Angles of a Triangle Are Concurrent</h1>
-
-  <img src="/images/theorems9old_12.1.6.svg"
-       alt="Triangle ABC with angle bisectors meeting at I"
-       style="max-width:50%;">
+  <img
+    src="/images/theorems9old_12.1.6.svg"
+    alt="Angle bisectors of triangle ABC meet at point I"
+    style="max-width:50%;"
+  />
 
   <h2>Book Statement</h2>
-  <p>The three internal angle bisectors of a triangle meet at a single point.</p>
+  <p>
+    The bisectors of ∠A, ∠B, and ∠C of a triangle are concurrent — they meet at
+    a single point.
+  </p>
 
   <h2>Key Vocabulary</h2>
   <ul>
-    <li><strong>Incenter:</strong> The common intersection point of angle bisectors; center of the inscribed circle.</li>
-    <li><strong>Concurrent:</strong> Passing through one point.</li>
+    <li>
+      <strong>Angle Bisector:</strong> A ray or segment that divides an angle into
+      two equal parts.
+    </li>
+    <li>
+      <strong>Concurrent Lines:</strong> Three or more lines that meet at a single
+      point.
+    </li>
+    <li>
+      <strong>Incenter (I):</strong> The common point where all angle bisectors of
+      a triangle intersect.
+    </li>
   </ul>
 
-  <p>
-    The incenter <em>I</em> is equidistant from all three sides, allowing construction of the triangle’s incircle.
-  </p>
-
-  <h2>What We Will Prove</h2>
+  <h2>Construction</h2>
   <ol>
-    <li>Bisectors of angles <em>A</em> and <em>B</em> meet at <em>I</em>.</li>
-    <li><em>I</em> is equidistant from sides <em>AB</em> and <em>AC</em> (Theorem 12.1.4).</li>
-    <li><em>I</em> is also equidistant from <em>BC</em>.</li>
-    <li>Hence the bisector of <em>∠C</em> also passes through <em>I</em>.</li>
+    <li>
+      Draw angle bisectors of ∠B and ∠C. Let them intersect at point <strong
+        >I</strong
+      >.
+    </li>
+    <li>
+      From point <strong>I</strong>, draw perpendiculars to each side:
+      <em>ID ⊥ BC</em>, <em>IE ⊥ CA</em>, <em>IF ⊥ AB</em>.
+    </li>
   </ol>
 
-  <h2>Proof Road-Map (Top-Level Steps)</h2>
+  <h2>Proof Table</h2>
   <table>
-    <thead><tr><th>Step</th><th>Core Idea</th><th>Tool Used</th></tr></thead>
+    <thead><tr><th>Statements</th><th>Reasons</th></tr></thead>
     <tbody>
-      <tr><td>1</td><td>Intersect bisectors of two angles</td><td>Construction</td></tr>
-      <tr><td>2</td><td>Use 12.1.4 to show equal distances to corresponding sides</td><td>12.1.4</td></tr>
-      <tr><td>3</td><td>Equal distances to third side</td><td>Transitive property</td></tr>
-      <tr><td>4</td><td>Establish concurrency at incenter</td><td>Uniqueness of equal-distance locus</td></tr>
+      <tr
+        ><td><em>ID = IF</em></td><td
+          >Theorem 12.1.4 : Any point on bisector of ∠B is equidistant from its
+          arms</td
+        ></tr
+      >
+      <tr
+        ><td><em>ID = IE</em></td><td
+          >Theorem 12.1.4 : Any point on bisector of ∠C is equidistant from its
+          arms</td
+        ></tr
+      >
+      <tr><td><em>∴ IE = IF</em></td><td>Each ≅ ID</td></tr>
+      <tr
+        ><td><strong>I lies on the bisector of ∠A</strong></td><td
+          >By converse of Theorem 12.1.4</td
+        ></tr
+      >
+      <tr
+        ><td><strong>I lies on all three bisectors</strong></td><td
+          >Construction + above proof</td
+        ></tr
+      >
     </tbody>
   </table>
 
-  <img src="/images/theorems9old_12.1.6.svg"
-       alt="Repeat diagram with incenter I"
-       style="max-width:50%; margin-top:1rem;">
+  <img
+    src="/images/theorems9old_12.1.6.svg"
+    alt="Reinforcement: all three bisectors meet at point I"
+    style="max-width:50%; margin-top:1rem;"
+  />
 
-  <h2>Detailed Proof</h2>
-
-  <h3>Step 1 — Two Bisectors Meet</h3>
+  <h2>Conclusion</h2>
   <p>
-    Draw bisectors of <em>∠A</em> and <em>∠B</em>; let them intersect at <em>I</em>.
+    Thus, the bisectors of angles ∠A, ∠B, and ∠C of triangle ABC are concurrent
+    at point <strong>I</strong>. This point is called the
+    <strong>incenter</strong> of the triangle.
   </p>
 
-  <h3>Step 2 — Equidistance from Two Sides</h3>
-  <p>
-    By Theorem 12.1.4, <em>I</em> is equidistant from sides <em>AB</em> and <em>AC</em> (as it lies on the bisector of <em>∠A</em>),  
-    and from sides <em>AB</em> and <em>BC</em> (as it lies on the bisector of <em>∠B</em>).  
-    Combining, <strong>dist(I, AC) = dist(I, AB) = dist(I, BC)</strong>.
-  </p>
-
-  <h3>Step 3 — Lies on Third Bisector</h3>
-  <p>
-    Because <em>I</em> is equidistant from sides <em>AC</em> and <em>BC</em>, it satisfies the converse theorem 12.1.5  
-    for angle <em>C</em>; hence it must lie on the bisector of <em>∠C</em>.
-  </p>
-
-  <h3>Conclusion</h3>
-  <p>Therefore all three internal angle bisectors intersect at the incenter <em>I</em>.</p>
-
-  <hr>
-  <small>Generated 2025-08-05.</small>
-
+  <hr />
+  <small>Generated 2025-08-05 — Final theorem, Chapter 12.</small>
 </main>

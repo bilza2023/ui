@@ -78,6 +78,48 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Ch-12",
+        "filename": "Ch-12 Line Bisectors and Angle Bisectors",
+        "exercises": [
+          {
+            "name": "Theorems",
+            "filename": "theorems",
+            "questions": [
+              {
+                "name": "Th 12_1_1",
+                "filename": "fbise9mathold_theorem12_1_1",
+                "type": "note"
+              },
+              {
+                "name": "Th 12_1_2",
+                "filename": "fbise9mathold_theorem12_1_2",
+                "type": "note"
+              },
+              {
+                "name": "Th 12_1_3",
+                "filename": "fbise9mathold_theorem12_1_3",
+                "type": "note"
+              },
+              {
+                "name": "Th 12_1_4",
+                "filename": "fbise9mathold_theorem12_1_4",
+                "type": "note"
+              },
+              {
+                "name": "Th 12_1_5",
+                "filename": "fbise9mathold_theorem12_1_5",
+                "type": "note"
+              },
+              {
+                "name": "Th 12_1_6",
+                "filename": "fbise9mathold_theorem12_1_6",
+                "type": "note"
+              }
+            ]
+          }
+        ]
       }
     ]
   }
