@@ -22,6 +22,7 @@
   const goNext  = () => currentIndex.update(i => Math.min(i + 1, $deck.deck.length - 1));
   const goLast  = () => currentIndex.set($deck.deck.length - 1);
 /* ───────── fetch deck ───── */
+/* ───────── fetch deck ───── */
 onMount(async () => {
   const params   = new URLSearchParams($page.url.search);
   const filename = params.get('filename');
@@ -31,22 +32,31 @@ onMount(async () => {
     return;
   }
 
-  const url = `/decks_test/${filename}.json`;
+  const candidates = [
+    `/decks_browser/${filename}.json`,
+    `/decks/${filename}.json`
+  ];
 
-  try {
-    const res  = await fetch(url);
-    if (!res.ok) throw new Error('404');
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const json = await res.json();
 
-    const json = await res.json();
-    if (json.version !== 'deck-v1' || !Array.isArray(json.deck)) {
-      throw new Error('Invalid deck-v1 JSON');
+      if (json.version !== 'deck-v1' || !Array.isArray(json.deck)) {
+        throw new Error('Invalid deck-v1 JSON');
+      }
+
+      deck.set(json);
+      return;
+    } catch (err) {
+      continue;
     }
-
-    deck.set(json);           // ✅ success
-  } catch (err) {
-    loadError.set(`Deck "${filename}" not found in /decks_test.`);
   }
+
+  loadError.set(`Deck "${filename}" not found in /decks_browser or /decks.`);
 });
+
 
 
   /* ───────── derived ─────── */
