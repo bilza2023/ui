@@ -1,34 +1,37 @@
 <!-- NavBar.svelte -->
 <script>
-  export let currentTime = 0;
-  export let duration = 100;
-  export let onPlay = () => {};
-  export let onPause = () => {};
-  export let onStop = () => {};
-  export let onBack = () => {};
-  export let onSeek = (val) => {};
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
 
+  export let currentTime = 0;
+  export let duration    = 100;
+  export let onPlay  = () => {};
+  export let onPause = () => {};
+  export let onStop  = () => {};
+  export let onSeek  = (val) => {};
+
+  /* ─── open the same deck in /browser ─── */
+  const openBrowser = () => {
+    const params   = new URLSearchParams($page.url.search);
+    const filename = params.get('filename');
+    if (filename) goto(`/browser?filename=${filename}`);
+  };
+
+  /* ─── transient visibility logic (unchanged) ─── */
   let visible = true;
   let hideTimeout;
-
-  function formatTime(seconds) {
-    const m = Math.floor(seconds / 60)
-      .toString()
-      .padStart(2, "0");
-    const s = Math.floor(seconds % 60)
-      .toString()
-      .padStart(2, "0");
-    return `${m}:${s}`;
-  }
-
   function showTemporarily() {
     visible = true;
     clearTimeout(hideTimeout);
     hideTimeout = setTimeout(() => (visible = false), 4000);
   }
-
-  // Listen to any pointer movement
   const handleMove = () => showTemporarily();
+
+  function formatTime(sec) {
+    const m = Math.floor(sec / 60).toString().padStart(2, '0');
+    const s = Math.floor(sec % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  }
 </script>
 
 <div
@@ -37,7 +40,9 @@
   on:pointermove={handleMove}
   on:touchstart={handleMove}
 >
-  <button on:click={onBack}>←</button>
+  <!-- NEW Browse button -->
+  <button on:click={openBrowser} title="Open in Browser">👁 Browse</button>
+
   <button on:click={onPlay}> ▶️</button>
   <button on:click={onPause}>⏸️</button>
   <button on:click={onStop}>⏹️</button>
@@ -59,7 +64,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0,0,0,0.6);
     color: white;
     display: flex;
     align-items: center;
@@ -69,9 +74,8 @@
     transition: opacity 0.4s;
     z-index: 10;
   }
-  .nav-bar.visible {
-    opacity: 1;
-  }
+  .nav-bar.visible { opacity: 1; }
+
   .nav-bar button {
     border: none;
     border-radius: 6px;
@@ -81,16 +85,8 @@
     color: #fff;
     cursor: pointer;
   }
+  .nav-bar button:hover { background: #555; }
 
-  .nav-bar button:hover {
-    background: #555;
-  }
-
-  .nav-bar .timer {
-    min-width: 90px;
-    text-align: center;
-  }
-  .nav-bar input[type="range"] {
-    flex: 1;
-  }
+  .nav-bar .timer { min-width: 90px; text-align: center; }
+  .nav-bar input[type="range"] { flex: 1; }
 </style>
