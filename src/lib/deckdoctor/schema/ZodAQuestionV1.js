@@ -255,13 +255,20 @@ const fillImage = baseSlide.extend({
 });
 
 
+// 21 TITLE AND PARA  ────────────────────────────────────────────────
+const titleAndPara = baseSlide.extend({
+  type: z.literal("titleAndPara"),
+  data: z.array(
+    z.union([
+      z.object({ name: z.literal("title"),     content: z.string(), showAt: z.number() }),
+      z.object({ name: z.literal("paragraph"), content: z.string(), showAt: z.number() })
+    ])
+  )
+});
+
 //////////////////////--->SvgPointer
-// 22 --- SVG POINTER SLIDE  -----------------------------------------------
-/**
- * data[] must contain **exactly one** { type:"image" } entry
- * followed by any number of pointer entries.
- */
 // 22 — SVG POINTER SLIDE  (v2: supports window & blink)
+
 const svgPointer = baseSlide.extend({
   type: z.literal("svgPointer"),
 
@@ -329,6 +336,7 @@ export const zodAQuestionV1 = z.object({
     .optional(),
     deck:        z.array(
       z.discriminatedUnion("type", [
+        titleAndPara,
         svgPointer,
         eqSlide,
         fillImage,

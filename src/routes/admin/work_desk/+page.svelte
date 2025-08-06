@@ -12,7 +12,7 @@
   defineDeck(deckbuilder);
   const question = deckbuilder.build();
   const deck = question.deck;
-
+  console.log("deck" ,deck); //<<<<<<<<<<<==============
   const background = question.background ?? {}; // fallback if author omitted
   let   soundUrl   = '';                      // no audio in work desk preview
   let   mounted    = false;

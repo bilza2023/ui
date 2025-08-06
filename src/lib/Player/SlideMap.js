@@ -14,6 +14,7 @@ import BarChartSlide from './slides/BarChartSlide.svelte';
 import TwoColumnTextSlide from './slides/TwoColumnTextSlide.svelte';
 import DonutChartSlide from './slides/DonutChartSlide.svelte';
 import TitleAndSubtitle from './slides/TitleAndSubtitle.svelte';
+import TitleAndPara from './slides/TitleAndPara.svelte';
 import BulletList from './slides/BulletList.svelte';
 import BigNumber from './slides/BigNumber.svelte';
 import QuoteWithImage from './slides/QuoteWithImage.svelte';
@@ -23,6 +24,7 @@ import Eq from './slides/eq/Eq.svelte';
 import SvgPointer from './slides/SvgPointer.svelte';
 
 export default {
+  titleAndPara:TitleAndPara,
   fillImage:FillImage,
   svgPointer: SvgPointer,
   eq: Eq,

@@ -279,6 +279,19 @@ Background-filling image.
 
 ---
 
+### 20. `titleAndPara` (Title + Paragraph)
+
+```ts
+[
+  { name: "title",     content: "Main Slide Title",            showAt: 0 },
+  { name: "paragraph", content: "Here’s the full paragraph text…", showAt: 1 }
+]
+
+```
+
+---
+
+
 ## ➗ EQ Slide
 
 See [`eq.md`](./eq.md) for full detail.
