@@ -24,7 +24,8 @@
 					class:selected={selectedChapter?.filename === chapter.filename}
 					on:click={() => selectChapter(chapter)}
 				>
-					{chapter.name}
+				{chapter.name.length > 30 ? chapter.name.slice(0, 30) + '...' : chapter.name}
+
 				</button>
 			{/each}
 		</div>
