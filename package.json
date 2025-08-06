@@ -4,10 +4,8 @@
   "private": true,
   "scripts": {
     "dev:deploy": "nodemon index.js",
-    "build:html": "node scripts/html2json.js",
     "dev": "vite dev",
     "build": "vite build && postbuild",
-    "postbuild": "rm -rf build/client/{images,sounds,md}",
     "preview": "vite preview",
     "build:syllabus": "node syllabus/genSyllabus.js"
   },
@@ -25,6 +23,7 @@
   "type": "module",
   "dependencies": {
     "@prisma/client": "^6.12.0",
+    "@svgdotjs/svg.js": "^3.2.4",
     "@zerodevx/svelte-toast": "^0.9.5",
     "better-sqlite3": "^12.2.0",
     "cheerio": "^1.0.0-rc.12",

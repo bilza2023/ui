@@ -12,7 +12,7 @@ export default  function defineFbise9matholdSyllabus(builder) {
 
     ch10_theorems.addQuestion("Congruent Triangles", "congruent_triangles");
     ch10_theorems.addQuestion("SAS Postulate", "posultate_and_SAS_postulate");
-    ch10_theorems.addNote("Test", "test");
+
     // ch10_theorems.addQuestion("Th 10.1.3", "math9old_theorem10_1_3");
 /////////////////////////////////////////////////////////////////////
 const ch11 = fbise9mathold.addChapter("Ch-11", "Ch-11 Parallelograms and Triangles");
@@ -62,6 +62,17 @@ ch13_theorems.addNote("Th 13_1_1" , "fbise9mathold_theorem13_1_1");
 ch13_theorems.addNote("Th 13_1_2" , "fbise9mathold_theorem13_1_2");
 ch13_theorems.addNote("Th 13_1_3" , "fbise9mathold_theorem13_1_3");
 ch13_theorems.addNote("Th 13_1_4" , "fbise9mathold_theorem13_1_4");
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////
+const ch14 = fbise9mathold.addChapter("Ch-14", "Ch-14 Pythogoras Theorem");
+const ch14_theorems = ch14.addExercise("Theorems", "theorems");
+
+
+ch14_theorems.addNote("Th 14_1_1" , "fbise9mathold_theorem14_1_1");
+ch14_theorems.addNote("Th 14_1_2" , "fbise9mathold_theorem14_1_2");
+ch14_theorems.addNote("Th 14_1_3" , "fbise9mathold_theorem14_1_3");
+ch14_theorems.addNote("Th 14_1_4" , "fbise9mathold_theorem14_1_4");
 //////////////////////////////////////////////////////////////////////////////////////////
     return fbise9mathold;
   }

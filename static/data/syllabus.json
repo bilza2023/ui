@@ -22,11 +22,6 @@
                 "name": "SAS Postulate",
                 "filename": "posultate_and_SAS_postulate",
                 "type": "slide"
-              },
-              {
-                "name": "Test",
-                "filename": "test",
-                "type": "note"
               }
             ]
           }
@@ -147,6 +142,38 @@
               {
                 "name": "Th 13_1_4",
                 "filename": "fbise9mathold_theorem13_1_4",
+                "type": "note"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ch-14",
+        "filename": "Ch-14 Pythogoras Theorem",
+        "exercises": [
+          {
+            "name": "Theorems",
+            "filename": "theorems",
+            "questions": [
+              {
+                "name": "Th 14_1_1",
+                "filename": "fbise9mathold_theorem14_1_1",
+                "type": "note"
+              },
+              {
+                "name": "Th 14_1_2",
+                "filename": "fbise9mathold_theorem14_1_2",
+                "type": "note"
+              },
+              {
+                "name": "Th 14_1_3",
+                "filename": "fbise9mathold_theorem14_1_3",
+                "type": "note"
+              },
+              {
+                "name": "Th 14_1_4",
+                "filename": "fbise9mathold_theorem14_1_4",
                 "type": "note"
               }
             ]
