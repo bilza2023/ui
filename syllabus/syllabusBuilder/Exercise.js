@@ -1,60 +1,66 @@
-
+// src/syllabus/ExerciseExtended.js
 
 export default class Exercise {
-    constructor(name, filename) {
-      this.name = name;
-      this.filename = filename;
-      this.questions = [];
-    }
-  
-    /**
-     * Add a question-type entry (default)
-     * @param {string} name      – Display label
-     * @param {string} filename  – Identity anchor (deck filename)
-     */
-    addQuestion(name, filename) {
-      this._addEntry(name, filename, "slide");
-    }
-  
-    /**
-     * Add a note-type entry
-     * @param {string} name
-     * @param {string} filename
-     */
-    addNote(name, filename) {
-      this._addEntry(name, filename, "note");
-    }
-  
-    /**
-     * Private helper for all entry types
-     * @param {string} name
-     * @param {string} filename
-     * @param {string} type
-     */
-    _addEntry(name, filename, type) {
-      this.questions.push({ name, filename, type });
-    }
-  
-    /**
-     * Return a shallow copy of the questions array
-     * @returns {Array<{name: string, filename: string, type: string}>}
-     */
-    getAllQuestions() {
-      return [...this.questions];
-    }
-  
-    /**
-     * Serialize to plain JSON
-     * @returns {object}
-     */
-    toJSON() {
-      const json = {
-        name: this.name,
-        filename: this.filename
-      };
-      if (this.questions.length) {
-        json.questions = this.questions;
-      }
-      return json;
-    }
+  constructor(name, filename) {
+    this.name = name;
+    this.filename = filename;
+    this.questions = [];
   }
+
+  /**
+   * Add a sound-enabled slide entry.
+   */
+  addQuestion(name, filename, thumbnail = null, tags = []) {
+    this._addEntry(name, filename, 'slide', thumbnail, tags);
+    return this;
+  }
+
+  /**
+   * Add a note entry.
+   */
+  addNote(name, filename, thumbnail = null, tags = ['note']) {
+    this._addEntry(name, filename, 'note', thumbnail, tags);
+    return this;
+  }
+
+  /**
+   * Add a deck-only entry (no sound).
+   */
+  addDeck(name, filename, thumbnail = null, tags = ['deck']) {
+    this._addEntry(name, filename, 'deck', thumbnail, tags);
+    return this;
+  }
+
+  /**
+   * Return a shallow copy of all questions.
+   */
+  getAllQuestions() {
+    return [...this.questions];
+  }
+
+  /**
+   * Serialize exercise to a JSON-ready object.
+   */
+  toJSON() {
+    return {
+      name: this.name,
+      filename: this.filename,
+      questions: this.questions.map(q => ({
+        name: q.name,
+        filename: q.filename,
+        type: q.type,
+        thumbnail: q.thumbnail,
+        tags: q.tags
+      }))
+    };
+  }
+
+  /**
+   * Internal helper to push an entry.
+   * @private
+   */
+  _addEntry(name, filename, type, thumbnail, tags) {
+    this.questions.push({ name, filename, type, thumbnail, tags });
+  }
+}
+

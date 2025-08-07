@@ -18,7 +18,10 @@
 		const slug = get(page).url.searchParams.get('tcode') ?? 'fbise9physics';
 		const res = await fetch('/data/syllabus.json');
 		const res2 = await res.json();
+		// debugger;
+		console.log("res2",res2);
 		syllabus = res2.find((s) => s.tcodeName === slug);
+		// syllabus = res2[0];
 		if (syllabus?.chapters?.length > 0) {
 			selectedChapter = syllabus.chapters[0];
 		}
