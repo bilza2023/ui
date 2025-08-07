@@ -1,36 +1,52 @@
 <script>
   export let questions = [];
-  // export let selectedChapter = null;
-  // export let selectedExercise = null;
+
   function getThumb(q) {
     return q.thumbnail
-      ?? (q.type === 'slide' ? '/images/slide.webp' : '/images/beakers2.webp');
+      ?? (q.type === 'slide'
+        ? '/images/slide.webp'
+        : '/images/beakers2.webp');
+  }
+
+  function getMeta(q) {
+    switch (q.type) {
+      case 'slide': return { color: '#2E1C02', icon: '📷' };
+      case 'note':  return { color: '#6c430b', icon: '📓' };
+      case 'deck':  return { color: '#0c0535', icon: '📽️' };
+      default:      return { color: '#2E1C02', icon: '' };
+    }
   }
 </script>
 
 <div class="question-grid">
   {#if questions.length > 0}
     {#each questions as question}
-      {#if question.type == "slide"}
-        <a class="card" href={`/player?filename=${question.filename}`}>
-      
-          <img class="thumb" src={getThumb(question)} alt={question.name} />
+      <a
+        class="card"
+        href={question.type === 'note'
+          ? `/notes/${question.filename}`
+          : `/player?filename=${question.filename}`}
+        style="border: 4px solid {getMeta(question).color}"
+      >
+        <img
+          class="thumb"
+          src={getThumb(question)}
+          alt={question.name}
+        />
 
-
-          <div class="title">{question.name}</div>
-        </a>
-      {:else if question.type == "note"}
-        <a class="card" href={`/notes/${question.filename}`}>
-          <img class="thumb" src={getThumb(question)} alt={question.name} />
-
-          <div class="title">{question.name}</div>
-        </a>
-      {/if}
+        <div
+          class="title"
+          style="background-color: {getMeta(question).color}"
+        >
+          {getMeta(question).icon} &nbsp; {question.name}
+        </div>
+      </a>
     {/each}
   {:else}
     <p class="no-questions">No questions available for this selection.</p>
   {/if}
 </div>
+
 
 <style>
   .question-grid {
@@ -54,6 +70,7 @@
   border-radius: 0.75rem;  /* rounded corners */
   overflow: hidden;   
   border: 4px solid #2E1C02;
+  /* border: 4px solid #372205; */
   box-shadow: 0 8px 8px rgba(45, 44, 44, 0.8);
 }
 
