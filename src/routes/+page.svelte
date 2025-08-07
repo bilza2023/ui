@@ -7,7 +7,7 @@
     import VideosCard from "../lib/appComps/homepage/VideosCard.svelte";
     import HomeIndex from "../lib/homeIndex/HomeIndex.svelte";
    
-    let showCourses = true;
+    let showCourses = false;
     let syllabus = [];
   
   onMount(async () => {
