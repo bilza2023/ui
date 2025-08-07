@@ -12,7 +12,6 @@
 
   onMount(async () => {
 
-    debugger;
     /* 1️⃣ choose file ------------------------------------------------ */
     const params   = new URLSearchParams(window.location.search);
     const filename = params.get('filename') ?? 'index.json';
