@@ -4,18 +4,13 @@
   import { goto } from '$app/navigation';
 
   export let currentTime = 0;
+  export let soundUrl = null;
   export let duration    = 100;
   export let onPlay  = () => {};
   export let onPause = () => {};
   export let onStop  = () => {};
   export let onSeek  = (val) => {};
 
-  /* ─── open the same deck in /browser ─── */
-  const openBrowser = () => {
-    const params   = new URLSearchParams($page.url.search);
-    const filename = params.get('filename');
-    if (filename) goto(`/browser?filename=${filename}`);
-  };
 
   /* ─── transient visibility logic (unchanged) ─── */
   let visible = true;
@@ -41,11 +36,11 @@
   on:touchstart={handleMove}
 >
   <!-- NEW Browse button -->
-  <button on:click={openBrowser} title="Open in Browser">👁 Browse</button>
-
+   {#if soundUrl}
   <button on:click={onPlay}> ▶️</button>
   <button on:click={onPause}>⏸️</button>
   <button on:click={onStop}>⏹️</button>
+    {/if}
 
   <span class="timer">{formatTime(currentTime)} / {formatTime(duration)}</span>
   <input

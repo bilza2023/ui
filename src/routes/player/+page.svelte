@@ -21,7 +21,8 @@
   // let deck       = null;        // slide array for the player
   // let background = null;        // background config   
   let notFound   = false;
-  let soundUrl   = '/media/sounds/music.opus';
+  // let soundUrl   = '/media/sounds/music.opus';
+  let soundUrl   = null;
   let mounted    = false;
 
 

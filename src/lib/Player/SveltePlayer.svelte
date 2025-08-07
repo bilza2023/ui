@@ -7,7 +7,7 @@
   import StaticBackground from "./background/StaticBackground.svelte";
 
   export let deck = [];
-  export let soundUrl = "";
+  export let soundUrl = "" | null;
   export let background = {
   backgroundColor: "#ffffff",
   backgroundImage: "",
@@ -19,6 +19,7 @@
   let currentTime = 0;
   let currentSlideIndex = 0;
 
+  let ready = false;
   function handleTick(time) {
     const deckEnd = deck.at(-1)?.end ?? 10;
 
@@ -40,9 +41,9 @@
   }
 
   onMount(() => {
-  //  debugger;
-  player = new Player(soundUrl);
-  player.onTick(handleTick);
+    player = new Player(soundUrl);
+    player.onTick(handleTick);
+    ready = true;
 });
 
 
@@ -76,6 +77,9 @@
   const getCurrentSlide = () => deck[currentSlideIndex];
 </script>
 
+
+{#if ready}
+
 <div class="stage-wrapper">
 
   <StaticBackground
@@ -100,6 +104,7 @@
 
   <NavBar
     {currentTime}
+    {soundUrl}
     duration={deck.at(-1).end}
     onPlay={play}
     onPause={pause}
@@ -107,8 +112,9 @@
     onSeek={seek}
     onBack={back}
   />
-</div>
 
+</div>
+{/if}
 <style>
   .stage-wrapper {
     position: relative;
