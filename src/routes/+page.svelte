@@ -5,6 +5,7 @@
     import Sidebar from "$lib/appComps/homepage/Sidebar.svelte";
     import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";
     import VideosCard from "../lib/appComps/homepage/VideosCard.svelte";
+    import HomeIndex from "../lib/homeIndex/HomeIndex.svelte";
    
     let showCourses = true;
     let syllabus = [];
@@ -33,7 +34,9 @@
   {#if showCourses}
         <TcodeCard tcodes={syllabus} />
         {:else}    
-        <VideosCard />    
+        <!-- <VideosCard />     -->
+        <HomeIndex />    
+
         {/if}    
       <Sidebar/>
  </section>
