@@ -12,44 +12,43 @@
 
 <script>
   import { onMount } from 'svelte';
-  import { page }      from '$app/stores';
+  import { page } from '$app/stores';
   import { SveltePlayer } from '../../lib/Player';
 
   export let data;
-  const { deck, background,error } = data;
+  const { deck, background, error } = data;
+  let soundUrl = null;
+  let notFound = false;
+  let mounted = false;
 
-  // let deck       = null;        // slide array for the player
-  // let background = null;        // background config   
-  let notFound   = false;
-  // let soundUrl   = '/media/sounds/music.opus';
-  let soundUrl   = null;
-  let mounted    = false;
-
-
-  // Run once after the component mounts
-  onMount(() => {
-    // debugger;
-    console.log("deck",deck);
-    const params   = new URLSearchParams($page.url.search);
+  onMount(async () => {
+    const params = new URLSearchParams($page.url.search);
     const filename = params.get('filename');
-
+   
     if (!filename) {
       notFound = true;
     } else {
-      // Optionally look for a matching .opus file
-      const opusName = `${filename}.opus`;
-      fetch(`/sounds/${opusName}`, { method: 'HEAD' })
-        .then((res) => { if (res.ok) soundUrl = `/sounds/${opusName}`; })
-        .catch(() => {});
+      try {
+        const opusName = `${filename}.opus`;
+        const response = await fetch(`/sounds/${opusName}`, { 
+          method: 'HEAD',
+          cache: 'no-store' // Prevent caching issues
+        });
+        soundUrl = response.ok ? `/sounds/${opusName}` : null;
+      } catch (err) {
+        console.log('Fetch error for sound file:', err.message); // Log for debugging
+        soundUrl = null; // Ensure null on any error
+      }
     }
 
     mounted = true;
+    return () => {}; // Cleanup function
   });
 </script>
 
 {#if mounted}
   {#if notFound}
-  <!-- dont remove this text-black -->
+    <!-- dont remove this text-black -->
     <div class="flex items-center justify-center h-full p-8">
       <p class="text-lg font-semibold text-gray-700">Content not found.</p>
     </div>
@@ -69,7 +68,6 @@
 {/if}
 
 <style>
-  /* Basic centering helpers */
   .flex {
     display: flex;
   }

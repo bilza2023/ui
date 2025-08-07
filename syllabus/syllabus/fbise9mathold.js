@@ -29,7 +29,7 @@ const ch11_theorems = ch11.addExercise("Theorems", "theorems");
   ch11_theorems.addNote("Th 11_1_4" , "fbise9mathold_theorem11_1_4" , "/images/theorems9old_11.1.4.svg")
   ch11_theorems.addNote("Th 11_1_5" , "fbise9mathold_theorem11_1_5" , "/images/theorems9old_11.1.5.svg")
 
-  ch11_theorems.addDeck("Th revision ch10-11" , "theorem_revision_ch10_11" , "/images/theorems9old_11.1.5.svg")
+  // ch11_theorems.addDeck("Th revision ch10-11" , "theorem_revision_ch10_11" , "/images/theorems9old_11.1.5.svg")
   
 //////////////////////////////////////////////////////////////////////////////////////////
 const ch12 = fbise9mathold.addChapter("Ch-12", "Ch-12 Line Bisectors and Angle Bisectors");
