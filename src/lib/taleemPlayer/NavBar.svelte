@@ -36,11 +36,11 @@
   on:touchstart={handleMove}
 >
   <!-- NEW Browse button -->
-   {#if soundUrl}
+   <!-- {#if soundUrl} -->
   <button on:click={onPlay}> ▶️</button>
   <button on:click={onPause}>⏸️</button>
   <button on:click={onStop}>⏹️</button>
-    {/if}
+    <!-- {/if} -->
 
   <span class="timer">{formatTime(currentTime)} / {formatTime(duration)}</span>
   <input
