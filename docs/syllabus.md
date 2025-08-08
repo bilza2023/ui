@@ -1,173 +1,177 @@
-# 📚 Syllabus Specification — Version 1
 
-> **Filename = Identity = Anchor** — every piece of content in Taleem.Help is uniquely addressed by its `filename`. The *syllabus* is the master index that binds these filenames into a navigable curriculum tree.
 
----
-
-## 1  Purpose & Scope
-
-The syllabus answers two questions:
-
-1. **Where is each lesson located?** — chapters, exercises, and questions are arranged in a three‑tier tree under a textbook‑code (**tcode**).
-2. **What kind of lesson is it?** — each leaf (`question`) declares its `type` so the front‑end can choose the correct viewer (player, notes, external link, etc.).
-
-Runtime reads exactly **one file**: `static/data/syllabus.json`. No database queries are required.
+# 📚 Syllabus Specification — v1 (Split: Builder + Usage)
 
 ---
 
-## 2  Core Design Principles
+## **Part 1 — SyllabusBuilder (External Library Spec)**
 
-I. *Filename = Identity* — a filename’s meaning is global and immutable.
-II. Authoring uses a **DSL** (`SyllabusBuilder.js`); runtime consumes **pure JSON**.
-III. Content‑type agnostic — new types can be added without changing the tree shape.
-IV. Version locked: `syllabus‑v1` is frozen alongside `deck‑v1`.
+> **Filename = Identity = Anchor** — every piece of content is uniquely addressed by its `filename`.
+> The **SyllabusBuilder** class compiles one textbook-code (**tcode**) into a navigable syllabus tree.
+
+### **1. Purpose**
+
+Provide a programmatic, fluent API for defining a syllabus as:
+
+* **Chapters** → **Exercises** → **Questions**
+* Immutable `filename` IDs for all leaf nodes
+
+### **2. Core API**
+
+```ts
+import SyllabusBuilder from 'syllabus-builder';
+
+// Create builder for one tcode
+const sb = new SyllabusBuilder('fbise9mathold', {
+  description: 'Math Class 9 Old Course',
+  image: '/bookcovers/math_9thFBSIE.png'
+});
+
+// Add chapter → exercise → questions
+const ch10 = sb.addChapter('Ch-10', 'Ch-10 Congruent Triangles');
+const ex10 = ch10.addExercise('Theorems', 'theorems');
+
+ex10.addQuestion('Congruent Triangles', 'congruent_triangles', '/images/congruent_triangle.webp');
+ex10.addNote('Th 10.1.2', 'fbise9mathold_theorem10_1_2', '/images/theorems9old_10.1.2.svg');
+
+// Compile to JSON
+const syllabusJSON = sb.build();
+```
 
 ---
 
-## 3  Data Model & Allowed Content Types
+### **3. Data Model**
 
-| Level        | Required keys                                                 | Notes                            |
-| ------------ | ------------------------------------------------------------- | -------------------------------- |
-| **tcode**    | `tcodeName`, `filename`, `description`, `image`, `chapters[]` | Represents one book / subject.   |
-| **chapter**  | `name`, `filename`, `exercises[]`                             | Filename can contain spaces.     |
-| **exercise** | `name`, `filename`, `questions[]`                             | Holds a topic or theorem group.  |
-| **question** | `name`, `filename`, `type`                                    | Leaf; `type` decides the viewer. |
+| Level        | Required keys                                       | Notes                             |
+| ------------ | --------------------------------------------------- | --------------------------------- |
+| **tcode**    | `tcodeName`, `description`, `image`, `chapters[]`   | One subject/book per JSON file.   |
+| **chapter**  | `name`, `filename`, `exercises[]`                   | `filename` can have spaces.       |
+| **exercise** | `name`, `filename`, `questions[]`                   | Groups related content.           |
+| **question** | `name`, `filename`, `type`, `thumbnail?`, `tags[]?` | Leaf node; `type` decides viewer. |
 
-Current `type` values:
+**Allowed `type` values**:
 
 | `type`    | Viewer route        | Typical extension       |
 | --------- | ------------------- | ----------------------- |
 | `"slide"` | `/player?filename=` | `deck.js` / `deck.json` |
-| `"note"`  | `/notes?filename=`  | `.md`                   |
+| `"note"`  | `/notes?filename=`  | `.svelte` (HTML embed)  |
+| `"deck"`  | `/player?filename=` | silent deck `.json`     |
 | `"exam"`  | `/exam?filename=`   | `.json` (future)        |
 | `"link"`  | external redirect   | URL                     |
 
 ---
 
-## 4  Canonical JSON Schema (excerpt)
-
-```jsonc
-[
-  {
-    "tcodeName": "fbise9mathold",
-    "filename": "fbise9mathold",
-    "description": "Math Class 9 Old Course",
-    "image": "/bookcovers/math_9thFBSIE.png",
-    "chapters": [
-      {
-        "name": "Ch‑10",
-        "filename": "Ch-10 Congruent Triangles",
-        "exercises": [
-          {
-            "name": "Theorems",
-            "filename": "theorems",
-            "questions": [
-              { "name": "Congruent Triangles", "filename": "congruent_triangles", "type": "slide" }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-]
-```
-
-The complete file is generated at **`static/data/syllabus.json`**.
-
----
-
-## 5  SyllabusBuilder DSL (authoring layer)
-
-### 5.1  API Surface
+### **4. Class Structure**
 
 ```ts
-const sb   = new SyllabusBuilder();
-const book = sb.addTcode(tcodeName, meta);
-const ch   = book.addChapter(name, filename);
-const ex   = ch.addExercise(name, filename);
-ex.addQuestion(name, filename, type); // type defaults to "slide"
+class SyllabusBuilder {
+  constructor(code, { description, image }) { ... }
+  addChapter(name, filename) : Chapter { ... }
+  build() : TcodeJSON { ... }
+}
+
+class Chapter {
+  addExercise(name, filename) : Exercise { ... }
+}
+
+class Exercise {
+  addQuestion(name, filename, thumbnail?, tags?) { ... } // type = 'slide'
+  addNote(name, filename, thumbnail?, tags = ['note']) { ... }
+  addDeck(name, filename, thumbnail?, tags = ['deck']) { ... }
+}
 ```
 
-### 5.2  Authoring Example
+---
+
+## **Part 2 — Usage in Taleem.Help**
+
+### **1. File Structure**
+
+```
+/syllabus/
+  fbise9mathold.js      ← defines one tcode using SyllabusBuilder
+  syllabus.js           ← imports all tcodes, compiles them
+/scripts/
+  genSyllabus.js        ← writes per-tcode JSON + subjects.json
+/static/data/syllabus/
+  fbise9mathold.json
+  fbise9physics.json
+  subjects.json         ← index (tcodeName, description, image)
+```
+
+---
+
+### **2. Generating Output**
+
+1. **Author** a tcode in `/syllabus/<tcode>.js` using `SyllabusBuilder`.
+2. Add it to `syllabus.js`:
 
 ```js
-export default function defineMath(builder) {
-  const math = builder.addTcode("fbise9mathold", {
-    description: "Math Class 9 Old Course",
-    image: "/bookcovers/math_9thFBSIE.png"
-  });
+import defineFbise9mathold from './fbise9mathold.js';
+import SyllabusBuilder from '../syllabusBuilder/SyllabusBuilder.js';
 
-  const ch10 = math.addChapter("Ch‑10", "Ch‑10 Congruent Triangles");
-  const ex   = ch10.addExercise("Theorems", "theorems");
-
-  ex.addQuestion("Congruent Triangles", "congruent_triangles");
+function buildTcode(defineFn, code, meta) {
+  const sb = new SyllabusBuilder(code, meta);
+  defineFn(sb);
+  return sb.build();
 }
+
+export const syllabus = [
+  buildTcode(defineFbise9mathold, 'fbise9mathold', {
+    description: 'Math Class 9 Old Course',
+    image: '/bookcovers/math_9thFBSIE.png'
+  })
+];
 ```
 
-### 5.3  Generated Output (fragment)
+3. **Run**:
 
-```jsonc
-{
-  "name": "Congruent Triangles",
-  "filename": "congruent_triangles",
-  "type": "slide"
-}
+```bash
+npm run build:syllabus
 ```
+
+`genSyllabus.js` will:
+
+* Write `/static/data/syllabus/<tcode>.json`
+* Write `/static/data/syllabus/subjects.json`
+* Optionally write combined `/static/data/syllabus.json` for backward compatibility.
 
 ---
 
-## 6  Build & Generation Script 🚀
+### **3. Frontend Consumption**
 
-1. Place or modify DSL files under `/syllabus/`.
-2. Run **`npm run build:syllabus`** — alias for `node syllabus/genSyllabus.js`.
-3. The script combines every DSL module and writes **`static/data/syllabus.json`** (pretty printed).
-4. Front‑end reads that JSON directly; **no Svelte rebuild** is required.
+**services/syllabusService.js**:
 
-```jsonc
-// package.json (relevant extract)
-{
-  "scripts": {
-    "dev:deploy": "nodemon index.js",
-    "dev": "vite dev",
-    "build": "vite build && postbuild",
-    "preview": "vite preview",
-    "build:syllabus": "node syllabus/genSyllabus.js"
+```js
+export async function getSubjectsIndex() {
+  return fetch('/data/syllabus/subjects.json').then(r => r.json());
+}
+
+export async function getSyllabusByTcode(tcode) {
+  return fetch(`/data/syllabus/${tcode}.json`).then(r => r.json());
+}
+```
+
+**Example — syllabus page**:
+
+```js
+import { getSyllabusByTcode } from '$lib/services/syllabusService.js';
+onMount(async () => {
+  syllabus = await getSyllabusByTcode('fbise9mathold');
+  if (syllabus?.chapters?.length > 0) {
+    selectedChapter = syllabus.chapters[0];
   }
-}
+});
 ```
 
 ---
 
-## 7  Validation & Testing
+### **4. Version Lock**
 
-*Upcoming*: a Zod schema will hard‑lock `syllabus‑v1`.
-
-Current safeguards:
-
-* Duplicate filename detection (Map lookup inside builder).
-* Required‑key checks during DSL construction.
+`syllabus-v1` is **frozen** alongside `deck-v1`.
+Breaking changes — e.g., nested exercises or per-question metadata — will only appear in `syllabus-v2`.
 
 ---
 
-## 8  Workflow Recap
-
-```mermaid
-graph LR
-  A[Authoring .js] -->|build:syllabus| B(static/data/syllabus.json)
-  B --> C(UI renders navigation)
-```
-
----
-
-## 9  Future Extensions (non‑breaking)
-
-* Multi‑language fields (`lang`, `title_en`, `title_ur`, …)
-* Tag arrays (`difficulty`, `concepts[]`)
-* UI filters (by tag, difficulty)
-
----
-
-## 10  Freeze Notice
-
-`syllabus‑v1` is frozen alongside `deck‑v1`.
-Breaking changes — e.g., nested exercises or per‑question metadata — will ship in **`syllabus‑v2`**.
+If you want, I can now **merge this updated spec file into your repo** so it fully replaces the old `syllabus.md`.
+Do you want me to prepare it ready-to-drop in?

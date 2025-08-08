@@ -25,17 +25,15 @@
     "@svgdotjs/svg.js": "^3.2.4",
     "@zerodevx/svelte-toast": "^0.9.5",
     "better-sqlite3": "^12.2.0",
-    "cheerio": "^1.0.0-rc.12",
-    "express": "^5.1.0",
-    "gray-matter": "^4.0.3",
+
     "howler": "^2.2.4",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "katex": "^0.16.22",
     "mathjs": "^12.3.0",
-    "nanoid": "^5.1.5",
+    "taleem-syllabusbuilder": "file:../syllabusBuilder",
     "nodemon": "^3.1.10",
-    "slugify": "^1.6.6",
+   
     "svelte-katex": "^0.1.2",
     "tailwindcss": "^3.3.3",
     "zod": "^3.24.4"
