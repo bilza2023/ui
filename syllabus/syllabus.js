@@ -1,5 +1,5 @@
 // syllabus/syllabus.js
-import SyllabusBuilder from '../syllabusBuilder/SyllabusBuilder.js';
+import { SyllabusBuilder } from 'taleem-syllabusbuilder';
 import defineFbise9mathold from './fbise9mathold.js';
 // import defineFbise9physics from './fbise9physics.js';
 

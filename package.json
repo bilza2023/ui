@@ -25,17 +25,15 @@
     "@svgdotjs/svg.js": "^3.2.4",
     "@zerodevx/svelte-toast": "^0.9.5",
     "better-sqlite3": "^12.2.0",
-
     "howler": "^2.2.4",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "katex": "^0.16.22",
     "mathjs": "^12.3.0",
-    "taleem-syllabusbuilder": "file:../syllabusBuilder",
     "nodemon": "^3.1.10",
-   
     "svelte-katex": "^0.1.2",
     "tailwindcss": "^3.3.3",
+    "taleem-syllabusbuilder": "^1.0.0",
     "zod": "^3.24.4"
   },
   "description": "",
