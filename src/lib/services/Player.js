@@ -23,6 +23,11 @@ export default class Player {
     this.sound.pause();
   }
 
+    // 👇 add this
+    seek(sec) {
+      if (typeof sec === 'number') this.sound.seek(sec);
+      return this.sound.seek(); // return current time (s), like Howler
+    }
   onTick(cb, interval = 200) {
     this._tickCbs.push(cb);
     if (this.sound.playing() && !this._intervalId) {
