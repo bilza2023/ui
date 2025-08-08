@@ -1,6 +1,6 @@
 <script>
   export let questions = [];
-
+  
   function getThumb(q) {
     return q.thumbnail
       ?? (q.type === 'slide'

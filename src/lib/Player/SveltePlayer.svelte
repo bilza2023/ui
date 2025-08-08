@@ -2,6 +2,7 @@
 <script>
   import { onMount, onDestroy } from "svelte";
   import Player from "./Player";
+  import Timer from "./Timer";
   import SlideMap from "./SlideMap.js";
   import NavBar from "./NavBar.svelte";
   import StaticBackground from "./background/StaticBackground.svelte";
@@ -41,8 +42,11 @@
   }
 
   onMount(() => {
-    // debugger;
-    player = new Player(soundUrl);
+    if(soundUrl){
+      player = new Player(soundUrl);
+    }else{
+      player = new Timer();
+    }
     player.onTick(handleTick);
     ready = true;
 });

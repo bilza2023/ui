@@ -20,31 +20,21 @@
   let soundUrl = null;
   let notFound = false;
   let mounted = false;
+  onMount(() => {
+  const params = new URLSearchParams($page.url.search);
+  const filename = params.get('filename');
 
-  onMount(async () => {
-    const params = new URLSearchParams($page.url.search);
-    const filename = params.get('filename');
-   
-    if (!filename) {
-      notFound = true;
-    } else {
-      try {
-        const opusName = `${filename}.opus`;
-        const response = await fetch(`/sounds/${opusName}`, { 
-          method: 'HEAD',
-          cache: 'no-store' // Prevent caching issues
-        });
-        soundUrl = response.ok ? `/sounds/${opusName}` : null;
-      } catch (err) {
-        console.log('Fetch error for sound file:', err.message); // Log for debugging
-        soundUrl = null; // Ensure null on any error
-      }
-    }
+  if (!filename) {
+    notFound = true;
+  } else {
+    soundUrl = null; // ensure silent mode still mounts player
+  }
 
-    mounted = true;
-    return () => {}; // Cleanup function
-  });
+  mounted = true;
+});
+
 </script>
+
 
 {#if mounted}
   {#if notFound}
