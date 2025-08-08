@@ -3,7 +3,7 @@
   import { page } from '$app/stores';
 
   import { getDeck } from '$lib/services/deckService.js';
-  import { createSoundPlayer, decideSoundUrl } from '$lib/services/soundServices.js';
+  import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
 
   import TaleemPlayer from '$lib/taleemPlayer/Player.svelte';
   import { clampTime, findSlideIndex, getDeckEnd } from '$lib/taleemPlayer/player-utility.js';
@@ -36,7 +36,7 @@
 
     try {
       // 1) Load deck
-      const fullDeck = await getDeck(filename); // { version, deck, background?, meta? }
+      const fullDeck = await getDeck(filename); // { version, deck, background? }
       deck = fullDeck.deck;
       background = fullDeck.background ?? null;
 
@@ -44,14 +44,10 @@
       deckEnd = getDeckEnd(deck);
       currentSlideIndex = findSlideIndex(deck, 0); // ensure first slide renders immediately
 
-      // 3) Decide audio URL (no HEAD probes)
-      soundUrl = decideSoundUrl({
-        searchParams: params,
-        deckMeta: fullDeck.meta ?? fullDeck,
-        filename
-      });
+      // 3) Auto-detect audio once (client-side), no logging on 404
+      soundUrl = await detectSoundUrl(filename, fetch); // returns '/sounds/<filename>.opus' or null
 
-      // 4) Create timing source
+      // 4) Create timing source (Howler if url, Timer otherwise)
       player = createSoundPlayer(soundUrl);
 
       // 5) Ticks → update app state
@@ -75,21 +71,20 @@
   function play()  { player?.play?.(); }
   function pause() { player?.pause?.(); }
   function seek(t) {
-  if (!player) return;
-  player.seek(t);
-  // immediately reflect in UI (works when paused)
-  currentTime = clampTime(deck, t);
-  currentSlideIndex = findSlideIndex(deck, currentTime);
-}
-
-function stop() {
-  if (!player) return;
-  player.pause();
-  player.seek(0);
-  // reflect immediately
-  currentTime = 0;
-  currentSlideIndex = findSlideIndex(deck, 0);
-}
+    if (!player) return;
+    player.seek(t);
+    // immediately reflect in UI (works when paused)
+    currentTime = clampTime(deck, t);
+    currentSlideIndex = findSlideIndex(deck, currentTime);
+  }
+  function stop() {
+    if (!player) return;
+    player.pause();
+    player.seek(0);
+    // reflect immediately
+    currentTime = 0;
+    currentSlideIndex = findSlideIndex(deck, 0);
+  }
 
   onMount(init);
   onDestroy(() => { player?.destroy?.(); });
