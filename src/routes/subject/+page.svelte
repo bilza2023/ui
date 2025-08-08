@@ -1,9 +1,7 @@
 <script>
+	
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
-	import { get } from 'svelte/store';
 	import Nav from '$lib/appComps/Nav.svelte';
-	import BetaWarning from '$lib/appComps/BetaWarning.svelte';
 	import LeftChaptersBar from './LeftChaptersBar.svelte';
 	import ExNavBar from './ExNavBar.svelte';
 	import QuestionCard from './QuestionCard.svelte';
@@ -13,19 +11,15 @@
 	let selectedExercise = null;
 	let isSidebarOpen = true; // Default to open
 
-	// Fetch syllabus data
-	onMount(async () => {
-		const slug = get(page).url.searchParams.get('tcode') ?? 'fbise9physics';
-		const res = await fetch('/data/syllabus.json');
-		const res2 = await res.json();
-		// debugger;
-		console.log("res2",res2);
-		syllabus = res2.find((s) => s.tcodeName === slug);
-		// syllabus = res2[0];
-		if (syllabus?.chapters?.length > 0) {
-			selectedChapter = syllabus.chapters[0];
-		}
-	});
+	import { getSyllabusByTcode } from '../../lib/services/syllabusServicer';
+
+onMount(async () => {
+  syllabus = await getSyllabusByTcode('fbise9mathold');
+  if (syllabus?.chapters?.length > 0) {
+    selectedChapter = syllabus.chapters[0];
+  }
+});
+
 
 	// Derive chapters, exercises, and questions
 	$: chapters = syllabus?.chapters || [];

@@ -2,28 +2,6 @@
 import Exercise from './Exercise.js';
 
 export default class SyllabusBuilder {
-  constructor() {
-    this.tcodes = [];
-  }
-
-  /**
-   * Add a new top-level syllabus code (course).
-   */
-  addTcode(code, options) {
-    const tcode = new Tcode(code, options);
-    this.tcodes.push(tcode);
-    return tcode;
-  }
-
-  /**
-   * Build final JSON output for all tcodes.
-   */
-  build() {
-    return this.tcodes.map(tc => tc.toJSON());
-  }
-}
-
-class Tcode {
   constructor(code, { description, image = null }) {
     this.code = code;
     this.description = description;
@@ -37,9 +15,9 @@ class Tcode {
     return chapter;
   }
 
-  toJSON() {
+  build() {
     return {
-      tcodeName: this.code,            // renamed to match consumer lookup
+      tcodeName: this.code,
       description: this.description,
       image: this.image,
       chapters: this.chapters.map(ch => ch.toJSON())

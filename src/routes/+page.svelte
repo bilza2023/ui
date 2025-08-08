@@ -9,11 +9,13 @@
    
     let showCourses = false;
     let syllabus = [];
-  
-  onMount(async () => {
-    const res = await fetch('/data/syllabus.json');
-    syllabus = await res.json();
-  });
+
+    import { getSubjectsIndex } from '../lib/services/syllabusServicer';
+
+onMount(async () => {
+  syllabus = await getSubjectsIndex();
+});
+
   
   </script>
   

@@ -2,11 +2,11 @@
 // Define a minimal test syllabus
 
 export default  function defineFbise9matholdSyllabus(builder) {
-    const fbise9mathold = builder.addTcode("fbise9mathold", {
-      description: "Math Class 9 Old Course",
-      image: "/bookcovers/math_9thFBSIE.png"
-    });
-  
+    // const fbise9mathold = builder.addTcode("fbise9mathold", {
+    //   description: "Math Class 9 Old Course",
+    //   image: "/bookcovers/math_9thFBSIE.png"
+    // });
+    const fbise9mathold = builder; 
     const ch10 = fbise9mathold.addChapter("Ch-10", "Ch-10 Congruent Triangles");
     const ch10_theorems = ch10.addExercise("Theorems", "theorems");
 

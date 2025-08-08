@@ -5,7 +5,6 @@
   "scripts": {
     "dev:deploy": "nodemon index.js",
     "dev": "vite dev",
-    "build": "vite build && postbuild",
     "preview": "vite preview",
     "build:syllabus": "node syllabus/genSyllabus.js"
   },
