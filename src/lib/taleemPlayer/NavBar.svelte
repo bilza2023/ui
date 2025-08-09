@@ -1,18 +1,12 @@
-<!-- NavBar.svelte -->
 <script>
-  import { page } from '$app/stores';
-  import { goto } from '$app/navigation';
-
   export let currentTime = 0;
-  export let soundUrl = null;
   export let duration    = 100;
   export let onPlay  = () => {};
   export let onPause = () => {};
   export let onStop  = () => {};
   export let onSeek  = (val) => {};
+  export let hasAudio = false;
 
-
-  /* ─── transient visibility logic (unchanged) ─── */
   let visible = true;
   let hideTimeout;
   function showTemporarily() {
@@ -35,23 +29,25 @@
   on:pointermove={handleMove}
   on:touchstart={handleMove}
 >
-  <!-- NEW Browse button -->
-   <!-- {#if soundUrl} -->
-  <button on:click={onPlay}> ▶️</button>
-  <button on:click={onPause}>⏸️</button>
-  <button on:click={onStop}>⏹️</button>
-    <!-- {/if} -->
+  {#if hasAudio}
+    <button on:click={onPlay}>▶️</button>
+    <button on:click={onPause}>⏸️</button>
+    <button on:click={onStop}>⏹️</button>
+  {/if}
 
   <span class="timer">{formatTime(currentTime)} / {formatTime(duration)}</span>
+
+  <!-- changed: value=... and currentTarget -->
   <input
     type="range"
     min="0"
     max={duration}
     step="0.1"
-    bind:value={currentTime}
-    on:input={(e) => onSeek(+e.target.value)}
+    value={currentTime}
+    on:input={(e) => onSeek(+e.currentTarget.value)}
   />
 </div>
+
 
 <style>
   .nav-bar {
