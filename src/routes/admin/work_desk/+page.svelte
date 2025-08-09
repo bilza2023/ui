@@ -1,6 +1,8 @@
 <script>
   import { onMount } from 'svelte';
-  import { SveltePlayer } from '../../../lib/Player';
+  // import { SveltePlayer } from '../../../lib/Player';
+
+  import TaleemPlayer from '$lib/taleemPlayer/Player.svelte';
 
   let deck        = [];       // slides[]
   let background  = {};       // bg config
@@ -50,7 +52,7 @@
 </script>
 
 {#if mounted && deck.length}
-  <SveltePlayer {deck} {background} {soundUrl} />
+  <TaleemPlayer {deck} {background} {soundUrl} />
 {:else}
   <div class="flex items-center justify-center h-full">Loading…</div>
 {/if}

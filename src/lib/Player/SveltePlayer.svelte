@@ -1,125 +1,135 @@
-<!-- PivotPlayerUI.svelte -->
 <script>
-  import { onMount, onDestroy } from "svelte";
-  import Player from "./Player";
-  import Timer from "./Timer";
-  import SlideMap from "./SlideMap.js";
-  import NavBar from "./NavBar.svelte";
-  import StaticBackground from "./background/StaticBackground.svelte";
+  import { onMount, onDestroy } from 'svelte';
+  import StaticBackground from '../../lib/taleemPlayer/StaticBackground.svelte';
 
-  export let deck = [];
-  export let soundUrl = "" | null;
-  export let background = {
-  backgroundColor: "#ffffff",
-  backgroundImage: "",
-  backgroundImageOpacity: 1,
- };
+  // Public inputs (keep names as you already use them)
+  export let deck = null;        // full deck object (v1 schema)
+  export let soundUrl = null;    // optional audio url; player must work without it
+  export let autoPlay = false;   // optional: start playing automatically
 
+  // If you inject a runtime/player instance from outside, keep this prop.
+  // Otherwise, you can remove it and manage time locally.
+  export let runtime = null;     // optional external runtime/controller
 
-  let player;
-  let currentTime = 0;
-  let currentSlideIndex = 0;
+  // Background state (finalized system: color, image, opacity)
+  let backgroundColor = '#111';
+  let backgroundImage = "/images/taleem.webp";
+  let backgroundImageOpacity = 1;
 
-  let ready = false;
-  function handleTick(time) {
-    const deckEnd = deck.at(-1)?.end ?? 10;
-
-    if (time >= deckEnd) {
-      player.pause();
-      currentTime = deckEnd;
-      return;
-    }
-
-    currentTime = time;
-
-    for (let i = 0; i < deck.length; i++) {
-      const { start, end } = deck[i];
-      if (time >= start && time < end) {
-        currentSlideIndex = i;
-        break;
-      }
-    }
+  // Derive background from deck (no per-slide overrides)
+  $: if (deck?.background) {
+    backgroundColor        = deck.background.color   ?? backgroundColor;
+    backgroundImage        = deck.background.image   ?? backgroundImage;
+    backgroundImageOpacity = deck.background.opacity ?? backgroundImageOpacity;
   }
 
-  onMount(() => {
-    if(soundUrl){
-      player = new Player(soundUrl);
-    }else{
-      player = new Timer();
+  // Minimal internal clock (works with or without audio).
+  // If you already have a runtime handling this, you can ignore/remove this section.
+  let rafId;
+  let startedAt = 0;
+  let pausedAt = 0;
+  let isPlaying = false;
+  let currentTime = 0; // seconds (global)
+
+  function tick(ts) {
+    // basic time driver for silent mode; if runtime exists, prefer runtime time
+    if (runtime?.getTime) {
+      currentTime = runtime.getTime();
+    } else if (isPlaying) {
+      const now = performance.now() / 1000;
+      currentTime = now - startedAt;
+    } else {
+      currentTime = pausedAt || 0;
     }
-    player.onTick(handleTick);
-    ready = true;
-});
-
-
-  onDestroy(() => {
-    player.destroy();
-  });
+    rafId = requestAnimationFrame(tick);
+  }
 
   function play() {
-    player.play();
+    if (runtime?.play) {
+      runtime.play();
+    } else {
+      const now = performance.now() / 1000;
+      startedAt = now - (pausedAt || 0);
+      isPlaying = true;
+    }
   }
 
   function pause() {
-    player.pause();
-  }
-
-  function stop() {
-    player.pause();
-    player.sound.seek(0);
-    currentTime = 0;
+    if (runtime?.pause) {
+      runtime.pause();
+    } else {
+      isPlaying = false;
+      pausedAt = currentTime;
+    }
   }
 
   function seek(t) {
-    player.sound.seek(t);
-    handleTick(t);
+    if (runtime?.seek) {
+      runtime.seek(t);
+    } else {
+      const now = performance.now() / 1000;
+      startedAt = now - t;
+      pausedAt = t;
+      currentTime = t;
+    }
   }
 
-  function back() {
-    history.back();
-  }
+  // Auto-play if requested
+  onMount(() => {
+    rafId = requestAnimationFrame(tick);
+    if (autoPlay) play();
+  });
 
-  const getCurrentSlide = () => deck[currentSlideIndex];
+  onDestroy(() => {
+    if (rafId) cancelAnimationFrame(rafId);
+  });
+
+  // Expose controls outward if needed (kept for API parity)
+  export { play, pause, seek };
 </script>
 
-
-{#if ready}
-
-<div class="stage-wrapper">
-
+<!-- Root container -->
+<div class="player-root">
+  <!-- Background (z0) -->
   <StaticBackground
-  backgroundColor={background.backgroundColor}
-  backgroundImage={background.backgroundImage}
-  backgroundImageOpacity={background.backgroundImageOpacity}
-/>
-
-
-
-  <div class="stage">
-    {#if SlideMap[getCurrentSlide().type]}
-      <svelte:component
-        this={SlideMap[getCurrentSlide().type]}
-        data={getCurrentSlide().data}
-        {currentTime}
-      />
-    {:else}
-      <p>Unknown slide type: {getCurrentSlide().type}</p>
-    {/if}
-  </div>
-
-  <NavBar
-    {currentTime}
-    {soundUrl}
-    duration={deck.at(-1).end}
-    onPlay={play}
-    onPause={pause}
-    onStop={stop}
-    onSeek={seek}
-    onBack={back}
+    {backgroundColor}
+    {backgroundImage}
+    {backgroundImageOpacity}
   />
 
+  <!-- Foreground (z1): your existing player UI + slide renderer lives here -->
+  <div class="stage">
+    <!-- Transport (optional simple controls; keep/remove as per your current UI) -->
+    <div class="transport">
+      <button on:click={play}>Play</button>
+      <button on:click={pause}>Pause</button>
+      <!-- Example scrubber; wire to your existing UI if you already have one -->
+      <input
+        type="range"
+        min="0"
+        max="{deck?.duration ?? 0}"
+        step="0.01"
+        value="{currentTime}"
+        on:input={(e) => seek(+e.currentTarget.value)}
+      />
+      <span>{currentTime.toFixed(2)}s</span>
+    </div>
+
+    <!-- Slide host: render whatever slide system you already have -->
+    <!-- If your project uses a separate SlideRenderer, keep that here -->
+    <!-- Example placeholder; replace with your real renderer component -->
+    {#if deck}
+      <!-- Replace this block with your actual slide renderer -->
+      <div class="slides-host">
+        <!-- Your slide rendering goes here, driven by `currentTime` -->
+        <slot name="slides" {deck} {currentTime} />
+      </div>
+    {:else}
+      <div class="empty">No deck loaded.</div>
+    {/if}
+  </div>
 </div>
-{/if}
+
 <style>
   .stage-wrapper {
     position: relative;
