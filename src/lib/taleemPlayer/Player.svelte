@@ -100,12 +100,23 @@
       min-height: 100vh;
       display: grid;
       place-items: center;
-      padding: 16px;
+      padding: 0px;
     }
   
     .fallback {
       color: #aaa;
       font-size: 14px;
     }
+
+
+    .stage :where(.eq, .eq-slide, .eq-container, .eq-lines, .eq-sidebar){
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+.stage :where(.eq-sidebar)::before,
+.stage :where(.eq-sidebar)::after{
+  display:none !important;
+}
   </style>
   
