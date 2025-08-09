@@ -25,6 +25,7 @@
     "@svgdotjs/svg.js": "^3.2.4",
     "@zerodevx/svelte-toast": "^0.9.5",
     "better-sqlite3": "^12.2.0",
+    "chalk": "^5.5.0",
     "howler": "^2.2.4",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",

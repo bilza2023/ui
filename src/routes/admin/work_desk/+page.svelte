@@ -1,7 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-  // import { SveltePlayer } from '../../../lib/Player';
-
   import TaleemPlayer from '$lib/taleemPlayer/Player.svelte';
 
   let deck        = [];       // slides[]
