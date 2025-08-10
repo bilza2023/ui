@@ -1,5 +1,5 @@
 // DeckBuilder.js
-import DeckDoctor from "../deckdoctor/DeckDoctor";
+import DeckDoctor from "../deckdoctor/DeckDoctor.js";
 
 export default class DeckBuilder {
   constructor() {
