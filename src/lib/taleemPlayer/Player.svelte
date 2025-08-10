@@ -1,9 +1,7 @@
+
 <script>
   // Pure display: background (behind), current slide (above), and NavBar.
   import StaticBackground from './StaticBackground.svelte';
-  import { GlobalBackgrounds } from './globalBackgrounds.js';
-  import { getDefaultBackground } from './getDefaultBackground.js';
-
   import NavBar from './NavBar.svelte';
   import SlideMap from '$lib/taleemSlides/SlideMap.js';
 
@@ -20,10 +18,7 @@
   export let onStop  = () => {};
   export let onSeek  = (t) => {};
 
-  // ── Background policy (agreed) ─────────────────────────────────────────────
-  // 1) Prefer explicit `background` prop if provided
-  // 2) Else use `deck.background` when `deck` is an object
-  // 3) Else fallback to solid color (no image)
+
   const FALLBACK_BG = {
     backgroundColor: '#000000',
     backgroundImage: null,
@@ -81,42 +76,23 @@
   onSeek={onSeek}
 />
 
+
   <style>
-    :global(html, body, #svelte) { height: 100%; }
-    :global(body) { margin: 0; }
-  
-    /* Background sits behind */
-    :global(.static-bg) {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-  
-    /* Slides sit above */
-    .stage {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 0px;
-    }
-  
-    .fallback {
-      color: #aaa;
-      font-size: 14px;
-    }
-
-
-    .stage :where(.eq, .eq-slide, .eq-container, .eq-lines, .eq-sidebar){
-  border: 0 !important;
-  outline: 0 !important;
-  box-shadow: none !important;
+:global(html, body, #svelte){ height:100%; }
+:global(body){ margin:0; }
+:global(.static-bg){ position:fixed; inset:0; z-index:0; pointer-events:none; }
+:global(body){ margin:0; color:#050000; }  /* pick your final text color */
+.stage{ color: inherit; }   
+.stage{
+  position:relative; z-index:1;
+  height:100dvh;
+  display:grid;
+  place-items:stretch;   /* child fills the slide area */
+  padding:0;
+  overflow:hidden;
 }
-.stage :where(.eq-sidebar)::before,
-.stage :where(.eq-sidebar)::after{
-  display:none !important;
-}
+
+.fallback{ color:#aaa; font-size:14px; }
+
   </style>
   

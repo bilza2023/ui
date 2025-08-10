@@ -7,26 +7,24 @@
 
 <div class="image-slide">
   <!-- svelte-ignore a11y-img-redundant-alt -->
-  <img class="slide-image" src={imageSrc} alt="Slide Image" />
+  <img class="fullImage" src={imageSrc} alt="Slide Image" />
 </div>
 
 <style>
-  /* I. Container: full-height flex centering + padding */
-  .image-slide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;           /* fill the parent (e.g. slide-outer) */
-    padding: 2rem;          /* breathing room around the image */
-    box-sizing: border-box;
-  }
+ .image-slide{
+  display:flex; align-items:center; justify-content:center;
+  height:100%; width:100%;
+  padding:2rem; box-sizing:border-box;
+  overflow:hidden; min-height:0;
+}
 
-  /* II. Image: responsive, bordered, contained */
-  .slide-image {
-    max-width: 100%;
-    max-height: 90%;
-    object-fit: contain;    /* preserve aspect ratio */
-    border: 4px solid #ddd; /* simple light gray border */
-    border-radius: 8px;     /* gentle rounding */
-  }
+.fullImage{
+  display:block; margin:auto;
+  max-width:100%; max-height:90%;
+  width:auto; height:auto;
+  object-fit:contain;
+}
+
+
+
 </style>
