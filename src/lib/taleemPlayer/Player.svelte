@@ -78,10 +78,11 @@
 
 
   <style>
-:global(html, body, #svelte){ height:100%; }
-:global(body){ margin:0; }
-:global(.static-bg){ position:fixed; inset:0; z-index:0; pointer-events:none; }
-:global(body){ margin:0; color:#050000; }  /* pick your final text color */
+  :global(html, body, #svelte){ height:100%; }
+  :global(body){ margin:0; color:#050000; }
+  :global(.static-bg){ position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+
 .stage{ color: inherit; }   
 .stage{
   position:relative; z-index:1;
