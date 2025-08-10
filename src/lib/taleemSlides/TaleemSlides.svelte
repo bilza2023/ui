@@ -1,10 +1,13 @@
+
 <script>
-  import SlideMap from './SlideMap.js';
+
+import SlideMap from './SlideMap.js';
   import { pickSlideByTime } from './pickSlideByTime.js';
 
   // Props
   export let deck = [];              // array of slides (Zod-checked: has startAt, type)
   export let currentTime = 0;        // global time (seconds)
+  
   export let background = {
     backgroundColor: '#f2f2b5',
     backgroundImage: '/images/taleem.webp',
