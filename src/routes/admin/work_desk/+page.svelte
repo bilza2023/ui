@@ -2,56 +2,54 @@
   import TaleemSlides from '../../../lib/taleemSlides/TaleemSlides.svelte';
   import NavBar from '../../../lib/taleemSlides/NavBar.svelte';
 
-import {onMount} from "svelte"
-  let deck = [];          // must be slides[]
-  // console.log("deck" ,deck);
-  let soundUrl = null;
+  let deck = [];
   let mounted = false;
   let currentTime = 0;
-  let duration = 60;
+  let duration = 0;
 
+  function computeDuration(slides = []) {
+    const times = slides.map(s => s.end ?? 0);
+    return Math.max(0, ...times);
+  }
 
-  const BASE = '/decks_workbench/';
+  function onSeek(val) {
+    currentTime = Math.max(0, Math.min(duration, val));
+  }
 
+  function handleFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  onMount(async () => {
-    const params   = new URLSearchParams(window.location.search);
-    const filename = params.get('filename') ?? 'index.json';
-    const path     = `${BASE}${filename}`;
-
-    if (filename.endsWith('.json')) {
-      const res = await fetch(path);
-      const obj = await res.json();
-
-      // ✅ normalize to slides[]
-      deck = Array.isArray(obj) ? obj : (obj.slides ?? obj.deck ?? []);
-      // debugger;
-      duration = deck[deck.length -1].end;
-      console.log("duration" , duration);
-      soundUrl = null; // not needed for this test
-      // trigger()//
-      mounted = true;
-      return;
-    }
-
-    alert('For now, load a .json deck (we’ll add .js later).');
-    mounted = true;
-  });
-
-  function onSeek(val){
-   currentTime = val;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const obj = JSON.parse(event.target.result);
+        deck = Array.isArray(obj) ? obj : (obj.slides ?? obj.deck ?? []);
+        duration = computeDuration(deck) || 100;
+        currentTime = 0;
+        mounted = true;
+      } catch (err) {
+        alert("Invalid JSON file");
+      }
+    };
+    reader.readAsText(file);
   }
 </script>
 
+
 {#if mounted && deck.length}
-  <!-- {#key  currentTime} -->
-  <TaleemSlides {deck} {currentTime} />
-  <!-- {/key} -->
+  <TaleemSlides {deck} {currentTime} {duration} />
+  <NavBar {currentTime} {duration} onSeek={onSeek}/>
 {:else}
-  <div class="flex items-center justify-center h-full">Loading…</div>
+  <div class="flex items-center justify-center h-full">Load a deck file to start</div>
 {/if}
 
-<NavBar  {currentTime} {onSeek} {duration} />
+
+<!-- Load Deck Button -->
+
+
+<input type="file" accept=".json" on:change={handleFile} />
+
 <style>
   .flex{display:flex}.items-center{align-items:center}.justify-center{justify-content:center}.h-full{height:100%}
 </style>
