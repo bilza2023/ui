@@ -1,4 +1,7 @@
 
+<svelte:options customElement="taleem-slides" />
+
+
 <script>
 
 import SlideMap from './SlideMap.js';
