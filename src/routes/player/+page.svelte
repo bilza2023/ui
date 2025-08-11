@@ -9,16 +9,14 @@
 
   import { getDeck } from '$lib/services/deckService.js';
   import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
-
-  // Keep utilities you still use
   import { clampTime, getDeckEnd } from '$lib/taleemPlayer/player-utility.js';
 
-  // Optional: reuse the same NavBar as Workdesk (seek only)
+  // Optional simple seek bar (same as Workdesk)
   import NavBar from '$lib/taleemSlides/NavBar.svelte';
 
   // ---- state (single source of truth) ----
   let deck = null;           // slides[]
-  let background = null;     // retained for future, CE doesn't need it
+  let background = null;     // kept for future; CE doesn't need it
   let soundUrl = null;
   let player = null;
 
@@ -51,6 +49,10 @@
 
       // 2) Time boundaries
       deckEnd = getDeckEnd(deck);
+      currentTime = 0;
+
+      // Immediately feed CE if it's already mounted (defensive)
+      if (slidesEl && deck) slidesEl.deck = deck;
 
       // 3) Auto-detect audio once (client-side), no logging on 404
       soundUrl = await detectSoundUrl(filename, fetch); // '/sounds/<filename>.opus' or null
@@ -88,7 +90,7 @@
     currentTime = 0;
   }
 
-  // push props into the CE whenever they change
+  // Reactive prop push into CE
   $: if (slidesEl && deck) slidesEl.deck = deck;
   $: if (slidesEl)          slidesEl.currentTime = currentTime;
 
@@ -101,17 +103,20 @@
 {:else if errorMsg}
   <div class="center error">{errorMsg}</div>
 {:else}
-  <!-- VISUALS: use the precompiled Web Component -->
-  <taleem-slides bind:this={slidesEl}></taleem-slides>
+  {#if deck && deck.length}
+    <!-- VISUALS: use the precompiled Web Component -->
+    <taleem-slides bind:this={slidesEl}></taleem-slides>
 
-  <!-- Controls: reuse the simple NavBar (seek only) -->
-  <NavBar {currentTime} duration={deckEnd} onSeek={seek} />
-
-  <!-- If you want play/pause/stop buttons here, wire them to play/pause/stop() -->
+    <!-- Controls: simple seek bar (play/pause/stop can be added as buttons if you like) -->
+    <NavBar {currentTime} duration={deckEnd} onSeek={seek} />
+  {:else}
+    <div class="center">Preparing deck…</div>
+  {/if}
 {/if}
 
 <style>
   .center { display:flex; align-items:center; justify-content:center; height:100vh; color:#666; }
   .error { color:#b00020; }
-  taleem-slides { display:block; width:100%; height:100vh; }
+  /* Prevent initial white text flash by avoiding CE default paint before props */
+  taleem-slides { display:block; width:100%; height:100vh; color:#222; }
 </style>
