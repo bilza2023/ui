@@ -13,10 +13,17 @@
 
 	import { getSyllabusByTcode } from '../../lib/services/syllabusServicer';
 
-onMount(async () => {
-  syllabus = await getSyllabusByTcode('fbise9mathold');
-  if (syllabus?.chapters?.length > 0) {
-    selectedChapter = syllabus.chapters[0];
+	onMount(async () => {
+  const params = new URLSearchParams(window.location.search);
+  const tcode = (params.get('tcode') || 'fbise9mathold').trim();
+
+  try {
+    syllabus = await getSyllabusByTcode(tcode);
+    selectedChapter = syllabus?.chapters?.[0] ?? null;
+  } catch (err) {
+    console.error('Failed to load syllabus for', tcode, err);
+    syllabus = null;
+    selectedChapter = null;
   }
 });
 

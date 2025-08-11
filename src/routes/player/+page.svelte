@@ -1,5 +1,5 @@
+
 <svelte:head>
-  <!-- Precompiled Web Component -->
   <script type="module" src="/components/taleem-slides/taleem-slides.js"></script>
 </svelte:head>
 
@@ -11,7 +11,6 @@
   import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
   import { clampTime, getDeckEnd } from '$lib/taleemPlayer/player-utility.js';
 
-  // Optional simple seek bar (same as Workdesk)
   import NavBar from '$lib/taleemSlides/NavBar.svelte';
 
   // ---- state (single source of truth) ----
@@ -19,14 +18,10 @@
   let background = null;     // kept for future; CE doesn't need it
   let soundUrl = null;
   let player = null;
-
   let currentTime = 0;
   let deckEnd = 0;
-
   let loading = true;
   let errorMsg = null;
-
-  // reference to the CE
   let slidesEl;
 
   async function init() {

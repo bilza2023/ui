@@ -5,7 +5,8 @@ html {
     font-size: 125%;
     line-height: 1.6;
     color-scheme: dark;
-    background: #00001a;
+    /* background: #00001a; */
+    background: #311c01;
     color: #e8e8e8;
     font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     margin: 0;

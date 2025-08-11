@@ -211,7 +211,7 @@
       },
       {
         "name": "Ch-14",
-        "filename": "Ch-14 Pythogoras Theorem",
+        "filename": "Ch-14 ",
         "exercises": [
           {
             "name": "Theorems",
@@ -249,6 +249,1333 @@
                 "filename": "fbise9mathold_theorem14_1_4",
                 "type": "note",
                 "thumbnail": "/images/theorems9old_14.1.4.svg",
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ch-15",
+        "filename": "Ch-15 Pythagoras Theorem",
+        "exercises": [
+          {
+            "name": "Theorems",
+            "filename": "theorems",
+            "questions": [
+              {
+                "name": "Th 15_1_1",
+                "filename": "fbise9mathold_theorem15_1_1",
+                "type": "note",
+                "thumbnail": "/images/theorems9old_15.1.1.svg",
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Th 15_1_2",
+                "filename": "fbise9mathold_theorem15_1_2",
+                "type": "note",
+                "thumbnail": "/images/theorems9old_15.1.2.svg",
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ch-16",
+        "filename": "Area",
+        "exercises": [
+          {
+            "name": "Theorems",
+            "filename": "theorems",
+            "questions": [
+              {
+                "name": "Th 16_1_1",
+                "filename": "fbise9mathold_theorem16_1_1",
+                "type": "note",
+                "thumbnail": "/images/theorems9old_16.1.1.svg",
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Th 16_1_2",
+                "filename": "fbise9mathold_theorem16_1_2",
+                "type": "note",
+                "thumbnail": "/images/theorems9old_16.1.2.svg",
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Th 16_1_3",
+                "filename": "fbise9mathold_theorem16_1_3",
+                "type": "note",
+                "thumbnail": "/images/theorems9old_16.1.3.svg",
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Th 16_1_4",
+                "filename": "fbise9mathold_theorem16_1_4",
+                "type": "note",
+                "thumbnail": "/images/theorems9old_16.1.4.svg",
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "tcodeName": "fbise9physics",
+    "description": "Physics Class 9",
+    "image": "/bookcovers/fbise9physics.png",
+    "chapters": [
+      {
+        "name": "Ch-01",
+        "filename": "Ch-01 Physical Quantities and Measurement",
+        "exercises": [
+          {
+            "name": "Introduction to Physics",
+            "filename": "ch1_physical_quantities_ex1_intro",
+            "questions": [
+              {
+                "name": "What is Physics?",
+                "filename": "fbise9physics__ch1__what_is_physics",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Physical Quantities & SI Units",
+                "filename": "fbise9physics__ch1__physical_quantities_and_si_units",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Base Quantities & Base Units (7 Foundation Units)",
+                "filename": "fbise9physics__ch1__base_quantities_and_units",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Derived Quantities & Derived Units",
+                "filename": "fbise9physics__ch1__derived_quantities_and_units",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "International System of Units (SI)",
+            "filename": "ch1_physical_quantities_ex2_units",
+            "questions": [
+              {
+                "name": "SI Prefixes (milli to giga) & Symbols",
+                "filename": "fbise9physics__ch1__si_prefixes_and_symbols",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Converting Units with Prefixes",
+                "filename": "fbise9physics__ch1__unit_conversions_with_prefixes",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Derived Unit Examples (N, J, Pa, W)",
+                "filename": "fbise9physics__ch1__derived_unit_examples",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Measuring Instruments",
+            "filename": "ch1_physical_quantities_ex3_instruments",
+            "questions": [
+              {
+                "name": "Vernier Caliper: Least Count & Zero Error",
+                "filename": "fbise9physics__ch1__vernier_caliper_lc_ze",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Micrometer Screw Gauge: Least Count & Zero Error",
+                "filename": "fbise9physics__ch1__micrometer_lc_ze",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Measuring Time: Stopwatch, Pendulum (Idea)",
+                "filename": "fbise9physics__ch1__measuring_time_stopwatch_pendulum",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Accuracy, Precision & Least Count",
+                "filename": "fbise9physics__ch1__accuracy_precision_least_count",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Scientific Notation",
+            "filename": "ch1_physical_quantities_ex4_notations",
+            "questions": [
+              {
+                "name": "Rules of Scientific Notation (A × 10^n)",
+                "filename": "fbise9physics__ch1__scientific_notation_rules",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Converting Standard ↔ Scientific Form",
+                "filename": "fbise9physics__ch1__convert_standard_scientific_form",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Significant Figures",
+            "filename": "ch1_physical_quantities_ex5_sigfigs",
+            "questions": [
+              {
+                "name": "Counting Significant Figures (Rules & Examples)",
+                "filename": "fbise9physics__ch1__sigfigs_counting_rules",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Calculations with Significant Figures (×, ÷, +, −)",
+                "filename": "fbise9physics__ch1__sigfigs_operations",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ch-02",
+        "filename": "Ch-02 Kinematics",
+        "exercises": [
+          {
+            "name": "Introduction to Kinematics",
+            "filename": "ch2_kinematics_ex1_intro",
+            "questions": [
+              {
+                "name": "Distance vs Displacement",
+                "filename": "fbise9physics__ch2__distance_vs_displacement",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Speed vs Velocity",
+                "filename": "fbise9physics__ch2__speed_vs_velocity",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Average vs Instantaneous Speed/Velocity",
+                "filename": "fbise9physics__ch2__average_vs_instantaneous",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Uniform vs Non-uniform Motion",
+                "filename": "fbise9physics__ch2__uniform_vs_nonuniform_motion",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Acceleration",
+            "filename": "ch2_kinematics_ex4_acceleration",
+            "questions": [
+              {
+                "name": "Acceleration: Definition & Units (m/s²)",
+                "filename": "fbise9physics__ch2__acceleration_definition_units",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Average vs Instantaneous Acceleration",
+                "filename": "fbise9physics__ch2__avg_vs_inst_acceleration",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Graphical Representation of Motion",
+            "filename": "ch2_kinematics_ex5_graphs",
+            "questions": [
+              {
+                "name": "Distance–Time Graphs: Slope = Speed",
+                "filename": "fbise9physics__ch2__distance_time_graphs_slope",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Velocity–Time Graphs: Slope & Area",
+                "filename": "fbise9physics__ch2__velocity_time_graphs_slope_area",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Equations of Motion",
+            "filename": "ch2_kinematics_ex6_equations",
+            "questions": [
+              {
+                "name": "v = u + a t (Interpretation & Use)",
+                "filename": "fbise9physics__ch2__equation_v_equal_u_plus_at",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "s = u t + 1/2 a t² (Derivation Idea)",
+                "filename": "fbise9physics__ch2__equation_s_equal_ut_plus_half_at2",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "v² = u² + 2 a s (No Time Equation)",
+                "filename": "fbise9physics__ch2__equation_v2_equal_u2_plus_2as",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Free Fall and Uniform Acceleration",
+            "filename": "ch2_kinematics_ex7_freefall",
+            "questions": [
+              {
+                "name": "Free Fall: g ≈ 9.8 m/s² (Near Earth)",
+                "filename": "fbise9physics__ch2__free_fall_g_value",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Motion Under Gravity (Vertical Throw Up/Down)",
+                "filename": "fbise9physics__ch2__vertical_motion_under_gravity",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Problem Solving and Numericals",
+            "filename": "ch2_kinematics_ex8_problems",
+            "questions": [
+              {
+                "name": "Numericals Using v = u + a t",
+                "filename": "fbise9physics__ch2__numericals_v_equal_u_plus_at",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Graph-based Numericals (Area Under v–t Graph)",
+                "filename": "fbise9physics__ch2__numericals_graph_area",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ch-03",
+        "filename": "Ch-03 Dynamics",
+        "exercises": [
+          {
+            "name": "Introduction to Dynamics and Force",
+            "filename": "ch3_dynamics_ex1_intro",
+            "questions": [
+              {
+                "name": "Newton's First Law (Inertia)",
+                "filename": "fbise9physics__ch3__newtons_first_law_inertia",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Newton's Second Law (F = m a)",
+                "filename": "fbise9physics__ch3__newtons_second_law_fma",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Newton's Third Law (Action–Reaction)",
+                "filename": "fbise9physics__ch3__newtons_third_law_action_reaction",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Newton’s Laws of Motion",
+            "filename": "ch3_dynamics_ex2_newton_laws",
+            "questions": [
+              {
+                "name": "Resultant Force & Acceleration (∑F = m a)",
+                "filename": "fbise9physics__ch3__resultant_force_and_acceleration",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Free-Body Diagrams (Basics)",
+                "filename": "fbise9physics__ch3__free_body_diagrams_basics",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Inertia, Mass & Weight",
+            "filename": "ch3_dynamics_ex3_inertia_mass_weight",
+            "questions": [
+              {
+                "name": "Inertia & Mass (Qualitative)",
+                "filename": "fbise9physics__ch3__inertia_and_mass",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Weight (W = m g) & g Near Earth",
+                "filename": "fbise9physics__ch3__weight_mg_and_g",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Action-Reaction Principle",
+            "filename": "ch3_dynamics_ex4_action_reaction",
+            "questions": [
+              {
+                "name": "Pairs of Forces: Examples & Misconceptions",
+                "filename": "fbise9physics__ch3__action_reaction_examples",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Friction: Causes and Effects",
+            "filename": "ch3_dynamics_ex5_friction",
+            "questions": [
+              {
+                "name": "Types of Friction (Static, Kinetic, Rolling)",
+                "filename": "fbise9physics__ch3__types_of_friction",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Advantages & Disadvantages of Friction",
+                "filename": "fbise9physics__ch3__friction_advantages_disadvantages",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Reducing vs Increasing Friction (Real Life)",
+                "filename": "fbise9physics__ch3__reducing_increasing_friction",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Problem Solving and Numericals",
+            "filename": "ch3_dynamics_ex6_numericals",
+            "questions": [
+              {
+                "name": "Numericals on F = m a & Weight W = m g",
+                "filename": "fbise9physics__ch3__numericals_fma_weight",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ch-04",
+        "filename": "Ch-04 Turning Effect of Forces",
+        "exercises": [
+          {
+            "name": "Introduction to Moments",
+            "filename": "ch4_turning_effect_ex1_intro",
+            "questions": [
+              {
+                "name": "Moment of a Force",
+                "filename": "fbise9physics__ch4__moment_of_a_force",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Principle of Moments",
+                "filename": "fbise9physics__ch4__principle_of_moments",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Clockwise vs Anticlockwise Moments (Sign Convention)",
+                "filename": "fbise9physics__ch4__clockwise_vs_anticlockwise_moments",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Centre of Mass and Stability",
+            "filename": "ch4_turning_effect_ex3_center_mass",
+            "questions": [
+              {
+                "name": "Centre of Gravity vs Centre of Mass",
+                "filename": "fbise9physics__ch4__cog_vs_com",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Stability: Base of Support & Height of COM",
+                "filename": "fbise9physics__ch4__stability_base_support_com",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Conditions of Equilibrium",
+            "filename": "ch4_turning_effect_ex4_equilibrium",
+            "questions": [
+              {
+                "name": "Equilibrium: ∑F = 0 and ∑M = 0",
+                "filename": "fbise9physics__ch4__equilibrium_force_and_moment_conditions",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Applications in Real Life",
+            "filename": "ch4_turning_effect_ex5_applications",
+            "questions": [
+              {
+                "name": "Levers (Class I, II, III) & Everyday Tools",
+                "filename": "fbise9physics__ch4__levers_classes_applications",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Couple & Torque in Steering/Doors",
+                "filename": "fbise9physics__ch4__couple_and_torque_applications",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Problem Solving and Numericals",
+            "filename": "ch4_turning_effect_ex6_numericals",
+            "questions": [
+              {
+                "name": "Moment & Lever Problems (Balancing Beams)",
+                "filename": "fbise9physics__ch4__numericals_moments_levers",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ch-05",
+        "filename": "Ch-05 Gravitation",
+        "exercises": [
+          {
+            "name": "Introduction to Gravitation",
+            "filename": "ch5_gravitation_ex1_intro",
+            "questions": [
+              {
+                "name": "Mass vs Weight",
+                "filename": "fbise9physics__ch5__mass_vs_weight",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Newton’s Law of Gravitation",
+                "filename": "fbise9physics__ch5__newtons_law_of_gravitation",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Universal Gravitational Constant (G) & Units",
+                "filename": "fbise9physics__ch5__gravitational_constant_G_units",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Gravitational Field Strength",
+            "filename": "ch5_gravitation_ex4_gravitational_field",
+            "questions": [
+              {
+                "name": "g as Field Strength (N/kg) & Acceleration (m/s²)",
+                "filename": "fbise9physics__ch5__g_field_strength_and_acceleration",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Variation of g with Altitude (Qualitative)",
+                "filename": "fbise9physics__ch5__variation_of_g_with_altitude",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Satellites and Circular Orbits",
+            "filename": "ch5_gravitation_ex5_orbits",
+            "questions": [
+              {
+                "name": "Orbital Speed & Period (Concepts)",
+                "filename": "fbise9physics__ch5__orbital_speed_and_period_concepts",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Geostationary Satellite (Conditions)",
+                "filename": "fbise9physics__ch5__geostationary_satellite_conditions",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Problem Solving and Numericals",
+            "filename": "ch5_gravitation_ex6_numericals",
+            "questions": [
+              {
+                "name": "Numericals on Weight, g & Gravitation",
+                "filename": "fbise9physics__ch5__numericals_weight_g_gravitation",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ch-06",
+        "filename": "Ch-06 Work and Energy",
+        "exercises": [
+          {
+            "name": "Introduction to Work and Energy",
+            "filename": "ch6_work_energy_ex1_intro",
+            "questions": [
+              {
+                "name": "Work (W = F · s)",
+                "filename": "fbise9physics__ch6__work_basic_definition",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Kinetic & Potential Energy",
+                "filename": "fbise9physics__ch6__kinetic_and_potential_energy",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Energy Forms & Transformations",
+                "filename": "fbise9physics__ch6__energy_forms_and_transformations",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Work Done and Its Calculation",
+            "filename": "ch6_work_energy_ex2_work",
+            "questions": [
+              {
+                "name": "Units & Sign of Work; Angle Between F and s",
+                "filename": "fbise9physics__ch6__units_sign_of_work_angle",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Work–Energy Theorem (Idea)",
+                "filename": "fbise9physics__ch6__work_energy_theorem_idea",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Power and Its Measurement",
+            "filename": "ch6_work_energy_ex4_power",
+            "questions": [
+              {
+                "name": "Power (P = W/t) & Units (Watt, kW)",
+                "filename": "fbise9physics__ch6__power_definition_units",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Commercial Unit: kWh (Kilowatt-hour)",
+                "filename": "fbise9physics__ch6__commercial_unit_kwh",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Efficiency and Energy Conservation",
+            "filename": "ch6_work_energy_ex5_efficiency",
+            "questions": [
+              {
+                "name": "Efficiency (%) = Useful / Input × 100",
+                "filename": "fbise9physics__ch6__efficiency_percentage_formula",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Law of Conservation of Energy (Everyday Examples)",
+                "filename": "fbise9physics__ch6__conservation_of_energy_examples",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Problem Solving and Numericals",
+            "filename": "ch6_work_energy_ex6_numericals",
+            "questions": [
+              {
+                "name": "Numericals on Work, Energy & Power",
+                "filename": "fbise9physics__ch6__numericals_work_energy_power",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ch-07",
+        "filename": "Ch-07 Properties of Matter",
+        "exercises": [
+          {
+            "name": "Introduction to Matter and Its States",
+            "filename": "ch7_properties_matter_ex1_intro",
+            "questions": [
+              {
+                "name": "Density and Its Determination",
+                "filename": "fbise9physics__ch7__density_and_determination",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Pressure in Fluids",
+                "filename": "fbise9physics__ch7__pressure_in_fluids",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "States of Matter: Solid, Liquid, Gas (Brief)",
+                "filename": "fbise9physics__ch7__states_of_matter_brief",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Pressure in Solids, Liquids, and Gases",
+            "filename": "ch7_properties_matter_ex3_pressure",
+            "questions": [
+              {
+                "name": "Pressure = Force/Area (Solids) & Applications",
+                "filename": "fbise9physics__ch7__pressure_in_solids_and_apps",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Liquid Pressure with Depth: p = ρ g h",
+                "filename": "fbise9physics__ch7__liquid_pressure_rho_g_h",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Gas Pressure (Qualitative Ideas)",
+                "filename": "fbise9physics__ch7__gas_pressure_qualitative",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Elasticity and Hooke’s Law",
+            "filename": "ch7_properties_matter_ex4_elasticity",
+            "questions": [
+              {
+                "name": "Hooke’s Law: F = k x & Limit of Proportionality",
+                "filename": "fbise9physics__ch7__hookes_law_fx_and_limit",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Elastic vs Plastic Deformation",
+                "filename": "fbise9physics__ch7__elastic_vs_plastic_deformation",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Applications of Pressure",
+            "filename": "ch7_properties_matter_ex5_applications",
+            "questions": [
+              {
+                "name": "Hydraulic Press (Pascal’s Principle)",
+                "filename": "fbise9physics__ch7__hydraulic_press_pascals_principle",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Floating & Sinking (Density Reasoning)",
+                "filename": "fbise9physics__ch7__floating_and_sinking_density",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Problem Solving and Numericals",
+            "filename": "ch7_properties_matter_ex6_numericals",
+            "questions": [
+              {
+                "name": "Numericals on Density & Pressure",
+                "filename": "fbise9physics__ch7__numericals_density_pressure",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ch-08",
+        "filename": "Ch-08 Thermal Properties of Matter",
+        "exercises": [
+          {
+            "name": "Temperature and Heat",
+            "filename": "ch8_thermal_properties_ex1_intro",
+            "questions": [
+              {
+                "name": "Temperature vs Heat",
+                "filename": "fbise9physics__ch8__temperature_vs_heat",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Specific Heat Capacity",
+                "filename": "fbise9physics__ch8__specific_heat_capacity",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Temperature Scales: Celsius & Kelvin",
+                "filename": "fbise9physics__ch8__temperature_scales_celsius_kelvin",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Heat Capacity and Specific Heat",
+            "filename": "ch8_thermal_properties_ex2_heat_capacity",
+            "questions": [
+              {
+                "name": "Heat Capacity (C) vs Specific Heat (c)",
+                "filename": "fbise9physics__ch8__heat_capacity_vs_specific_heat",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Latent Heat and Change of State",
+            "filename": "ch8_thermal_properties_ex3_latent_heat",
+            "questions": [
+              {
+                "name": "Latent Heat of Fusion & Vaporization",
+                "filename": "fbise9physics__ch8__latent_heat_fusion_vaporization",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Heating/Cooling Curves (Plateaus)",
+                "filename": "fbise9physics__ch8__heating_cooling_curves_plateaus",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Thermal Expansion of Solids, Liquids, Gases",
+            "filename": "ch8_thermal_properties_ex4_thermal_expansion",
+            "questions": [
+              {
+                "name": "Linear Expansion in Solids (α)",
+                "filename": "fbise9physics__ch8__linear_expansion_in_solids",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Expansion of Liquids & Gases (Qualitative)",
+                "filename": "fbise9physics__ch8__expansion_of_liquids_gases",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Applications in Daily Life",
+            "filename": "ch8_thermal_properties_ex5_real_life",
+            "questions": [
+              {
+                "name": "Bimetallic Strip & Thermostat",
+                "filename": "fbise9physics__ch8__bimetallic_strip_thermostat",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Problem Solving and Numericals",
+            "filename": "ch8_thermal_properties_ex6_numericals",
+            "questions": [
+              {
+                "name": "Numericals on c, L & Expansion",
+                "filename": "fbise9physics__ch8__numericals_specific_latent_heat_expansion",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ch-09",
+        "filename": "Ch-09 Transfer of Heat",
+        "exercises": [
+          {
+            "name": "Modes of Heat Transfer",
+            "filename": "ch9_transfer_heat_ex1_intro",
+            "questions": [
+              {
+                "name": "Conduction",
+                "filename": "fbise9physics__ch9__conduction",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Convection vs Radiation",
+                "filename": "fbise9physics__ch9__convection_vs_radiation",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Good vs Bad Conductors (Insulators)",
+                "filename": "fbise9physics__ch9__good_vs_bad_conductors",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Conduction and Thermal Conductors",
+            "filename": "ch9_transfer_heat_ex2_conduction",
+            "questions": [
+              {
+                "name": "Conduction in Solids (Particle Model)",
+                "filename": "fbise9physics__ch9__conduction_in_solids_particle_model",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Convection in Fluids",
+            "filename": "ch9_transfer_heat_ex3_convection",
+            "questions": [
+              {
+                "name": "Convection Currents & Applications (Sea/Land Breeze)",
+                "filename": "fbise9physics__ch9__convection_currents_breezes",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Radiation and Absorbers/Emitters",
+            "filename": "ch9_transfer_heat_ex4_radiation",
+            "questions": [
+              {
+                "name": "Radiation in Vacuum; Black vs Shiny Surfaces",
+                "filename": "fbise9physics__ch9__radiation_black_vs_shiny",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Greenhouse Effect (Physics of Trapping Heat)",
+                "filename": "fbise9physics__ch9__greenhouse_effect_physics",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Everyday Applications of Heat Transfer",
+            "filename": "ch9_transfer_heat_ex5_household",
+            "questions": [
+              {
+                "name": "Thermos (Vacuum Flask): Design & Reasoning",
+                "filename": "fbise9physics__ch9__thermos_vacuum_flask_design",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              },
+              {
+                "name": "Home Insulation & Clothing (Winter/Summer)",
+                "filename": "fbise9physics__ch9__home_insulation_clothing",
+                "type": "note",
+                "thumbnail": null,
+                "tags": [
+                  "note"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Problem Solving and Numericals",
+            "filename": "ch9_transfer_heat_ex6_numericals",
+            "questions": [
+              {
+                "name": "Numericals on Conduction, Convection & Radiation",
+                "filename": "fbise9physics__ch9__numericals_heat_transfer_modes",
+                "type": "note",
+                "thumbnail": null,
                 "tags": [
                   "note"
                 ]

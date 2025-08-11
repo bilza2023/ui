@@ -1,0 +1,49 @@
+<h1>Theorem 15.1.2 – Converse of Pythagoras Theorem</h1>
+
+<img src="/images/theorems9old_15.1.2.svg" alt="Triangle with the longest side opposite the right angle" style="max-width:50%;">
+
+<h2>Book Statement</h2>
+<p>If, in a triangle, the square on one side equals the sum of the squares on the other two sides, then the angle opposite the first side is a right angle.</p>
+
+<h2>Key Vocabulary</h2>
+<ul>
+  <li><strong>Converse:</strong> A reversed implication; here, from square-sum to right angle.</li>
+  <li><strong>Right angle:</strong> An angle of measure 90°.</li>
+  <li><strong>Longest side:</strong> In a triangle whose sides satisfy <em>c² = a² + b²</em>, the side <em>c</em> is opposite the right angle.</li>
+</ul>
+
+<p>Symbolically, if in triangle <em>ABC</em> we have <em>AB² = AC² + BC²</em>, then <em>∠C = 90°</em>.</p>
+
+<h2>What We Will Prove</h2>
+<ol>
+  <li>Given a triangle with side lengths satisfying <em>AB² = AC² + BC²</em>, the angle at <em>C</em> is a right angle.</li>
+  <li>We justify this by constructing a reference right triangle and using congruence.</li>
+</ol>
+
+<h2>Proof Road-Map (Top-Level Steps)</h2>
+<table>
+  <thead>
+    <tr><th>Step</th><th>Core idea</th><th>Tool / Theorem used</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>Construct a right triangle with legs equal to the two shorter sides</td><td>Construction + Pythagoras (forward)</td></tr>
+    <tr><td>2</td><td>Show its hypotenuse equals the remaining side</td><td><em>c</em> = √(<em>a² + b²</em>)</td></tr>
+    <tr><td>3</td><td>Match it with the given triangle</td><td>SSS congruence</td></tr>
+  </tbody>
+</table>
+
+<h2>Detailed Proof</h2>
+
+<h3>Step&nbsp;1 – Build a Reference Right Triangle</h3>
+<p>Let triangle <em>ABC</em> satisfy <em>AB² = AC² + BC²</em>. Construct triangle <em>A′B′C′</em> with a right angle at <em>C′</em>, legs <em>A′C′ = AC</em> and <em>B′C′ = BC</em>. By Pythagoras, its hypotenuse satisfies <em>A′B′² = A′C′² + B′C′² = AC² + BC² = AB²</em>, hence <em>A′B′ = AB</em>.</p>
+
+<h3>Step&nbsp;2 – Compare the Two Triangles</h3>
+<p>Now triangles <em>ABC</em> and <em>A′B′C′</em> have three corresponding sides equal: <em>AB = A′B′</em>, <em>AC = A′C′</em>, <em>BC = B′C′</em>. Therefore, <em>△ABC ≅ △A′B′C′</em> by SSS.</p>
+
+<h3>Step&nbsp;3 – Conclude the Angle is Right</h3>
+<p>Corresponding parts of congruent triangles are equal, so <em>∠C</em> corresponds to the right angle <em>∠C′</em>. Hence <strong>∠C = 90°</strong>, completing the proof.</p>
+
+<pre><code class="language-latex">AB^2 = AC^2 + BC^2 \;\Rightarrow\; \angle C = 90^\circ</code></pre>
+
+<hr>
+<small>Generated 2025-08-11.</small>

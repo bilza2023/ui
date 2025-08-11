@@ -156,7 +156,7 @@ export default function defineFbise9matholdSyllabus(builder) {
   });
 
   // Ch-14
-  const ch14 = builder.addChapter({ name: 'Ch-14', filename: 'Ch-14 Pythogoras Theorem' });
+  const ch14 = builder.addChapter({ name: 'Ch-14', filename: 'Ch-14 ' });
   const ch14_theorems = ch14.addExercise({ name: 'Theorems', filename: 'theorems' });
 
   ch14_theorems.addItem({
@@ -187,6 +187,60 @@ export default function defineFbise9matholdSyllabus(builder) {
     thumbnail: '/images/theorems9old_14.1.4.svg',
     tags: ['note']
   });
+
+
+  // Ch-15
+  const ch15 = builder.addChapter({ name: 'Ch-15', filename: 'Ch-15 Pythagoras Theorem' });
+  const ch15_theorems = ch15.addExercise({ name: 'Theorems', filename: 'theorems' });
+
+  ch15_theorems.addItem({
+    name: 'Th 15_1_1',
+    filename: 'fbise9mathold_theorem15_1_1',
+    type: 'note',
+    thumbnail: '/images/theorems9old_15.1.1.svg',
+    tags: ['note']
+  });
+  ch15_theorems.addItem({
+    name: 'Th 15_1_2',
+    filename: 'fbise9mathold_theorem15_1_2',
+    type: 'note',
+    thumbnail: '/images/theorems9old_15.1.2.svg',
+    tags: ['note']
+  });
+
+  // Ch-16
+  const ch16 = builder.addChapter({ name: 'Ch-16', filename: 'Area' });
+  const ch16_theorems = ch16.addExercise({ name: 'Theorems', filename: 'theorems' });
+
+  ch16_theorems.addItem({
+    name: 'Th 16_1_1',
+    filename: 'fbise9mathold_theorem16_1_1',
+    type: 'note',
+    thumbnail: '/images/theorems9old_16.1.1.svg',
+    tags: ['note']
+  });
+  ch16_theorems.addItem({
+    name: 'Th 16_1_2',
+    filename: 'fbise9mathold_theorem16_1_2',
+    type: 'note',
+    thumbnail: '/images/theorems9old_16.1.2.svg',
+    tags: ['note']
+  });
+  ch16_theorems.addItem({
+    name: 'Th 16_1_3',
+    filename: 'fbise9mathold_theorem16_1_3',
+    type: 'note',
+    thumbnail: '/images/theorems9old_16.1.3.svg',
+    tags: ['note']
+  });
+  ch16_theorems.addItem({
+    name: 'Th 16_1_4',
+    filename: 'fbise9mathold_theorem16_1_4',
+    type: 'note',
+    thumbnail: '/images/theorems9old_16.1.4.svg',
+    tags: ['note']
+  });
+
 
   return builder;
 }

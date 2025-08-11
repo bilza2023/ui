@@ -28,13 +28,13 @@
      inkscape:document-units="px"
      showgrid="false"
      inkscape:zoom="0.76"
-     inkscape:cx="614.47368"
+     inkscape:cx="615.13158"
      inkscape:cy="336.18421"
-     inkscape:window-width="1210"
-     inkscape:window-height="991"
-     inkscape:window-x="26"
-     inkscape:window-y="23"
-     inkscape:window-maximized="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="svg5" />
   <defs
      id="defs2" />
@@ -371,16 +371,28 @@
        y="212.66638">taleem.help</tspan></text>
   <text
      xml:space="preserve"
+     style="font-style:italic;font-weight:bold;font-size:16.3881px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';fill:none;stroke:#ffd5d5;stroke-width:1.20264;stroke-dasharray:none"
+     x="147.80298"
+     y="97.810608"
+     id="text1805-62-3"
+     transform="scale(1.2591759,0.79417021)"><tspan
+       sodipodi:role="line"
+       id="tspan1803-6-6"
+       style="stroke:#ffd5d5;stroke-width:1.20264;stroke-dasharray:none"
+       x="147.80298"
+       y="97.810608">taleem.help</tspan></text>
+  <text
+     xml:space="preserve"
      style="font-style:italic;font-weight:bold;font-size:19.0775px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';fill:#e5e5c0;fill-opacity:1;stroke:#d40000;stroke-width:1.4;stroke-dasharray:none"
-     x="19.696369"
-     y="38.425407"
+     x="52.792229"
+     y="61.312801"
      id="text1805-18"
      transform="scale(1.149285,0.87010619)"><tspan
        sodipodi:role="line"
        id="tspan1803-7"
        style="fill:#e5e5c0;fill-opacity:1;stroke:#d40000;stroke-width:1.4;stroke-dasharray:none"
-       x="19.696369"
-       y="38.425407">Th 14.1.4</tspan></text>
+       x="52.792229"
+       y="61.312801">Th 15.1.1</tspan></text>
   <path
      style="fill:none;stroke:#280b0b;stroke-width:1.77074;stroke-dasharray:none"
      d="m 24.946658,125.1115 c 0,0 32.169527,-4.77741 21.267422,20.03251"

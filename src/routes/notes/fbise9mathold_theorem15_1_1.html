@@ -1,0 +1,53 @@
+<h1>Theorem 15.1.1 – Pythagoras Theorem</h1>
+
+<img src="/images/theorems9old_15.1.1.svg" alt="Right-angled triangle with squares on its sides" style="max-width:50%;">
+
+<h2>Book Statement</h2>
+<p>In a right-angled triangle, the square on the hypotenuse is equal to the sum of the squares on the other two sides.</p>
+
+<h2>Key Vocabulary</h2>
+<ul>
+  <li><strong>Right-angled triangle:</strong> A triangle with one angle equal to 90°.</li>
+  <li><strong>Hypotenuse:</strong> The side opposite the right angle; the longest side of a right-angled triangle.</li>
+  <li><strong>Legs (or perpendicular and base):</strong> The two sides that form the right angle.</li>
+</ul>
+
+<p>Symbolically, if the right angle is at <em>C</em> in triangle <em>ABC</em>, then <em>AB</em> is the hypotenuse and <em>AB² = AC² + BC²</em>.</p>
+
+<h2>What We Will Prove</h2>
+<ol>
+  <li>In right-angled triangle <em>ABC</em> with right angle at <em>C</em>, the relation <em>AB² = AC² + BC²</em> holds.</li>
+  <li>This follows from similarity of the two smaller triangles formed by the altitude from the right angle to the hypotenuse.</li>
+</ol>
+
+<h2>Proof Road-Map (Top-Level Steps)</h2>
+<table>
+  <thead>
+    <tr><th>Step</th><th>Core idea</th><th>Tool / Theorem used</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>Drop altitude from the right angle to the hypotenuse</td><td>Auxiliary construction</td></tr>
+    <tr><td>2</td><td>Show both smaller triangles are similar to the original</td><td>AA similarity</td></tr>
+    <tr><td>3</td><td>Translate similarity ratios into a square-sum equality</td><td>Proportionality &amp; algebra</td></tr>
+  </tbody>
+</table>
+
+<h2>Detailed Proof</h2>
+
+<h3>Step&nbsp;1 – Construct the Altitude</h3>
+<p>Let <em>ABC</em> be a right-angled triangle with right angle at <em>C</em>. Drop an altitude from <em>C</em> to the hypotenuse <em>AB</em>, meeting it at <em>D</em>.</p>
+
+<h3>Step&nbsp;2 – Establish Similarity</h3>
+<p>Observe that <em>∠ACB</em> is a right angle and <em>∠ADC</em>, <em>∠CBD</em> are also right angles. Angle chasing gives
+<em>∠CAB = ∠CAD</em> and <em>∠CBA = ∠CBD</em>. Hence <em>△ABC ∼ △ACD</em> and <em>△ABC ∼ △CBD</em> by AA similarity.</p>
+
+<h3>Step&nbsp;3 – Convert Similarity to the Square Relation</h3>
+<p>From <em>△ABC ∼ △ACD</em>, corresponding sides give <em>AC/AB = AD/AC</em>, so <em>AC² = AD·AB</em>.
+From <em>△ABC ∼ △CBD</em>, we get <em>BC/AB = BD/BC</em>, so <em>BC² = BD·AB</em>.</p>
+<p>Adding these equalities:
+<em>AC² + BC² = (AD·AB) + (BD·AB) = (AD + BD)·AB = AB·AB = AB²</em>, which proves the theorem.</p>
+
+<pre><code class="language-latex">AB^2 = AC^2 + BC^2</code></pre>
+
+<hr>
+<small>Generated 2025-08-11.</small>
