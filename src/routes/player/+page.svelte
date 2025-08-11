@@ -1,3 +1,8 @@
+<svelte:head>
+  <!-- Precompiled Web Component -->
+  <script type="module" src="/components/taleem-slides/taleem-slides.js"></script>
+</svelte:head>
+
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { page } from '$app/stores';
@@ -5,22 +10,26 @@
   import { getDeck } from '$lib/services/deckService.js';
   import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
 
-  import TaleemPlayer from '$lib/taleemPlayer/Player.svelte';
-  import { clampTime, findSlideIndex, getDeckEnd } from '$lib/taleemPlayer/player-utility.js';
+  // Keep utilities you still use
+  import { clampTime, getDeckEnd } from '$lib/taleemPlayer/player-utility.js';
+
+  // Optional: reuse the same NavBar as Workdesk (seek only)
+  import NavBar from '$lib/taleemSlides/NavBar.svelte';
 
   // ---- state (single source of truth) ----
-  let deck = null;
-  let background = null;
-
+  let deck = null;           // slides[]
+  let background = null;     // retained for future, CE doesn't need it
   let soundUrl = null;
   let player = null;
 
   let currentTime = 0;
-  let currentSlideIndex = 0;
   let deckEnd = 0;
 
   let loading = true;
   let errorMsg = null;
+
+  // reference to the CE
+  let slidesEl;
 
   async function init() {
     loading = true;
@@ -42,10 +51,9 @@
 
       // 2) Time boundaries
       deckEnd = getDeckEnd(deck);
-      currentSlideIndex = findSlideIndex(deck, 0); // ensure first slide renders immediately
 
       // 3) Auto-detect audio once (client-side), no logging on 404
-      soundUrl = await detectSoundUrl(filename, fetch); // returns '/sounds/<filename>.opus' or null
+      soundUrl = await detectSoundUrl(filename, fetch); // '/sounds/<filename>.opus' or null
 
       // 4) Create timing source (Howler if url, Timer otherwise)
       player = createSoundPlayer(soundUrl);
@@ -53,8 +61,6 @@
       // 5) Ticks → update app state
       player.onTick((t) => {
         currentTime = clampTime(deck, t);
-        currentSlideIndex = findSlideIndex(deck, currentTime);
-
         if (currentTime >= deckEnd) {
           currentTime = deckEnd;
           player.pause();
@@ -73,18 +79,18 @@
   function seek(t) {
     if (!player) return;
     player.seek(t);
-    // immediately reflect in UI (works when paused)
-    currentTime = clampTime(deck, t);
-    currentSlideIndex = findSlideIndex(deck, currentTime);
+    currentTime = clampTime(deck, t); // reflect immediately
   }
   function stop() {
     if (!player) return;
     player.pause();
     player.seek(0);
-    // reflect immediately
     currentTime = 0;
-    currentSlideIndex = findSlideIndex(deck, 0);
   }
+
+  // push props into the CE whenever they change
+  $: if (slidesEl && deck) slidesEl.deck = deck;
+  $: if (slidesEl)          slidesEl.currentTime = currentTime;
 
   onMount(init);
   onDestroy(() => { player?.destroy?.(); });
@@ -95,21 +101,17 @@
 {:else if errorMsg}
   <div class="center error">{errorMsg}</div>
 {:else}
-  <TaleemPlayer
-    {deck}
-    {background}
-    {currentTime}
-    {currentSlideIndex}
-    {deckEnd}
-    {soundUrl}
-    onPlay={play}
-    onPause={pause}
-    onStop={stop}
-    onSeek={seek}
-  />
+  <!-- VISUALS: use the precompiled Web Component -->
+  <taleem-slides bind:this={slidesEl}></taleem-slides>
+
+  <!-- Controls: reuse the simple NavBar (seek only) -->
+  <NavBar {currentTime} duration={deckEnd} onSeek={seek} />
+
+  <!-- If you want play/pause/stop buttons here, wire them to play/pause/stop() -->
 {/if}
 
 <style>
   .center { display:flex; align-items:center; justify-content:center; height:100vh; color:#666; }
   .error { color:#b00020; }
+  taleem-slides { display:block; width:100%; height:100vh; }
 </style>
