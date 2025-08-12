@@ -43,6 +43,7 @@
 
 <div class="wrap">
   <form class="card" on:submit={submit} autocomplete="on" novalidate>
+    <h1 class="text-center"> 🌐 Taleem.Help</h1>
     <h1>Log in</h1>
 
     <label>
@@ -61,14 +62,21 @@
     <label>
       <span>Password</span>
       <div class="pwd">
+        <!-- manual binding so we can toggle type safely -->
         <input
-          type="password"
-          bind:value={password}
+          type={showPwd ? 'text' : 'password'}
+          value={password}
+          on:input={(e) => (password = e.target.value)}
           required
           minlength="6"
           autocomplete="current-password"
           placeholder="••••••••" />
-        <button type="button" class="toggle" on:click={() => (showPwd = !showPwd)} aria-label="Toggle password visibility">
+        <button
+          type="button"
+          class="toggle"
+          aria-pressed={showPwd}
+          on:click={() => (showPwd = !showPwd)}
+          aria-label="Toggle password visibility">
           {showPwd ? 'Hide' : 'Show'}
         </button>
       </div>
@@ -96,8 +104,22 @@
     place-items: center;
     padding: 24px;
     background-color: #C1B294;
+    position: relative;      /* background image layer */
+    overflow: hidden;
   }
+  .wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/images/taleem.webp') center / cover no-repeat;
+    opacity: 0.1;            /* 50% as requested */
+    z-index: 0;
+    pointer-events: none;
+  }
+
   .card {
+    position: relative;      /* above bg image */
+    z-index: 1;
     width: min(460px, 92vw);
     display: grid;
     gap: 14px;
@@ -105,26 +127,31 @@
     border: 1px solid rgba(255,255,255,0.12);
     border-radius: 14px;
     color: white;
-    background:  #533f18;
+    background: #533f18;
   }
+
   h1 { margin: 0 0 2px; font-size: 1.25rem; }
   label { display: grid; gap: 6px; }
   label span { font-size: 0.9rem; opacity: 0.85; }
+
   input {
     width: 100%;
     padding: 10px 12px;
     border-radius: 10px;
     border: 1px solid rgba(255,255,255,0.12);
-    background: transparent;
-    color: inherit;
+    /* match your register page input style */
+    background-color: antiquewhite;
+    color: rgb(91, 53, 3);
     outline: none;
   }
+
   .pwd {
     display: flex;
     gap: 8px;
     align-items: center;
   }
   .pwd input { flex: 1; }
+
   .toggle {
     border: 1px solid rgba(255,255,255,0.12);
     background: transparent;
@@ -133,6 +160,7 @@
     padding: 8px 10px;
     cursor: pointer;
   }
+
   .submit {
     margin-top: 6px;
     padding: 10px 12px;
@@ -143,6 +171,7 @@
     cursor: pointer;
   }
   .submit[disabled] { opacity: 0.6; cursor: not-allowed; }
+
   .error {
     color: #ff6b6b;
     font-size: 0.9rem;

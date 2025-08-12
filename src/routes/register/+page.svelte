@@ -46,7 +46,8 @@
 
 <div class="wrap">
   <form class="card" on:submit={submit} autocomplete="on" novalidate>
-    <h1>Create account</h1>
+    <h1 class="text-center"> 🌐 Taleem.Help</h1>
+    <h1>Register / Create account</h1>
 
     <label>
       <span>Email</span>
@@ -65,12 +66,13 @@
       <span>Password</span>
       <div class="pwd">
         <input
-          type='password'
-          bind:value={password}
-          required
-          minlength="6"
-          autocomplete="new-password"
-          placeholder="••••••••" />
+        type={showPwd ? 'text' : 'password'}
+        value={password}
+        on:input={(e) => password = e.target.value}
+        required
+        minlength="6"
+        autocomplete="new-password"
+        placeholder="••••••••" />
         <button type="button" class="toggle" on:click={() => (showPwd = !showPwd)} aria-label="Toggle password visibility">
           {showPwd ? 'Hide' : 'Show'}
         </button>
@@ -81,6 +83,7 @@
       <div class="error" aria-live="polite">{error}</div>
     {/if}
 
+    <div>Please provide a working email address.</div>
     <button class="submit" type="submit" disabled={loading || !email || !password}>
       {#if loading}Creating…{/if}
       {#if !loading}Create account{/if}
@@ -100,8 +103,23 @@
     place-items: center;
     padding: 24px;
     background-color: #C1B294;
+    position: relative;           
+    overflow: hidden;             
   }
+  .wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/images/taleem.webp') center / cover no-repeat;
+  opacity: 0.1;                 /* your requested 50% */
+  z-index: 0;
+  pointer-events: none;         /* ensure clicks pass through */
+}
+
   .card {
+    
+    position: relative;           /* NEW */
+    z-index: 1;                   /* NEW */
     width: min(460px, 92vw);
     display: grid;
     gap: 14px;
@@ -119,8 +137,9 @@
     padding: 10px 12px;
     border-radius: 10px;
     border: 1px solid rgba(255,255,255,0.12);
-    background: transparent;
-    color: inherit;
+    /* background: transparent; */
+    background-color:antiquewhite;
+    color: rgb(91, 53, 3);
     outline: none;
   }
   .pwd {

@@ -5,8 +5,10 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '$lib/server/prisma.js';
+import { assertPasswordOrThrow } from './passwordPolicy.js';
 
 const TOKEN_TTL = '7d'; // adjust later
+
 function getSecret() {
   const s = process.env.JWT_SECRET || 'dev-secret-change-me';
   if (!s) throw new Error('JWT_SECRET missing');
@@ -17,10 +19,12 @@ function normEmail(email) {
   return (email ?? '').toString().trim().toLowerCase();
 }
 
-// Register: create user if email not taken
 export async function register(email, password) {
   const e = normEmail(email);
   if (!e || !password) throw new Error('email and password are required');
+
+  // ✅ enforce simple policy
+  assertPasswordOrThrow(password);
 
   const exists = await prisma.user.findUnique({ where: { email: e }, select: { id: true } });
   if (exists) throw new Error('email already registered');
