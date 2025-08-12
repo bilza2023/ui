@@ -52,10 +52,51 @@ model SlideItem {
   slide      Slide   @relation(fields: [slideId], references: [id])
 }
 
-// model Deck {
-//   id        Int        @id @default(autoincrement())
-//   filename  String     @unique
-//   content   Json
-//   createdAt DateTime   @default(now())
+enum InteractionCategory {
+  view
+  reaction
+  comment 
+}
 
-// }
+model UserInteraction {
+  id           String               @id @default(cuid())
+  created_at  DateTime             @default(now())
+  anchor_id    String
+  actor_id     String
+  user_id      String?
+  category     InteractionCategory
+  tags         Json                 // array of strings; set in code
+  payload_json Json                 // small object; set in code
+
+  @@map("user_interactions")
+  @@index([actor_id, anchor_id], name: "idx_actor_anchor")
+  @@index([user_id, anchor_id], name: "idx_user_anchor")
+}
+
+// --- Student Messages -------------------------------------------------------
+enum StudentMessageCategory {
+  general   // keep 1 for now; add more later
+}
+
+model StudentMessage {
+  id          String                   @id @default(cuid())          // message id
+  user_id     String                                                   // target user
+  category    StudentMessageCategory   @default(general)              // simple now, extensible later
+  message     String                                                   // HTML allowed (stored as TEXT)
+  read        Boolean                  @default(false)                // unread by default
+  created_at  DateTime                 @default(now())                // for ordering
+
+  @@index([user_id, read, created_at])
+  @@index([user_id, created_at])
+}
+
+// --- Users ---------------------------------------------------------------
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique          // store lowercase
+  password_hash String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@index([email])
+}

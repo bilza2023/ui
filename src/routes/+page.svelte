@@ -6,7 +6,12 @@
     import TcodeCard from "../lib/appComps/homepage/TcodeCard.svelte";
     import VideosCard from "../lib/appComps/homepage/VideosCard.svelte";
     import HomeIndex from "../lib/homeIndex/HomeIndex.svelte";
-   
+    import InteractionPanel from '$lib/InteractionPanel.svelte';
+  // Provide the current page’s anchor filename (identity = filename = anchor).
+  const anchorId = 'demo_anchor';
+  // If you have an authenticated user, pass their userId; else omit.
+  const userId = "jj";
+
     let showCourses = false;
     let syllabus = [];
 
@@ -43,6 +48,10 @@ onMount(async () => {
       <Sidebar/>
  </section>
   
+
+<InteractionPanel {anchorId} {userId} />
+
     <Footer />
   </div>
   
+
