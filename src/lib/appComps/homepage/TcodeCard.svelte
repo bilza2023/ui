@@ -3,7 +3,29 @@
   let folderName = "subject";
 </script>
 
+
+<div class="container">
+
+  <div class="gallery">
+    {#each tcodes as t}
+      <a href={`/${folderName}?tcode=${t.tcodeName}`}>
+        <div class="gallery-item">
+          <img src={t.image} alt={t.tcodeName} />
+          <div class="details">{t.tcodeName}</div>
+        </div>
+      </a>
+    {/each}
+  </div>
+</div>
+
+
 <style>
+
+  .container {
+    background-color: rgb(193, 178, 148);
+    border-radius:2%;
+    padding: 2rem;
+  }
   :global(body) {
     background-color: #1e1e1e;
     color: #f0f0f0;
@@ -50,17 +72,3 @@
     font-weight: bold;
   }
 </style>
-
-<div>
-  <h2>Courses</h2>
-  <div class="gallery">
-    {#each tcodes as t}
-      <a href={`/${folderName}?tcode=${t.tcodeName}`}>
-        <div class="gallery-item">
-          <img src={t.image} alt={t.tcodeName} />
-          <div class="details">{t.tcodeName}</div>
-        </div>
-      </a>
-    {/each}
-  </div>
-</div>

@@ -19,7 +19,7 @@
   <div class="app-container">
     <div class="layout-container">
       <div class="main-content">
-        Sample Videos
+
         <div class="questions-container">
           <!-- Only render once loaded -->
           {#if questions.length}
@@ -66,6 +66,7 @@
       justify-content: center;
       align-items: flex-start;
       background-color: rgb(193, 178, 148);
+      border-radius:2%;
     }
   
     @media (max-width: 768px) {
