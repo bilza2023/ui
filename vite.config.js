@@ -1,14 +1,10 @@
-// vite.config.js
-import path from 'path';
-import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  resolve: {
-    
-  },
-  ssr: {
-    noExternal: ['svelte-katex', 'taleem-pivot-player']
-  },
-  plugins: [sveltekit()]
+  plugins: [sveltekit()],
+  test: {
+    globals: true,
+    environment: 'node', // for API route testing
+  }
 });

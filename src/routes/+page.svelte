@@ -6,7 +6,6 @@
   import Sidebar from "$lib/appComps/homepage/Sidebar.svelte";
   import TcodeCard from "$lib/appComps/homepage/TcodeCard.svelte";
   import HomeIndex from "$lib/homeIndex/HomeIndex.svelte";
-
   import SecondaryNav from "$lib/SecondaryNav.svelte";
   import HomePageNotes from "$lib/homeIndex/HomePageNotes.svelte";
   import { getSubjectsIndex } from "$lib/services/syllabusServicer";
@@ -16,15 +15,14 @@
     syllabus = await getSubjectsIndex();
   });
 
-  // 0=Courses, 1=Videos, 2=Notes (match your simple {#if pageDisplayState==0} …)
   let navItems = ["Courses", "Videos", "Notes"];
   let pageDisplayState = 0;
 </script>
 
-<div class="min-h-screen flex flex-col justify-start bg-[#594112]">
+<div class="page">
   <Nav />
 
-  <div class="pl-20">
+  <div class="secondary-nav-container">
     <SecondaryNav
       items={navItems}
       bind:pageDisplayState={pageDisplayState}
@@ -32,7 +30,7 @@
     />
   </div>
 
-  <section class="w-full px-12 py-10 grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-12 min-h-screen">
+  <section class="content-section">
     {#if pageDisplayState == 0}
       <TcodeCard tcodes={syllabus} />
     {:else if pageDisplayState == 1}
@@ -44,6 +42,36 @@
     <Sidebar />
   </section>
 
-
   <Footer />
 </div>
+
+<style>
+  .page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .secondary-nav-container {
+    padding-left: 5rem;
+  }
+
+  .content-section {
+    width: 100%;
+    padding: 2.5rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    min-height: 100vh;
+    background-color: var(--color-surface);
+  }
+
+  @media (min-width: 768px) {
+    .content-section {
+      grid-template-columns: 3fr 1fr;
+    }
+  }
+</style>

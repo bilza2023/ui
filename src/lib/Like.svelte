@@ -115,8 +115,8 @@
     align-items: center;
     gap: 10px;
     padding: 8px 12px;
-    border-top: 1px solid #5a3a1a;
-    border-bottom: 1px solid #5a3a1a;
+    /* border-top: 1px solid #5a3a1a; */
+    /* border-bottom: 1px solid #5a3a1a; */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -131,7 +131,7 @@
     padding: 6px 12px;
     border-radius: 999px;
     background: rgba(196,167,127,0.10); /* soft sand tint */
-    border: 1px solid rgba(196,167,127,0.35);
+    /* border: 1px solid rgba(196,167,127,0.35); */
     color: #E8D7BD;
     cursor: pointer;
     font: inherit;

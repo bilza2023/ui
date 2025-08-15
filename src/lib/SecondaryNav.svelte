@@ -19,18 +19,19 @@
     $: justify =
       align === 'center' ? 'justify-center' : align === 'right' ? 'justify-end' : 'justify-start';
   </script>
-  
   <div class="home-nav py-4">
     <div class={"flex " + justify}>
       <div
-        class="inline-flex items-center rounded-full p-1 ring-1 ring-[#C4A77F]/40 bg-[#C4A77F]/10 overflow-x-auto whitespace-nowrap"
+        class="inline-flex items-center rounded-full p-1 ring-1 ring-[var(--color-primary)]/40 bg-[var(--color-primary)]/10 overflow-x-auto whitespace-nowrap"
         role="tablist"
         aria-orientation="horizontal"
       >
         {#each items as label, i}
           <button
-            class={`px-4 py-1.5 text-sm font-medium rounded-full transition outline-none focus:ring-2 focus:ring-[#C4A77F]/60 ${
-              pageDisplayState === i ? 'bg-[#C4A77F] text-[#0e3d0c]' : 'text-[#C4A77F]'
+            class={`px-4 py-1.5 text-sm font-medium rounded-full transition outline-none focus:ring-2 focus:ring-[var(--color-primary)]/60 ${
+              pageDisplayState === i
+                ? 'bg-[var(--color-primary)] text-[var(--color-primary-text)]'
+                : 'text-[var(--color-primary)]'
             }`}
             role="tab"
             aria-selected={pageDisplayState === i}
@@ -43,7 +44,9 @@
                 const dir = e.key === 'ArrowRight' ? 'nextElementSibling' : 'previousElementSibling';
                 const next =
                   btn[dir] ??
-                  (dir === 'nextElementSibling' ? btn.parentElement.firstElementChild : btn.parentElement.lastElementChild);
+                  (dir === 'nextElementSibling'
+                    ? btn.parentElement.firstElementChild
+                    : btn.parentElement.lastElementChild);
                 next?.focus();
               } else if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -59,6 +62,9 @@
   </div>
   
   <style>
-    .home-nav { width: 100%; text-align: left; }
+    .home-nav {
+      width: 100%;
+      text-align: left;
+    }
   </style>
   

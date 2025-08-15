@@ -122,26 +122,23 @@ let authToken = null;
 
 
 
-<hr />
-
+<div style="background-color:#594112">
 {#if authToken}
-<div class="mt-5 bg-[#2a1405]">
+
   <Like contentId={filename} authToken={authToken} />
 
-</div>
 {/if}
 
 
 <!-- Player +page.svelte -->
-<hr />
-
-<div class="mt-5 bg-[#2a1405]">
+<div class="mt-5  px-40">
   <Comment
     contentId={filename}  
     userId={userId}      
   />
 </div>
 
+</div>
 
 <style>
   .center { display:flex; align-items:center; justify-content:center; height:100vh; color:#666; }

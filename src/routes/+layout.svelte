@@ -1,6 +1,6 @@
 <!-- src/routes/+layout.svelte -->
 <style>
-  @import '/data/global-blog.css';
+  @import '/css/theme.css';
 
 </style>
 <script>
