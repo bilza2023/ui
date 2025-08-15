@@ -1,4 +1,5 @@
 // schema.prisma
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,93 +8,93 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
 model Question {
-  filename     String   @id               // e.g., "what_is_algebra"
+  filename     String   @id
   name         String?
   description  String?
-  tags         Json?                      // stored as ["math", "algebra"]
-  status       String?                    // e.g., "draft", "ready"
-  timed        Boolean  @default(false)   // true = has showAt timings
+  tags         Json?
+  status       String?
+  timed        Boolean  @default(false)
   createdAt    DateTime @default(now())
   editedAt     DateTime @updatedAt
-  deck         Json                       // full validated deck object
-
+  deck         Json
   slides       Slide[]  @relation("QuestionSlides")
 }
 
-
 model Slide {
-  id              Int      @id @default(autoincrement())
-  questionFilename String   @map("question_filename") // FK → Question
-  index           Int      // order in deck
-  type            String
-  start           Float
-  end             Float
-  // dataJson        Json     // original data[] block <<< ---gone
-
-  question        Question @relation("QuestionSlides", fields: [questionFilename], references: [filename])
-  items           SlideItem[]
+  id               Int      @id @default(autoincrement())
+  questionFilename String   @map("question_filename")
+  index            Int
+  type             String
+  start            Float
+  end              Float
+  question  Question   @relation("QuestionSlides", fields: [questionFilename], references: [filename])
+  items     SlideItem[]
 }
 
 model SlideItem {
-  id         Int     @id @default(autoincrement())
-  slideId    Int
-  index      Int
-  name       String
-  showAt     Float?
+  id          Int     @id @default(autoincrement())
+  slideId     Int
+  index       Int
+  name        String
+  showAt      Float?
   textContent String?
-  numValue   Float?
-  label      String?
-  imageUrl   String?
-  colorHex   String?
-  typeHint   String?
-  extraJson  Json?
-
-  slide      Slide   @relation(fields: [slideId], references: [id])
+  numValue    Float?
+  label       String?
+  imageUrl    String?
+  colorHex    String?
+  typeHint    String?
+  extraJson   Json?
+  slide Slide @relation(fields: [slideId], references: [id])
 }
 
-enum InteractionCategory {
-  view
-  reaction
-  comment 
+/////////////////////////////////
+model Comments {
+  id          String   @id @default(cuid())
+  created_at  DateTime @default(now())
+
+  content_id  String
+  user_id     String
+  text        String   // the comment text
+
+  @@index([content_id, created_at], name: "idx_comment_content_time")
+  @@index([user_id, content_id], name: "idx_comment_user_content")
 }
 
-model UserInteraction {
-  id           String               @id @default(cuid())
-  created_at  DateTime             @default(now())
-  anchor_id    String
-  actor_id     String
-  user_id      String?
-  category     InteractionCategory
-  tags         Json                 // array of strings; set in code
-  payload_json Json                 // small object; set in code
 
-  @@map("user_interactions")
-  @@index([actor_id, anchor_id], name: "idx_actor_anchor")
-  @@index([user_id, anchor_id], name: "idx_user_anchor")
+///////////
+
+model Likes {
+  id            String   @id @default(cuid())
+  created_at    DateTime @default(now())
+
+  content_id    String
+  user_id       String
+
+@@unique([user_id, content_id], name: "uniq_user_content_reaction")
+@@index([user_id, content_id], name: "idx_user_content")
 }
 
-// --- Student Messages -------------------------------------------------------
+//////////////
 enum StudentMessageCategory {
-  general   // keep 1 for now; add more later
+  general
 }
 
 model StudentMessage {
-  id          String                   @id @default(cuid())          // message id
-  user_id     String                                                   // target user
-  category    StudentMessageCategory   @default(general)              // simple now, extensible later
-  message     String                                                   // HTML allowed (stored as TEXT)
-  read        Boolean                  @default(false)                // unread by default
-  created_at  DateTime                 @default(now())                // for ordering
-
+  id          String                   @id @default(cuid())
+  user_id     String
+  category    StudentMessageCategory   @default(general)
+  message     String
+  read        Boolean                  @default(false)
+  created_at  DateTime                 @default(now())
   @@index([user_id, read, created_at])
   @@index([user_id, created_at])
 }
 
-// --- Users ---------------------------------------------------------------
 model User {
   id            String   @id @default(cuid())
-  email         String   @unique          // store lowercase
+  email         String   @unique
   password_hash String
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt

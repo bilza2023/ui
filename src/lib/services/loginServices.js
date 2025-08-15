@@ -4,7 +4,7 @@
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import prisma from '$lib/server/prisma.js';
+import prisma from '../server/prisma.js';
 import { assertPasswordOrThrow } from './passwordPolicy.js';
 
 const TOKEN_TTL = '7d'; // adjust later
@@ -69,5 +69,6 @@ export async function verify(token) {
     select: { id: true, email: true, created_at: true }
   });
   if (!user) throw new Error('user not found');
+  // console.log("user" , user);
   return { payload, user };
 }

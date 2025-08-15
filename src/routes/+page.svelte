@@ -6,13 +6,10 @@
   import Sidebar from "$lib/appComps/homepage/Sidebar.svelte";
   import TcodeCard from "$lib/appComps/homepage/TcodeCard.svelte";
   import HomeIndex from "$lib/homeIndex/HomeIndex.svelte";
-  import InteractionPanel from "$lib/InteractionPanel.svelte";
+
   import SecondaryNav from "$lib/SecondaryNav.svelte";
   import HomePageNotes from "$lib/homeIndex/HomePageNotes.svelte";
   import { getSubjectsIndex } from "$lib/services/syllabusServicer";
-
-  const anchorId = "demo_anchor";
-  const userId = "jj";
 
   let syllabus = [];
   onMount(async () => {
@@ -47,9 +44,6 @@
     <Sidebar />
   </section>
 
-  <div class="mt-5 bg-[#2a1405]">
-    <InteractionPanel {anchorId} {userId} />
-  </div>
 
   <Footer />
 </div>

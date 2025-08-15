@@ -1,158 +1,235 @@
 <script>
-    import { onMount } from 'svelte';
-  
-    // Required
-    export let anchorId;          // e.g. "demo_anchor"
-    // Optional
-    export let userId = null;
-    export let reactionEndpoint = '/api/interactions/reaction';
-    export let commentEndpoint  = '/api/interactions/comment';
-  
-    // Minimal state
-    let actorId = null;
-    let sending = false;
-    let msg = '';
-    let err = '';
-    let comment = '';
-    let liked = false;
-  
-    // — helpers (kept tiny) —
-    function uuid() {
-      try {
-        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c/4).toString(16)
-        );
-      } catch {
-        return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
-      }
+  import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
+
+  // Inputs (same names you’re already using)
+  export let anchorId;         // required: where interaction happens (e.g., "notesPage")
+  export let userId = null;    // optional: logged-in user id (locals.user.id saved in localStorage)
+  export let contentId = null; // optional: the specific content (e.g., filename)
+
+  // Local state
+  let likeSending = false;
+  let likeSent = false;
+  let likeMsg = '';
+  let likeErr = '';
+
+  let comment = '';
+  let commentSending = false;
+  let commentMsg = '';
+  let commentErr = '';
+
+  const ENDPOINT = '/api/interactions';
+
+  function resetLikeFeedback() {
+    likeMsg = '';
+    likeErr = '';
+  }
+
+  function resetCommentFeedback() {
+    commentMsg = '';
+    commentErr = '';
+  }
+
+  async function post(payload) {
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload),
+      credentials: 'same-origin'
+    });
+    let data = {};
+    try { data = await res.json(); } catch {}
+    if (!res.ok || data?.ok === false) {
+      const msg = data?.message || `HTTP ${res.status}`;
+      const code = data?.code || 'E_HTTP';
+      const e = new Error(msg);
+      e.code = code;
+      throw e;
     }
-    function getActor() {
-      try {
-        let id = localStorage.getItem('taleem.actorId');
-        if (!id) { id = uuid(); localStorage.setItem('taleem.actorId', id); }
-        return id;
-      } catch { return uuid(); }
+    return data;
+  }
+
+  // Log a simple page/view hit
+  onMount(async () => {
+    if (!browser) return;
+    if (!anchorId) return; // nothing to do without anchor
+    try {
+      await post({ anchor_id: anchorId, category: 'view', user_id: userId });
+    } catch (e) {
+      // Silent fail; views are best-effort
+      // console.debug('view failed', e);
     }
-    async function post(url, body) {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(body)
+  });
+
+  // Send a like reaction (category: 'reaction')
+  async function sendLike() {
+    resetLikeFeedback();
+    if (!anchorId || !contentId) {
+      likeErr = 'Missing anchorId or contentId.';
+      return;
+    }
+    if (likeSent) return;
+
+    likeSending = true;
+    try {
+      await post({
+        anchor_id: anchorId,
+        category: 'reaction',
+        content_id: contentId,
+        user_id: userId,
+        payload: { reaction_type: 'like' }
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
-      return res.json().catch(() => ({}));
+      likeSent = true;            // UI guard; server still dedupes/records as it sees fit
+      likeMsg = 'Thanks! Your like was recorded.';
+    } catch (e) {
+      likeErr = e?.message || 'Could not send like.';
+    } finally {
+      likeSending = false;
     }
-  
-    // — actions —
-    async function sendLike() {
-      if (sending || liked) return;
-      err = ''; msg = '';
-      sending = true;
-      try {
-        await post(reactionEndpoint, {
-          anchorId,
-          reactionType: 'like',
-          actorId,
-          userId
-        });
-        liked = true;
-        msg = 'Thanks for the like.';
-      } catch (e) {
-        err = e.message ?? 'Failed to send like.';
-      } finally {
-        sending = false;
-      }
+  }
+
+  // Post a comment (category: 'comment')
+  async function sendComment() {
+    resetCommentFeedback();
+    const text = (comment ?? '').trim();
+
+    if (!anchorId || !contentId) {
+      commentErr = 'Missing anchorId or contentId.';
+      return;
     }
-  
-    async function sendComment() {
-      if (sending || !comment.trim()) return;
-      err = ''; msg = '';
-      sending = true;
-      try {
-        await post(commentEndpoint, {
-          anchorId,
-          text: comment.trim(),
-          actorId,
-          userId
-        });
-        comment = '';
-        msg = 'Comment saved.';
-      } catch (e) {
-        err = e.message ?? 'Failed to save comment.';
-      } finally {
-        sending = false;
-      }
+    if (!text) {
+      commentErr = 'Please write a comment first.';
+      return;
     }
-  
-    onMount(() => { actorId = getActor(); });
-  </script>
-  
-  <div class="ip-wrap" data-anchor={anchorId}>
-    <div class="row">
-      <button class="pill {liked ? 'active' : ''}" disabled={sending || liked} on:click={sendLike} title="Like">
-        👍 Like
-      </button>
-    </div>
-  
-    <div class="comment">
-      <textarea
-        bind:value={comment}
-        placeholder="Add a quick note…"
-        rows="3"
-        maxlength="1000"
-        />
-      <div class="actions">
-        <button class="pill" on:click={sendComment} disabled={sending || !comment.trim()}>
-          Submit
-        </button>
-      </div>
-    </div>
-  
-    <div class="status">
-      {#if msg}<span class="ok">{msg}</span>{/if}
-      {#if err}<span class="err">{err}</span>{/if}
-    </div>
+
+    commentSending = true;
+    try {
+      await post({
+        anchor_id: anchorId,
+        category: 'comment',
+        content_id: contentId,
+        user_id: userId,
+        payload: { comment_text: text }
+      });
+      commentMsg = 'Comment posted.';
+      comment = '';
+    } catch (e) {
+      // If server enforces auth for comments, you’ll get a 401/400 here
+      commentErr = e?.message || 'Could not post comment.';
+    } finally {
+      commentSending = false;
+    }
+  }
+</script>
+
+<!-- Panel shell (parent gives brown background; we keep it simple) -->
+<div class="panel">
+  <!-- Reactions row -->
+  <div class="row">
+    <button
+      class="btn"
+      on:click={sendLike}
+      disabled={likeSending || likeSent || !contentId}
+      aria-pressed={likeSent}
+      title="Send a like reaction"
+    >
+      {#if likeSending}Sending…{/if}
+      {#if !likeSending}{likeSent ? 'Liked' : 'Like'}/{/if}
+    </button>
+
+    {#if likeErr}<span class="err">{likeErr}</span>{/if}
+    {#if likeMsg}<span class="msg">{likeMsg}</span>{/if}
   </div>
-  
-  <style>
-    .ip-wrap {
-      --border: rgba(255,255,255,0.12);
-      --bg: rgba(255,255,255,0.04);
-      --bg2: rgba(255,255,255,0.06);
-      --ok: #39d98a;
-      --err: #ff6b6b;
-  
-      display: grid;
-      gap: 10px;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--bg);
-    }
-    .row { display: flex; gap: 8px; align-items: center; }
-    .pill {
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: inherit;
-      font-size: 13px;
-      cursor: pointer;
-    }
-    .pill:hover { background: var(--bg2); }
-    .pill.active { opacity: 0.7; cursor: default; }
-    .comment { display: grid; gap: 8px; }
-    textarea {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: inherit;
-    }
-    .actions { display: flex; justify-content: flex-end; }
-    .status { min-height: 18px; font-size: 12px; }
-    .ok { color: var(--ok); }
-    .err { color: var(--err); }
-  </style>
-  
+
+  <!-- Comment box -->
+  <div class="row comment-row">
+    <textarea
+      bind:value={comment}
+      rows="3"
+      placeholder="Write a comment…"
+      on:input={resetCommentFeedback}
+    />
+    <div class="actions">
+      <button
+        class="btn"
+        on:click={sendComment}
+        disabled={commentSending || !contentId || !(comment || '').trim()}
+        title="Post comment"
+      >
+        {#if commentSending}Posting…{/if}
+        {#if !commentSending}Post Comment{/if}
+      </button>
+      {#if !userId}
+        <small class="hint">You may be posting without sign-in.</small>
+      {/if}
+    </div>
+
+    {#if commentErr}<div class="err">{commentErr}</div>{/if}
+    {#if commentMsg}<div class="msg">{commentMsg}</div>{/if}
+  </div>
+</div>
+
+<style>
+  .panel {
+    padding: 12px 14px;
+    color: #E8D7BD; /* light sand on dark brown */
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .comment-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #5a3a1a;
+    background: #1e1006;
+    color: #E8D7BD;
+    resize: vertical;
+    outline: none;
+  }
+  textarea:focus {
+    border-color: #C4A77F;
+    box-shadow: 0 0 0 2px rgba(196, 167, 127, 0.2);
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .btn {
+    appearance: none;
+    border: 1px solid #C4A77F;
+    background: transparent;
+    color: #E8D7BD;
+    padding: 6px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font: inherit;
+  }
+  .btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .err {
+    color: #ffb3b3;
+    font-size: 0.9rem;
+  }
+  .msg {
+    color: #b7ffc2;
+    font-size: 0.9rem;
+  }
+  .hint {
+    color: #C4A77F;
+    opacity: 0.85;
+  }
+</style>
