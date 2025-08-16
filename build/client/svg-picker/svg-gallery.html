@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>SVG Gallery</title>
+
+  <style>
+    /* layout */
+    body { font: 14px/1.4 system-ui, sans-serif; margin: 16px;background-color: rgb(4, 4, 88); }
+    .top { display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:16px; }
+    input[type="search"] { padding:8px 10px; width: min(520px, 90vw); }
+  
+    /* FLEX gallery — full width, centered rows */
+    .grid{
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      justify-content:center;   /* center cards on each row */
+      align-content:flex-start;
+      width:100%;
+      margin:0;                 /* no max-width, no centering box */
+    }
+  
+    /* cards */
+    :root{
+      --card-bg:#121212;
+      --card-border:rgba(255,255,255,0.08);
+      --thumb-bg:#0d0d0d;
+      --thumb-overlay:rgba(255,255,255,0.02);
+    }
+    .card{
+      flex:1 1 260px;           /* responsive: basis 260px, grows/shrinks */
+      max-width:340px;          /* prevent super-wide cards on big screens */
+      min-width:220px;
+      border:1px solid var(--card-border);
+      border-radius:16px;
+      padding:12px;
+      background:var(--card-bg);
+      display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px;
+      box-shadow:0 4px 14px rgba(0,0,0,0.25);
+      transition:transform .12s ease, box-shadow .12s ease;
+    }
+    .card:hover{ transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.35); }
+  
+    /* oval preview stage (doesn't alter SVG colors) */
+    .thumb{
+      width:100%;
+      aspect-ratio: 4 / 3;      /* responsive height */
+      height: 180px;            /* fallback if aspect-ratio unsupported */
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(var(--thumb-overlay),var(--thumb-overlay)), var(--thumb-bg);
+      border-radius:28px / 20px; /* oval corners */
+      overflow:hidden;           /* clip child */
+    }
+    .thumb img{
+      width:100%; height:100%;
+      object-fit:contain;
+      display:block;
+      border-radius:inherit;     /* keep the oval clip */
+    }
+  
+    .meta{ font-size:12px; color:#bbb; word-break:break-all; }
+  
+    button{
+      padding:6px 12px; border-radius:10px; border:1px solid var(--card-border);
+      background:#1f6f3d; color:#fff; cursor:pointer;
+    }
+    button:hover{ background:#238a4c; }
+  
+    .toast{
+      position:fixed; bottom:16px; right:16px; background:#111; color:#fff;
+      padding:8px 12px; border-radius:8px; opacity:0; transition:.2s;
+    }
+    .toast.show{ opacity:1; }
+  </style>
+  
+</head>
+<body>
+  <div class="top">
+    <input id="q" type="search" placeholder="Search filename or tag…">
+    <span id="count"></span>
+  </div>
+
+  <div id="grid" class="grid"></div>
+  <div id="toast" class="toast">Copied ✓</div>
+
+  <script type="module">
+    const BASE = 'svgs/';           // folder with your .svg files
+    const MANIFEST_URL = './manifest.json'; // array of items
+
+    const elGrid  = document.getElementById('grid');
+    const elQ     = document.getElementById('q');
+    const elCount = document.getElementById('count');
+    const toast   = document.getElementById('toast');
+
+    let items = [];   // [{file:'ai.svg', tags:['logo','ai']}, ...]
+    let view  = [];
+
+    // tiny toast
+    function showToast(msg='Copied ✓') {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(()=>toast.classList.remove('show'), 900);
+    }
+
+    // copy as real SVG to clipboard (fallback to text)
+    async function copySvg(url) {
+      const res = await fetch(url);
+      const svgText = await res.text();
+      try {
+        await navigator.clipboard.write([
+          new ClipboardItem({ 'image/svg+xml': new Blob([svgText], { type:'image/svg+xml' }) })
+        ]);
+      } catch {
+        await navigator.clipboard.writeText(svgText); // fallback
+      }
+      showToast();
+    }
+
+    function render(list) {
+      elGrid.innerHTML = '';
+      list.forEach(({ file, tags=[] }) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="thumb"><img loading="lazy" src="${BASE + file}" alt=""></div>
+          <div class="meta">${file}${tags?.length ? ' — ' + tags.join(', ') : ''}</div>
+          <button data-file="${file}">Copy SVG</button>
+        `;
+        card.querySelector('button').addEventListener('click', () => copySvg(BASE + file));
+        elGrid.appendChild(card);
+      });
+      elCount.textContent = `${list.length} item(s)`;
+    }
+
+    function applyFilter() {
+      const q = elQ.value.trim().toLowerCase();
+      view = !q
+        ? items
+        : items.filter(it => it.file.toLowerCase().includes(q) || (it.tags||[]).some(t => t.toLowerCase().includes(q)));
+      render(view);
+    }
+
+    // load manifest and go
+    fetch(MANIFEST_URL).then(r => r.json()).then(data => {
+      // Accept either ["a.svg","b.svg"] or [{file:"a.svg",tags:[...]}, ...]
+      items = data.map(v => typeof v === 'string' ? ({ file: v, tags: [] }) : v);
+      applyFilter();
+    });
+
+    elQ.addEventListener('input', applyFilter);
+  </script>
+</body>
+</html>
