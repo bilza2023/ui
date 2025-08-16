@@ -1,30 +1,34 @@
-// src/routes/timings/+server.js
+// src/routes/admin/timings/+server.js  (or your actual path)
+
 import { json } from '@sveltejs/kit';
-import * as questionService from '../../../lib/services/questionServices';
+import * as questionService from '../../../lib/services/questionServices.js';
 
 export async function GET({ url }) {
   const filename = url.searchParams.get('filename');
-  if (!filename) {
-    return json({ error: 'filename required' }, { status: 400 });
-  }
+  if (!filename) return json({ error: 'filename required' }, { status: 400 });
 
   const record = await questionService.getQuestionByFilename(filename);
-  if (!record) {
-    return json({ error: 'Deck not found' }, { status: 404 });
-  }
+  if (!record) return json({ error: 'Question not found' }, { status: 404 });
 
-  // return the deck JSON as-is (already stored as validated DeckBuilder format)
-  return json(record.deck);
+  // Return the full question so the client can use question.deck
+  return json(record);
 }
 
 export async function POST({ request, url }) {
   const filename = url.searchParams.get('filename');
-  if (!filename) {
-    return json({ error: 'filename required' }, { status: 400 });
-  }
+  if (!filename) return json({ error: 'filename required' }, { status: 400 });
 
-  const newContent = await request.json();
-  await questionService.updateDeckJson(filename, newContent);
+  const payload = await request.json();
 
+  // Accept either:
+  // - { question: { deck } }   ← new shape
+  // - { deck }                  ← transitional
+  // - deck (raw)                ← legacy
+  const newDeck =
+    payload?.question?.deck ??
+    payload?.deck ??
+    payload;
+
+  await questionService.updateDeckJson(filename, newDeck);
   return json({ success: true });
 }
