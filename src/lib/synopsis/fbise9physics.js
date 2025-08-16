@@ -4,7 +4,7 @@
 const fbise9physics = {
     tcodeName: "fbise9physics",
     description: "Physics Class 9 (FBISE)",
-    image: "/bookcovers/physics_9thFBSIE.png",
+    image: "/bookcovers/fbise9physics.png",
     chapters: [
       {
         name: "Ch-01 Physical Quantities and Measurement",

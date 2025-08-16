@@ -1,4 +1,4 @@
-<!-- +page.svelte -->
+<!-- src/routes/+page.svelte -->
 <script>
   import { onMount } from "svelte";
   import Nav from "$lib/appComps/Nav.svelte";
@@ -8,11 +8,14 @@
   import HomeIndex from "$lib/homeIndex/HomeIndex.svelte";
   import SecondaryNav from "$lib/SecondaryNav.svelte";
   import HomePageNotes from "$lib/homeIndex/HomePageNotes.svelte";
-  import { getSubjectsIndex } from "$lib/services/syllabusServicer";
+
+  // ✅ use the new synopsis services (registry-based)
+  import { listTcodes } from "$lib/services/synopsisServeces.js";
 
   let syllabus = [];
-  onMount(async () => {
-    syllabus = await getSubjectsIndex();
+  onMount(() => {
+    // listTcodes() is synchronous and client-safe
+    syllabus = listTcodes(); // [{ tcodeName, description, image }]
   });
 
   let navItems = ["Courses", "Videos", "Notes"];
