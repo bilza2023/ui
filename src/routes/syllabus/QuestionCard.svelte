@@ -1,103 +1,75 @@
 <script>
-  export let questions = [];
-  
-  function getThumb(q) {
-    return q.thumbnail
-      ?? (q.type === 'slide'
-        ? '/images/slide.webp'
-        : '/images/beakers2.webp');
+  export let items = []; // rows from getExerciseContent(): { filename, type, name, description, status, tags, timed, editedAt }
+
+  function hrefFor(q) {
+    if (q.type === 'deck') return `/player?filename=${encodeURIComponent(q.filename)}`;
+    if (q.type === 'note') return `/notes?filename=${encodeURIComponent(q.filename)}`;
+    return '#';
   }
 
-  function getMeta(q) {
+  function metaFor(q) {
     switch (q.type) {
-      case 'slide': return { color: '#492d08', icon: '📷' };
-      case 'note':  return { color: '#6c430b', icon: '📚' };
-      case 'deck':  return { color: '#0c0535', icon: '📽️' };
-      default:      return { color: '#2E1C02', icon: '' };
+      case 'deck': return { bg: '#0c0535', fg: '#dcd6ff', label: 'Deck' };
+      case 'note': return { bg: '#6c430b', fg: '#ffe3c4', label: 'Note' };
+      default:     return { bg: '#2E1C02', fg: '#e6ccb0', label: (q.type ?? 'Item') };
     }
   }
 </script>
 
-<div class="question-grid">
-  {#if questions.length > 0}
-    {#each questions as question}
-      <a
-        class="card"
-        href={question.type === 'note'
-          ? `/notes/${question.filename}`
-          : `/player?filename=${question.filename}`}
-        style="border: 4px solid {getMeta(question).color}"
-      >
-        <img
-          class="thumb"
-          src={getThumb(question)}
-          alt={question.name}
-        />
-
-        <div
-          class="title"
-          style="background-color: {getMeta(question).color}"
-        >
-         <span style="font-size:1.25rem"> {getMeta(question).icon}</span> 
-         &nbsp; 
-         <span style="font-size:1rem">{question.name}</span>
+{#if !items || items.length === 0}
+  <div class="empty">No items yet for this exercise.</div>
+{:else}
+  <div class="grid">
+    {#each items as q}
+      {@const m = metaFor(q)}
+      <a class="card" href={hrefFor(q)}>
+        <div class="type" style={`--bg:${m.bg}; --fg:${m.fg}`}>{m.label}</div>
+        <div class="title">{q.name ?? q.filename}</div>
+        {#if q.description}
+          <div class="desc">{q.description}</div>
+        {/if}
+        <div class="meta">
+          {#if q.timed}<span class="pill">timed</span>{/if}
+          {#if q.status}<span class="pill">{q.status}</span>{/if}
+          {#if Array.isArray(q.tags)}
+            {#each q.tags.slice(0,5) as t}
+              <span class="tag">#{t}</span>
+            {/each}
+          {/if}
+        </div>
+        <div class="footer">
+          <span class="fn">{q.filename}</span>
+          {#if q.editedAt}<span class="date" title="Last edited">{new Date(q.editedAt).toLocaleDateString()}</span>{/if}
         </div>
       </a>
     {/each}
-  {:else}
-    <p class="no-questions">No questions available for this selection.</p>
-  {/if}
-</div>
-
+  </div>
+{/if}
 
 <style>
-  .question-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Center cards horizontally */
-    gap: 1rem;
-    padding: 1rem;
-    width: 100%;
+  .empty{
+    width:100%; text-align:center; color:#3b2606; padding:40px 12px;
   }
-
- 
-  .card:hover {
-    transform: translateY(2px);
-    box-shadow: 0 10px 10px rgba(21, 42, 0, 0.9);
+  .grid{
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap:12px; width:100%;
   }
-
-  .card {
-    display: flex;
-  flex-direction: column;
-  border-radius: 0.75rem;  /* rounded corners */
-  overflow: hidden;   
-  border: 4px solid #2E1C02;
-  /* border: 4px solid #372205; */
-  box-shadow: 0 8px 8px rgba(45, 44, 44, 0.8);
-}
-
-.thumb {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  background-color: #f0f0f0;
-  flex-shrink: 0;
-  border-top-left-radius: 0.75rem;
-  border-top-right-radius: 0.75rem;
-}
-
-.title {
-  margin-top: auto;       /* stick title to bottom of the card */
-  color: #d5bd9b;
-    background-color: #2E1C02;
-    padding: 0.6rem;
-    font-size: 0.9rem;;
-}
-
-
-  .no-questions {
-    color: #331f04;
-    font-size: 1rem;
-    text-align: center;
+  .card{
+    display:flex; flex-direction:column; gap:8px;
+    background:#f3e5c6; color:#1b1205; border-radius:16px; padding:12px; text-decoration:none;
+    border:1px solid #e2d4b5; box-shadow: 0 1px 0 rgba(0,0,0,0.04);
   }
+  .card:hover{ transform: translateY(-1px); transition: transform .12s ease; }
+  .type{
+    align-self:flex-start; padding:2px 8px; border-radius:999px; font-size:12px;
+    background: var(--bg); color: var(--fg); border:1px solid rgba(255,255,255,0.12);
+  }
+  .title{ font-weight:700; color:#2b1b05; }
+  .desc{ color:#4a3111; font-size: 0.95rem; }
+  .meta{ display:flex; flex-wrap:wrap; gap:6px; }
+  .pill{ background:#2E1C02; color:#e6ccb0; border-radius:999px; font-size:12px; padding:2px 8px; }
+  .tag{ background:#ead6b5; color:#4a3111; border-radius:999px; font-size:12px; padding:2px 8px; }
+  .footer{ display:flex; justify-content:space-between; align-items:center; color:#6b4a12; font-size:12px; }
+  .fn{ max-width:60%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .date{ opacity:0.8; }
 </style>

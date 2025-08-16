@@ -1,113 +1,48 @@
 <script>
-	export let chapters = [];
-	export let selectedChapter = null;
-	export let isSidebarOpen = true;
-
-	function selectChapter(chapter) {
-		dispatch('select', { chapter });
-	}
-
 	import { createEventDispatcher } from 'svelte';
+  
+	export let chapters = [];      // [{ name, filename, number, order }]
+	export let activeSlug = null;  // chapter filename
+  
 	const dispatch = createEventDispatcher();
-</script>
-
-<div class="sidebar" class:open={isSidebarOpen}>
-	{#if isSidebarOpen}
-		<div class="chapter-list">
-			<button class="toggle-btn" on:click={() => dispatch('toggle')}>
-				◄ Collapse
-			</button>
-			<h3 class="text-center text-[#EAB308]">Chapters</h3>
-			{#each chapters as chapter}
-				<button
-					class="chapter-btn"
-					class:selected={selectedChapter?.filename === chapter.filename}
-					on:click={() => selectChapter(chapter)}
-				>
-				{chapter.name.length > 30 ? chapter.name.slice(0, 30) + '...' : chapter.name}
-
-				</button>
-			{/each}
-		</div>
-	{:else}
-		<button class="toggle-btn collapsed" on:click={() => dispatch('toggle')}>
-			<!-- 🔓 
-			<br/> -->
-			☰
+	function pick(slug) { dispatch('pick', { slug }); }
+  </script>
+  
+  <div class="sidebar">
+	<div class="title">Chapters</div>
+	<div class="list">
+	  {#each chapters as ch}
+		<button
+		  class="ch"
+		  class:active={activeSlug === ch.filename}
+		  on:click={() => pick(ch.filename)}
+		  title={ch.name}>
+		  <span class="num">{ch.number.toString().padStart(2,'0')}</span>
+		  <span class="name">{ch.name}</span>
 		</button>
-	{/if}
-</div>
-
-<style>
-	.sidebar {
-		width: 20%;
-		min-width: 5%;
-		color: whitesmoke;
-		background: #2E1C02;
-		border-right: 1px solid #ddd;
-		transition: width 0.3s ease;
+	  {/each}
+	</div>
+  </div>
+  
+  <style>
+	.sidebar{
+	  height:100%; display:flex; flex-direction:column; gap:8px;
+	  background:#221605;
 	}
-
-	.sidebar.open {
-		width: 20%;
+	.title{
+	  padding:12px; color:#e6ccb0; font-weight:600; letter-spacing:0.3px; border-bottom:1px solid #3b2606;
 	}
-
-	.sidebar:not(.open) {
-		width: 5%;
+	.list{ display:flex; flex-direction:column; }
+	.ch{
+	  display:flex; gap:10px; align-items:center; text-align:left;
+	  padding:8px 12px; border:none; background:transparent; color:#d7c1a5; cursor:pointer;
+	  border-left:4px solid transparent;
 	}
-
-	.toggle-btn {
-		width: 100%;
-		padding: 0.5rem;
-		background-color: #2E1C02;
-		color: white;
-		border: none;
-		cursor: pointer;
-		text-align: left;
+	.ch:hover{ background:#2a1a06; }
+	.ch.active{ background:#2f1d07; color:#fff2e0; border-left-color:#eab308; }
+	.num{
+	  min-width:28px; padding:2px 6px; border-radius:6px; background:#3b2606; color:#e6ccb0; font-size:12px;
 	}
-
-	.toggle-btn.collapsed {
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 1.5rem;
-	}
-
-	.chapter-list {
-		padding: 1rem;
-		overflow-y: auto;
-		height: 100%;
-	}
-
-	.chapter-btn {
-		display: block;
-		width: 100%;
-		padding: 0.5rem;
-		margin: 0.2rem 0;
-		background: none;
-		border: none;
-		text-align: left;
-		cursor: pointer;
-		border-radius: 4px;
-	}
-
-	.chapter-btn:hover {
-		background: #7d551c;
-	}
-
-	.chapter-btn.selected {
-		background: #EAB308;
-		color: white;
-	}
-
-	@media (max-width: 768px) {
-		.sidebar {
-			width: 5%;
-		}
-		.sidebar.open {
-			width: 100%;
-			max-width: 250px;
-		}
-	}
-</style>
+	.name{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  </style>
+  
