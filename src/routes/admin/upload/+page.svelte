@@ -88,13 +88,8 @@
 <section class="page dark">
   <header class="header">
     <div class="container">
-      <div class="title">
-        <h1>Upload Deck</h1>
-        <p>Send a deck (<code>.json</code> / <code>.js</code>) into <code>Question</code> (type=<strong>deck</strong>).</p>
-      </div>
-      <button type="button" class="btn btn-primary" on:click={upload} disabled={uploading || !canSubmit}>
-        {uploading ? 'Uploading…' : 'Upload'}
-      </button>
+      <div class="title flex justify-center w-full my-5">
+        <h1 class="">Upload Deck</h1>
     </div>
   </header>
 
@@ -109,9 +104,9 @@
         <span class="sep">•</span>
         <span class="chip">File: <strong>{file ? file.name : '—'}</strong></span>
       </div>
-      <button type="button" class="btn btn-primary" on:click={upload} disabled={uploading || !canSubmit}>
+      <!-- <button type="button" class="btn btn-primary" on:click={upload} disabled={uploading || !canSubmit}>
         {uploading ? 'Uploading…' : 'Upload'}
-      </button>
+      </button> -->
     </div>
   </div>
 

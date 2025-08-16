@@ -128,11 +128,26 @@
         throw new Error(body.error || res.statusText);
       }
       deck = await res.json();
+      console.log("deck" , deck);
       deckLoaded = true;
     } catch (e) {
       error = (e as Error).message;
     }
   });
+
+  function addSlide() {
+    if (!deck?.deck) return;
+    const newSlide = {
+      type: 'titleSlide',
+      start: 0,
+      end: 0,
+      data: [
+        { type: 'text', content: 'New Slide Content', showAt: 0 }
+      ]
+    };
+    deck.deck.push(newSlide);
+    deck = { ...deck }; // trigger reactivity
+  }
 </script>
 
 <Nav />
@@ -221,6 +236,15 @@
     </div>
   {/each}
 {/if}
+
+
+<button
+on:click={addSlide}
+class="btn"
+style="margin-left: 0.5rem; background-color: #2563eb;"
+>
+➕ Add Slide
+</button>
 
 <style>
   :global(body) {
