@@ -1,33 +1,33 @@
 <script>
-  // path
-  let tcode = '';
-  let chapter = '';
-  let exercise = '';
+  import PathPicker from '$lib/components/PathPicker.svelte';
 
-  // meta
+  // Cascading path from synopsis services (via PathPicker)
+  let path = { tcode: '', chapterSlug: '', chapterNo: null, exerciseSlug: '' };
+
+  // Meta
   let status = '';
   let tagsCsv = '';
   let description = '';
 
-  // payload (single file)
-  let file = /** @type {File|null} */(null);
+  // Payload (single file)
+  let file = /** @type {File|null} */ (null);
   let filename = ''; // derived from file name (no extension)
   let fileEl;        // ref to clear input
 
-  // ui
+  // UI
   let uploading = false;
   let msg = '';
   let err = '';
 
+  // Derived: enable/disable submit
   $: canSubmit =
-    tcode.trim() &&
-    chapter.toString().trim() &&
-    !Number.isNaN(parseInt(chapter, 10)) &&
-    exercise.trim() &&
+    !!path.tcode &&
+    !!path.chapterNo &&
+    !!path.exerciseSlug &&
     !!file;
 
   function resetForm() {
-    tcode = ''; chapter = ''; exercise = '';
+    path = { tcode: '', chapterSlug: '', chapterNo: null, exerciseSlug: '' };
     status = ''; tagsCsv = ''; description = '';
     file = null; filename = '';
     if (fileEl) fileEl.value = '';
@@ -47,6 +47,13 @@
   }
   function onDragOver(e) { e.preventDefault(); }
 
+  function onDropKey(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      fileEl?.click();
+    }
+  }
+
   async function upload() {
     err = ''; msg = '';
     if (!canSubmit) { err = 'Please fill required fields.'; return; }
@@ -54,12 +61,14 @@
     uploading = true;
     try {
       const fd = new FormData();
-      fd.append('tcode', tcode.trim());
-      fd.append('chapter', chapter.toString().trim());
-      fd.append('exercise', exercise.trim());
+      fd.append('tcode', path.tcode);
+      fd.append('chapter', String(path.chapterNo));     // from PathPicker (number)
+      fd.append('exercise', path.exerciseSlug);         // exercise filename (slug/id)
+
       if (status.trim())       fd.append('status', status.trim());
       if (tagsCsv.trim())      fd.append('tags', tagsCsv.trim());
       if (description.trim())  fd.append('description', description.trim());
+
       fd.append('file', file);
       fd.append('filename', filename || file.name.replace(/\.(json|js)$/i, ''));
 
@@ -70,7 +79,9 @@
       else { msg = `Uploaded ${data?.uploaded ?? 1} deck.`; resetForm(); }
     } catch (e) {
       err = e?.message ?? 'Network error.';
-    } finally { uploading = false; }
+    } finally {
+      uploading = false;
+    }
   }
 </script>
 
@@ -79,7 +90,7 @@
     <div class="container">
       <div class="title">
         <h1>Upload Deck</h1>
-        <p>Send a deck (JSON/JS) into <code>Question</code> (type=<strong>deck</strong>).</p>
+        <p>Send a deck (<code>.json</code> / <code>.js</code>) into <code>Question</code> (type=<strong>deck</strong>).</p>
       </div>
       <button type="button" class="btn btn-primary" on:click={upload} disabled={uploading || !canSubmit}>
         {uploading ? 'Uploading…' : 'Upload'}
@@ -90,11 +101,11 @@
   <div class="toolbar">
     <div class="container toolbar-inner">
       <div class="summary">
-        <span class="chip">Tcode: <strong>{tcode || '—'}</strong></span>
+        <span class="chip">Tcode: <strong>{path.tcode || '—'}</strong></span>
         <span class="sep">•</span>
-        <span class="chip">Chapter: <strong>{chapter || '—'}</strong></span>
+        <span class="chip">Chapter#: <strong>{path.chapterNo ?? '—'}</strong></span>
         <span class="sep">•</span>
-        <span class="chip">Exercise: <strong>{exercise || '—'}</strong></span>
+        <span class="chip">Exercise: <strong>{path.exerciseSlug || '—'}</strong></span>
         <span class="sep">•</span>
         <span class="chip">File: <strong>{file ? file.name : '—'}</strong></span>
       </div>
@@ -109,20 +120,8 @@
       <form class="form" on:submit|preventDefault={upload}>
         <div class="group">
           <h2 class="group-title">Path</h2>
-          <div class="grid-3">
-            <div class="row">
-              <label for="tcode">Tcode<span class="req">*</span></label>
-              <input id="tcode" bind:value={tcode} placeholder="fbise9mathold" required />
-            </div>
-            <div class="row">
-              <label for="chapter">Chapter<span class="req">*</span></label>
-              <input id="chapter" type="number" min="1" step="1" bind:value={chapter} required />
-            </div>
-            <div class="row">
-              <label for="exercise">Exercise<span class="req">*</span></label>
-              <input id="exercise" bind:value={exercise} placeholder="Theorems" required />
-            </div>
-          </div>
+          <!-- Reusable cascading picker -->
+          <PathPicker bind:value={path} />
         </div>
 
         <div class="group">
@@ -148,7 +147,15 @@
           <div class="row">
             <label for="file">Choose file</label>
             <input bind:this={fileEl} id="file" type="file" accept=".json,.js" on:change={onPick} />
-            <div class="drop" on:drop={onDrop} on:dragover={onDragOver}>
+            <div
+              class="drop"
+              role="region"
+              aria-label="File drop zone"
+              tabindex="0"
+              on:drop={onDrop}
+              on:dragover={onDragOver}
+              on:keydown={onDropKey}
+            >
               Drop a file here or click above.
             </div>
           </div>
@@ -174,7 +181,7 @@
 </section>
 
 <style>
-  /* same dark theme as before (trimmed to essentials) */
+  /* Dark theme */
   .dark{--bg:#0b0b0b;--bg-soft:#101010;--panel:#121212;--panel-2:#161616;--text:#eaeaea;--muted:#a9a9a9;--border:#252525;--accent:#2aa96b;--accent-2:#1f7f50}
   .dark{color:var(--text);background:radial-gradient(1200px 600px at 10% -10%,#121212 0,transparent 60%),radial-gradient(800px 500px at 90% -20%,#101010 0,transparent 60%),var(--bg);min-height:100vh}
   .container{max-width:1040px;margin:0 auto;padding:0 16px}
@@ -191,10 +198,10 @@
   .group-title{margin:0;font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-left:6px}
   .grid-3{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
   @media (max-width:900px){.grid-3{grid-template-columns:1fr}}
-  .row{display:grid;gap:8px}label{font-weight:600;font-size:14px}.req{color:#e33;margin-left:4px}
-  input,textarea,select{padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--bg-soft);color:var(--text);outline:none}
+  .row{display:grid;gap:8px}label{font-weight:600;font-size:14px}
+  input,textarea{padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--bg-soft);color:var(--text);outline:none}
   input::placeholder,textarea::placeholder{color:#6f6f6f}
-  input:focus,textarea:focus,select:focus{border-color:#2c2c2c;box-shadow:0 0 0 3px rgba(42,169,107,.15)}
+  input:focus,textarea:focus{border-color:#2c2c2c;box-shadow:0 0 0 3px rgba(42,169,107,.15)}
   .hint{color:var(--muted);font-size:12px}
   .drop{border:1px dashed #3a3a3a;border-radius:12px;padding:18px;text-align:center;background:#121212;color:var(--muted)}
   .actions{display:flex;gap:12px;align-items:center}
