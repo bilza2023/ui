@@ -1,54 +1,38 @@
 -- CreateTable
 CREATE TABLE "Question" (
     "filename" TEXT NOT NULL PRIMARY KEY,
+    "tcode" TEXT NOT NULL,
+    "chapter" INTEGER NOT NULL,
+    "exercise" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
     "name" TEXT,
     "description" TEXT,
     "tags" JSONB,
     "status" TEXT,
+    "sortOrder" INTEGER,
     "timed" BOOLEAN NOT NULL DEFAULT false,
+    "deck" JSONB,
+    "note" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "editedAt" DATETIME NOT NULL,
-    "deck" JSONB NOT NULL
+    "editedAt" DATETIME NOT NULL
 );
 
 -- CreateTable
-CREATE TABLE "Slide" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "question_filename" TEXT NOT NULL,
-    "index" INTEGER NOT NULL,
-    "type" TEXT NOT NULL,
-    "start" REAL NOT NULL,
-    "end" REAL NOT NULL,
-    CONSTRAINT "Slide_question_filename_fkey" FOREIGN KEY ("question_filename") REFERENCES "Question" ("filename") ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
--- CreateTable
-CREATE TABLE "SlideItem" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "slideId" INTEGER NOT NULL,
-    "index" INTEGER NOT NULL,
-    "name" TEXT NOT NULL,
-    "showAt" REAL,
-    "textContent" TEXT,
-    "numValue" REAL,
-    "label" TEXT,
-    "imageUrl" TEXT,
-    "colorHex" TEXT,
-    "typeHint" TEXT,
-    "extraJson" JSONB,
-    CONSTRAINT "SlideItem_slideId_fkey" FOREIGN KEY ("slideId") REFERENCES "Slide" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
--- CreateTable
-CREATE TABLE "user_interactions" (
+CREATE TABLE "Comments" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "anchor_id" TEXT NOT NULL,
-    "user_id" TEXT,
-    "category" TEXT NOT NULL,
-    "tags" JSONB NOT NULL,
-    "payload_json" JSONB NOT NULL,
-    CONSTRAINT "user_interactions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    "content_id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "text" TEXT NOT NULL,
+    "response" TEXT
+);
+
+-- CreateTable
+CREATE TABLE "Likes" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "content_id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -71,7 +55,28 @@ CREATE TABLE "User" (
 );
 
 -- CreateIndex
-CREATE INDEX "idx_user_anchor" ON "user_interactions"("user_id", "anchor_id");
+CREATE INDEX "Question_tcode_idx" ON "Question"("tcode");
+
+-- CreateIndex
+CREATE INDEX "Question_tcode_chapter_idx" ON "Question"("tcode", "chapter");
+
+-- CreateIndex
+CREATE INDEX "Question_tcode_chapter_exercise_idx" ON "Question"("tcode", "chapter", "exercise");
+
+-- CreateIndex
+CREATE INDEX "Question_tcode_chapter_exercise_sortOrder_idx" ON "Question"("tcode", "chapter", "exercise", "sortOrder");
+
+-- CreateIndex
+CREATE INDEX "idx_comment_content_time" ON "Comments"("content_id", "created_at");
+
+-- CreateIndex
+CREATE INDEX "idx_comment_user_content" ON "Comments"("user_id", "content_id");
+
+-- CreateIndex
+CREATE INDEX "idx_user_content" ON "Likes"("user_id", "content_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Likes_user_id_content_id_key" ON "Likes"("user_id", "content_id");
 
 -- CreateIndex
 CREATE INDEX "StudentMessage_user_id_read_created_at_idx" ON "StudentMessage"("user_id", "read", "created_at");

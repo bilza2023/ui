@@ -2,6 +2,7 @@
     <a href="/" class="nav-link">🔱 App Home</a>
     <a href="/admin/" class="nav-link">🏠 Home</a>
     <a href="/admin/upload" class="nav-link">📤 Upload</a>
+    <a href="/admin/uploadNotes" class="nav-link">📤 Upload Notes</a>
     <a href="/admin/workdesk" class="nav-link">🎖️ workdesk</a>
   </nav>
   

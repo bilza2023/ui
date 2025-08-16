@@ -37,13 +37,13 @@
   function onPick(e) {
     const picked = (e.target.files && e.target.files[0]) ? e.target.files[0] : null;
     file = picked;
-    filename = picked ? picked.name.replace(/\.(json|js)$/i, '') : '';
+    filename = picked ? picked.name.replace(/\.(html|htm)$/i, '') : '';
   }
   function onDrop(e) {
     e.preventDefault();
     const dropped = e.dataTransfer?.files?.[0] ?? null;
     file = dropped || null;
-    filename = file ? file.name.replace(/\.(json|js)$/i, '') : '';
+    filename = file ? file.name.replace(/\.(html|htm)$/i, '') : '';
   }
   function onDragOver(e) { e.preventDefault(); }
 
@@ -61,13 +61,13 @@
       if (tagsCsv.trim())      fd.append('tags', tagsCsv.trim());
       if (description.trim())  fd.append('description', description.trim());
       fd.append('file', file);
-      fd.append('filename', filename || file.name.replace(/\.(json|js)$/i, ''));
+      fd.append('filename', filename || file.name.replace(/\.(html|htm)$/i, ''));
 
-      const res = await fetch('/admin/upload', { method: 'POST', body: fd });
+      const res = await fetch('/admin/uploadNotes', { method: 'POST', body: fd });
       const data = await res.json();
 
       if (!res.ok) err = data?.error ?? 'Upload failed.';
-      else { msg = `Uploaded ${data?.uploaded ?? 1} deck.`; resetForm(); }
+      else { msg = `Uploaded ${data?.uploaded ?? 1} note.`; resetForm(); }
     } catch (e) {
       err = e?.message ?? 'Network error.';
     } finally { uploading = false; }
@@ -78,8 +78,8 @@
   <header class="header">
     <div class="container">
       <div class="title">
-        <h1>Upload Deck</h1>
-        <p>Send a deck (JSON/JS) into <code>Question</code> (type=<strong>deck</strong>).</p>
+        <h1>Upload Note</h1>
+        <p>Send a <code>.html</code> note into <code>Question</code> (type=<strong>note</strong>).</p>
       </div>
       <button type="button" class="btn btn-primary" on:click={upload} disabled={uploading || !canSubmit}>
         {uploading ? 'Uploading…' : 'Upload'}
@@ -144,18 +144,18 @@
         </div>
 
         <div class="group">
-          <h2 class="group-title">Deck File</h2>
+          <h2 class="group-title">Note File</h2>
           <div class="row">
             <label for="file">Choose file</label>
-            <input bind:this={fileEl} id="file" type="file" accept=".json,.js" on:change={onPick} />
+            <input bind:this={fileEl} id="file" type="file" accept=".html,.htm" on:change={onPick} />
             <div class="drop" on:drop={onDrop} on:dragover={onDragOver}>
-              Drop a file here or click above.
+              Drop a .html file here or click above.
             </div>
           </div>
           <div class="row">
             <label for="filename">Filename (auto)</label>
             <input id="filename" value={filename} readonly />
-            <small class="hint">Derived from the chosen file (without .json/.js)</small>
+            <small class="hint">Derived from the chosen file (without .html/.htm)</small>
           </div>
         </div>
 
@@ -174,7 +174,6 @@
 </section>
 
 <style>
-  /* same dark theme as before (trimmed to essentials) */
   .dark{--bg:#0b0b0b;--bg-soft:#101010;--panel:#121212;--panel-2:#161616;--text:#eaeaea;--muted:#a9a9a9;--border:#252525;--accent:#2aa96b;--accent-2:#1f7f50}
   .dark{color:var(--text);background:radial-gradient(1200px 600px at 10% -10%,#121212 0,transparent 60%),radial-gradient(800px 500px at 90% -20%,#101010 0,transparent 60%),var(--bg);min-height:100vh}
   .container{max-width:1040px;margin:0 auto;padding:0 16px}

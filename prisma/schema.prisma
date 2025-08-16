@@ -10,44 +10,34 @@ datasource db {
 }
 
 model Question {
-  filename     String   @id
+  filename     String   @id                 // stable identity / anchor
+  tcode        String                       // subject/book
+  chapter      Int                           // chapter number
+  exercise     String                        // exercise name
+  type         String                        // "deck" | "note" | (future: "quiz", "video", ...)
+  
+  // ── Metadata ──
   name         String?
   description  String?
   tags         Json?
-  status       String?
-  timed        Boolean  @default(false)
+  status       String?                       // draft | ready | hidden
+  sortOrder    Int?                          // manual ordering inside exercise
+  timed        Boolean   @default(false)
+
+  // ── Payloads ──
+  deck         Json?                         // only when type="deck"
+  note         String?                       // only when type="note"
+
   createdAt    DateTime @default(now())
   editedAt     DateTime @updatedAt
-  deck         Json
-  slides       Slide[]  @relation("QuestionSlides")
+
+  @@index([tcode])
+  @@index([tcode, chapter])
+  @@index([tcode, chapter, exercise])
+  @@index([tcode, chapter, exercise, sortOrder])
 }
 
-model Slide {
-  id               Int      @id @default(autoincrement())
-  questionFilename String   @map("question_filename")
-  index            Int
-  type             String
-  start            Float
-  end              Float
-  question  Question   @relation("QuestionSlides", fields: [questionFilename], references: [filename])
-  items     SlideItem[]
-}
 
-model SlideItem {
-  id          Int     @id @default(autoincrement())
-  slideId     Int
-  index       Int
-  name        String
-  showAt      Float?
-  textContent String?
-  numValue    Float?
-  label       String?
-  imageUrl    String?
-  colorHex    String?
-  typeHint    String?
-  extraJson   Json?
-  slide Slide @relation(fields: [slideId], references: [id])
-}
 
 /////////////////////////////////
 model Comments {
@@ -57,6 +47,7 @@ model Comments {
   content_id  String
   user_id     String
   text        String   // the comment text
+  response    String?   // the comment text
 
   @@index([content_id, created_at], name: "idx_comment_content_time")
   @@index([user_id, content_id], name: "idx_comment_user_content")

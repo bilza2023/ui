@@ -1,87 +1,84 @@
-// File: src/routes/admin/upload/+server.js
+// src/routes/admin/upload/+server.js
 import { json } from '@sveltejs/kit';
 import DeckDoctor   from '../../../lib/deckdoctor/DeckDoctor.js';
 import DeckBuilder  from '../../../lib/deckbuilder/Deckbuilder.js';
-import { insertFullQuestionFromDeck } from '../../../lib/services/questionServices.js';
+import { createDeck, exists } from '../../../lib/services/uploadServices.js'; // ✅ use upload services
 import { Buffer } from 'buffer';
 
-/** POST /admin/upload — accepts .js (DeckBuilder DSL) or .json (raw deck-v1) */
 export async function POST({ request }) {
-  const form  = await request.formData();
-  const files = form.getAll('files');
-  if (!files.length) {
-    return json({ error: 'No files uploaded' }, { status: 400 });
+  const form = await request.formData();
+
+  const tcode    = (form.get('tcode') ?? '').toString().trim();
+  const chapStr  = (form.get('chapter') ?? '').toString().trim();
+  const exercise = (form.get('exercise') ?? '').toString().trim();
+  if (!tcode || !chapStr || !exercise) return json({ error: 'Missing required path fields' }, { status: 400 });
+
+  const chapter = Number.parseInt(chapStr, 10);
+  if (Number.isNaN(chapter)) return json({ error: 'Chapter must be integer' }, { status: 400 });
+
+  const statusOverride      = (form.get('status') ?? '').toString().trim() || undefined;
+  const descriptionOverride = (form.get('description') ?? '').toString().trim() || undefined;
+  const tagsCsv             = (form.get('tags') ?? '').toString();
+  const tagsOverride        = tagsCsv ? tagsCsv.split(',').map(s=>s.trim()).filter(Boolean) : undefined;
+
+  const file = form.get('file');
+  if (!file) return json({ error: 'No file uploaded' }, { status: 400 });
+
+  const originalName = file.name;
+  const baseName = (form.get('filename')?.toString().trim())
+                || originalName.replace(/\.(json|js)$/i, '');
+  if (!baseName) return json({ error: 'Unable to determine filename' }, { status: 400 });
+
+  // ✅ hard fail on duplicate (no upsert)
+  if (await exists(baseName)) {
+    return json({ error: 'Filename already exists. Delete it first or choose a new filename.' }, { status: 409 });
   }
 
-  const failed = [];
-
-  for (const file of /** @type {File[]} */ (files)) {
-    const name     = file.name;
-    const filename = name.replace(/\.(json|js)$/i, '');
-
-    try {
-      /* ─────────────────────── Parse / Build Deck ─────────────────────── */
-      let deckRaw;
-
-      if (/\.js$/i.test(name)) {
-        // ── DeckBuilder DSL file ──────────────────────────────────────────
-        const rawCode = await file.text();
-        const base64  = Buffer.from(rawCode, 'utf8').toString('base64');
-        const mod     = await import(`data:application/javascript;base64,${base64}`);
-        const define  = mod.defineDeck ?? mod.default;
-        if (typeof define !== 'function') {
-          throw new Error('No defineDeck() export found');
-        }
-
-        const builder = new DeckBuilder();
-        define(builder);
-        deckRaw = builder.build();          // already deck-v1
-      } else {
-        // ── Raw JSON upload ───────────────────────────────────────────────
-        const rawJson = await file.text();
-        deckRaw = JSON.parse(rawJson);      // may or may not be deck-v1
-      }
-
-      /* ───────────────────── Normalise / Validate ─────────────────────── */
-      const deckNorm = DeckDoctor.isDeckV1(deckRaw)
-        ? deckRaw                       // DeckBuilder output → already v1
-        : DeckDoctor.build(deckRaw);    // raw JSON → inject defaults, expand EQ
-
-      const validation = DeckDoctor.validate(deckNorm);
-      if (!validation.ok) {
-        const msgs = validation.errors.map(e => e.message).join('; ');
-        throw new Error(`Validation failed: ${msgs}`);
-      }
-      const deck = validation.value;
-
-      /* ───────────────────── Insert into DB ───────────────────────────── */
-      const { name: qName, description, tags, status } = deck;
-      const timed = DeckDoctor.getTotalDuration(deck) > 0;
-
-      await insertFullQuestionFromDeck({
-        filename,
-        name:        qName,
-        description,
-        tags,
-        status,
-        timed,
-        deck
-      });
-
-    } catch (err) {
-      console.error(`Upload error for ${name}:`, err);
-
-      if (err.code === 'P2002') {
-        failed.push(`${name} (question already exists)`);
-      } else {
-        failed.push(`${name} (${err.message})`);
-      }
+  try {
+    // Parse / build
+    let deckRaw;
+    if (/\.js$/i.test(originalName)) {
+      const rawCode = await file.text();
+      const mod     = await import(`data:application/javascript;base64,${Buffer.from(rawCode,'utf8').toString('base64')}`);
+      const define  = mod.defineDeck ?? mod.default;
+      if (typeof define !== 'function') throw new Error('No defineDeck() export found');
+      const builder = new DeckBuilder();
+      define(builder);
+      deckRaw = builder.build();
+    } else {
+      deckRaw = JSON.parse(await file.text());
     }
-  }
 
-  if (failed.length) {
-    return json({ error: `Failed uploads: ${failed.join(', ')}` }, { status: 400 });
-  }
+    // Validate
+    const deckNorm = DeckDoctor.isDeckV1(deckRaw) ? deckRaw : DeckDoctor.build(deckRaw);
+    const validation = DeckDoctor.validate(deckNorm);
+    if (!validation.ok) {
+      const msgs = validation.errors.map(e => e.message).join('; ');
+      return json({ error: `Validation failed: ${msgs}` }, { status: 400 });
+    }
+    const deck = validation.value;
 
-  return json({ success: true });
+    // Metadata precedence
+    const qName       = deck?.name || baseName;
+    const description = descriptionOverride ?? deck?.description ?? null;
+    const tags        = tagsOverride ?? deck?.tags ?? [];
+    const status      = statusOverride ?? deck?.status ?? null;
+    const timed       = (DeckDoctor.getTotalDuration?.(deck) ?? 0) > 0;
+
+    // ✅ create-only (will throw P2002 if race)
+    await createDeck({
+      filename: baseName,
+      tcode, chapter, exercise,
+      name: qName, description, tags, status, timed, deck
+    });
+
+    return json({ success: true, uploaded: 1 });
+  } catch (err) {
+    if (err?.code === 'P2002') {
+      // unique constraint safety net
+      return json({ error: 'Filename already exists. Delete it first or choose a new filename.' }, { status: 409 });
+    }
+    console.error('Deck upload error:', err);
+    return json({ error: err?.message ?? 'Server error' }, { status: 500 });
+  }
 }
