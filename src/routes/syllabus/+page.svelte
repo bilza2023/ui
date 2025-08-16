@@ -3,7 +3,7 @@
 	import LeftChaptersBar from './LeftChaptersBar.svelte';
 	import ExNavBar from './ExNavBar.svelte';
 	import QuestionCard from './QuestionCard.svelte';
-  
+	import Nav from '$lib/appComps/Nav.svelte';
 	// Provided by +page.server.js
 	export let data;
   
@@ -54,6 +54,8 @@
 	}
   </script>
   
+  <Nav />
+
   {#if !tcode}
 	<div class="empty">No syllabus registered.</div>
   {:else}
