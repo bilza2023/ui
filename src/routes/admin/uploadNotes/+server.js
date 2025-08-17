@@ -1,7 +1,6 @@
-
 // src/routes/admin/uploadNotes/+server.js
 import { json } from '@sveltejs/kit';
-import { createNote, exists } from '../../../lib/services/uploadServices.js';
+import { createQuestion, exists } from '../../../lib/services/questionServices.js'; // ✅ unified service
 
 export async function POST({ request }) {
   const form = await request.formData();
@@ -41,9 +40,10 @@ export async function POST({ request }) {
       return json({ error: 'Note file is empty' }, { status: 400 });
     }
 
-    // Create note row (create-only)
-    await createNote({
+    // ✅ Use createQuestion for notes
+    await createQuestion({
       filename: baseName,
+      type: 'note',                        // <-- important: mark it as a note
       tcode, chapter, exercise,
       name: descriptionOverride || baseName,
       description: descriptionOverride ?? null,

@@ -2,7 +2,7 @@
 import { json } from '@sveltejs/kit';
 import DeckDoctor   from '../../../lib/deckdoctor/DeckDoctor.js';
 import DeckBuilder  from '../../../lib/deckbuilder/Deckbuilder.js';
-import { createDeck, exists } from '../../../lib/services/uploadServices.js'; // ✅ use upload services
+import { createQuestion, exists } from '../../../lib/services/questionServices.js'; // ⬅️ changed
 import { Buffer } from 'buffer';
 
 export async function POST({ request }) {
@@ -29,7 +29,7 @@ export async function POST({ request }) {
                 || originalName.replace(/\.(json|js)$/i, '');
   if (!baseName) return json({ error: 'Unable to determine filename' }, { status: 400 });
 
-  // ✅ hard fail on duplicate (no upsert)
+  // hard fail on duplicate (no upsert)
   if (await exists(baseName)) {
     return json({ error: 'Filename already exists. Delete it first or choose a new filename.' }, { status: 409 });
   }
@@ -49,7 +49,7 @@ export async function POST({ request }) {
       deckRaw = JSON.parse(await file.text());
     }
 
-    // Validate
+    // Validate/normalize
     const deckNorm = DeckDoctor.isDeckV1(deckRaw) ? deckRaw : DeckDoctor.build(deckRaw);
     const validation = DeckDoctor.validate(deckNorm);
     if (!validation.ok) {
@@ -65,17 +65,17 @@ export async function POST({ request }) {
     const status      = statusOverride ?? deck?.status ?? null;
     const timed       = (DeckDoctor.getTotalDuration?.(deck) ?? 0) > 0;
 
-    // ✅ create-only (will throw P2002 if race)
-    await createDeck({
+    // ⬅️ changed: createQuestion with type: 'deck'
+    await createQuestion({
       filename: baseName,
       tcode, chapter, exercise,
+      type: 'deck',
       name: qName, description, tags, status, timed, deck
     });
 
     return json({ success: true, uploaded: 1 });
   } catch (err) {
     if (err?.code === 'P2002') {
-      // unique constraint safety net
       return json({ error: 'Filename already exists. Delete it first or choose a new filename.' }, { status: 409 });
     }
     console.error('Deck upload error:', err);

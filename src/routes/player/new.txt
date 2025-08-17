@@ -1,0 +1,24 @@
+<script>
+  import TaleemSlides from '$lib/taleemSlides/TaleemSlides.svelte';
+  // import NavBar from '$lib/taleemSlides/NavBar.svelte';
+  export let data;
+
+  // Normalize: TaleemSlides expects an array of slides
+  $: deckSlides =
+    Array.isArray(data?.deckRaw)
+      ? data.deckRaw
+      : (data?.deckRaw?.deck ?? []);
+
+  // Keep player responsibilities minimal here
+  let currentTime = 0; // if you already have a ticker/sound system, wire it below
+</script>
+
+<svelte:head>
+  <title>{data?.meta?.name ?? 'Player'}</title>
+</svelte:head>
+
+{#if !deckSlides || deckSlides.length === 0}
+  <div style="padding:24px">No slides.</div>
+{:else}
+  <TaleemSlides deck={deckSlides} {currentTime} />
+  {/if}
