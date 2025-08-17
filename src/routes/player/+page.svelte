@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import '$lib/styles/tables.css';
 
+  import Like from '../../lib/Like.svelte';
   import { getDeck } from '$lib/services/deckService.js';
   import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
 
@@ -18,6 +19,7 @@
 
   let currentTime = 0;
   let currentSlideIndex = 0;
+  let filename = "";
   let deckEnd = 0;
 
   let loading = true;
@@ -28,7 +30,7 @@
     errorMsg = null;
 
     const params = new URLSearchParams($page.url.search);
-    const filename = params.get('filename');
+    filename = params.get('filename');
     if (!filename) {
       errorMsg = 'Filename parameter is required.';
       loading = false;
@@ -110,6 +112,10 @@
   />
 {/if}
 
+
+<Like 
+contentId ={filename}
+/>
 <style>
   .center { display:flex; align-items:center; justify-content:center; height:100vh; color:#666; }
   .error { color:#b00020; }

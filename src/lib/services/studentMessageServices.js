@@ -8,13 +8,7 @@ const DEFAULT_CATEGORY = 'general';
 const ALLOWED_CATEGORIES = new Set([DEFAULT_CATEGORY]);
 const MAX_MESSAGE_BYTES = 16 * 1024; // 16KB per message (tweak later if needed)
 
-// ────────────────────────────────────────────────────────────────────────────
-// READ: get messages for a user (does NOT mark read)
-//   userId: required
-//   onlyUnread: default true
-//   limit: default 50 (cap results)
-//   cursor: optional message id for pagination (fetch next page)
-// Returns newest-first list of messages.
+
 export async function getUserMessages(userId, { onlyUnread = true, limit = 50, cursor = null } = {}) {
   if (!userId || typeof userId !== 'string') throw new Error('getUserMessages: userId (string) is required');
   const take = Math.max(1, Math.min(200, limit|0));
@@ -35,14 +29,7 @@ export async function getUserMessages(userId, { onlyUnread = true, limit = 50, c
   return rows;
 }
 
-// ────────────────────────────────────────────────────────────────────────────
-// WRITE: bulk upload (admin/offline)
-//   messagesArray: [{ user_id, category?, message, read? }, ...]
-// Behavior:
-//   - category defaults to 'general' if missing/invalid
-//   - read defaults to false
-//   - HTML is allowed in `message` (stored as-is)
-// Returns: { count } from createMany
+
 export async function bulkUpload(messagesArray) {
   if (!Array.isArray(messagesArray) || messagesArray.length === 0) {
     throw new Error('bulkUpload: messagesArray (non-empty) is required');
