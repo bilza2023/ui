@@ -72,3 +72,14 @@ export async function verify(token) {
   // console.log("user" , user);
   return { payload, user };
 }
+// Simple admin check: verify token → match email against ADMIN_EMAIL
+export async function isAdmin(token) {
+  if (!token) return false;
+  try {
+    const { user } = await verify(token); // reuse verify()
+    const adminEmail = "bilza2024@gmail.com";
+    return user?.email?.toLowerCase() === adminEmail;
+  } catch {
+    return false;
+  }
+}
