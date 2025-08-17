@@ -4,6 +4,7 @@ import prisma from '../server/prisma.js';
 import { verify, isAdmin } from './loginServices.js';
 
 const DAY_MS = 86_400_000;
+const FREE_TCODES = ['blog'];
 
 function normTcode(t) {
   return (t ?? '').toString().trim();
@@ -17,7 +18,13 @@ function normTcode(t) {
  * @returns {Promise<{allowed:boolean, reason:'ok'|'no-token'|'invalid-token'|'no-subscription'|'expired', userId:string|null, tcode:string, expiresAt:string|null, remainingDays:number|null}>}
  */
 export async function isSubscribed(tcode, token) {
+
   const code = (tcode ?? '').toString().trim();
+
+  if (FREE_TCODES.includes(code)) {
+    return { allowed: true, reason: 'free', userId: null, tcode: code, expiresAt: null, remainingDays: null };
+  }
+
   if (!token) {
     return { allowed: false, reason: 'no-token', userId: null, tcode: code, expiresAt: null, remainingDays: null };
   }
