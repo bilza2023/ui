@@ -4,10 +4,10 @@
   import Nav from "$lib/appComps/Nav.svelte";
   import Footer from "$lib/appComps/Footer.svelte";
   import Sidebar from "$lib/appComps/homepage/Sidebar.svelte";
-  import TcodeCard from "$lib/appComps/homepage/TcodeCard.svelte";
+  import TcodeCard from "$lib/homeIndex/TcodeCard.svelte";
   import HomeIndex from "$lib/homeIndex/HomeIndex.svelte";
   import SecondaryNav from "$lib/SecondaryNav.svelte";
-  import HomePageNotes from "$lib/homeIndex/HomePageNotes.svelte";
+  // import HomePageNotes from "$lib/homeIndex/HomePageNotes.svelte";
 
   // ✅ use the new synopsis services (registry-based)
   import { listTcodes } from "$lib/services/synopsisServeces.js";
@@ -18,7 +18,7 @@
     syllabus = listTcodes(); // [{ tcodeName, description, image }]
   });
 
-  let navItems = ["Courses", "Videos", "Notes"];
+  let navItems = ["Videos" , "Courses"];
   let pageDisplayState = 0;
 </script>
 
@@ -35,11 +35,9 @@
 
   <section class="content-section">
     {#if pageDisplayState == 0}
-      <TcodeCard tcodes={syllabus} />
+    <HomeIndex />
     {:else if pageDisplayState == 1}
-      <HomeIndex />
-    {:else if pageDisplayState == 2}
-      <HomePageNotes />
+    <TcodeCard tcodes={syllabus} />
     {/if}
 
     <Sidebar />
