@@ -2,7 +2,8 @@
 <script>
     import { goto } from '$app/navigation';
     import '$lib/styles/notes.css';
-    import Nav from "../../lib/Nav.svelte";
+    import Nav from "../../lib/appComps/Nav.svelte";
+    import AdminNav from "../../lib/AdminNav.svelte";
     
     export let data;
   
@@ -25,6 +26,7 @@
   
 
   <Nav />
+  <AdminNav />
   
       {#if !html}
         <div class="empty">This note is empty.</div>

@@ -1,6 +1,7 @@
 <script>
   import Nav from "$lib/appComps/Nav.svelte";
   import { goto } from '$app/navigation';
+  import AdminNav from "../../lib/AdminNav.svelte";
   import '$lib/styles/tables.css';
 
   export let data;
@@ -67,6 +68,7 @@
 </svelte:head>
 
 <Nav />
+<AdminNav />
 
 
 <div class="page">

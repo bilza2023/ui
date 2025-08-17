@@ -38,6 +38,18 @@ model Question {
 }
 
 
+model Subscription {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+
+  user_id    String
+  tcode      String
+
+  start_date DateTime
+  duration   Int      // number of days
+
+  @@index([user_id, tcode])
+}
 
 /////////////////////////////////
 model Comments {

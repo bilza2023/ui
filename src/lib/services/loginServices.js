@@ -83,3 +83,66 @@ export async function isAdmin(token) {
     return false;
   }
 }
+
+// One-shot authz: token + tcode → access decision
+export async function isSubscribed(token, tcode) {
+  const t = (tcode ?? '').toString().trim();
+
+  if (!token) {
+    return { allowed: false, reason: 'no-token', userId: null, tcode: t, expiresAt: null, remainingDays: null };
+  }
+  if (!t) {
+    return { allowed: false, reason: 'no-subscription', userId: null, tcode: t, expiresAt: null, remainingDays: null };
+  }
+
+  try {
+    // 1) authenticate
+    const { user } = await verify(token); // throws on invalid/expired
+    const now = new Date();
+
+    // 2) find most recent sub for this (user, tcode)
+    const sub = await prisma.subscription.findFirst({
+      where: { user_id: user.id, tcode: t },
+      orderBy: { start_date: 'desc' },
+      select: { start_date: true, duration: true },
+    });
+
+    if (!sub) {
+      return { allowed: false, reason: 'no-subscription', userId: user.id, tcode: t, expiresAt: null, remainingDays: null };
+    }
+
+    // 3) compute window
+    const startMs  = sub.start_date.getTime();
+    const expiryMs = startMs + sub.duration * 86400000; // 86_400_000 ms/day
+
+    // Not yet active
+    if (now.getTime() < startMs) {
+      return { allowed: false, reason: 'no-subscription', userId: user.id, tcode: t, expiresAt: null, remainingDays: null };
+    }
+
+    // Expired
+    if (now.getTime() >= expiryMs) {
+      return {
+        allowed: false,
+        reason: 'expired',
+        userId: user.id,
+        tcode: t,
+        expiresAt: new Date(expiryMs).toISOString(),
+        remainingDays: 0,
+      };
+    }
+
+    // Active
+    const remainingDays = Math.ceil((expiryMs - now.getTime()) / 86400000);
+    return {
+      allowed: true,
+      reason: 'ok',
+      userId: user.id,
+      tcode: t,
+      expiresAt: new Date(expiryMs).toISOString(),
+      remainingDays,
+    };
+  } catch {
+    return { allowed: false, reason: 'invalid-token', userId: null, tcode: t, expiresAt: null, remainingDays: null };
+  }
+}

@@ -1,9 +1,20 @@
 import { error } from '@sveltejs/kit';
 import prisma from '$lib/server/prisma.js';
+import { isSubscribed as isSubscribedForTcode } from '$lib/services/subscriptionServices.js';
+// 1) add this import
+import { error, redirect } from '@sveltejs/kit';
 
 export const prerender = false;
 
-export async function load({ url }) {
+function getToken(cookies, request) {
+  const cookie = cookies.get('token');
+  if (cookie) return cookie;
+  const auth = request.headers.get('authorization');
+  if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
+  return null;
+}
+
+export async function load({ url, cookies, request }) {
   const filename = url.searchParams.get('filename');
   if (!filename) throw error(400, 'filename is required');
 
@@ -34,6 +45,22 @@ export async function load({ url }) {
     throw error(422, `Deck "${filename}" has no slides`);
   }
 
+  // ── NEW: subscription check (non-blocking; UI can decide) ───────────────
+  const token = getToken(cookies, request);
+  // debugger;
+  const authz = await isSubscribedForTcode(row.tcode ?? '', token);
+  
+  // console.log("authz" ,authz);
+  // ⛔ gate playback: bounce to /sales with helpful context
+  if (!authz.allowed) {
+    const q = new URLSearchParams({
+      tcode: row.tcode ?? '',
+      filename,
+      reason: authz.reason ?? 'denied'
+    }).toString();
+    throw redirect(302, `/sales?${q}`);
+  }
+  /////////////////////////////////////////////////////////////
   return {
     meta: {
       filename,
@@ -48,6 +75,7 @@ export async function load({ url }) {
       editedAt: row.editedAt,
       createdAt: row.createdAt
     },
-    deckRaw: row.deck
+    deckRaw: row.deck,
+    authz // { allowed, reason, userId, tcode, expiresAt, remainingDays }
   };
 }
