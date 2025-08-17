@@ -23,8 +23,6 @@
       font-size: 1rem;
     }
   
-    .nav-link:hover {
-      color: #facc15; /* yellow-400 */
-    }
+   
   </style>
   

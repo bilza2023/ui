@@ -1,10 +1,12 @@
 
 <script>
     import { goto } from '$app/navigation';
-    import '$lib/styles/notes.css';
+    import '../../lib/styles/notes.css';
     import Nav from "../../lib/appComps/Nav.svelte";
     import AdminNav from "../../lib/AdminNav.svelte";
     
+  import Like from '../../lib/Like.svelte';
+  import Comment from '../../lib/Comment.svelte';
     export let data;
   
     $: title    = data?.meta?.title ?? 'Notes';
@@ -31,9 +33,23 @@
       {#if !html}
         <div class="empty">This note is empty.</div>
       {:else}
-        <!-- You control the HTML at upload time, so {@html} is acceptable here -->
-        <div class="notes">{@html html}</div>
+      <main class="notes">
+        <article class="note-html">{@html html}</article>
+      </main>
       {/if}
 
 
+  
+
+<div class="bg-[#594112]">
+  <Like 
+  contentId ={filename}
+  />
+  
+  <hr/>
+  
+  <Comment 
+  contentId ={filename}
+  />
+  </div>
   

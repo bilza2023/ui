@@ -1,0 +1,78 @@
+
+/* --- Base reset & element defaults --- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-3);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg, video, canvas, audio, iframe {
+  display: block;
+  max-width: 100%;
+}
+
+button, input, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: var(--space-5) 0;
+}
+
+code, kbd, pre, samp {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Form basics */
+input, textarea, select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+  padding: var(--space-2) var(--space-3);
+}
+input::placeholder, textarea::placeholder { color: var(--muted); }
+
+button {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+}
+button:hover { border-color: var(--accent); }
+
+/* Tables */
+table { border-collapse: collapse; width: 100%; }
+th, td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--border); }
+
+/* Guard: prevent link hovers from changing page bg via rogue globals */
+:root, html, body { background: var(--bg); }

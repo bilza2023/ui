@@ -129,3 +129,4 @@ html {
     margin: 3rem 0;
   }
   
+  .notes, .notes p, .notes li, .notes td, .notes th { color: #e8e8e8; }

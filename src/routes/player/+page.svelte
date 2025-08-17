@@ -4,6 +4,7 @@
   import '$lib/styles/tables.css';
 
   import Like from '../../lib/Like.svelte';
+  import Comment from '../../lib/Comment.svelte';
   import { getDeck } from '$lib/services/deckService.js';
   import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
 
@@ -113,9 +114,18 @@
 {/if}
 
 
+<div class="bg-[#594112]">
 <Like 
 contentId ={filename}
 />
+
+<hr/>
+
+<Comment 
+contentId ={filename}
+/>
+</div>
+
 <style>
   .center { display:flex; align-items:center; justify-content:center; height:100vh; color:#666; }
   .error { color:#b00020; }

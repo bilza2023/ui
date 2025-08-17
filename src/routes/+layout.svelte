@@ -1,19 +1,19 @@
-<!-- src/routes/+layout.svelte -->
-<style>
-  @import '/css/theme.css';
 
-</style>
 <script>
-  // import '$lib/styles/themes.css';
-  import 'katex/dist/katex.min.css';
+  import '$lib/styles/tokens.css';
+  import '$lib/styles/theme-dark.css';
+  import '$lib/styles/base.css';
+
+  import 'katex/dist/katex.min.css';   // ← move up (before notes.css)
+
+  /* keep your framework layers next */
+  import '$lib/styles/utilities.css';
+  import '$lib/styles/layout.css';
+  import '$lib/styles/notes.css';
 
 
-  import "../app.css";
-  import { SvelteToast } from '@zerodevx/svelte-toast'
-   const options = {}
-
-
-
+  import { SvelteToast } from '@zerodevx/svelte-toast';
+  const options = {};
 </script>
 
 <SvelteToast {options} />
