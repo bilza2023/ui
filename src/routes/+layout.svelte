@@ -11,14 +11,18 @@
   import '$lib/styles/layout.css';
   import '$lib/styles/notes.css';
 
-
+  import Nav from "$lib/appComps/Nav.svelte";
+  import Footer from "$lib/appComps/Footer.svelte";
   import { SvelteToast } from '@zerodevx/svelte-toast';
   const options = {};
 </script>
 
 <SvelteToast {options} />
 <!-- <slot/> -->
-
+<Nav />
 <div class=" min-h-screen h-full">
   <slot></slot>
   </div>
+
+
+<Footer />  

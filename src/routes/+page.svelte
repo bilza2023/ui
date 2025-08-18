@@ -1,78 +1,53 @@
 <!-- src/routes/+page.svelte -->
 <script>
   import { onMount } from "svelte";
-  import Nav from "$lib/appComps/Nav.svelte";
-  import Footer from "$lib/appComps/Footer.svelte";
+
   import Sidebar from "$lib/appComps/homepage/Sidebar.svelte";
   import TcodeCard from "$lib/homeIndex/TcodeCard.svelte";
   import HomeIndex from "$lib/homeIndex/HomeIndex.svelte";
   import SecondaryNav from "$lib/SecondaryNav.svelte";
-  // import HomePageNotes from "$lib/homeIndex/HomePageNotes.svelte";
-
-  // ✅ use the new synopsis services (registry-based)
+ 
   import { listTcodes } from "$lib/services/synopsisServeces.js";
 
   let syllabus = [];
   onMount(() => {
-    // listTcodes() is synchronous and client-safe
+
     syllabus = listTcodes(); // [{ tcodeName, description, image }]
   });
 
-  let navItems = ["Videos" , "Courses"];
   let pageDisplayState = 0;
 </script>
 
 <div class="page">
-  <Nav />
 
-  <div class="secondary-nav-container">
+  <div >
     <SecondaryNav
-      items={navItems}
+      items={["Videos" , "Courses"]}
       bind:pageDisplayState={pageDisplayState}
-      align="left"
     />
   </div>
 
-  <section class="content-section">
+  <section class="main-section">
     {#if pageDisplayState == 0}
     <HomeIndex />
+    <br>
+    <br>
     {:else if pageDisplayState == 1}
     <TcodeCard tcodes={syllabus} />
     {/if}
 
-    <Sidebar />
+    <!-- // DO NOT DELETE -->
+    <!-- <Sidebar /> -->
   </section>
 
-  <Footer />
 </div>
 
+
 <style>
-  .page {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    background-color: var(--color-bg);
-    color: var(--color-text);
-  }
-
-  .secondary-nav-container {
-    padding-left: 5rem;
-  }
-
-  .content-section {
+  .main-section {
     width: 100%;
-    padding: 2.5rem 3rem;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
+    /* background-color: #C1B294; */
     min-height: 100vh;
-    background-color: var(--color-surface);
-  }
-
-  @media (min-width: 768px) {
-    .content-section {
-      grid-template-columns: 3fr 1fr;
-    }
+    border-radius: 20px;
   }
 </style>

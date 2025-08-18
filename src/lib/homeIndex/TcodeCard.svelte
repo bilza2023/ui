@@ -1,105 +1,63 @@
 <script>
-  export let tcodes = []; // [{ tcodeName, description?, image? }]
-  const FALLBACK_IMG = '/images/taleem.webp';
+  export let tcodes = []; // [{ tcodeName, description, image }]
+  const FALLBACK_IMG = "/images/taleem.webp";
   const hrefFor = (t) => `/syllabus?tcode=${encodeURIComponent(t.tcodeName)}`;
-
-  const META_COLOR = '#2E1C02';
-  const META_ICON  = '👨‍🎓';
 </script>
 
-{#if !tcodes || tcodes.length === 0}
-  <p class="no-questions">No subjects registered yet.</p>
-{:else}
-  <!-- Background band like HomeIndex -->
-  <section class="paper">
-    <div class="wrap">
-      <div class="tcode-row">
-        {#each tcodes as t (t.tcodeName)}
-          <a class="card" href={hrefFor(t)} title={`Open ${t.tcodeName} syllabus`}>
-            <img class="thumb" src={t.image || FALLBACK_IMG} alt={t.tcodeName} loading="lazy" />
-            <div class="title">
-              <span style="font-size:1.1rem">{META_ICON}</span>&nbsp;<span>{t.tcodeName}</span>
-            </div>
-            <!-- {#if t.description}<div class="caption">{t.description}</div>{/if} -->
-          </a>
-        {/each}
+<div class="tcode-grid">
+  {#each tcodes as t}
+    <a class="card tcode-card" href={hrefFor(t)}>
+      <div class="thumb">
+        <img src={t.image || FALLBACK_IMG} alt={t.tcodeName} loading="lazy" />
       </div>
-    </div>
-  </section>
-{/if}
+
+      <div class="meta">
+        <h3 class="title">{t.tcodeName}</h3>
+        {#if t.description}<p class="desc">{t.description}</p>{/if}
+      </div>
+    </a>
+  {/each}
+</div>
 
 <style>
-  /* Full-width background band (match HomeIndex light brown) */
-  .paper{
-    background:#C1B294;               /* rgb(193,178,148) */
-    border-top:1px solid #bca984;     /* subtle separators */
-    border-bottom:1px solid #bca984;
-    padding:24px 0;
+  /* FLEXBOX container: centers, wraps, and avoids full-height rows */
+  .tcode-grid {
+    display: flex;
+    padding-top: 20px;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    justify-content: center;      /* center the row of cards */
+    align-items: flex-start;       /* let each card size to its own content */
   }
 
-  /* Centered inner container like HomeIndex */
-  .wrap{
-    width:min(1200px, 100%);
-    margin:0 auto;
-    padding:0 16px;
+  /* Card: consistent, not-too-narrow width with nice wrapping */
+  .tcode-card {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 320px;               /* preferred width */
+    min-width: 260px;              /* prevents super-narrow cards */
+    max-width: 360px;              /* keeps a tidy max size */
+  }
+  .tcode-card:hover { box-shadow: var(--shadow-2); }
+
+  /* 16:9 cover thumbnail */
+  .thumb {
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-2);
+    overflow: hidden;
+    background: var(--surface-2);
+    margin-bottom: var(--space-3);
+  }
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
-  /* Pure flex row, no equal-height stretch */
-  .tcode-row{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    align-items:flex-start;   /* prevent stretch */
-    gap:1rem;
-    width:100%;
-  }
-
-  .card{
-    display:flex;
-    flex-direction:column;
-    align-self:flex-start;    /* keep natural height */
-    height:auto;
-    border-radius:0.75rem;
-    overflow:hidden;
-    border:4px solid #6C430B;
-    box-shadow:0 8px 8px rgba(45,44,44,0.8);
-    text-decoration:none;
-    color:inherit;
-    max-width:320px;
-    transition:transform .12s ease, box-shadow .12s ease;
-    flex: 0 0 300px;  /* ← surgical fix */
-    width: 300px;     /* optional but helps avoid layout jitter */
-  }
-  .card:hover{
-    transform:translateY(2px);
-    box-shadow:0 10px 10px rgba(21,42,0,0.9);
-
-  }
-
-  .thumb{
-    width:100%;
-    height:160px;
-    object-fit:cover;
-    background:#f0f0f0;
-    flex-shrink:0;
-    border-top-left-radius:0.75rem;
-    border-top-right-radius:0.75rem;
-  }
-
-  .title{
-    color:#d5bd9b;
-    background:#6C430B; /* inline override keeps it in sync */
-    padding:0.6rem;
-    font-size:0.95rem;
-    margin-top:0;       /* don't push card taller */
-  }
-
-  .caption{
-    padding:0.6rem;
-    color:#6C430B;
-    font-size:0.9rem;
-    background:#fffcef;
-  }
-
-  .no-questions{ color:#331f04; font-size:1rem; text-align:center; }
+  /* Text */
+  .meta { display: flex; flex-direction: column; gap: var(--space-2); }
+  .title { margin: 0; font-size: var(--font-5); color: var(--text); }
+  .desc  { margin: 0; color: var(--muted); }
 </style>

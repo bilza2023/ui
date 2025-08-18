@@ -71,7 +71,7 @@
   flex-direction: column;
   border-radius: 0.75rem;  /* rounded corners */
   overflow: hidden;   
-  border: 4px solid #2E1C02;
+  /* border: 4px solid #2E1C02; */
   /* border: 4px solid #372205; */
   box-shadow: 0 8px 8px rgba(45, 44, 44, 0.8);
 }
@@ -89,7 +89,7 @@
 .title {
   margin-top: auto;       /* stick title to bottom of the card */
   color: #d5bd9b;
-    background-color: #2E1C02;
+    /* background-color: #2E1C02; */
     padding: 0.6rem;
     font-size: 0.9rem;;
 }

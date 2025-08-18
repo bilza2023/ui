@@ -30,9 +30,10 @@
   on:touchstart={handleMove}
 >
   {#if hasAudio}
-    <button on:click={onPlay}>▶️</button>
-    <button on:click={onPause}>⏸️</button>
-    <button on:click={onStop}>⏹️</button>
+    <a class="btn btn--icon" href="/">🏠</a>
+    <button class="btn btn--icon"  on:click={onPlay}>▶️</button>
+    <button class="btn btn--icon"  on:click={onPause}>⏸️</button>
+    <button class="btn btn--icon"  on:click={onStop}>⏹️</button>
   {/if}
 
   <span class="timer">{formatTime(currentTime)} / {formatTime(duration)}</span>
@@ -50,6 +51,37 @@
 
 
 <style>
+  /* one style for both <a> and <button> */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong, #3a3a3a);
+  border-radius: var(--radius-2, 8px);
+  background: var(--surface-2, #262626);
+  color: var(--text, #fff);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;        /* kills anchor underline */
+  cursor: pointer;
+  box-shadow: var(--shadow-1, 0 1px 2px rgba(0,0,0,.3));
+  transition: background .15s ease, box-shadow .15s ease, transform .05s ease;
+}
+.btn:hover { background: var(--surface-3, #2e2e2e); box-shadow: var(--shadow-2, 0 2px 6px rgba(0,0,0,.35)); }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid var(--brand, #89aaff); outline-offset: 2px; }
+
+/* square, icon-only buttons (emoji) */
+.btn--icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  font-size: 1rem; /* adjust to taste */
+}
+
   .nav-bar {
     position: absolute;
     bottom: 0;

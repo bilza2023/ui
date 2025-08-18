@@ -1,6 +1,9 @@
+
 <script>
-  import { onMount } from 'svelte';
-  import QuestionCard from './QuestionCard.svelte';
+
+import { onMount } from 'svelte';
+  // import QuestionCard from '../../lib/homeIndex/QuestionCard.svelte';
+  import QCard from '../../lib/homeIndex/QCard.svelte';
 
   let questions = [];
 
@@ -23,7 +26,9 @@
       <div class="questions-container">
         <!-- Only render once loaded -->
         {#if questions.length}
-          <QuestionCard {questions} />
+          <QCard 
+          {questions} 
+          />
         {:else}
           <p>Loading…</p>
         {/if}
@@ -31,46 +36,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  .app-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
-  .layout-container {
-    display: flex;
-    flex: 1;
-    gap: 0;
-    margin: 0;
-    padding: 0;
-    min-height: 0;
-  }
-
-  .main-content {
-    flex: 1;
-    width: 95%;
-    margin: 0;
-    padding: 0;
-    transition: width 0.3s ease;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .questions-container {
-    flex: 1;
-    display: flex;
-    margin: 0;
-    padding: 0;
-    justify-content: center;
-    align-items: flex-start;
-    background-color: rgb(193, 178, 148);
-  }
-
-  @media (max-width: 768px) {
-    .main-content {
-      width: 100%;
-    }
-  }
-</style>
