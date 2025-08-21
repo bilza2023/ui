@@ -8,8 +8,8 @@
   import { getDeck } from '$lib/services/deckService.js';
   import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
 
-  import NavBar from '../../lib/Player-slides-codebase/NavBar.svelte';
-  import TaleemSlides from '../../lib/taleemSlides/TaleemSlides.svelte';
+  import { NavBar, TaleemSlides } from '$lib/taleemPlayer';
+
   // import TaleemPlayer from '$lib/taleemPlayer/Player.svelte';
   import { clampTime, findSlideIndex, getDeckEnd } from '$lib/taleemPlayer/player-utility.js';
 
