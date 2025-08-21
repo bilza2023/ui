@@ -2,7 +2,8 @@
   // @ts-nocheck
   import { enhance } from '$app/forms';
   export let data;
-
+  import Nav from "$lib/appComps/Nav.svelte";
+  import AdminNav from "$lib/AdminNav.svelte";
   console.log("data",data);
   let email = data.selectedEmail ?? '';
   let tcode = '';
@@ -21,9 +22,8 @@
   $: subscriptions = data.subscriptions ?? [];
 </script>
 
-<svelte:head>
-  <title>Admin • Subscriptions</title>
-</svelte:head>
+<Nav />
+<AdminNav />
 
 <div class="page">
   <h1>Subscriptions (Admin)</h1>

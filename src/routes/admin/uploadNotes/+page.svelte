@@ -1,38 +1,51 @@
-
-
 <script>
-  import PathPicker from '$lib/components/PathPicker.svelte';
+  import Nav from "$lib/appComps/Nav.svelte";
+  import AdminNav from "$lib/AdminNav.svelte";
+  import {
+    listTcodes,
+    getChapters,
+    getExercises,
+    chapterNo as chapterNoOf
+  } from "$lib/services/synopsisServices.js";
 
-  // Cascading path from synopsis services (via PathPicker)
+  // --- Path state (replaces PathPicker) ---
+  const tcodes = listTcodes(); // [{ tcodeName, ... }]
+  let tcode = tcodes[0]?.tcodeName ?? '';
+  let chapters = [];
+  let chapterSlug = '';
+  let exercises = [];
+  let exerciseSlug = '';
+  let chapterNo = null;
+
+  // keep your original "path" object in sync (so the rest of your code stays the same)
   let path = { tcode: '', chapterSlug: '', chapterNo: null, exerciseSlug: '' };
 
-  // Meta
+  // --- Meta ---
   let status = '';
   let tagsCsv = '';
   let description = '';
 
-  // Payload (single file)
+  // --- Payload ---
   let file = /** @type {File|null} */ (null);
-  let filename = ''; // derived from file name (no extension)
-  let fileEl;        // ref to clear input
+  let filename = '';
+  let fileEl;
 
-  // UI
+  // --- UI ---
   let uploading = false;
   let msg = '';
   let err = '';
+  let dragging = false;
 
   // Derived: enable/disable submit
-  $: canSubmit =
-    !!path.tcode &&
-    !!path.chapterNo &&
-    !!path.exerciseSlug &&
-    !!file;
+  $: canSubmit = !!path.tcode && !!path.chapterNo && !!path.exerciseSlug && !!file;
 
   function resetForm() {
-    path = { tcode: '', chapterSlug: '', chapterNo: null, exerciseSlug: '' };
-    status = ''; tagsCsv = ''; description = '';
+    tcode = tcodes[0]?.tcodeName ?? '';
+    chapterSlug = '';
+    exerciseSlug = '';
     file = null; filename = '';
     if (fileEl) fileEl.value = '';
+    status = ''; tagsCsv = ''; description = '';
     msg = ''; err = '';
   }
 
@@ -46,8 +59,10 @@
     const dropped = e.dataTransfer?.files?.[0] ?? null;
     file = dropped || null;
     filename = file ? file.name.replace(/\.(html|htm)$/i, '') : '';
+    dragging = false;
   }
-  function onDragOver(e) { e.preventDefault(); }
+  function onDragOver(e) { e.preventDefault(); dragging = true; }
+  function onDragLeave() { dragging = false; }
   function onDropKey(e) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -55,6 +70,23 @@
     }
   }
 
+  // --- Cascading reactivity ---
+  $: chapters = tcode ? getChapters(tcode) : [];
+  $: if (!chapters.find(c => c.filename === chapterSlug)) chapterSlug = '';
+
+  $: chapterNo = (tcode && chapterSlug) ? chapterNoOf(tcode, chapterSlug) : null;
+  $: exercises = (tcode && chapterSlug) ? getExercises(tcode, chapterSlug) : [];
+  $: if (!exercises.find(e => e.filename === exerciseSlug)) exerciseSlug = '';
+
+  // mirror into your original "path" object
+  $: path = {
+    tcode,
+    chapterSlug,
+    chapterNo,
+    exerciseSlug
+  };
+
+  // --- Upload (unchanged endpoint/payload) ---
   async function upload() {
     err = ''; msg = '';
     if (!canSubmit) { err = 'Please fill required fields.'; return; }
@@ -63,8 +95,8 @@
     try {
       const fd = new FormData();
       fd.append('tcode', path.tcode);
-      fd.append('chapter', String(path.chapterNo));     // from PathPicker (number)
-      fd.append('exercise', path.exerciseSlug);         // exercise filename (slug/id)
+      fd.append('chapter', String(path.chapterNo));
+      fd.append('exercise', path.exerciseSlug);
 
       if (status.trim())       fd.append('status', status.trim());
       if (tagsCsv.trim())      fd.append('tags', tagsCsv.trim());
@@ -86,129 +118,180 @@
   }
 </script>
 
-<section class="page dark">
-  <header class="header">
-    <div class="container">
-      <div class="title">
-        <h1>Upload Note</h1>
-        <p>Send a <code>.html</code> note into <code>Question</code> (type=<strong>note</strong>).</p>
-      </div>
-      <button type="button" class="btn btn-primary" on:click={upload} disabled={uploading || !canSubmit}>
-        {uploading ? 'Uploading…' : 'Upload'}
-      </button>
-    </div>
+<Nav />
+<AdminNav />
+
+<section class="wrap">
+  <header class="pagehead">
+    <h1>Upload Note (.html)</h1>
+    <p>Select the path, drop your <code>.html</code> file, add optional meta, then upload.</p>
   </header>
 
-  <div class="toolbar">
-    <div class="container toolbar-inner">
-      <div class="summary">
-        <span class="chip">Tcode: <strong>{path.tcode || '—'}</strong></span>
-        <span class="sep">•</span>
-        <span class="chip">Chapter#: <strong>{path.chapterNo ?? '—'}</strong></span>
-        <span class="sep">•</span>
-        <span class="chip">Exercise: <strong>{path.exerciseSlug || '—'}</strong></span>
-        <span class="sep">•</span>
-        <span class="chip">File: <strong>{file ? file.name : '—'}</strong></span>
+  <form class="card" on:submit|preventDefault={upload}>
+    <!-- Path (cascading) -->
+    <fieldset class="block">
+      <legend>Path</legend>
+      <div class="form-grid">
+        <!-- Tcode -->
+        <div class="field">
+          <label for="tcode">Tcode</label>
+          <select id="tcode" bind:value={tcode}>
+            {#if !tcodes.length}
+              <option value="">No subjects registered</option>
+            {:else}
+              {#each tcodes as t}
+                <option value={t.tcodeName}>{t.tcodeName}</option>
+              {/each}
+            {/if}
+          </select>
+        </div>
+
+        <!-- Chapter (slug) -->
+        <div class="field">
+          <label for="chapterSlug">Chapter</label>
+          <select id="chapterSlug" bind:value={chapterSlug} disabled={!tcode || !chapters.length}>
+            <option value="" disabled selected>{tcode ? 'Select chapter' : 'Pick tcode first'}</option>
+            {#each chapters as ch}
+              <option value={ch.filename}>Ch {String(ch.number).padStart(2,'0')} — {ch.name}</option>
+            {/each}
+          </select>
+          {#if chapterNo !== null}
+            <small class="hint">Chapter #: <strong>{chapterNo}</strong></small>
+          {/if}
+        </div>
+
+        <!-- Exercise (slug) -->
+        <div class="field">
+          <label for="exerciseSlug">Exercise</label>
+          <select id="exerciseSlug" bind:value={exerciseSlug} disabled={!chapterSlug || !exercises.length}>
+            <option value="" disabled selected>{chapterSlug ? 'Select exercise' : 'Pick chapter first'}</option>
+            {#each exercises as ex}
+              <option value={ex.filename}>{ex.name}</option>
+            {/each}
+          </select>
+        </div>
       </div>
-      <button type="button" class="btn btn-primary" on:click={upload} disabled={uploading || !canSubmit}>
-        {uploading ? 'Uploading…' : 'Upload'}
-      </button>
-    </div>
-  </div>
+    </fieldset>
 
-  <main class="container">
-    <div class="panel">
-      <form class="form" on:submit|preventDefault={upload}>
-        <div class="group">
-          <h2 class="group-title">Path</h2>
-          <PathPicker bind:value={path} />
+    <!-- Metadata -->
+    <fieldset class="block">
+      <legend>Metadata</legend>
+      <div class="form-grid two">
+        <div class="field">
+          <label for="status">Status</label>
+          <input id="status" bind:value={status} placeholder="ready | draft | hidden" />
+        </div>
+        <div class="field">
+          <label for="tags">Tags (CSV)</label>
+          <input id="tags" bind:value={tagsCsv} placeholder="geometry, class9" />
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <label for="description">Description</label>
+          <textarea id="description" rows="2" bind:value={description}></textarea>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Note File -->
+    <fieldset class="block">
+      <legend>Note File</legend>
+      <div class="dropgrid">
+        <div
+          class={"dropzone " + (dragging ? "is-dragging" : "")}
+          role="button" tabindex="0"
+          aria-label="Drop .html here or click to browse"
+          on:click={() => fileEl?.click()}
+          on:dragover={onDragOver}
+          on:dragleave={onDragLeave}
+          on:drop={onDrop}
+          on:keydown={onDropKey}
+        >
+          <div class="dz-icon">⇪</div>
+          <div class="dz-text">
+            {#if file}
+              <strong>{file.name}</strong>
+              <small>{Math.round(file.size/1024)} KB</small>
+            {:else}
+              <strong>Drop your .html here</strong>
+              <small>or click to choose</small>
+            {/if}
+          </div>
+          <input
+            bind:this={fileEl}
+            id="file"
+            type="file"
+            accept=".html,.htm,text/html"
+            on:change={onPick}
+            class="hidden-input"
+          />
         </div>
 
-        <div class="group">
-          <h2 class="group-title">Metadata</h2>
-          <div class="grid-3">
-            <div class="row">
-              <label for="status">Status</label>
-              <input id="status" bind:value={status} placeholder="ready | draft | hidden" />
-            </div>
-            <div class="row">
-              <label for="tags">Tags (CSV)</label>
-              <input id="tags" bind:value={tagsCsv} placeholder="geometry, class9" />
-            </div>
-            <div class="row wide">
-              <label for="description">Description</label>
-              <textarea id="description" rows="2" bind:value={description}></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="group">
-          <h2 class="group-title">Note File</h2>
-          <div class="row">
-            <label for="file">Choose file</label>
-            <input bind:this={fileEl} id="file" type="file" accept=".html,.htm" on:change={onPick} />
-            <div
-              class="drop"
-              role="region"
-              aria-label="File drop zone"
-              tabindex="0"
-              on:drop={onDrop}
-              on:dragover={onDragOver}
-              on:keydown={onDropKey}
-            >
-              Drop a .html file here or click above.
-            </div>
-          </div>
-          <div class="row">
+        <div class="sidegrid">
+          <div class="field">
             <label for="filename">Filename (auto)</label>
-            <input id="filename" value={filename} readonly />
+            <input id="filename" value={filename} readonly placeholder="auto from file" />
             <small class="hint">Derived from the chosen file (without .html/.htm)</small>
           </div>
         </div>
+      </div>
+    </fieldset>
 
-        <div class="actions">
-          <button class="btn btn-primary" type="submit" disabled={uploading || !canSubmit}>
-            {uploading ? 'Uploading…' : 'Upload'}
-          </button>
-          <button type="button" class="btn" on:click={resetForm} disabled={uploading}>Clear</button>
-        </div>
+    <!-- Actions & messages -->
+    <div class="actions">
+      <button class="btn-primary" type="submit" disabled={uploading || !canSubmit}>
+        {uploading ? 'Uploading…' : 'Upload'}
+      </button>
+      <button type="button" class="btn" on:click={resetForm} disabled={uploading}>Clear</button>
 
-        {#if msg}<p class="toast ok">{msg}</p>{/if}
-        {#if err}<p class="toast err">{err}</p>{/if}
-      </form>
+      {#if msg}<div class="note ok">{msg}</div>{/if}
+      {#if err}<div class="note err">{err}</div>{/if}
     </div>
-  </main>
+
+    <p class="hint">Tip: Drag & drop a <code>.html</code> file anywhere inside the dashed area above.</p>
+  </form>
 </section>
 
 <style>
-  /* Dark theme */
-  .dark{--bg:#0b0b0b;--bg-soft:#101010;--panel:#121212;--panel-2:#161616;--text:#eaeaea;--muted:#a9a9a9;--border:#252525;--accent:#2aa96b;--accent-2:#1f7f50}
-  .dark{color:var(--text);background:radial-gradient(1200px 600px at 10% -10%,#121212 0,transparent 60%),radial-gradient(800px 500px at 90% -20%,#101010 0,transparent 60%),var(--bg);min-height:100vh}
-  .container{max-width:1040px;margin:0 auto;padding:0 16px}
-  .header{padding:18px 0 8px;border-bottom:1px solid var(--border);background:linear-gradient(#0b0b0b,rgba(11,11,11,.85))}
-  .header .container{display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .title h1{margin:0;font-size:22px}.title p{margin:4px 0 0;color:var(--muted);font-size:14px}
-  .toolbar{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border);background:linear-gradient(#0b0b0b,rgba(11,11,11,.92));backdrop-filter:blur(4px)}
-  .toolbar-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0}
-  .summary{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted)}
-  .chip{background:var(--panel-2);border:1px solid var(--border);padding:4px 8px;border-radius:999px}.sep{color:#555}
-  main.container{padding:20px 16px 40px}
-  .panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;box-shadow:0 2px 30px rgba(0,0,0,.35);padding:18px}
-  .form{display:grid;gap:24px}.group{display:grid;gap:14px}
-  .group-title{margin:0;font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-left:6px}
-  .grid-3{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
-  @media (max-width:900px){.grid-3{grid-template-columns:1fr}}
-  .row{display:grid;gap:8px}label{font-weight:600;font-size:14px}
-  input,textarea{padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--bg-soft);color:var(--text);outline:none}
-  input::placeholder,textarea::placeholder{color:#6f6f6f}
-  input:focus,textarea:focus{border-color:#2c2c2c;box-shadow:0 0 0 3px rgba(42,169,107,.15)}
-  .hint{color:var(--muted);font-size:12px}
-  .drop{border:1px dashed #3a3a3a;border-radius:12px;padding:18px;text-align:center;background:#121212;color:var(--muted)}
-  .actions{display:flex;gap:12px;align-items:center}
-  .btn{background:var(--panel-2);color:var(--text);border:1px solid var(--border);padding:10px 14px;border-radius:12px;cursor:pointer}
-  .btn-primary{background:var(--accent);border-color:var(--accent-2);color:#fff}
-  .btn[disabled]{opacity:.55;cursor:default}
-  .toast{margin:6px 0 0;padding:10px 12px;border-radius:10px;border:1px solid var(--border)}
-  .toast.ok{color:#d6ffe7;background:rgba(92,207,133,.08);border-color:rgba(92,207,133,.3)}
-  .toast.err{color:#ffd6d6;background:rgba(255,110,110,.08);border-color:rgba(255,110,110,.3)}
+  .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px; }
+  .pagehead h1 { font-size: 1.5rem; font-weight: 700; margin: 0 0 .25rem; }
+  .pagehead p { opacity: .75; margin: 0 0 1rem; font-size: .95rem; }
+
+  .card { background: #0f0f11; border: 1px solid #26262b; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.35); padding: 20px; }
+  .block + .block { margin-top: 18px; }
+  .block > legend { font-size: .9rem; letter-spacing: .02em; opacity: .8; margin-bottom: 10px; padding: 0 4px; }
+
+  .form-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .form-grid.two { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+  .field label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .35rem; color: #c9c9d1; }
+  .field input, .field select, .field textarea { width: 100%; padding: .6rem .7rem; border: 1px solid #36363b; border-radius: .55rem; background: #121217; color: #f0f0f3; transition: border-color .15s, box-shadow .15s; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #bfa074; box-shadow: 0 0 0 3px rgba(191,160,116,.2); }
+
+  .dropgrid { display: grid; gap: 14px; grid-template-columns: 1.2fr .8fr; }
+  @media (max-width: 820px) { .dropgrid { grid-template-columns: 1fr; } }
+
+  .dropzone { position: relative; min-height: 130px; border: 2px dashed #3a3a40; border-radius: 14px; background: linear-gradient(180deg, #111114, #0f0f12); display: flex; align-items: center; gap: 14px; padding: 14px 16px; cursor: pointer; }
+  .dropzone.is-dragging { border-color: #bfa074; background: radial-gradient(1000px 200px at 50% -200px, rgba(191,160,116,.15), transparent 70%), linear-gradient(180deg, #111114, #0f0f12); }
+  .dz-icon { font-size: 1.4rem; width: 2.5rem; height: 2.5rem; line-height: 2.5rem; text-align: center; border-radius: 12px; border: 1px solid #3a3a40; background: #141418; color: #d9d3c7; flex: 0 0 auto; }
+  .dz-text { display: flex; flex-direction: column; }
+  .dz-text strong { font-weight: 700; font-size: .95rem; }
+  .dz-text small { opacity: .7; margin-top: 2px; }
+  .hidden-input { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+
+  .sidegrid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+
+  .actions { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+  .btn-primary { background: #bfa074; color: #0e0e10; font-weight: 700; padding: .6rem 1rem; border: 1px solid #bfa074; border-radius: .6rem; transition: transform .05s ease, filter .15s ease; }
+  .btn-primary:hover { filter: brightness(1.05); }
+  .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+  .btn-primary:active { transform: translateY(1px); }
+
+  .btn { background: #18181c; color: #f0f0f3; border: 1px solid #2b2b31; padding: .6rem 1rem; border-radius: .6rem; }
+  .btn[disabled] { opacity: .55; cursor: default; }
+
+  .note { padding: .45rem .6rem; border-radius: .5rem; font-size: .9rem; border: 1px solid transparent; }
+  .note.ok { color: #c7f5cf; background: #0f1c12; border-color: #1c3b24; }
+  .note.err { color: #ffd6d6; background: #2a1111; border-color: #5c1f1f; }
+
+  .hint { margin-top: 6px; font-size: .8rem; opacity: .65; }
 </style>

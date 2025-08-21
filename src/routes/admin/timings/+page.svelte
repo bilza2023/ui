@@ -2,8 +2,8 @@
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import PointerEditor from './PointerEditor.svelte';
-  import Nav from '../../../lib/appComps/Nav.svelte';
-
+  import Nav from "$lib/appComps/Nav.svelte";
+  import AdminNav from "$lib/AdminNav.svelte";
   let deck: any = null;
   let deckLoaded = false;
   let error = '';
@@ -134,8 +134,8 @@
     }
   });
 </script>
-
-<Nav/>
+<Nav />
+<AdminNav />
 <h1 style="width: 100%; border: 2px solid #facc15; border-radius: 0.375rem; text-align: center; font-size: 1.2rem; padding:6px; margin:2px; background-color: #0f4502">
   💡 Timing Page
 </h1>

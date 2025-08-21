@@ -1,6 +1,6 @@
 <script>
-  import Nav from "$lib/appComps/Nav.svelte";
   import { goto } from '$app/navigation';
+  import Nav from "$lib/appComps/Nav.svelte";
   import AdminNav from "../../lib/AdminNav.svelte";
   import '$lib/styles/tables.css';
 
@@ -72,54 +72,49 @@
 
 
 <div class="page">
-  <header class="top">
-    <div class="left">
-      <h1>Question Index</h1>
-      <div class="totals">
-        <span class="pill">All: {totals.all}</span>
-        <span class="pill decks">Decks: {totals.decks}</span>
-        <span class="pill notes">Notes: {totals.notes}</span>
-      </div>
-    </div>
-    <div class="right">
-      <a class="btn" href="/admin/upload">+ Upload Deck</a>
-      <a class="btn" href="/admin/uploadNotes">+ Upload Note</a>
-    </div>
-  </header>
-
-  <section class="filters">
-    <input class="search" type="search" placeholder="Search filename / name / desc / exercise…" bind:value={q} on:keydown={(e)=>e.key==='Enter'&&apply()} />
-
-    <div class="group">
-      <label>Type</label>
-      <div class="seg">
-        <button class:active={!type} on:click={() => { type = null; apply(); }}>All</button>
-        <button class:active={type==='deck'} on:click={() => { type = 'deck'; apply(); }}>Decks</button>
-        <button class:active={type==='note'} on:click={() => { type = 'note'; apply(); }}>Notes</button>
-      </div>
-    </div>
-
-    <div class="group">
-      <label>Tcode</label>
-      <select bind:value={tcode} on:change={apply}>
-        <option value=''>All</option>
+ 
+  
+  <header class="top compact">
+    <h1>Question Index</h1>
+  
+    <div class="controls">
+      <input
+        class="search"
+        type="search"
+        placeholder="Search filename / name / desc / exercise…"
+        bind:value={q}
+        on:keydown={(e)=>e.key==='Enter'&&apply()}
+      />
+  
+      <!-- Type: All / Decks / Notes -->
+      <select
+        class="sel"
+        on:change={(e)=>{ const v=e.currentTarget.value; type = v || null; apply(); }}
+      >
+        <option value="" selected={!type}>All</option>
+        <option value="deck" selected={type==='deck'}>Decks</option>
+        <option value="note" selected={type==='note'}>Notes</option>
+      </select>
+  
+      <!-- Tcode: simplified (no counts) -->
+      <select class="sel" bind:value={tcode} on:change={apply}>
+        <option value=''>All tcodes</option>
         {#each tcodeOptions as t}
-          <option value={t}>{t} ({tcodeStats[t]?.total ?? 0})</option>
+          <option value={t}>{t}</option>
         {/each}
       </select>
-    </div>
-
-    <div class="group">
-      <label>Sort</label>
-      <select bind:value={sort} on:change={apply}>
+  
+      <!-- Sort -->
+      <select class="sel" bind:value={sort} on:change={apply}>
         <option value="edited_desc">Last Edited (newest)</option>
         <option value="created_desc">Created (newest)</option>
         <option value="name_asc">Name (A–Z)</option>
       </select>
+  
+      <button class="clear" on:click={clearAll}>Reset</button>
     </div>
-
-    <button class="clear" on:click={clearAll}>Reset</button>
-  </section>
+  </header>
+  
 
   <section class="taleemTableWrap">
     {#if items.length === 0}
@@ -241,4 +236,70 @@
   .btn:hover{ background:#3a220d; border-color:var(--line-2); color:var(--accent); }
 
   .empty{ opacity:.7; padding:24px; text-align:center; }
+
+  /* Single-line toolbar */
+.top.compact{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px 12px;
+}
+
+.top.compact h1{
+  margin:0;
+  font-size:1.1rem;
+  color:var(--text);
+  white-space:nowrap;
+}
+
+.top.compact .controls{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:nowrap;
+}
+
+.top.compact .search{
+  width:min(420px, 42vw);
+  padding:6px 10px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--panel-2);
+  color:var(--text);
+}
+
+.top.compact .sel{
+  padding:6px 10px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--panel-2);
+  color:var(--text);
+}
+
+.top.compact .clear{
+  padding:6px 10px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--panel-2);
+  color:var(--text);
+  cursor:pointer;
+}
+
+/* Make it wrap gracefully on small screens */
+@media (max-width: 760px){
+  .top.compact{
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .top.compact .controls{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .top.compact .search{ width:100%; }
+}
+
 </style>
