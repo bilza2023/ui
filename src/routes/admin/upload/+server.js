@@ -1,9 +1,15 @@
-// src/routes/admin/upload/+server.js
 import { json } from '@sveltejs/kit';
-import DeckDoctor   from '../../../lib/deckdoctor/DeckDoctor.js';
-import DeckBuilder  from '../../../lib/deckbuilder/Deckbuilder.js';
-import { createQuestion, exists } from '../../../lib/services/questionServices.js'; // ⬅️ changed
-import { Buffer } from 'buffer';
+import { createQuestion, exists } from '../../../lib/services/questionServices.js';
+
+const STATUS = new Set(['draft', 'ready', 'published', 'archived']);
+
+const toSafeName = (s) => (s || '')
+  .replace(/\.json$/i, '')
+  .trim()
+  .toLowerCase()
+  .replace(/[^a-z0-9_-]+/g, '-')
+  .replace(/-+/g, '-')
+  .replace(/^-|-$/g, '');
 
 export async function POST({ request }) {
   const form = await request.formData();
@@ -11,74 +17,76 @@ export async function POST({ request }) {
   const tcode    = (form.get('tcode') ?? '').toString().trim();
   const chapStr  = (form.get('chapter') ?? '').toString().trim();
   const exercise = (form.get('exercise') ?? '').toString().trim();
-  if (!tcode || !chapStr || !exercise) return json({ error: 'Missing required path fields' }, { status: 400 });
 
+  if (!tcode || !chapStr || !exercise) {
+    return json({ error: 'Missing required fields: tcode, chapter, exercise' }, { status: 400 });
+  }
   const chapter = Number.parseInt(chapStr, 10);
-  if (Number.isNaN(chapter)) return json({ error: 'Chapter must be integer' }, { status: 400 });
-
-  const statusOverride      = (form.get('status') ?? '').toString().trim() || undefined;
-  const descriptionOverride = (form.get('description') ?? '').toString().trim() || undefined;
-  const tagsCsv             = (form.get('tags') ?? '').toString();
-  const tagsOverride        = tagsCsv ? tagsCsv.split(',').map(s=>s.trim()).filter(Boolean) : undefined;
-
-  const file = form.get('file');
-  if (!file) return json({ error: 'No file uploaded' }, { status: 400 });
-
-  const originalName = file.name;
-  const baseName = (form.get('filename')?.toString().trim())
-                || originalName.replace(/\.(json|js)$/i, '');
-  if (!baseName) return json({ error: 'Unable to determine filename' }, { status: 400 });
-
-  // hard fail on duplicate (no upsert)
-  if (await exists(baseName)) {
-    return json({ error: 'Filename already exists. Delete it first or choose a new filename.' }, { status: 409 });
+  if (Number.isNaN(chapter)) {
+    return json({ error: 'chapter must be an integer' }, { status: 400 });
   }
 
+  // Optional metadata
+  const description = (form.get('description') ?? '').toString().trim() || null;
+  const tagsCsv     = (form.get('tags') ?? '').toString();
+  const tags        = tagsCsv ? tagsCsv.split(',').map((s) => s.trim()).filter(Boolean) : [];
+
+  let status = (form.get('status') ?? '').toString().trim();
+  if (status && !STATUS.has(status)) status = ''; // ignore invalid
+
+  // File
+  const file = form.get('file');
+  if (!file) return json({ error: 'No file uploaded' }, { status: 400 });
+  if (!/\.json$/i.test(file.name || '')) {
+    return json({ error: 'Only .json files are allowed' }, { status: 400 });
+  }
+
+  // Filename (server-side normalized)
+  const provided = (form.get('filename') ?? '').toString().trim();
+  const baseName = toSafeName(provided || file.name);
+  if (!baseName) return json({ error: 'Unable to determine filename' }, { status: 400 });
+
+  // Reject duplicates
+  if (await exists(baseName)) {
+    return json({ error: 'Filename already exists' }, { status: 409 });
+  }
+
+  // Parse JSON
+  let deck;
   try {
-    // Parse / build
-    let deckRaw;
-    if (/\.js$/i.test(originalName)) {
-      const rawCode = await file.text();
-      const mod     = await import(`data:application/javascript;base64,${Buffer.from(rawCode,'utf8').toString('base64')}`);
-      const define  = mod.defineDeck ?? mod.default;
-      if (typeof define !== 'function') throw new Error('No defineDeck() export found');
-      const builder = new DeckBuilder();
-      define(builder);
-      deckRaw = builder.build();
-    } else {
-      deckRaw = JSON.parse(await file.text());
-    }
+    const text = await file.text();
+    deck = JSON.parse(text);
+  } catch {
+    return json({ error: 'Invalid JSON' }, { status: 400 });
+  }
 
-    // Validate/normalize
-    const deckNorm = DeckDoctor.isDeckV1(deckRaw) ? deckRaw : DeckDoctor.build(deckRaw);
-    const validation = DeckDoctor.validate(deckNorm);
-    if (!validation.ok) {
-      const msgs = validation.errors.map(e => e.message).join('; ');
-      return json({ error: `Validation failed: ${msgs}` }, { status: 400 });
-    }
-    const deck = validation.value;
+  // Minimal fields for DB insert (no DeckBuilder, no heavy validation)
+  const qName  = deck?.name || baseName;
+  const timed  = false; // keep lean; timings handled elsewhere
 
-    // Metadata precedence
-    const qName       = deck?.name || baseName;
-    const description = descriptionOverride ?? deck?.description ?? null;
-    const tags        = tagsOverride ?? deck?.tags ?? [];
-    const status      = statusOverride ?? deck?.status ?? null;
-    const timed       = (DeckDoctor.getTotalDuration?.(deck) ?? 0) > 0;
-
-    // ⬅️ changed: createQuestion with type: 'deck'
+  try {
     await createQuestion({
       filename: baseName,
-      tcode, chapter, exercise,
+      tcode,
+      chapter,
+      exercise,
       type: 'deck',
-      name: qName, description, tags, status, timed, deck
+      name: qName,
+      description,
+      tags,
+      status: status || null,
+      timed,
+      deck
     });
 
-    return json({ success: true, uploaded: 1 });
-  } catch (err) {
-    if (err?.code === 'P2002') {
-      return json({ error: 'Filename already exists. Delete it first or choose a new filename.' }, { status: 409 });
+    return json({ success: true, filename: baseName });
+  } catch (e) {
+    const msg = e?.message || 'Server error';
+    // Prisma duplicate safety (if exists() raced)
+    if (/P2002/.test(msg)) {
+      return json({ error: 'Filename already exists' }, { status: 409 });
     }
-    console.error('Deck upload error:', err);
-    return json({ error: err?.message ?? 'Server error' }, { status: 500 });
+    console.error('upload_json error:', e);
+    return json({ error: msg }, { status: 500 });
   }
 }
