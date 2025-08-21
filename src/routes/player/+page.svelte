@@ -8,6 +8,7 @@
   import { getDeck } from '$lib/services/deckService.js';
   import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
 
+  import NavBar from '../../lib/Player-slides-codebase/NavBar.svelte';
   import TaleemSlides from '../../lib/taleemSlides/TaleemSlides.svelte';
   // import TaleemPlayer from '$lib/taleemPlayer/Player.svelte';
   import { clampTime, findSlideIndex, getDeckEnd } from '$lib/taleemPlayer/player-utility.js';
@@ -112,13 +113,20 @@
     onStop={stop}
     onSeek={seek}
   /> -->
-  <div class="text-black">
     <TaleemSlides
     {deck}
     {currentTime}
   />
-  </div>
-  
+  <NavBar 
+  {currentTime}
+  {currentSlideIndex}
+  {deckEnd}
+  {soundUrl}
+  onPlay={play}
+  onPause={pause}
+  onStop={stop}
+  onSeek={seek}
+  />
 {/if}
 
 
