@@ -21,7 +21,7 @@
   
   .full-image {
     max-width: 90vw;
-    max-height: 80vh;
+    max-height: 70vh;
     object-fit: contain;
     border-radius: 12px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);

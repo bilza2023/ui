@@ -28,7 +28,7 @@
   
 
   <Nav />
-  <AdminNav />
+
   
       {#if !html}
         <div class="empty">This note is empty.</div>

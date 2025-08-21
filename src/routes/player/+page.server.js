@@ -1,4 +1,3 @@
-import { error } from '@sveltejs/kit';
 import prisma from '$lib/server/prisma.js';
 import { isSubscribed as isSubscribedForTcode } from '$lib/services/subscriptionServices.js';
 // 1) add this import

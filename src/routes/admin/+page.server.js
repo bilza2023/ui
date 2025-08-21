@@ -78,7 +78,8 @@ export async function load({ url }) {
     if (r.type === 'deck') tcodeStats[r.tcode].deck += r._count._all;
     if (r.type === 'note') tcodeStats[r.tcode].note += r._count._all;
   }
-
+  
+  
   return {
     items,
     filters: { q, type: (type === 'deck' || type === 'note') ? type : null, tcode, limit, offset, sort },

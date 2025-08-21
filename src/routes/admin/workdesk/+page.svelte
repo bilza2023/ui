@@ -1,58 +1,92 @@
-<svelte:head>
-  <script type="module" src="/components/taleem-slides/taleem-slides.js"></script>
-</svelte:head>
-
 <script>
-  import NavBar from '../../../lib/taleemSlides/NavBar.svelte';
+  import { onDestroy } from 'svelte';
+  import { NavBar, TaleemSlides } from '$lib/taleemPlayer';
+  import { clampTime, findSlideIndex, getDeckEnd } from '$lib/taleemPlayer/player-utility.js';
 
+  // deck + playback state
   let deck = [];
   let mounted = false;
+  let errorMsg = null;
+
   let currentTime = 0;
-  let duration = 0;
+  let currentSlideIndex = 0;
+  let deckEnd = 0;
 
-  // reference to the CE
-  let slidesEl;
+  // local timer (no audio in workbench)
+  let timer = null;
+  const TICK_MS = 200;
 
-  function computeDuration(slides = []) {
-    const times = slides.map(s => (s.end != null ? s.end : 0)); // avoid ??
-    return Math.max(0, ...times);
-  }
-
-  function onSeek(val) {
-    currentTime = Math.max(0, Math.min(duration, val));
-  }
-
+  // --- file load ---
   function handleFile(e) {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = (ev) => {
       try {
-        const obj = JSON.parse(event.target.result);
-        // avoid ?? and optional chaining to be safe
-        const arr = Array.isArray(obj) ? obj : ((obj && obj.slides) ? obj.slides : (obj && obj.deck) ? obj.deck : []);
-        deck = arr;
-        duration = computeDuration(deck) || 100; // NavBar only
+        const obj = JSON.parse(ev.target.result);
+        deck = Array.isArray(obj) ? obj : (obj?.deck ?? obj?.slides ?? []);
+        if (!Array.isArray(deck) || deck.length === 0) throw new Error('Empty deck');
+
+        deckEnd = getDeckEnd(deck);
         currentTime = 0;
+        currentSlideIndex = findSlideIndex(deck, 0);
         mounted = true;
+        stop(); // ensure clean state
       } catch {
-        alert("Invalid JSON file");
+        errorMsg = 'Invalid deck JSON';
+        mounted = false;
       }
     };
     reader.readAsText(file);
   }
 
-  // push props into the CE whenever they change
-  $: if (slidesEl) slidesEl.deck = deck;
-  $: if (slidesEl) slidesEl.currentTime = currentTime;
+  // --- timer controls (mirror player page API) ---
+  function startTimer() {
+    if (timer) return;
+    timer = setInterval(() => {
+      currentTime = clampTime(deck, currentTime + TICK_MS / 1000);
+      currentSlideIndex = findSlideIndex(deck, currentTime);
+      if (currentTime >= deckEnd) {
+        currentTime = deckEnd;
+        pause();
+      }
+    }, TICK_MS);
+  }
+  function clearTimer() { if (timer) { clearInterval(timer); timer = null; } }
+
+  function play()  { startTimer(); }
+  function pause() { clearTimer(); }
+  function stop()  {
+    clearTimer();
+    currentTime = 0;
+    currentSlideIndex = findSlideIndex(deck, 0);
+  }
+  function onSeek(t) {
+    currentTime = clampTime(deck, t);
+    currentSlideIndex = findSlideIndex(deck, currentTime);
+  }
+
+  onDestroy(() => clearTimer());
 </script>
 
-{#if mounted && deck.length}
-  <!-- USE THE WEB COMPONENT, not the Svelte component -->
-  <taleem-slides bind:this={slidesEl}></taleem-slides>
+{#if errorMsg}
+  <div class="center error">{errorMsg}</div>
+{/if}
 
-  <NavBar {currentTime} {duration} onSeek={onSeek}/>
+{#if mounted && deck.length}
+  <TaleemSlides {deck} {currentTime} />
+
+  <NavBar
+    {currentTime}
+    {currentSlideIndex}
+    deckEnd={deckEnd}
+    soundUrl={null}
+    onPlay={play}
+    onPause={pause}
+    onStop={stop}
+    onSeek={onSeek}
+  />
 {:else}
   <div class="flex items-center justify-center h-full">Load a deck file to start</div>
 {/if}
@@ -60,6 +94,7 @@
 <input type="file" accept=".json" on:change={handleFile} />
 
 <style>
+  .center { display:flex; align-items:center; justify-content:center; height:100vh; color:#666; }
+  .error { color:#b00020; }
   .flex{display:flex}.items-center{align-items:center}.justify-center{justify-content:center}.h-full{height:100%}
-  taleem-slides{display:block;width:100%;height:100vh}
 </style>
