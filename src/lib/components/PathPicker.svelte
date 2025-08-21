@@ -4,7 +4,7 @@
       getChapters,
       getExercises,
       chapterNo
-    } from '$lib/services/synopsisServeces.js';
+    } from '../services/synopsisServices';
   
     // parent binds this: { tcode, chapterSlug, chapterNo, exerciseSlug }
     export let value = { tcode: '', chapterSlug: '', chapterNo: null, exerciseSlug: '' };

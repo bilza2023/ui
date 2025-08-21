@@ -7,7 +7,7 @@
   import HomeIndex from "$lib/homeIndex/HomeIndex.svelte";
   import SecondaryNav from "$lib/SecondaryNav.svelte";
  
-  import { listTcodes } from "$lib/services/synopsisServeces.js";
+  import { listTcodes } from "../lib/services/synopsisServices";
 
   let syllabus = [];
   onMount(() => {
