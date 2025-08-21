@@ -86,7 +86,8 @@ import SlideMap from './SlideMap.js';
     display: grid;
     place-items: stretch;
     overflow: hidden;
-    color: inherit;
+    /* color: inherit; */
+    color: black;
   }
 
   .fallback { color: #aaa; font-size: 14px; }

@@ -8,24 +8,12 @@
   import '$lib/styles/layout.css';
   import '$lib/styles/notes.css';
 
-  import Nav from "$lib/appComps/Nav.svelte";
-  import Footer from "$lib/appComps/Footer.svelte";
   import { SvelteToast } from '@zerodevx/svelte-toast';
-  import { page } from '$app/stores';   // ← needed to read current path
-
   const options = {};
 </script>
 
 <SvelteToast {options} />
 
-{#if !$page.url.pathname.startsWith('/player')}
-  <Nav />
-{/if}
-
 <div class="min-h-screen h-full">
   <slot></slot>
 </div>
-
-{#if !$page.url.pathname.startsWith('/player')}
-  <Footer />
-{/if}

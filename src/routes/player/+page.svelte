@@ -8,7 +8,8 @@
   import { getDeck } from '$lib/services/deckService.js';
   import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
 
-  import TaleemPlayer from '$lib/taleemPlayer/Player.svelte';
+  import TaleemSlides from '../../lib/taleemSlides/TaleemSlides.svelte';
+  // import TaleemPlayer from '$lib/taleemPlayer/Player.svelte';
   import { clampTime, findSlideIndex, getDeckEnd } from '$lib/taleemPlayer/player-utility.js';
 
   // ---- state (single source of truth) ----
@@ -99,7 +100,7 @@
 {:else if errorMsg}
   <div class="center error">{errorMsg}</div>
 {:else}
-  <TaleemPlayer
+  <!-- <SveltePlayer
     {deck}
     {background}
     {currentTime}
@@ -110,7 +111,14 @@
     onPause={pause}
     onStop={stop}
     onSeek={seek}
+  /> -->
+  <div class="text-black">
+    <TaleemSlides
+    {deck}
+    {currentTime}
   />
+  </div>
+  
 {/if}
 
 
