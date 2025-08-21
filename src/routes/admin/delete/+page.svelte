@@ -1,6 +1,7 @@
 <!-- src/routes/admin/delete/+page.svelte -->
 <script>
-  import Nav from "../../../lib/Nav.svelte";
+   import Nav from "$lib/appComps/Nav.svelte";
+  import AdminNav from "../../../lib/AdminNav.svelte";
   import { onMount } from 'svelte';
 
   let filename = '';
@@ -36,6 +37,7 @@
 </script>
 
 <Nav />
+<AdminNav />
 
 <div class="container">
   <div class="confirm-card">
