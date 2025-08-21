@@ -1,7 +1,7 @@
 import { t as text_decoder, b as base64_decode, a as afterUpdate, d as decode_pathname, c as decode_params, n as normalize_path, e as disable_search, v as validate_layout_server_exports, f as validate_layout_exports, g as validate_page_server_exports, h as validate_page_exports, i as text_encoder, r as resolve, m as make_trackable, j as get_relative_path, k as base64_encode } from './chunks/ssr2-6RDSickK.js';
-import { j as json, t as text, R as Redirect, S as SvelteKitError, H as HttpError, e as error, A as ActionFailure } from './chunks/index-DIHiwsVu.js';
-import { r as readable, w as writable } from './chunks/index-BLxZcfXI.js';
-import { c as create_ssr_component, s as setContext, v as validate_component, m as missing_component } from './chunks/ssr-DD2Fi2eU.js';
+import { j as json, t as text, R as Redirect, S as SvelteKitError, H as HttpError, e as error, A as ActionFailure } from './chunks/index-BIDRY2MQ.js';
+import { r as readable, w as writable } from './chunks/index-DtJIOHv8.js';
+import { c as create_ssr_component, s as setContext, v as validate_component, m as missing_component } from './chunks/ssr-CO7PFcwR.js';
 
 /** @type {Record<string, string>} */
 const escaped = {
@@ -941,7 +941,7 @@ function stringify_primitive(thing) {
 	return String(thing);
 }
 
-const BROWSER = false;
+const DEV = false;
 let request_event = null;
 let als;
 import('node:async_hooks').then((hooks) => als = new hooks.AsyncLocalStorage()).catch(() => {
@@ -1014,6 +1014,7 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { form } = $$props;
   let { data_0 = null } = $$props;
   let { data_1 = null } = $$props;
+  let { data_2 = null } = $$props;
   {
     setContext("__svelte__", stores);
   }
@@ -1025,6 +1026,7 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   if ($$props.form === void 0 && $$bindings.form && form !== void 0) $$bindings.form(form);
   if ($$props.data_0 === void 0 && $$bindings.data_0 && data_0 !== void 0) $$bindings.data_0(data_0);
   if ($$props.data_1 === void 0 && $$bindings.data_1 && data_1 !== void 0) $$bindings.data_1(data_1);
+  if ($$props.data_2 === void 0 && $$bindings.data_2 && data_2 !== void 0) $$bindings.data_2(data_2);
   let $$settled;
   let $$rendered;
   let previous_head = $$result.head;
@@ -1049,7 +1051,40 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       },
       {
         default: () => {
-          return `${validate_component(constructors[1] || missing_component, "svelte:component").$$render(
+          return `${constructors[2] ? `${validate_component(constructors[1] || missing_component, "svelte:component").$$render(
+            $$result,
+            {
+              data: data_1,
+              params: page.params,
+              this: components[1]
+            },
+            {
+              this: ($$value) => {
+                components[1] = $$value;
+                $$settled = false;
+              }
+            },
+            {
+              default: () => {
+                return `${validate_component(constructors[2] || missing_component, "svelte:component").$$render(
+                  $$result,
+                  {
+                    data: data_2,
+                    form,
+                    params: page.params,
+                    this: components[2]
+                  },
+                  {
+                    this: ($$value) => {
+                      components[2] = $$value;
+                      $$settled = false;
+                    }
+                  },
+                  {}
+                )}`;
+              }
+            }
+          )}` : `${validate_component(constructors[1] || missing_component, "svelte:component").$$render(
             $$result,
             {
               data: data_1,
@@ -1064,7 +1099,7 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
               }
             },
             {}
-          )}`;
+          )}`}`;
         }
       }
     )}` : `${validate_component(constructors[0] || missing_component, "svelte:component").$$render(
@@ -1173,7 +1208,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "9w81ug"
+  version_hash: "xlzhum"
 };
 async function get_hooks() {
   let handle;
@@ -2261,20 +2296,20 @@ async function load_server_data({ event, state, node, parent }) {
       ...event,
       fetch: (info, init2) => {
         const url2 = new URL(info instanceof Request ? info.url : info, event.url);
-        if (BROWSER && done && !uses.dependencies.has(url2.href)) ;
+        if (DEV && done && !uses.dependencies.has(url2.href)) ;
         return event.fetch(info, init2);
       },
       /** @param {string[]} deps */
       depends: (...deps) => {
         for (const dep of deps) {
           const { href } = new URL(dep, event.url);
-          if (BROWSER) ;
+          if (DEV) ;
           uses.dependencies.add(href);
         }
       },
       params: new Proxy(event.params, {
         get: (target, key2) => {
-          if (BROWSER && done && typeof key2 === "string" && !uses.params.has(key2)) ;
+          if (DEV && done && typeof key2 === "string" && !uses.params.has(key2)) ;
           if (is_tracking) {
             uses.params.add(key2);
           }
@@ -2285,7 +2320,7 @@ async function load_server_data({ event, state, node, parent }) {
         }
       }),
       parent: async () => {
-        if (BROWSER && done && !uses.parent) ;
+        if (DEV && done && !uses.parent) ;
         if (is_tracking) {
           uses.parent = true;
         }
@@ -2293,7 +2328,7 @@ async function load_server_data({ event, state, node, parent }) {
       },
       route: new Proxy(event.route, {
         get: (target, key2) => {
-          if (BROWSER && done && typeof key2 === "string" && !uses.route) ;
+          if (DEV && done && typeof key2 === "string" && !uses.route) ;
           if (is_tracking) {
             uses.route = true;
           }
@@ -4099,7 +4134,7 @@ async function render_page(event, page, options2, manifest, state, nodes, resolv
     const ssr = nodes.ssr();
     const csr = nodes.csr();
     if (ssr === false && !(state.prerendering && should_prerender_data)) {
-      if (BROWSER && action_result && !event.request.headers.has("x-sveltekit-action")) ;
+      if (DEV && action_result && !event.request.headers.has("x-sveltekit-action")) ;
       return await render_response({
         branch: [],
         fetched,
@@ -4766,12 +4801,12 @@ async function respond(request, options2, manifest, state) {
       if (url.pathname === base || url.pathname === base + "/") {
         trailing_slash = "always";
       } else if (page_nodes) {
-        if (BROWSER) ;
+        if (DEV) ;
         trailing_slash = page_nodes.trailing_slash();
       } else if (route.endpoint) {
         const node = await route.endpoint();
         trailing_slash = node.trailingSlash ?? "never";
-        if (BROWSER) ;
+        if (DEV) ;
       }
       if (!is_data_request) {
         const normalized = normalize_path(url.pathname, trailing_slash);
@@ -4995,7 +5030,7 @@ async function respond(request, options2, manifest, state) {
         });
       }
       if (state.depth === 0) {
-        if (BROWSER && event2.url.pathname === "/.well-known/appspecific/com.chrome.devtools.json") ;
+        if (DEV && event2.url.pathname === "/.well-known/appspecific/com.chrome.devtools.json") ;
         return await respond_with_error({
           event: event2,
           options: options2,

@@ -3,7 +3,9 @@
 // Server-only helpers that require Prisma DB access.
 // Use only in +page.server.js, +server.js, or other server modules.
 
-import { prisma } from '$lib/server/prisma.js';
+
+// import { prisma } from '$lib/server/prisma.js';
+import prisma from '../server/prisma.js';
 import { chapterNo, getExercises } from './synopsisServices.js';
 
 /**

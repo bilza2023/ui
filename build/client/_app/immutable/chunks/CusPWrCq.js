@@ -1,1 +1,0 @@
-async function t(){const a=await fetch("/data/syllabus/subjects.json");if(!a.ok)throw new Error("Failed to load subjects index");return await a.json()}async function o(a){const s=await fetch(`/data/syllabus/${a}.json`);if(!s.ok)throw new Error(`Failed to load syllabus for ${a}`);return await s.json()}export{t as a,o as g};

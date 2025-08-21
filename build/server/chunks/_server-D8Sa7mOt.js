@@ -1,0 +1,57 @@
+import { j as json } from './index-BIDRY2MQ.js';
+import { e as exists, c as createQuestion } from './questionServices-CHZd5-Cj.js';
+import './prisma-CbVrW2fI.js';
+import '@prisma/client';
+
+async function POST({ request }) {
+  const form = await request.formData();
+  const tcode = (form.get("tcode") ?? "").toString().trim();
+  const chapStr = (form.get("chapter") ?? "").toString().trim();
+  const exercise = (form.get("exercise") ?? "").toString().trim();
+  if (!tcode || !chapStr || !exercise) {
+    return json({ error: "Missing required path fields" }, { status: 400 });
+  }
+  const chapter = Number.parseInt(chapStr, 10);
+  if (Number.isNaN(chapter)) return json({ error: "Chapter must be integer" }, { status: 400 });
+  const statusOverride = (form.get("status") ?? "").toString().trim() || void 0;
+  const descriptionOverride = (form.get("description") ?? "").toString().trim() || void 0;
+  const tagsCsv = (form.get("tags") ?? "").toString();
+  const tagsOverride = tagsCsv ? tagsCsv.split(",").map((s) => s.trim()).filter(Boolean) : void 0;
+  const file = form.get("file");
+  if (!file) return json({ error: "No file uploaded" }, { status: 400 });
+  const originalName = file.name;
+  const baseName = form.get("filename")?.toString().trim() || originalName.replace(/\.(html|htm)$/i, "");
+  if (!baseName) return json({ error: "Unable to determine filename" }, { status: 400 });
+  if (await exists(baseName)) {
+    return json({ error: "Filename already exists. Delete it first or choose a new filename." }, { status: 409 });
+  }
+  try {
+    const noteText = await file.text();
+    if (!noteText.trim()) {
+      return json({ error: "Note file is empty" }, { status: 400 });
+    }
+    await createQuestion({
+      filename: baseName,
+      type: "note",
+      // <-- important: mark it as a note
+      tcode,
+      chapter,
+      exercise,
+      name: descriptionOverride || baseName,
+      description: descriptionOverride ?? null,
+      tags: tagsOverride ?? [],
+      status: statusOverride ?? "ready",
+      note: noteText
+    });
+    return json({ success: true, uploaded: 1 });
+  } catch (err) {
+    if (err?.code === "P2002") {
+      return json({ error: "Filename already exists. Delete it first or choose a new filename." }, { status: 409 });
+    }
+    console.error("Note upload error:", err);
+    return json({ error: err?.message ?? "Server error" }, { status: 500 });
+  }
+}
+
+export { POST };
+//# sourceMappingURL=_server-D8Sa7mOt.js.map
