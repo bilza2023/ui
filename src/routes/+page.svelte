@@ -6,7 +6,7 @@
   import TcodeCard from "$lib/homeIndex/TcodeCard.svelte";
   import HomeIndex from "$lib/homeIndex/HomeIndex.svelte";
   import SecondaryNav from "$lib/SecondaryNav.svelte";
- 
+ import Footer from "../lib/appComps/Footer.svelte";
   import { listTcodes } from "../lib/services/synopsisServices";
   export let data;
   let syllabus = [];
@@ -44,6 +44,8 @@
 
 </div>
 
+
+<Footer/>
 <style>
   /* Page shell */
   .page {

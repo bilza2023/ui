@@ -70,13 +70,13 @@
       width: 100%;
       height: 160px;
       object-fit: cover;
-      background-color: #f0f0f0;
+      background: var(--surfaceColor);
       /* no extra radius needed; parent overflow handles corners */
     }
   
     .title {
       margin-top: auto;
-      color: #d5bd9b;
+      color:  var(--accentColor);
       background: var(--surfaceColor);
       padding: 0.45rem 0.6rem; /* tighter */
       font-size: 0.95rem;

@@ -38,8 +38,7 @@
 
   .main-content {
     flex: 1;
-    background: var(--surfaceColor);
-    border: 1px solid var(--borderColor);
+    border: 4px solid var(--backgroundColor);
     border-radius: 16px;
     padding: clamp(12px, 2vw, 24px);
     box-shadow:
@@ -48,6 +47,7 @@
   }
 
   .questions-container {
+   
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
