@@ -7,20 +7,37 @@
   import { onMount, onDestroy, createEventDispatcher } from 'svelte';
   import { browser } from '$app/environment';   // ✅ SSR guard
 
+ 
   const dispatch = createEventDispatcher();
 
   let loading = true;
-  let user = null;        // { id, email } | null
+  let user = null;
   let unread = 0;
 
-  // --- THEME ---
+  // --- THEMES (keys must match your .theme-* class suffixes) ---
+  const THEMES = [
+    { key: 'light',            label: 'Light (Primer)' },
+    { key: 'dark',             label: 'Dark (Primer)' },
+    { key: 'dracula',          label: 'Dracula' },
+    { key: 'nord',             label: 'Nord' },
+    { key: 'github-dim',       label: 'GitHub Dim' },
+    { key: 'gruvbox-dark',     label: 'Gruvbox Dark' },
+    { key: 'solarized-light',  label: 'Solarized Light' },
+    { key: 'latte',            label: 'Latte' },
+  ];
+  const ALL_THEME_CLASSES = THEMES.map(t => `theme-${t.key}`);
+  const ALLOWED = new Set(THEMES.map(t => t.key));
+
   let showThemeMenu = false;
+  let currentTheme = 'light';
 
   function setTheme(theme) {
-    if (!browser) return;                               // ✅ guard
+    if (!browser) return;
+    if (!ALLOWED.has(theme)) theme = 'light';
     const root = document.documentElement;
-    root.classList.remove('theme-light', 'theme-dark');
+    root.classList.remove(...ALL_THEME_CLASSES);   // ✅ remove ANY previously set theme
     root.classList.add(`theme-${theme}`);
+    currentTheme = theme;
     try { localStorage.setItem('theme', theme); } catch {}
   }
   function selectTheme(theme) {
@@ -36,14 +53,13 @@
   }
 
   function authHeaders() {
-    if (!browser) return {};                            // ✅ guard
+    if (!browser) return {};
     let t = null;
     try { t = localStorage.getItem('token'); } catch {}
     return t ? { authorization: `Bearer ${t}` } : {};
   }
 
   async function verifyUser() {
-    // called only on client (onMount)
     const res = await fetch('/api/auth/verify', {
       headers: { accept: 'application/json', ...authHeaders() }
     });
@@ -53,7 +69,6 @@
   }
 
   async function fetchUnread() {
-    // called only on client (onMount)
     const r = await fetch('/studio', {
       headers: { accept: 'application/json', ...authHeaders() }
     });
@@ -63,12 +78,11 @@
   }
 
   async function init() {
-    if (!browser) return;                               // ✅ guard
-    // restore saved theme first
+    if (!browser) return;
     try {
       const saved = localStorage.getItem('theme');
-      if (saved === 'light' || saved === 'dark') setTheme(saved);
-    } catch {}
+      setTheme(ALLOWED.has(saved) ? saved : 'light');   // ✅ restore any theme
+    } catch { setTheme('light'); }
     loading = true;
     user = await verifyUser();
     unread = user ? await fetchUnread() : 0;
@@ -77,7 +91,7 @@
   }
 
   onMount(() => {
-    init();                                             // ✅ client-only work
+    init();
     if (browser) document.addEventListener('click', handleDocClick);
   });
 
@@ -110,15 +124,24 @@
     <span class="muted">…</span>
   {:else if user}
     <span class="hello">Hi, {user.email}</span>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="dropdown" on:click|stopPropagation={toggleThemeMenu}>
       <button class="pill">Theme ▾</button>
       {#if showThemeMenu}
         <div class="menu" role="menu">
-          <button class="menu-item" on:click={() => selectTheme('light')}>Light</button>
-          <button class="menu-item" on:click={() => selectTheme('dark')}>Dark</button>
+          {#each THEMES as t}
+            <button
+              class={"menu-item" + (currentTheme === t.key ? " active" : "")}
+              on:click={() => selectTheme(t.key)}
+            >
+              {t.label}
+            </button>
+          {/each}
         </div>
       {/if}
     </div>
+    
     <button class="pill" on:click={logout}>Logout</button>
   {:else}
     <a href="/login" class="pill">Login</a>
@@ -219,6 +242,7 @@
     z-index: 50;
   }
   .menu-item {
+    font-size: 0.75rem;
     width: 100%;
     text-align: left;
     background: transparent;
