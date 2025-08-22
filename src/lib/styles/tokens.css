@@ -1,49 +1,30 @@
+/* ONE FILE. EIGHT TOKENS. LIGHT + DARK SCOPES. */
 
-:root {
-    /* — Fonts — */
-    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  
-    /* — Color tokens (dark baseline) — */
-    --bg:         #111827; /* page background */
-    --surface:    #1f2937; /* panels/cards */
-    --surface-2:  #0f172a; /* deeper panels */
-    --text:       #E8D7BD; /* primary text (sand) */
-    --muted:      #C4A77F; /* muted text / hints */
-    --brand:      #0a9396; /* Taleem teal */
-    --accent:     #C4A77F; /* sand accent */
-    --border:     #2d3748; /* subtle borders */
-  
-    --success:    #b7ffc2;
-    --warn:       #ffd89a;
-    --error:      #ffb3b3;
-  
-    /* — Radii — */
-    --radius-1: 8px;
-    --radius-2: 12px;
-    --radius-3: 16px;
-    --radius-4: 24px;
-  
-    /* — Spacing (4px scale) — */
-    --space-0: 0px;
-    --space-1: 4px;
-    --space-2: 8px;
-    --space-3: 12px;
-    --space-4: 16px;
-    --space-5: 24px;
-    --space-6: 32px;
-  
-    /* — Font sizes — */
-    --font-1: 12px;
-    --font-2: 14px;
-    --font-3: 16px;
-    --font-4: 18px;
-    --font-5: 22px;
-    --font-6: 28px;
-  
-    /* — Shadows — */
-    --shadow-1: 0 1px 2px rgba(0,0,0,0.25);
-    --shadow-2: 0 6px 16px rgba(0,0,0,0.25);
-    --shadow-3: 0 16px 32px rgba(0,0,0,0.35);
-  }
-  
+/* Light (default) */
+:root,
+.theme-light {
+  --backgroundColor: #ffffff;
+  --surfaceColor:    #f8fafc; /* panels/cards */
+  --borderColor:     #e5e7eb;
+
+  --primaryColor:    #2563eb; /* brand/action */
+  --secondaryColor:  #059669; /* secondary action */
+  --accentColor:     #d97706; /* highlights/links */
+
+  --primaryText:     #0f172a; /* main text */
+  --secondaryText:   #475569; /* muted text */
+}
+
+/* Dark */
+.theme-dark {
+  --backgroundColor: #0b0f14;
+  --surfaceColor:    #111827;
+  --borderColor:     #2a2f3a;
+
+  --primaryColor:    #3b82f6;
+  --secondaryColor:  #10b981;
+  --accentColor:     #f59e0b;
+
+  --primaryText:     #e5e7eb;
+  --secondaryText:   #9ca3af;
+}
