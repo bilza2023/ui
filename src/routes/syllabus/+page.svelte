@@ -5,7 +5,7 @@
 	import QuestionCard from './QuestionCard.svelte';
 	// Provided by +page.server.js
 	export let data;
-  
+	import Nav from "$lib/appComps/Nav.svelte"; 
 	// Local state
 	let tcode = null;
 	let chapters = [];
@@ -52,15 +52,17 @@
 	  go({ type: next ?? undefined });
 	}
   </script>
-  
+  <Nav/>
   {#if !tcode}
 	<div class="empty">No syllabus registered.</div>
   {:else}
 	<!-- Top strip: fixed single-tcode header + filters -->
 	<div class="topbar one">
 	  <div class="title">
-		<div class="tcode">{tcode}</div>
-		{#if tcodeDesc}<div class="desc">{tcodeDesc}</div>{/if}
+		<div class="tcode">{tcode}
+			&nbsp
+		{#if tcodeDesc}<span class="desc">{tcodeDesc}</span>{/if}
+		</div>
 	  </div>
   
 	  <div class="filters">
@@ -94,43 +96,90 @@
 	  </main>
 	</div>
   {/if}
-  
   <style>
-	:global(body){ background:#1b1205; }
-  
-	.empty{
-	  padding:40px 12px; text-align:center; color:#d5bd9b;
+	/* App background */
+	:global(body){
+	  background: var(--backgroundColor);
+	  color: var(--primaryText);
 	}
   
+	.empty{
+	  padding:40px 12px;
+	  text-align:center;
+	  color: var(--secondaryText);
+	}
+  
+	/* Top bar */
 	.topbar{
 	  display:flex; align-items:center; justify-content:space-between;
-	  padding:10px 12px; background:#2E1C02; border-bottom:1px solid #3b2606;
+	  padding:10px 12px;
+	  /* tinted surface to stand apart */
+	  background: color-mix(in oklab, var(--accentColor) 16%, var(--surfaceColor));
+	  border-bottom:1px solid color-mix(in oklab, var(--accentColor) 45%, var(--borderColor));
 	  position:sticky; top:0; z-index:10;
+	  color: var(--primaryText);
 	}
 	.title{ display:flex; flex-direction:column; gap:2px; }
 	.tcode{
-	  font-weight:700; color:#f4e2c7; letter-spacing:0.3px;
+	  font-weight:700; letter-spacing:0.3px;
+	  color: var(--accentColor);
 	}
 	.desc{
-	  color:#d5bd9b; font-size:0.95rem; max-width:60ch; opacity:0.9;
+	  color: var(--secondaryText);
+	  font-size:0.95rem; max-width:60ch; opacity:0.9;
 	}
   
-	.filters{ display:flex; align-items:center; gap:8px; color:#d5bd9b; }
+	/* Filters */
+	.filters{
+	  display:flex; align-items:center; gap:8px;
+	  color: var(--secondaryText);
+	}
 	.filters button{
-	  padding:4px 10px; border:1px solid #6b4a12; background:#3b2606; color:#e6ccb0; border-radius:8px; cursor:pointer;
+	  padding:4px 10px;
+	  border:1px solid var(--borderColor);
+	  background: color-mix(in oklab, var(--accentColor) 10%, var(--surfaceColor));
+	  color: var(--primaryText);
+	  border-radius:8px; cursor:pointer;
+	  transition: background .15s ease, border-color .15s ease, color .15s ease;
 	}
-	.filters button.active{ background:#78471a; border-color:#b07b2a; }
+	.filters button:hover{
+	  border-color: color-mix(in oklab, var(--primaryColor) 40%, var(--borderColor));
+	}
+	.filters button.active{
+	  background: var(--primaryColor);
+	  border-color: var(--primaryColor);
+	  color: var(--backgroundColor);
+	}
   
-	.page{ display:flex; min-height:calc(100vh - 54px); }
-	.left{ width:260px; border-right:1px solid #3b2606; background:#221605; }
-	.main{ flex:1; display:flex; flex-direction:column; gap:12px; }
+	/* Layout */
+	.page{
+	  display:flex;
+	  min-height: 100vh;
+	}
+	.left{
+	  width:260px;
+	  border-right:1px solid var(--borderColor);
+	  background: color-mix(in oklab, var(--accentColor) 8%, var(--surfaceColor));
+	}
+	.main{
+	  flex:1; display:flex; flex-direction:column; gap:0px; 
+	}
   
+	/* Exercise bar (sticky inside main) */
 	.exbar-wrap{
-	  position:sticky; top:54px; background:#241706; padding:10px 12px; border-bottom:1px solid #3b2606; z-index:5;
+	  position:sticky; top:54px; z-index:5;
+	  background: color-mix(in oklab, var(--accentColor) 6%, var(--surfaceColor));
+	  gap:10px;
+	  border-bottom:1px solid color-mix(in oklab, var(--accentColor) 35%, var(--borderColor));
 	}
   
+	/* Cards area */
 	.cards{
-	  padding:16px; background:#C1B294; min-height:60vh; display:flex; justify-content:center; align-items:flex-start;
+	  background: color-mix(in oklab, var(--accentColor) 10%, var(--surfaceColor));
+	  min-height:100vh;
+	  display:flex; justify-content:center; align-items:flex-start;
+	  color: var(--primaryText);
+	  padding: 10px;
 	}
   
 	@media (max-width: 900px){
@@ -139,7 +188,7 @@
 	@media (max-width: 700px){
 	  .page{ flex-direction:column; }
 	  .left{ width:100%; }
-	  .exbar-wrap{ top:98px; } /* little cushion if header wraps on mobile */
+	  .exbar-wrap{ top:98px; } /* cushion if header wraps on mobile */
 	}
   </style>
   

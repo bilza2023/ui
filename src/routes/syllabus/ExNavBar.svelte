@@ -31,20 +31,94 @@
   </div>
   
   <style>
-	.exbar{ display:flex; gap:8px; flex-wrap:wrap; }
+	.exbar{
+	  display:flex;
+	  gap:8px;
+	  flex-wrap:wrap;
+	}
+  
 	.ex{
-	  display:flex; gap:8px; align-items:center; max-width:100%;
-	  padding:6px 10px; border:1px solid #6b4a12; background:#3b2606; color:#e6ccb0; border-radius:999px; cursor:pointer;
+	  display:flex;
+	  gap:8px;
+	  align-items:center;
+	  max-width:100%;
+	  padding:6px 10px;
+  
+	  border:1px solid var(--borderColor);
+	  border-radius:999px;
+	  cursor:pointer;
+  
+	  /* subtle tint so it stands apart from the surface */
+	  background: color-mix(in oklab, var(--accentColor) 10%, var(--surfaceColor));
+	  color: var(--primaryText);
+  
+	  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .12s ease;
 	}
-	.ex.active{ background:#78471a; border-color:#b07b2a; color:#fff2e0; }
-	.label{ max-width:42ch; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-	.badges{ display:flex; gap:6px; }
+	.ex:hover{
+	  background: color-mix(in oklab, var(--accentColor) 14%, var(--surfaceColor));
+	  border-color: color-mix(in oklab, var(--primaryColor) 40%, var(--borderColor));
+	  transform: translateY(-1px);
+	}
+	.ex:active{ transform: translateY(0); }
+	.ex:focus-visible{
+	  outline:2px solid var(--primaryColor);
+	  outline-offset:2px;
+	}
+	.ex.active{
+	  background: var(--primaryColor);
+	  border-color: var(--primaryColor);
+	  color: var(--backgroundColor);
+	}
+  
+	.label{
+	  max-width:42ch;
+	  overflow:hidden;
+	  text-overflow:ellipsis;
+	  white-space:nowrap;
+	}
+  
+	.badges{
+	  display:flex;
+	  gap:6px;
+	}
+  
+	/* badge base */
 	.b{
-	  padding:2px 6px; border-radius:999px; font-size:12px; line-height:1; border:1px solid transparent;
-	  background:#241706; color:#d5bd9b;
+	  padding:2px 6px;
+	  border-radius:999px;
+	  font-size:12px;
+	  line-height:1;
+	  border:1px solid var(--borderColor);
+	  background: color-mix(in oklab, var(--surfaceColor) 85%, var(--backgroundColor));
+	  color: var(--primaryText);
 	}
-	.b.total{ border-color:#5a3c0d; }
-	.b.decks{ background:#0c0535; color:#dcd6ff; }
-	.b.notes{ background:#6c430b; color:#ffe3c4; }
+  
+	/* semantic tints using tokens */
+	.b.total{
+	  background: color-mix(in oklab, var(--accentColor) 18%, var(--surfaceColor));
+	}
+	.b.decks{
+	  background: color-mix(in oklab, var(--primaryColor) 18%, var(--surfaceColor));
+	}
+	.b.notes{
+	  background: color-mix(in oklab, var(--secondaryColor) 18%, var(--surfaceColor));
+	}
+  
+	/* keep badges readable on active (inverted) button */
+	.ex.active .b{
+	  border-color: color-mix(in oklab, var(--backgroundColor) 40%, var(--primaryColor));
+	  color: var(--backgroundColor);
+	  background: color-mix(in oklab, var(--backgroundColor) 25%, var(--primaryColor));
+	}
+	.ex.active .b.total{
+	  background: color-mix(in oklab, var(--backgroundColor) 25%, var(--accentColor));
+	}
+	.ex.active .b.decks{
+	  background: color-mix(in oklab, var(--backgroundColor) 25%, var(--primaryColor));
+	}
+	.ex.active .b.notes{
+	  background: color-mix(in oklab, var(--backgroundColor) 25%, var(--secondaryColor));
+	}
   </style>
+  
   
