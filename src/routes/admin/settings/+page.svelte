@@ -2,8 +2,6 @@
     // @ts-nocheck
     import Nav from "$lib/appComps/Nav.svelte";
     import AdminNav from "$lib/AdminNav.svelte";
-  
-    // Expose action result (SvelteKit forms)
     export let form;
   </script>
   
@@ -11,8 +9,7 @@
   <AdminNav />
   <h1>Settings</h1>
   
-  <!-- Single-button experience: pick JSON → auto-submit -->
-  <form method="post" enctype="multipart/form-data">
+  <form method="POST" enctype="multipart/form-data">
     <label class="btn">
       Upload Index Data
       <input
@@ -27,7 +24,7 @@
   </form>
   
   {#if form?.ok}
-    <p>✅ Saved {form.count ?? ''} item(s).</p>
+    <p>✅ Saved {form.count} items.</p>
   {:else if form?.error}
     <p style="color:#f66">❌ {form.error}</p>
   {/if}

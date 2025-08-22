@@ -1,8 +1,7 @@
 import { fail } from '@sveltejs/kit';
-import { setSetting } from '$lib/services/AppServices.js'; // uses your existing service
+import { setSetting } from '$lib/services/AppServices.js';
 
 export const actions = {
-  // default form action
   default: async ({ request }) => {
     const data = await request.formData();
     const file = data.get('index_json');
@@ -25,14 +24,11 @@ export const actions = {
       return fail(400, { ok: false, error: 'Invalid JSON' });
     }
 
-    // Optional guard: require an array (your index_data is an array of items)
     if (!Array.isArray(json)) {
       return fail(400, { ok: false, error: 'Expected a JSON array' });
     }
 
-    // Write to app_settings → key = 'index_data'
     await setSetting('index_data', json);
-
     return { ok: true, count: json.length };
   }
 };
