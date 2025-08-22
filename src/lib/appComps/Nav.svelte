@@ -144,6 +144,7 @@
     gap: 10px;
     padding: 10px 12px;
 
+    
     background: var(--surfaceColor);
     color: var(--primaryText);
     border-bottom: 1px solid var(--borderColor);

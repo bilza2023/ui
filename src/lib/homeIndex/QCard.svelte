@@ -54,7 +54,7 @@
       flex-direction: column;
       border-radius: 0.75rem;
       overflow: hidden;
-      border: 2px solid var(--c); /* slimmer border */
+      border: 2px solid var(--accentColor); /* slimmer border */
       box-shadow: 0 8px 8px rgba(45, 44, 44, 0.8);
       transition: transform 120ms ease, box-shadow 120ms ease;
       text-decoration: none;
