@@ -18,32 +18,39 @@
     </a>
   {/each}
 </div>
+
 <style>
-  /* Flex grid */
-  .cards {
+  /* PANEL: match HomeIndex .main-content */
+  .tcode-grid {
+    /* acts as both the panel and the flex container */
+    border: 4px solid var(--backgroundColor);
+    align-items: flex-start;   /* items keep natural height */
+    align-content: flex-start; /* rows don't stretch to fill 100dvh */
+    border-radius: 16px;
+    min-height: 100vh;   /* fallback */
+    min-height: 100dvh;  
+    padding: clamp(12px, 2vw, 24px);
+    box-shadow:
+      0 1px 1px rgba(0,0,0,.04),
+      0 4px 14px rgba(0,0,0,.08);
+
+    /* flex layout for cards */
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    align-items: stretch;
+    justify-content: center;
   }
 
-  /* Card */
+  /* CARD */
   .card {
     display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: inherit;
-
-    background: var(--surfaceColor);
-    border: 1px solid var(--borderColor);
-    border-radius: 12px;
-
-    /* Responsive width: 3 in a row on wide, 2 on mid, 1 on narrow */
-    flex: 1 1 clamp(260px, 30%, 360px);
-    max-width: 360px;
-    min-width: 260px;
-
-    transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+      flex-direction: column;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 2px solid var(--accentColor); /* slimmer border */
+      box-shadow: 0 8px 8px rgba(45, 44, 44, 0.8);
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      text-decoration: none;
   }
 
   .card:hover {
@@ -52,7 +59,7 @@
     box-shadow: 0 8px 22px rgba(0,0,0,.18);
   }
 
-  /* Thumb */
+  /* THUMB */
   .thumb {
     aspect-ratio: 16 / 9;
     background: color-mix(in oklab, var(--primaryColor) 8%, var(--surfaceColor));
@@ -67,7 +74,7 @@
     display: block;
   }
 
-  /* Meta */
+  /* META */
   .meta {
     padding: 12px 14px 14px;
   }
@@ -76,6 +83,8 @@
     line-height: 1.25;
     color: var(--primaryText);
     margin: 0 0 6px 0;
+    color:  var(--accentColor);
+    background: var(--surfaceColor);
   }
   .desc {
     color: var(--secondaryText);
@@ -84,7 +93,7 @@
     margin: 0;
   }
 
-  /* Small badge/tag on image (optional if you have it) */
+  /* OPTIONAL badge */
   .tag {
     position: absolute;
     top: 8px;
@@ -96,5 +105,6 @@
     padding: 2px 8px;
     font-size: 12px;
     font-weight: 600;
+  
   }
 </style>
