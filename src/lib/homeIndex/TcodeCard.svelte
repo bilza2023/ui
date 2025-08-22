@@ -18,36 +18,47 @@
     </a>
   {/each}
 </div>
-
 <style>
-  /* FLEXBOX container: centers, wraps, and avoids full-height rows */
-  .tcode-grid {
+  /* Flex grid */
+  .cards {
     display: flex;
-    padding-top: 20px;
     flex-wrap: wrap;
-    gap: var(--space-5);
-    justify-content: center;      /* center the row of cards */
-    align-items: flex-start;       /* let each card size to its own content */
+    gap: 16px;
+    align-items: stretch;
   }
 
-  /* Card: consistent, not-too-narrow width with nice wrapping */
-  .tcode-card {
-    text-decoration: none;
+  /* Card */
+  .card {
     display: flex;
     flex-direction: column;
-    flex: 0 1 320px;               /* preferred width */
-    min-width: 260px;              /* prevents super-narrow cards */
-    max-width: 360px;              /* keeps a tidy max size */
-  }
-  .tcode-card:hover { box-shadow: var(--shadow-2); }
+    text-decoration: none;
+    color: inherit;
 
-  /* 16:9 cover thumbnail */
+    background: var(--surfaceColor);
+    border: 1px solid var(--borderColor);
+    border-radius: 12px;
+
+    /* Responsive width: 3 in a row on wide, 2 on mid, 1 on narrow */
+    flex: 1 1 clamp(260px, 30%, 360px);
+    max-width: 360px;
+    min-width: 260px;
+
+    transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--primaryColor) 40%, var(--borderColor));
+    box-shadow: 0 8px 22px rgba(0,0,0,.18);
+  }
+
+  /* Thumb */
   .thumb {
     aspect-ratio: 16 / 9;
-    border-radius: var(--radius-2);
+    background: color-mix(in oklab, var(--primaryColor) 8%, var(--surfaceColor));
     overflow: hidden;
-    background: var(--surface-2);
-    margin-bottom: var(--space-3);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
   }
   .thumb img {
     width: 100%;
@@ -56,8 +67,34 @@
     display: block;
   }
 
-  /* Text */
-  .meta { display: flex; flex-direction: column; gap: var(--space-2); }
-  .title { margin: 0; font-size: var(--font-5); color: var(--text); }
-  .desc  { margin: 0; color: var(--muted); }
+  /* Meta */
+  .meta {
+    padding: 12px 14px 14px;
+  }
+  .title {
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--primaryText);
+    margin: 0 0 6px 0;
+  }
+  .desc {
+    color: var(--secondaryText);
+    font-size: 0.95rem;
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* Small badge/tag on image (optional if you have it) */
+  .tag {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: color-mix(in oklab, var(--accentColor) 85%, var(--surfaceColor));
+    color: var(--primaryText);
+    border: 1px solid var(--borderColor);
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 600;
+  }
 </style>

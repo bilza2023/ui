@@ -44,12 +44,32 @@
 
 </div>
 
-
 <style>
+  /* Page shell */
+  .page {
+    max-width: 2500px;
+    margin-inline: auto;
+  }
+
+  /* Main content panel */
   .main-section {
     width: 100%;
-    /* background-color: #C1B294; */
-    min-height: 100vh;
-    border-radius: 20px;
+    min-height: 60vh;
+
+    /* Just use surfaceColor directly — avoids mismatch with border */
+    background: var(--surfaceColor);
+    color: var(--primaryText);
+
+    border: 1px solid var(--borderColor);
+    border-radius: 16px;
+
+    padding: clamp(12px, 2vw, 24px);
+    box-shadow:
+      0 1px 1px rgba(0,0,0,.04),
+      0 4px 14px rgba(0,0,0,.08);
+  }
+
+  .main-section > * + * {
+    margin-top: clamp(12px, 2vw, 24px);
   }
 </style>

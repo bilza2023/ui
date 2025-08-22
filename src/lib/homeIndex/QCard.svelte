@@ -77,7 +77,7 @@
     .title {
       margin-top: auto;
       color: #d5bd9b;
-      background: var(--c);
+      background: var(--surfaceColor);
       padding: 0.45rem 0.6rem; /* tighter */
       font-size: 0.95rem;
       display: flex;
@@ -89,7 +89,6 @@
     .name { font-size: 1rem; }
   
     .no-questions {
-      color: #331f04;
       font-size: 1rem;
       text-align: center;
     }

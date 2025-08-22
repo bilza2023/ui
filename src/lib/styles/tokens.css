@@ -17,14 +17,15 @@
 
 /* Dark */
 .theme-dark {
-  --backgroundColor: #0b0f14;
-  --surfaceColor:    #111827;
-  --borderColor:     #2a2f3a;
+  --backgroundColor: #282a36; /* background */
+  --surfaceColor:    #44475a; /* current line */
+  --borderColor:     #44475a; /* same as surface for cohesion */
 
-  --primaryColor:    #3b82f6;
-  --secondaryColor:  #10b981;
-  --accentColor:     #f59e0b;
+  --primaryColor:    #bd93f9; /* purple */
+  --secondaryColor:  #8be9fd; /* cyan */
+  --accentColor:     #ffb86c; /* orange */
 
-  --primaryText:     #e5e7eb;
-  --secondaryText:   #9ca3af;
+  --primaryText:     #f8f8f2; /* foreground */
+  --secondaryText:   #6272a4; /* comment */
 }
+

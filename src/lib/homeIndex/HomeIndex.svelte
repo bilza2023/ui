@@ -1,23 +1,8 @@
 
 <script>
-
-import { onMount } from 'svelte';
-  // import QuestionCard from '../../lib/homeIndex/QuestionCard.svelte';
   import QCard from '../../lib/homeIndex/QCard.svelte';
   export let data;
   const questions = data?.questions ?? [];
-  // let questions = [];
-
-  // onMount(async () => {
-  //   try {
-  //     const res = await fetch('/data/index_syllabus.json');
-  //     if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
-  //     questions = await res.json();
-  //   } catch (err) {
-  //     console.error('Error loading syllabus index:', err);
-  //     // Optionally set questions = [] or show an error state
-  //   }
-  // });
 </script>
 
 <div class="app-container">
@@ -37,3 +22,35 @@ import { onMount } from 'svelte';
     </div>
   </div>
 </div>
+
+
+<style>
+  .app-container {
+    max-width: 2500px;
+    margin-inline: auto;
+    padding: clamp(12px, 2vw, 24px);
+  }
+
+  .layout-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .main-content {
+    flex: 1;
+    background: var(--surfaceColor);
+    border: 1px solid var(--borderColor);
+    border-radius: 16px;
+    padding: clamp(12px, 2vw, 24px);
+    box-shadow:
+      0 1px 1px rgba(0,0,0,.04),
+      0 4px 14px rgba(0,0,0,.08);
+  }
+
+  .questions-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+</style>
