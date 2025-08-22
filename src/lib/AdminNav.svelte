@@ -5,6 +5,7 @@
     <a href="/admin/upload" class="nav-link">📤 Upload</a>
     <a href="/admin/upload_json" class="nav-link">📱 Upload Json</a>
     <a href="/admin/uploadNotes" class="nav-link">📜 Upload Notes</a>
+    <a href="/admin/settings" class="nav-link">🛠️ Settings</a>
     <a href="/admin/workdesk" target="_blank" class="nav-link">🎖️ workdesk</a>
   </nav>
   

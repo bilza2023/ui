@@ -8,7 +8,7 @@
   import SecondaryNav from "$lib/SecondaryNav.svelte";
  
   import { listTcodes } from "../lib/services/synopsisServices";
-
+  export let data;
   let syllabus = [];
   onMount(() => {
 
@@ -31,7 +31,7 @@
 
   <section class="main-section">
     {#if pageDisplayState == 0}
-    <HomeIndex />
+    <HomeIndex {data}/>
     <br>
     <br>
     {:else if pageDisplayState == 1}
