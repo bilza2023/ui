@@ -12,9 +12,7 @@
       <div class="questions-container">
         <!-- Only render once loaded -->
         {#if questions.length}
-          <QCard 
-          {questions} 
-          />
+          <QCard {questions} />
         {:else}
           <p>Loading…</p>
         {/if}

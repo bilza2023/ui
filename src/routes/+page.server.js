@@ -7,7 +7,7 @@ export async function load({ setHeaders }) {
  
   const fromIndexData     = await getSetting('index_data', null);
 
-  console.log("fromIndexData" ,fromIndexData);
+  // console.log("fromIndexData" ,fromIndexData);
   const questions =  fromIndexData ?? [];
 
   // Optional small cache; remove if you want zero caching.
