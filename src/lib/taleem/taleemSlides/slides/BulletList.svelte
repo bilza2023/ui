@@ -2,17 +2,18 @@
   export let data;
   export let currentTime;
 
-  // Reactive statement: recompute on every currentTime change
-  $: visibleBullets = data
-    .filter(item => item.name === "bullet" && item.showAt <= currentTime)
-    .sort((a, b) => a.showAt - b.showAt)
-    .map(item => item.content);
+  // All bullets visible; sort by showAt for stable order
+  $: bullets = (Array.isArray(data) ? data : [])
+    .filter(item => item?.name === "bullet")
+    .sort((a, b) => a.showAt - b.showAt);
 </script>
 
 <div class="slide-container">
   <ul class="bullet-list">
-    {#each visibleBullets as bullet}
-      <li class="bullet-item">{bullet}</li>
+    {#each bullets as b}
+      <li class={`bullet-item ${currentTime >= b.showAt ? 'active' : 'dim'}`}>
+        {b.content}
+      </li>
     {/each}
   </ul>
 </div>
@@ -36,6 +37,15 @@
 
 .bullet-item {
   margin-bottom: 0.8rem;
+}
+
+/* NEW: highlight vs. pre-highlight */
+.bullet-item.dim {
+  opacity: 0.45;
+}
+.bullet-item.active {
+  opacity: 1;
+  font-weight: 700;
 }
 
 @media (max-width: 768px) {

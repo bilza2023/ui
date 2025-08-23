@@ -2,27 +2,29 @@
   export let data;
   export let currentTime;
 
-  $: imageItem = data.find(
-    (d) => d.name === "image" && d.showAt <= currentTime
-  );
+  // Image: always render if present; highlight after its showAt
+  $: imageItem   = (Array.isArray(data) ? data : []).find(d => d?.name === "image");
+  $: imageActive = imageItem ? currentTime >= (imageItem.showAt ?? 0) : false;
 
-  $: bullets = data
-    .filter((d) => d.name === "bullet" && d.showAt <= currentTime)
-    .sort((a, b) => a.showAt - b.showAt)
-    .map((d) => d.content);
+  // Bullets: always render; order by showAt so highlight progresses in time
+  $: bullets = (Array.isArray(data) ? data : [])
+    .filter(d => d?.name === "bullet")
+    .sort((a, b) => a.showAt - b.showAt);
 </script>
 
 <div class="slide-container">
   <div class="bullets-left">
     <ul>
-      {#each bullets as bullet}
-        <li>{bullet}</li>
+      {#each bullets as b}
+        <li class={currentTime >= b.showAt ? 'active' : 'dim'}>
+          {b.content}
+        </li>
       {/each}
     </ul>
   </div>
 
   {#if imageItem}
-    <div class="image-right">
+    <div class={`image-right ${imageActive ? 'img-active' : 'img-dim'}`}>
       <img src={imageItem.content} alt="Slide image" />
     </div>
   {/if}
@@ -63,7 +65,6 @@
 
   .bullets-left li {
     margin-bottom: 0.5em;
-    
   }
 
   /* ───────────────── image column ──────────────── */
@@ -82,4 +83,11 @@
     object-fit: contain;
     border-radius: 12px;
   }
+
+  /* ───────────── NEW: highlight states only ───────────── */
+  .bullets-left li.dim { opacity: 0.45; }
+  .bullets-left li.active { opacity: 1; }
+
+  .image-right.img-dim img { opacity: 0.65; }
+  .image-right.img-active img { opacity: 1; }
 </style>
