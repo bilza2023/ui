@@ -92,7 +92,7 @@
 		</div>
   
 		<section class="cards">
-		  <QuestionCards data={{questions:items}} />
+		  <QuestionCards questions={items} />
 		</section>
 	  </main>
 	</div>

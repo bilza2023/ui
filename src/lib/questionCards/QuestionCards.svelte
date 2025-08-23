@@ -2,11 +2,9 @@
 <script>
   import QCard from './QCard.svelte';
     // Accept either `data` (like old HomeIndex) or direct `questions`
-    export let data = undefined;
     export let questions = [];
     export let loading = false;
-    const qs = (data?.questions ?? questions) ?? [];
-  
+  console.log("questions",questions);
     // Reuse your existing card list
     // adjust the import path if QCard lives elsewhere
   </script>
@@ -14,8 +12,8 @@
   <div class="questions-panel">
     {#if loading}
       <p class="status">Loading…</p>
-    {:else if qs.length}
-      <QCard questions={qs} />
+    {:else if questions.length}
+      <QCard {questions} />
     {:else}
       <p class="status">No items yet.</p>
     {/if}

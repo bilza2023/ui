@@ -21,6 +21,7 @@ model Question {
   description  String?
   tags         Json?
   status       String?                       // draft | ready | hidden
+  thumbnail    String?                       // draft | ready | hidden
   sortOrder    Int?                          // manual ordering inside exercise
   timed        Boolean   @default(false)
 

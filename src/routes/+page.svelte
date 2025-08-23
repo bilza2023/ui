@@ -32,7 +32,7 @@
 
   <section class="main-section">
     {#if pageDisplayState == 0}
-    <QuestionCards {data}/>
+    <QuestionCards questions={data.questions}/>
     <br>
     <br>
     {:else if pageDisplayState == 1}
