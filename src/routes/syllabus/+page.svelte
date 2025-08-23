@@ -2,7 +2,8 @@
 	import { goto } from '$app/navigation';
 	import LeftChaptersBar from './LeftChaptersBar.svelte';
 	import ExNavBar from './ExNavBar.svelte';
-	import QuestionCard from './QuestionCard.svelte';
+	// import QuestionCard from './QuestionCard.svelte';
+	import QuestionCards from "$lib/questionCards/QuestionCards.svelte";
 	// Provided by +page.server.js
 	export let data;
 	import Nav from "$lib/appComps/Nav.svelte"; 
@@ -91,7 +92,7 @@
 		</div>
   
 		<section class="cards">
-		  <QuestionCard {items} />
+		  <QuestionCards data={{questions:items}} />
 		</section>
 	  </main>
 	</div>

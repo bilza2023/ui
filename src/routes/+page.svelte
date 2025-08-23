@@ -4,7 +4,8 @@
   import Nav from "$lib/appComps/Nav.svelte";
   import Sidebar from "$lib/appComps/homepage/Sidebar.svelte";
   import TcodeCard from "$lib/homeIndex/TcodeCard.svelte";
-  import HomeIndex from "$lib/homeIndex/HomeIndex.svelte";
+
+  import QuestionCards from "../lib/questionCards/QuestionCards.svelte";
   import SecondaryNav from "$lib/SecondaryNav.svelte";
  import Footer from "../lib/appComps/Footer.svelte";
   import { listTcodes } from "../lib/services/synopsisServices";
@@ -31,7 +32,7 @@
 
   <section class="main-section">
     {#if pageDisplayState == 0}
-    <HomeIndex {data}/>
+    <QuestionCards {data}/>
     <br>
     <br>
     {:else if pageDisplayState == 1}
