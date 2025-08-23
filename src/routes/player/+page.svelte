@@ -1,83 +1,68 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
-  import { page } from '$app/stores';
   import '$lib/styles/tables.css';
 
+  // UI bits
   import Like from '../../lib/Like.svelte';
   import Comment from '../../lib/Comment.svelte';
-  import { getDeck } from '$lib/services/deckService.js';
+
+  // Taleem module
+  import {
+    TaleemSlides,
+    NavBar,
+    DeckDoctor,
+    clampTime,
+    findSlideIndex,
+    getDeckEnd
+  } from '$lib/taleem';
+
+  // audio utils
   import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
 
-  import { TaleemSlides, NavBar, player_utility } from '$lib/taleem';
-  const { clampTime, findSlideIndex, getDeckEnd } = player_utility;
+  // data from +page.server.js
+  export let data;
+  const { meta, deckRaw } = data;
 
-  // ---- state (single source of truth) ----
-  let deck = null;
+  // ---- build + validate deck (no client fetch) ----
+  let errorMsg = null;
+  let loading = false;                 // no deck fetch → not loading
+  let filename = meta?.filename ?? '';
+
+  let deckObj = null;                  // canonical { version, background?, deck: [] }
+  let deck = [];
   let background = null;
 
+  try {
+    // Wrap legacy array shape if needed, then normalise + validate
+    const candidate = Array.isArray(deckRaw) ? { version: 'deck-v1', deck: deckRaw } : deckRaw;
+    const built = DeckDoctor.build(candidate);
+    const res = DeckDoctor.validate(built);
+
+    if (!res.ok) {
+      errorMsg = (res.errors?.[0]?.message) || 'Invalid deck';
+    } else {
+      deckObj    = res.value;
+      deck       = deckObj.deck || [];
+      background = deckObj.background ?? null;
+    }
+  } catch (e) {
+    errorMsg = e?.message || 'Failed to prepare deck';
+  }
+
+  // ---- playback state ----
   let soundUrl = null;
   let player = null;
 
   let currentTime = 0;
-  let currentSlideIndex = 0;
-  let filename = "";
-  let deckEnd = 0;
+  let currentSlideIndex = findSlideIndex(deck, 0);
+  let deckEnd = getDeckEnd(deck);
 
-  let loading = true;
-  let errorMsg = null;
-
-  async function init() {
-    loading = true;
-    errorMsg = null;
-
-    const params = new URLSearchParams($page.url.search);
-    filename = params.get('filename');
-    if (!filename) {
-      errorMsg = 'Filename parameter is required.';
-      loading = false;
-      return;
-    }
-
-    try {
-      // 1) Load deck
-      const fullDeck = await getDeck(filename); // { version, deck, background? }
-      deck = fullDeck.deck;
-      background = fullDeck.background ?? null;
-
-      // 2) Time boundaries
-      deckEnd = getDeckEnd(deck);
-      currentSlideIndex = findSlideIndex(deck, 0); // ensure first slide renders immediately
-
-      // 3) Auto-detect audio once (client-side), no logging on 404
-      soundUrl = await detectSoundUrl(filename, fetch); // returns '/sounds/<filename>.opus' or null
-
-      // 4) Create timing source (Howler if url, Timer otherwise)
-      player = createSoundPlayer(soundUrl);
-
-      // 5) Ticks → update app state
-      player.onTick((t) => {
-        currentTime = clampTime(deck, t);
-        currentSlideIndex = findSlideIndex(deck, currentTime);
-
-        if (currentTime >= deckEnd) {
-          currentTime = deckEnd;
-          player.pause();
-        }
-      });
-    } catch (err) {
-      errorMsg = err?.message || 'Failed to load deck.';
-    } finally {
-      loading = false;
-    }
-  }
-
-  // Controls
+  // ---- controls ----
   function play()  { player?.play?.(); }
   function pause() { player?.pause?.(); }
   function seek(t) {
     if (!player) return;
     player.seek(t);
-    // immediately reflect in UI (works when paused)
     currentTime = clampTime(deck, t);
     currentSlideIndex = findSlideIndex(deck, currentTime);
   }
@@ -85,32 +70,38 @@
     if (!player) return;
     player.pause();
     player.seek(0);
-    // reflect immediately
     currentTime = 0;
     currentSlideIndex = findSlideIndex(deck, 0);
   }
 
-  onMount(init);
+  // ---- audio init (client-only) ----
+  onMount(async () => {
+    try {
+      soundUrl = await detectSoundUrl(filename, fetch);  // may return null (silent mode)
+      player = createSoundPlayer(soundUrl);
+      player.onTick((t) => {
+        currentTime = clampTime(deck, t);
+        currentSlideIndex = findSlideIndex(deck, currentTime);
+        if (currentTime >= deckEnd) {
+          currentTime = deckEnd;
+          player.pause();
+        }
+      });
+    } catch {
+      // no audio is fine; slides still render
+    }
+  });
+
   onDestroy(() => { player?.destroy?.(); });
 </script>
+
 
 {#if loading}
   <div class="center">Loading…</div>
 {:else if errorMsg}
   <div class="center error">{errorMsg}</div>
 {:else}
-  <!-- <SveltePlayer
-    {deck}
-    {background}
-    {currentTime}
-    {currentSlideIndex}
-    {deckEnd}
-    {soundUrl}
-    onPlay={play}
-    onPause={pause}
-    onStop={stop}
-    onSeek={seek}
-  /> -->
+
     <TaleemSlides
     {deck}
     {currentTime}
