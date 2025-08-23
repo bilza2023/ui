@@ -8,10 +8,8 @@
   import { getDeck } from '$lib/services/deckService.js';
   import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
 
-  import { NavBar, TaleemSlides } from '$lib/taleemPlayer';
-
-  // import TaleemPlayer from '$lib/taleemPlayer/Player.svelte';
-  import { clampTime, findSlideIndex, getDeckEnd } from '$lib/taleemPlayer/player-utility.js';
+  import { TaleemSlides, NavBar, player_utility } from '$lib/taleem';
+  const { clampTime, findSlideIndex, getDeckEnd } = player_utility;
 
   // ---- state (single source of truth) ----
   let deck = null;
