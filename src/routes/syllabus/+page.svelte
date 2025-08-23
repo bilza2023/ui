@@ -178,9 +178,10 @@
 	.cards{
 	  background: color-mix(in oklab, var(--accentColor) 10%, var(--surfaceColor));
 	  min-height:100vh;
+	  width:100%;
 	  display:flex; justify-content:center; align-items:flex-start;
 	  color: var(--primaryText);
-	  padding: 10px;
+	  padding: 5px;
 	}
   
 	@media (max-width: 900px){

@@ -38,26 +38,37 @@
       <p class="no-questions">No questions available for this selection.</p>
     {/if}
   </div>
-  
+
+
+
+
   <style>
+    /* Fill the full width, start from the left */
     .question-grid {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      padding: 0.5rem; /* trimmed */
+      justify-content: flex-start;   /* was center */
+      align-content: flex-start;
+      gap: 1.25rem;
+      padding: 0.5rem 0;             /* less side padding */
       width: 100%;
+      --card-w: 320px;               /* ↑ bigger default card width */
     }
   
     .card {
+      --card-accent: var(--c, var(--accentColor, #6c430b));
+      width: var(--card-w);
+      flex: 0 0 var(--card-w);       /* fixed same width per card */
       display: flex;
       flex-direction: column;
+  
       border-radius: 0.75rem;
       overflow: hidden;
-      border: 2px solid var(--accentColor); /* slimmer border */
+      border: 2px solid var(--card-accent);
       box-shadow: 0 8px 8px rgba(45, 44, 44, 0.8);
-      transition: transform 120ms ease, box-shadow 120ms ease;
       text-decoration: none;
+      background: var(--surfaceColor, #0e0e0e);
+      transition: transform 120ms ease, box-shadow 120ms ease;
     }
   
     .card:hover {
@@ -65,32 +76,48 @@
       box-shadow: 0 10px 10px rgba(21, 42, 0, 0.9);
     }
   
+    /* Taller thumb so overall card looks larger */
     .thumb {
       display: block;
       width: 100%;
-      height: 160px;
+      height: 200px;                 /* was 160px */
       object-fit: cover;
-      background: var(--surfaceColor);
-      /* no extra radius needed; parent overflow handles corners */
+      background: var(--surfaceColor, #0e0e0e);
     }
   
     .title {
-      margin-top: auto;
-      color:  var(--accentColor);
-      background: var(--surfaceColor);
-      padding: 0.45rem 0.6rem; /* tighter */
-      font-size: 0.95rem;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      background: var(--surfaceColor, #0e0e0e);
+      color: var(--card-accent);
+      line-height: 1.2;
+      min-height: 48px;              /* uniform title bar height */
     }
   
-    .icon { font-size: 1.15rem; line-height: 1; }
-    .name { font-size: 1rem; }
+    .icon { font-size: 1.1rem; line-height: 1; flex: 0 0 auto; }
+  
+    /* Truncate long names */
+    .name {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 1rem;
+    }
   
     .no-questions {
       font-size: 1rem;
       text-align: center;
+      opacity: 0.9;
+    }
+  
+    /* Optional: auto-scale card width on small screens */
+    @media (max-width: 480px) {
+      .question-grid { --card-w: 260px; }
+      .thumb { height: 170px; }
     }
   </style>
   

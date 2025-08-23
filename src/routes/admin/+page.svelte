@@ -160,55 +160,71 @@
     {/if}
   </section>
 </div>
-
 <style>
-  /* Warm dark (app-aligned) — page theming only */
-  :root{
-    --bg:#1b1205;
-    --panel:#241706;
-    --panel-2:#2e1c02;
-    --text:#f7ecda;
-    --muted:#c9b598;
-    --line:rgba(255,255,255,0.10);
-    --line-2:rgba(255,255,255,0.16);
-    --hover:rgba(255,255,255,0.04);
-    --accent:#e9b669;
-  }
-  :global(body){ background:var(--bg)!important; color:var(--text); }
+  /* Page theme */
+  :global(body){ background: var(--backgroundColor) !important; color: var(--primaryText); }
 
   .page{ padding:12px; display:flex; flex-direction:column; gap:12px; }
 
-  /* Header */
+  /* Header (legacy .top block) */
   .top{
     display:flex; justify-content:space-between; align-items:center;
-    background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 12px;
+    background: color-mix(in oklab, var(--accentColor) 10%, var(--surfaceColor));
+    border:1px solid var(--borderColor);
+    border-radius:12px; padding:10px 12px;
+    color: var(--primaryText);
   }
-  .left h1{ margin:0; font-size:1.1rem; color:var(--text); }
+  .left h1{ margin:0; font-size:1.1rem; color: var(--primaryText); }
   .totals{ display:flex; gap:8px; margin-top:6px; }
-  .pill{ background:var(--panel-2); color:var(--text); border:1px solid var(--line); border-radius:999px; padding:2px 8px; font-size:12px; }
-  .pill.decks{ background:#20173d; color:#e4e6ff; }
-  .pill.notes{ background:#3a230e; color:#ffe8cc; }
+  .pill{
+    background: color-mix(in oklab, var(--accentColor) 12%, var(--surfaceColor));
+    color: var(--primaryText);
+    border:1px solid var(--borderColor);
+    border-radius:999px; padding:2px 8px; font-size:12px;
+  }
+  .pill.decks{ background: color-mix(in oklab, var(--primaryColor) 16%, var(--surfaceColor)); color: var(--backgroundColor); }
+  .pill.notes{ background: color-mix(in oklab, var(--secondaryColor) 16%, var(--surfaceColor)); color: var(--backgroundColor); }
 
   /* Filters */
   .filters{
     display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-    background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px;
+    background: var(--surfaceColor);
+    border:1px solid var(--borderColor);
+    border-radius:12px; padding:10px;
+    color: var(--secondaryText);
   }
   .search{
-    min-width:280px; padding:6px 10px; border:1px solid var(--line); border-radius:8px;
-    background:var(--panel-2); color:var(--text);
+    min-width:280px; padding:6px 10px;
+    border:1px solid var(--borderColor); border-radius:8px;
+    background: color-mix(in oklab, var(--accentColor) 8%, var(--surfaceColor));
+    color: var(--primaryText);
   }
-  .group{ display:flex; align-items:center; gap:8px; color:var(--muted); }
+  .group{ display:flex; align-items:center; gap:8px; color: var(--secondaryText); }
   .seg{ display:flex; gap:6px; }
   .seg button{
-    padding:4px 10px; border:1px solid var(--line); border-radius:8px; background:var(--panel-2); color:var(--text); cursor:pointer;
+    padding:4px 10px; border:1px solid var(--borderColor); border-radius:8px;
+    background: var(--surfaceColor); color: var(--primaryText); cursor:pointer;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
   }
-  .seg button.active{ background:#3a220d; border-color:var(--line-2); }
+  .seg button:hover{
+    border-color: color-mix(in oklab, var(--primaryColor) 40%, var(--borderColor));
+    background: color-mix(in oklab, var(--accentColor) 10%, var(--surfaceColor));
+  }
+  .seg button.active{
+    background: var(--primaryColor); border-color: var(--primaryColor);
+    color: var(--backgroundColor);
+  }
   select{
-    padding:6px 10px; border:1px solid var(--line); border-radius:8px; background:var(--panel-2); color:var(--text);
+    padding:6px 10px; border:1px solid var(--borderColor); border-radius:8px;
+    background: var(--surfaceColor); color: var(--primaryText);
   }
   .clear{
-    margin-left:auto; padding:6px 10px; border:1px solid var(--line); border-radius:8px; background:var(--panel-2); color:var(--text); cursor:pointer;
+    margin-left:auto; padding:6px 10px; border:1px solid var(--borderColor); border-radius:8px;
+    background: var(--surfaceColor); color: var(--primaryText); cursor:pointer;
+  }
+  .clear:hover{
+    border-color: color-mix(in oklab, var(--primaryColor) 40%, var(--borderColor));
+    background: color-mix(in oklab, var(--accentColor) 10%, var(--surfaceColor));
   }
 
   /* Local override to make this table full-width */
@@ -216,9 +232,9 @@
 
   /* Elements not covered by shared table CSS */
   .badge{
-    background: var(--panel-2);
-    color: var(--text);
-    border:1px solid var(--line);
+    background: color-mix(in oklab, var(--accentColor) 10%, var(--surfaceColor));
+    color: var(--primaryText);
+    border:1px solid var(--borderColor);
     border-radius:999px;
     font-size:12px;
     padding:2px 8px;
@@ -226,80 +242,66 @@
 
   .btn{
     padding:6px 10px;
-    border:1px solid var(--line);
+    border:1px solid var(--borderColor);
     border-radius:8px;
-    background:var(--panel-2);
-    color:var(--text);
+    background: var(--surfaceColor);
+    color: var(--primaryText);
     text-decoration:none;
+    transition: background .15s ease, border-color .15s ease, color .15s ease, transform .12s ease;
   }
   .btn.small{ font-size:12px; padding:4px 8px; }
-  .btn:hover{ background:#3a220d; border-color:var(--line-2); color:var(--accent); }
+  .btn:hover{
+    background: color-mix(in oklab, var(--accentColor) 12%, var(--surfaceColor));
+    border-color: color-mix(in oklab, var(--primaryColor) 40%, var(--borderColor));
+    color: var(--primaryText);
+    transform: translateY(-1px);
+  }
 
-  .empty{ opacity:.7; padding:24px; text-align:center; }
+  .empty{ opacity:.7; padding:24px; text-align:center; color: var(--secondaryText); }
 
   /* Single-line toolbar */
-.top.compact{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:10px 12px;
-}
-
-.top.compact h1{
-  margin:0;
-  font-size:1.1rem;
-  color:var(--text);
-  white-space:nowrap;
-}
-
-.top.compact .controls{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  flex-wrap:nowrap;
-}
-
-.top.compact .search{
-  width:min(420px, 42vw);
-  padding:6px 10px;
-  border:1px solid var(--line);
-  border-radius:8px;
-  background:var(--panel-2);
-  color:var(--text);
-}
-
-.top.compact .sel{
-  padding:6px 10px;
-  border:1px solid var(--line);
-  border-radius:8px;
-  background:var(--panel-2);
-  color:var(--text);
-}
-
-.top.compact .clear{
-  padding:6px 10px;
-  border:1px solid var(--line);
-  border-radius:8px;
-  background:var(--panel-2);
-  color:var(--text);
-  cursor:pointer;
-}
-
-/* Make it wrap gracefully on small screens */
-@media (max-width: 760px){
   .top.compact{
-    flex-wrap:wrap;
-    gap:10px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background: var(--surfaceColor);
+    border:1px solid var(--borderColor);
+    border-radius:12px;
+    padding:10px 12px;
+    color: var(--primaryText);
+  }
+  .top.compact h1{
+    margin:0; font-size:1.1rem; color: var(--primaryText); white-space:nowrap;
   }
   .top.compact .controls{
-    width:100%;
-    flex-wrap:wrap;
+    display:flex; align-items:center; gap:8px; flex-wrap:nowrap;
   }
-  .top.compact .search{ width:100%; }
-}
+  .top.compact .search{
+    width:min(420px, 42vw);
+    padding:6px 10px;
+    border:1px solid var(--borderColor);
+    border-radius:8px;
+    background: var(--surfaceColor);
+    color: var(--primaryText);
+  }
+  .top.compact .sel{
+    padding:6px 10px;
+    border:1px solid var(--borderColor);
+    border-radius:8px;
+    background: var(--surfaceColor);
+    color: var(--primaryText);
+  }
+  .top.compact .clear{
+    padding:6px 10px;
+    border:1px solid var(--borderColor);
+    border-radius:8px;
+    background: var(--surfaceColor);
+    color: var(--primaryText);
+    cursor:pointer;
+  }
 
+  /* Make it wrap gracefully on small screens */
+  @media (max-width: 760px){
+    .top.compact{ flex-wrap:wrap; gap:10px; }
+    .top.compact .controls{ width:100%; flex-wrap:wrap; }
+    .top.compact .search{ width:100%; }
+  }
 </style>

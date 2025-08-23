@@ -2,7 +2,6 @@
 <script>
   import { onMount } from "svelte";
   import Nav from "$lib/appComps/Nav.svelte";
-  import Sidebar from "$lib/appComps/homepage/Sidebar.svelte";
   import TcodeCard from "$lib/homeIndex/TcodeCard.svelte";
 
   import QuestionCards from "../lib/questionCards/QuestionCards.svelte";

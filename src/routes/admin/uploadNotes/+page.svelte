@@ -1,6 +1,8 @@
 <script>
   import Nav from "$lib/appComps/Nav.svelte";
   import AdminNav from "$lib/AdminNav.svelte";
+  import "$lib/styles/forms.css"; // ✅ shared, theme-aware
+
   import {
     listTcodes,
     getChapters,
@@ -10,61 +12,65 @@
 
   // --- Path state (replaces PathPicker) ---
   const tcodes = listTcodes(); // [{ tcodeName, ... }]
-  let tcode = tcodes[0]?.tcodeName ?? '';
+  let tcode = tcodes[0]?.tcodeName ?? "";
   let chapters = [];
-  let chapterSlug = '';
+  let chapterSlug = "";
   let exercises = [];
-  let exerciseSlug = '';
+  let exerciseSlug = "";
   let chapterNo = null;
 
-  // keep your original "path" object in sync (so the rest of your code stays the same)
-  let path = { tcode: '', chapterSlug: '', chapterNo: null, exerciseSlug: '' };
+  // mirror for your existing payload shape
+  let path = { tcode: "", chapterSlug: "", chapterNo: null, exerciseSlug: "" };
 
   // --- Meta ---
-  let status = '';
-  let tagsCsv = '';
-  let description = '';
+  let status = "";
+  let tagsCsv = "";
+  let description = "";
 
   // --- Payload ---
   let file = /** @type {File|null} */ (null);
-  let filename = '';
+  let filename = "";
   let fileEl;
 
   // --- UI ---
   let uploading = false;
-  let msg = '';
-  let err = '';
+  let msg = "";
+  let err = "";
   let dragging = false;
 
-  // Derived: enable/disable submit
+  // enable/disable submit
   $: canSubmit = !!path.tcode && !!path.chapterNo && !!path.exerciseSlug && !!file;
 
   function resetForm() {
-    tcode = tcodes[0]?.tcodeName ?? '';
-    chapterSlug = '';
-    exerciseSlug = '';
-    file = null; filename = '';
-    if (fileEl) fileEl.value = '';
-    status = ''; tagsCsv = ''; description = '';
-    msg = ''; err = '';
+    tcode = tcodes[0]?.tcodeName ?? "";
+    chapterSlug = "";
+    exerciseSlug = "";
+    file = null;
+    filename = "";
+    if (fileEl) fileEl.value = "";
+    status = "";
+    tagsCsv = "";
+    description = "";
+    msg = "";
+    err = "";
   }
 
   function onPick(e) {
-    const picked = (e.target.files && e.target.files[0]) ? e.target.files[0] : null;
+    const picked = e.target?.files?.[0] ?? null;
     file = picked;
-    filename = picked ? picked.name.replace(/\.(html|htm)$/i, '') : '';
+    filename = picked ? picked.name.replace(/\.(html|htm)$/i, "") : "";
   }
   function onDrop(e) {
     e.preventDefault();
     const dropped = e.dataTransfer?.files?.[0] ?? null;
     file = dropped || null;
-    filename = file ? file.name.replace(/\.(html|htm)$/i, '') : '';
+    filename = file ? file.name.replace(/\.(html|htm)$/i, "") : "";
     dragging = false;
   }
   function onDragOver(e) { e.preventDefault(); dragging = true; }
   function onDragLeave() { dragging = false; }
   function onDropKey(e) {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       fileEl?.click();
     }
@@ -72,46 +78,40 @@
 
   // --- Cascading reactivity ---
   $: chapters = tcode ? getChapters(tcode) : [];
-  $: if (!chapters.find(c => c.filename === chapterSlug)) chapterSlug = '';
+  $: if (!chapters.find(c => c.filename === chapterSlug)) chapterSlug = "";
 
   $: chapterNo = (tcode && chapterSlug) ? chapterNoOf(tcode, chapterSlug) : null;
   $: exercises = (tcode && chapterSlug) ? getExercises(tcode, chapterSlug) : [];
-  $: if (!exercises.find(e => e.filename === exerciseSlug)) exerciseSlug = '';
+  $: if (!exercises.find(e => e.filename === exerciseSlug)) exerciseSlug = "";
 
   // mirror into your original "path" object
-  $: path = {
-    tcode,
-    chapterSlug,
-    chapterNo,
-    exerciseSlug
-  };
+  $: path = { tcode, chapterSlug, chapterNo, exerciseSlug };
 
   // --- Upload (unchanged endpoint/payload) ---
   async function upload() {
-    err = ''; msg = '';
-    if (!canSubmit) { err = 'Please fill required fields.'; return; }
+    err = ""; msg = "";
+    if (!canSubmit) { err = "Please fill required fields."; return; }
 
     uploading = true;
     try {
       const fd = new FormData();
-      fd.append('tcode', path.tcode);
-      fd.append('chapter', String(path.chapterNo));
-      fd.append('exercise', path.exerciseSlug);
+      fd.append("tcode", path.tcode);
+      fd.append("chapter", String(path.chapterNo));
+      fd.append("exercise", path.exerciseSlug);
 
-      if (status.trim())       fd.append('status', status.trim());
-      if (tagsCsv.trim())      fd.append('tags', tagsCsv.trim());
-      if (description.trim())  fd.append('description', description.trim());
+      if (status.trim())      fd.append("status", status.trim());
+      if (tagsCsv.trim())     fd.append("tags", tagsCsv.trim());
+      if (description.trim()) fd.append("description", description.trim());
 
-      fd.append('file', file);
-      fd.append('filename', filename || file.name.replace(/\.(html|htm)$/i, ''));
+      fd.append("file", file);
+      fd.append("filename", filename || file.name.replace(/\.(html|htm)$/i, ""));
 
-      const res = await fetch('/admin/uploadNotes', { method: 'POST', body: fd });
+      const res  = await fetch("/admin/uploadNotes", { method: "POST", body: fd });
       const data = await res.json();
-
-      if (!res.ok) err = data?.error ?? 'Upload failed.';
+      if (!res.ok) err = data?.error ?? "Upload failed.";
       else { msg = `Uploaded ${data?.uploaded ?? 1} note.`; resetForm(); }
     } catch (e) {
-      err = e?.message ?? 'Network error.';
+      err = e?.message ?? "Network error.";
     } finally {
       uploading = false;
     }
@@ -127,12 +127,11 @@
     <p>Select the path, drop your <code>.html</code> file, add optional meta, then upload.</p>
   </header>
 
-  <form class="card" on:submit|preventDefault={upload}>
-    <!-- Path (cascading) -->
+  <form class="form upload-form" on:submit|preventDefault={upload}>
+    <!-- Path -->
     <fieldset class="block">
       <legend>Path</legend>
       <div class="form-grid">
-        <!-- Tcode -->
         <div class="field">
           <label for="tcode">Tcode</label>
           <select id="tcode" bind:value={tcode}>
@@ -146,7 +145,6 @@
           </select>
         </div>
 
-        <!-- Chapter (slug) -->
         <div class="field">
           <label for="chapterSlug">Chapter</label>
           <select id="chapterSlug" bind:value={chapterSlug} disabled={!tcode || !chapters.length}>
@@ -160,7 +158,6 @@
           {/if}
         </div>
 
-        <!-- Exercise (slug) -->
         <div class="field">
           <label for="exerciseSlug">Exercise</label>
           <select id="exerciseSlug" bind:value={exerciseSlug} disabled={!chapterSlug || !exercises.length}>
@@ -238,8 +235,8 @@
 
     <!-- Actions & messages -->
     <div class="actions">
-      <button class="btn-primary" type="submit" disabled={uploading || !canSubmit}>
-        {uploading ? 'Uploading…' : 'Upload'}
+      <button class="primary" type="submit" disabled={uploading || !canSubmit}>
+        {uploading ? "Uploading…" : "Upload"}
       </button>
       <button type="button" class="btn" on:click={resetForm} disabled={uploading}>Clear</button>
 
@@ -252,46 +249,104 @@
 </section>
 
 <style>
-  .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px; }
-  .pagehead h1 { font-size: 1.5rem; font-weight: 700; margin: 0 0 .25rem; }
-  .pagehead p { opacity: .75; margin: 0 0 1rem; font-size: .95rem; }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    color: var(--primaryText);
+  }
 
-  .card { background: #0f0f11; border: 1px solid #26262b; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.35); padding: 20px; }
+  .pagehead h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 .25rem;
+    color: var(--primaryText);
+  }
+  .pagehead p {
+    margin: 0 0 1rem;
+    font-size: .95rem;
+    color: var(--secondaryText);
+  }
+  .pagehead code {
+    background: color-mix(in oklab, var(--accentColor) 14%, var(--surfaceColor));
+    border: 1px solid var(--borderColor);
+    border-radius: 6px;
+    padding: 1px 6px;
+    color: var(--primaryText);
+  }
+
+  /* Panel tone (forms.css provides the base look) */
+  .upload-form {
+    background: var(--surfaceColor);
+    border-color: var(--borderColor);
+  }
+
   .block + .block { margin-top: 18px; }
-  .block > legend { font-size: .9rem; letter-spacing: .02em; opacity: .8; margin-bottom: 10px; padding: 0 4px; }
+  .block > legend {
+    font-size: .9rem;
+    letter-spacing: .02em;
+    color: var(--secondaryText);
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
 
+  /* Grids */
   .form-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
   .form-grid.two { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 
-  .field label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .35rem; color: #c9c9d1; }
-  .field input, .field select, .field textarea { width: 100%; padding: .6rem .7rem; border: 1px solid #36363b; border-radius: .55rem; background: #121217; color: #f0f0f3; transition: border-color .15s, box-shadow .15s; }
-  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #bfa074; box-shadow: 0 0 0 3px rgba(191,160,116,.2); }
-
+  /* Dropzone layout */
   .dropgrid { display: grid; gap: 14px; grid-template-columns: 1.2fr .8fr; }
   @media (max-width: 820px) { .dropgrid { grid-template-columns: 1fr; } }
 
-  .dropzone { position: relative; min-height: 130px; border: 2px dashed #3a3a40; border-radius: 14px; background: linear-gradient(180deg, #111114, #0f0f12); display: flex; align-items: center; gap: 14px; padding: 14px 16px; cursor: pointer; }
-  .dropzone.is-dragging { border-color: #bfa074; background: radial-gradient(1000px 200px at 50% -200px, rgba(191,160,116,.15), transparent 70%), linear-gradient(180deg, #111114, #0f0f12); }
-  .dz-icon { font-size: 1.4rem; width: 2.5rem; height: 2.5rem; line-height: 2.5rem; text-align: center; border-radius: 12px; border: 1px solid #3a3a40; background: #141418; color: #d9d3c7; flex: 0 0 auto; }
+  /* Dropzone (token-only) */
+  .dropzone {
+    position: relative;
+    min-height: 130px;
+    border: 2px dashed var(--borderColor);
+    border-radius: 14px;
+    background:
+      radial-gradient(1000px 200px at 50% -300px, color-mix(in oklab, var(--accentColor) 10%, transparent), transparent 70%),
+      linear-gradient(180deg, color-mix(in oklab, var(--accentColor) 6%, var(--surfaceColor)), var(--surfaceColor));
+    display: flex; align-items: center; gap: 14px; padding: 14px 16px; cursor: pointer;
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .dropzone.is-dragging {
+    border-color: color-mix(in oklab, var(--primaryColor) 55%, var(--borderColor));
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--primaryColor) 20%, var(--backgroundColor));
+    background:
+      radial-gradient(1000px 200px at 50% -300px, color-mix(in oklab, var(--primaryColor) 18%, transparent), transparent 70%),
+      linear-gradient(180deg, color-mix(in oklab, var(--primaryColor) 10%, var(--surfaceColor)), var(--surfaceColor));
+  }
+
+  .dz-icon {
+    font-size: 1.4rem;
+    width: 2.5rem; height: 2.5rem; line-height: 2.5rem; text-align: center;
+    border-radius: 12px;
+    border: 1px solid var(--borderColor);
+    background: var(--surfaceColor);
+    color: var(--primaryText);
+    flex: 0 0 auto;
+  }
   .dz-text { display: flex; flex-direction: column; }
-  .dz-text strong { font-weight: 700; font-size: .95rem; }
-  .dz-text small { opacity: .7; margin-top: 2px; }
+  .dz-text strong { font-weight: 700; font-size: .95rem; color: var(--primaryText); }
+  .dz-text small { color: var(--secondaryText); margin-top: 2px; }
+
   .hidden-input { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
 
   .sidegrid { display: grid; gap: 12px; grid-template-columns: 1fr; }
 
+  /* Actions/messages (buttons base from forms.css) */
   .actions { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
-  .btn-primary { background: #bfa074; color: #0e0e10; font-weight: 700; padding: .6rem 1rem; border: 1px solid #bfa074; border-radius: .6rem; transition: transform .05s ease, filter .15s ease; }
-  .btn-primary:hover { filter: brightness(1.05); }
-  .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
-  .btn-primary:active { transform: translateY(1px); }
-
-  .btn { background: #18181c; color: #f0f0f3; border: 1px solid #2b2b31; padding: .6rem 1rem; border-radius: .6rem; }
-  .btn[disabled] { opacity: .55; cursor: default; }
 
   .note { padding: .45rem .6rem; border-radius: .5rem; font-size: .9rem; border: 1px solid transparent; }
-  .note.ok { color: #c7f5cf; background: #0f1c12; border-color: #1c3b24; }
-  .note.err { color: #ffd6d6; background: #2a1111; border-color: #5c1f1f; }
-
-  .hint { margin-top: 6px; font-size: .8rem; opacity: .65; }
+  .note.ok {
+    color: var(--primaryText);
+    background: color-mix(in oklab, var(--secondaryColor) 12%, var(--surfaceColor));
+    border-color: color-mix(in oklab, var(--secondaryColor) 40%, var(--borderColor));
+  }
+  .note.err {
+    color: var(--primaryText);
+    background: color-mix(in oklab, var(--accentColor) 14%, var(--surfaceColor));
+    border-color: color-mix(in oklab, var(--accentColor) 50%, var(--borderColor));
+  }
 </style>

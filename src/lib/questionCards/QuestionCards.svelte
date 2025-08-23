@@ -4,7 +4,7 @@
     // Accept either `data` (like old HomeIndex) or direct `questions`
     export let questions = [];
     export let loading = false;
-  console.log("questions",questions);
+  // console.log("questions",questions);
     // Reuse your existing card list
     // adjust the import path if QCard lives elsewhere
   </script>

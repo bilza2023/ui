@@ -1,6 +1,8 @@
 <script>
   import Nav from "$lib/appComps/Nav.svelte";
   import AdminNav from "$lib/AdminNav.svelte";
+  import '$lib/styles/forms.css'; // ✅ shared, theme-aware form styles
+
   import {
     listTcodes,
     getChapters,
@@ -11,7 +13,7 @@
   // populate once (client-safe)
   const tcodes = listTcodes();                      // [{ tcodeName, ... }]
   // form state
-  let tcode = tcodes[0]?.tcodeName ?? '';          // default to first if available
+  let tcode = tcodes[0]?.tcodeName ?? '';
 
   // cascading view-model (slugs for selects)
   let chapters = [];
@@ -19,9 +21,9 @@
   let exercises = [];
   let exerciseSlug = '';
 
-  // original fields (kept for your existing upload() body)
-  let chapter = '';     // numeric (as string) — auto-filled from chapterSlug
-  let exercise = '';    // slug — mirrors exerciseSlug
+  // original fields (kept for upload() body)
+  let chapter = '';    // numeric (string)
+  let exercise = '';   // slug
 
   let file = null;
   let filename = '';
@@ -59,25 +61,21 @@
     file = f;
     filename = f ? toSafeName(f.name) : '';
   }
-
   function onDragOver(e) { e.preventDefault(); dragging = true; }
   function onDragLeave() { dragging = false; }
 
   // ---------- cascading reactivity ----------
-  // 1) Load chapters when tcode changes; reset child selections if invalid
   $: chapters = tcode ? getChapters(tcode) : [];
   $: if (!chapters.find(c => c.filename === chapterSlug)) {
     chapterSlug = '';
   }
 
-  // 2) When chapterSlug changes, compute numeric chapter and load exercises
   $: chapter = (tcode && chapterSlug) ? String(chapterNoOf(tcode, chapterSlug)) : '';
   $: exercises = (tcode && chapterSlug) ? getExercises(tcode, chapterSlug) : [];
   $: if (!exercises.find(e => e.filename === exerciseSlug)) {
     exerciseSlug = '';
   }
 
-  // 3) Mirror exerciseSlug into the original `exercise` field
   $: exercise = exerciseSlug;
 
   async function upload() {
@@ -91,8 +89,8 @@
     try {
       const fd = new FormData();
       fd.append('tcode', tcode.trim());
-      fd.append('chapter', String(parseInt(chapter, 10))); // numeric chapter
-      fd.append('exercise', exercise.trim());              // exercise slug
+      fd.append('chapter', String(parseInt(chapter, 10)));
+      fd.append('exercise', exercise.trim());
       fd.append('file', file);
       fd.append('filename', toSafeName(filename || file.name));
       if (description) fd.append('description', description);
@@ -125,7 +123,7 @@
   </header>
 
   <form
-    class="card"
+    class="form upload-form"
     on:drop={onDrop}
     on:dragover={onDragOver}
     on:dragleave={onDragLeave}
@@ -192,6 +190,7 @@
       <legend>File</legend>
 
       <div class="dropgrid">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
           class={"dropzone " + (dragging ? "is-dragging" : "")}
           role="button"
@@ -256,7 +255,7 @@
       <button
         on:click|preventDefault={upload}
         disabled={loading}
-        class="btn-primary"
+        class="primary"
       >
         {loading ? 'Uploading…' : 'Upload JSON'}
       </button>
@@ -270,42 +269,107 @@
 </section>
 
 <style>
-  .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px; }
-  .pagehead h1 { font-size: 1.5rem; font-weight: 700; margin: 0 0 .25rem; }
-  .pagehead p { opacity: .75; margin: 0 0 1rem; font-size: .95rem; }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    color: var(--primaryText);
+  }
 
-  .card { background: #0f0f11; border: 1px solid #26262b; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.35); padding: 20px; }
+  .pagehead h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 .25rem;
+    color: var(--primaryText);
+  }
+  .pagehead p {
+    margin: 0 0 1rem;
+    font-size: .95rem;
+    color: var(--secondaryText);
+  }
+  .pagehead code {
+    background: color-mix(in oklab, var(--accentColor) 14%, var(--surfaceColor));
+    border: 1px solid var(--borderColor);
+    border-radius: 6px;
+    padding: 1px 6px;
+    color: var(--primaryText);
+  }
+
+  /* Panel tone (leaves base look to forms.css) */
+  .upload-form {
+    background: var(--surfaceColor);
+    border-color: var(--borderColor);
+  }
+
   .block + .block { margin-top: 18px; }
-  .block > legend { font-size: .9rem; letter-spacing: .02em; opacity: .8; margin-bottom: 10px; padding: 0 4px; }
+  .block > legend {
+    font-size: .9rem;
+    letter-spacing: .02em;
+    color: var(--secondaryText);
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
 
+  /* Grid helpers */
   .form-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
   .form-grid.two { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 
-  .field label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .35rem; color: #c9c9d1; }
-  .field input, .field select { width: 100%; padding: .6rem .7rem; border: 1px solid #36363b; border-radius: .55rem; background: #121217; color: #f0f0f3; transition: border-color .15s, box-shadow .15s; }
-  .field input:focus, .field select:focus { outline: none; border-color: #bfa074; box-shadow: 0 0 0 3px rgba(191,160,116,.2); }
-
+  /* Dropzone layout */
   .dropgrid { display: grid; gap: 14px; grid-template-columns: 1.2fr .8fr; }
   @media (max-width: 820px) { .dropgrid { grid-template-columns: 1fr; } }
 
-  .dropzone { position: relative; min-height: 130px; border: 2px dashed #3a3a40; border-radius: 14px; background: linear-gradient(180deg, #111114, #0f0f12); display: flex; align-items: center; gap: 14px; padding: 14px 16px; cursor: pointer; }
-  .dropzone.is-dragging { border-color: #bfa074; background: radial-gradient(1000px 200px at 50% -200px, rgba(191,160,116,.15), transparent 70%), linear-gradient(180deg, #111114, #0f0f12); }
-  .dz-icon { font-size: 1.4rem; width: 2.5rem; height: 2.5rem; line-height: 2.5rem; text-align: center; border-radius: 12px; border: 1px solid #3a3a40; background: #141418; color: #d9d3c7; flex: 0 0 auto; }
+  /* Dropzone (token-only) */
+  .dropzone {
+    position: relative;
+    min-height: 130px;
+    border: 2px dashed var(--borderColor);
+    border-radius: 14px;
+    background:
+      radial-gradient(1000px 200px at 50% -300px, color-mix(in oklab, var(--accentColor) 10%, transparent), transparent 70%),
+      linear-gradient(180deg, color-mix(in oklab, var(--accentColor) 6%, var(--surfaceColor)), var(--surfaceColor));
+    display: flex; align-items: center; gap: 14px; padding: 14px 16px; cursor: pointer;
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .dropzone.is-dragging {
+    border-color: color-mix(in oklab, var(--primaryColor) 55%, var(--borderColor));
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--primaryColor) 20%, var(--backgroundColor));
+    background:
+      radial-gradient(1000px 200px at 50% -300px, color-mix(in oklab, var(--primaryColor) 18%, transparent), transparent 70%),
+      linear-gradient(180deg, color-mix(in oklab, var(--primaryColor) 10%, var(--surfaceColor)), var(--surfaceColor));
+  }
+
+  .dz-icon {
+    font-size: 1.4rem;
+    width: 2.5rem; height: 2.5rem; line-height: 2.5rem; text-align: center;
+    border-radius: 12px;
+    border: 1px solid var(--borderColor);
+    background: var(--surfaceColor);
+    color: var(--primaryText);
+    flex: 0 0 auto;
+  }
   .dz-text { display: flex; flex-direction: column; }
-  .dz-text strong { font-weight: 700; font-size: .95rem; }
-  .dz-text small { opacity: .7; margin-top: 2px; }
+  .dz-text strong { font-weight: 700; font-size: .95rem; color: var(--primaryText); }
+  .dz-text small { color: var(--secondaryText); margin-top: 2px; }
+
   .hidden-input { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
 
   .sidegrid { display: grid; gap: 12px; grid-template-columns: 1fr; }
 
+  /* Actions: buttons come from forms.css; just spacing here */
   .actions { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
-  .btn-primary { background: #bfa074; color: #0e0e10; font-weight: 700; padding: .6rem 1rem; border: 1px solid #bfa074; border-radius: .6rem; transition: transform .05s ease, filter .15s ease; }
-  .btn-primary:hover { filter: brightness(1.05); }
-  .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
-  .btn-primary:active { transform: translateY(1px); }
 
-  .note { padding: .45rem .6rem; border-radius: .5rem; font-size: .9rem; border: 1px solid transparent; }
-  .note.ok { color: #c7f5cf; background: #0f1c12; border-color: #1c3b24; }
-  .note.err { color: #ffd6d6; background: #2a1111; border-color: #5c1f1f; }
-  .hint { margin-top: 6px; font-size: .8rem; opacity: .65; }
+  /* Notes (success/error) */
+  .note {
+    padding: .45rem .6rem; border-radius: .5rem; font-size: .9rem; border: 1px solid transparent;
+  }
+  .note.ok {
+    color: var(--primaryText);
+    background: color-mix(in oklab, var(--secondaryColor) 12%, var(--surfaceColor));
+    border-color: color-mix(in oklab, var(--secondaryColor) 40%, var(--borderColor));
+  }
+  .note.err {
+    color: var(--primaryText);
+    background: color-mix(in oklab, var(--accentColor) 14%, var(--surfaceColor));
+    border-color: color-mix(in oklab, var(--accentColor) 50%, var(--borderColor));
+  }
 </style>

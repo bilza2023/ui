@@ -1,8 +1,9 @@
 <!-- src/routes/admin/delete/+page.svelte -->
 <script>
-   import Nav from "$lib/appComps/Nav.svelte";
-  import AdminNav from "../../../lib/AdminNav.svelte";
+  import Nav from "$lib/appComps/Nav.svelte";
+  import AdminNav from "$lib/AdminNav.svelte";
   import { onMount } from 'svelte';
+  import '$lib/styles/forms.css';  // ✅ shared form styles
 
   let filename = '';
   let message = '';
@@ -20,16 +21,13 @@
     const formData = new FormData();
     formData.append('filename', filename);
 
-    const res = await fetch('', {
-      method: 'POST',
-      body: formData
-    });
+    const res = await fetch('', { method: 'POST', body: formData });
+    const result = await res.json().catch(() => ({}));
 
-    const result = await res.json();
-    if (result.success) {
+    if (result?.success) {
       message = 'Deck deleted.';
     } else {
-      message = result.error || 'Deletion failed.';
+      message = result?.error || 'Deletion failed.';
     }
 
     busy = false;
@@ -39,77 +37,71 @@
 <Nav />
 <AdminNav />
 
-<div class="container">
-  <div class="confirm-card">
+<div class="page">
+  <div class="form confirm">
     <h2>Are you sure you want to delete:</h2>
     <p class="filename"><strong>{filename}</strong></p>
-    <button on:click={handleDelete} disabled={busy}>
-      Delete This Deck
-    </button>
+
+    <div class="actions">
+      <button class="danger" on:click={handleDelete} disabled={busy} aria-busy={busy}>
+        {#if busy}Deleting…{/if}{#if !busy}Delete This Deck{/if}
+      </button>
+    </div>
   </div>
 
   {#if message}
-    <div class="message-card">
+    <div class="form message-card">
       <p class="message">{message}</p>
     </div>
   {/if}
 </div>
 
 <style>
-  :global(body) {
-    background-color: #1e1e1e;
-    color: #f0f0f0;
-    font-family: sans-serif;
+  .page {
+    max-width: 700px;
+    min-height: 100vh;
+    margin: 24px auto;
+    padding: 0 16px;
+    color: var(--primaryText);
   }
 
-  .container {
-    max-width: 600px;
-    margin: 2rem auto;
+  /* Panel tweaks (forms.css gives the base look) */
+  .form.confirm {
     text-align: center;
-  }
-
-  .confirm-card,
-  .message-card {
-    margin: 3rem auto;
-    background-color: #2c2c2c;
-    padding: 2rem;
-    max-width: 500px;
-    border: 2px solid #facc15;
-    border-radius: 1rem;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .confirm-card h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    background: color-mix(in oklab, var(--accentColor) 6%, var(--surfaceColor));
+    border-color: color-mix(in oklab, var(--accentColor) 35%, var(--borderColor));
   }
 
   .filename {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: var(--secondaryText);
+    margin: 0.25rem 0 1rem;
   }
 
-  button {
-    padding: 0.75rem 1.5rem;
-    background-color: #e53e3e;
-    color: #fff;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    font-size: 1.25rem;
+  /* Danger button variant (scoped to .form to avoid global impact) */
+  .form .danger {
+    background: var(--accentColor);
+    border-color: var(--accentColor);
+    color: var(--backgroundColor);
   }
-
-  button:disabled {
-    opacity: 0.6;
+  .form .danger:hover {
+    background: color-mix(in oklab, var(--backgroundColor) 12%, var(--accentColor));
+  }
+  .form button:disabled {
+    opacity: 0.65;
     cursor: not-allowed;
+    transform: none;
   }
 
+  /* Result message card */
+  .message-card {
+    text-align: center;
+    background: color-mix(in oklab, var(--accentColor) 6%, var(--surfaceColor));
+    border-color: color-mix(in oklab, var(--accentColor) 35%, var(--borderColor));
+  }
   .message-card .message {
-    font-size: 2.5rem;
-    color: #facc15;
     margin: 0;
+    font-size: 1.4rem;
+    color: var(--accentColor);
   }
 </style>

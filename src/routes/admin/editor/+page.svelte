@@ -128,7 +128,6 @@
         throw new Error(body.error || res.statusText);
       }
       deck = await res.json();
-      console.log("deck" , deck);
       deckLoaded = true;
     } catch (e) {
       error = (e as Error).message;
@@ -151,21 +150,12 @@
 </script>
 
 <Nav />
-<h1 style="width: 100%; border: 2px solid #facc15; border-radius: 0.375rem; text-align: center; font-size: 1.2rem; padding:6px; margin:2px; background-color: #0f4502">
-  💡 Timing Page
-</h1>
 
-<div class="timing-actions" style="margin: 1rem 0;">
-  <button on:click={saveTimings} class="btn">
-    Save
-  </button>
-  <button
-    on:click={saveAndDownload}
-    class="btn"
-    style="margin-left: 0.5rem;"
-  >
-    Save and Download
-  </button>
+<h1 class="banner">💡 Timing Page</h1>
+
+<div class="timing-actions">
+  <button on:click={saveTimings} class="btn">Save</button>
+  <button on:click={saveAndDownload} class="btn">Save and Download</button>
 </div>
 
 {#if error}
@@ -178,9 +168,7 @@
       <audio bind:this={audio} src={soundUrl} controls class="w-full"></audio>
     </div>
   {:else}
-    <h1 style="width: 100%; border: 2px solid #facc15; border-radius: 0.375rem; text-align: center; font-size: 1.2rem; padding:6px; margin:2px; background-color: #0f4502">
-      💡 Sound not found
-    </h1>
+    <h1 class="banner">💡 Sound not found</h1>
   {/if}
 
   <div class="time-display">
@@ -192,7 +180,7 @@
       <div class="slide-header">
         <strong>Slide {slideIndex + 1} — {slide.type}</strong>
         <button
-          class="set-start"
+          class="btn set-start"
           on:click={() => setSlideStart(slideIndex)}
           disabled={slideIndex === 0}
         >
@@ -202,34 +190,32 @@
 
       {#each slide.data as item, itemIndex}
         <div class="item">
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <div class="item-row">
             <span>showAt:</span>
             <input type="number" bind:value={item.showAt} step="0.0" />
-            <button class="set-show-zero" on:click={() => setShowAtZero(item)}>
-              0
-            </button>
-            <button class="set-show" on:click={() => setShowAt(item)}>
-              Now
-            </button>
-            <span class="bg-red-950 ">{item.name || item.type}:</span>
+            <button class="btn set-show-zero" on:click={() => setShowAtZero(item)}>0</button>
+            <button class="btn set-show" on:click={() => setShowAt(item)}>Now</button>
+
+            <span class="tag">{item.name || item.type}:</span>
             <input type="text" bind:value={item.content} placeholder="Edit content" />
-            <button class="delete-item" on:click={() => deleteItem(slideIndex, itemIndex)}>
+
+            <button class="btn delete-item" on:click={() => deleteItem(slideIndex, itemIndex)}>
               Delete
             </button>
           </div>
         </div>
       {/each}
 
-      <div style="display: flex; align-items: center; margin-top: 0.5rem;">
+      <div class="slide-controls">
         <label>
           Start:
           <input type="number" bind:value={slide.start} step="0.01" />
         </label>
-        <label style="margin-left: 1rem;">
+        <label>
           End:
           <input type="number" bind:value={slide.end} step="0.01" />
         </label>
-        <button class="set-end" on:click={() => setSlideEnd(slideIndex)}>
+        <button class="btn set-end" on:click={() => setSlideEnd(slideIndex)}>
           Set End = Now
         </button>
       </div>
@@ -237,95 +223,185 @@
   {/each}
 {/if}
 
-
-<button
-on:click={addSlide}
-class="btn"
-style="margin-left: 0.5rem; background-color: #2563eb;"
->
-➕ Add Slide
-</button>
+<button on:click={addSlide} class="btn primary add-slide">➕ Add Slide</button>
 
 <style>
+  /* Page baseline */
   :global(body) {
-    background-color: #1f2937; /* gray-800 */
-    color: #f3f4f6; /* gray-100 */
+    background: var(--backgroundColor);
+    color: var(--primaryText);
   }
+
+  .banner {
+    width: 100%;
+    border: 2px solid var(--accentColor);
+    border-radius: 0.5rem;
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 6px;
+    margin: 8px 2px;
+    background: color-mix(in oklab, var(--accentColor) 10%, var(--surfaceColor));
+    color: var(--primaryText);
+  }
+
+  .timing-actions {
+    margin: 1rem 0;
+  }
+  .timing-actions .btn + .btn { margin-left: 0.5rem; }
+
   .audio-panel {
     padding: 1rem;
   }
+
   .time-display {
     padding: 0 1rem 1rem;
     font-size: 0.875rem;
-    color: #a0aec0; /* gray-400 */
+    color: var(--secondaryText);
   }
+
   .slide {
     padding: 1rem;
-    border-bottom: 1px solid #374151; /* gray-700 */
+    border-bottom: 1px solid var(--borderColor);
   }
+
   .slide-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+
   .item {
-    padding-left: 1.5rem;
-    font-size: 0.875rem;
-    color: #e5e7eb; /* gray-200 */
     margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--primaryText);
   }
-  input[type="number"], input[type="text"] {
-    width: 4.5rem;
-    background-color: #374151;
-    color: #f3f4f6;
-    border: none;
-    padding: 0.25rem;
+  .item-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Inputs */
+  input[type="number"],
+  input[type="text"] {
+    background: var(--surfaceColor);
+    color: var(--primaryText);
+    border: 1px solid var(--borderColor);
+    padding: 0.25rem 0.4rem;
     border-radius: 0.25rem;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  input[type="number"] {
+    width: 4.5rem;
     text-align: right;
   }
   input[type="text"] {
-    width: 100%; /* Make text input full width for better editing */
+    width: 100%;
     text-align: left;
   }
-  button {
-    margin-left: 0.5rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    background-color: #4a5568; /* gray-600 */
-    color: #edf2f7;
-    border: none;
+  input[type="number"]:focus,
+  input[type="text"]:focus {
+    outline: none;
+    border-color: color-mix(in oklab, var(--primaryColor) 50%, var(--borderColor));
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--primaryColor) 25%, var(--backgroundColor));
+  }
+
+  /* Small label/tag next to inputs */
+  .tag {
+    display: inline-block;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.35rem;
+    background: color-mix(in oklab, var(--accentColor) 14%, var(--surfaceColor));
+    color: var(--primaryText);
+    border: 1px solid var(--borderColor);
+    margin-left: 0.25rem;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.35rem;
+    background: var(--surfaceColor);
+    color: var(--primaryText);
+    border: 1px solid var(--borderColor);
     cursor: pointer;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
+    transition: background .15s, border-color .15s, color .15s, transform .12s;
   }
-  button:hover {
-    background-color: #2d3748; /* gray-700 */
+  .btn:hover {
+    background: color-mix(in oklab, var(--accentColor) 12%, var(--surfaceColor));
+    border-color: color-mix(in oklab, var(--primaryColor) 40%, var(--borderColor));
+    transform: translateY(-1px);
   }
-  button.set-start {
-    background-color: #6b7280; /* gray-500 */
-  }
-  button.set-start:disabled {
+  .btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
   }
-  button.set-end {
-    font-size: smaller;
-    background-color: #16a34a; /* green-600 */
+
+  /* Variants */
+  .btn.primary,
+  .add-slide {
+    background: var(--primaryColor);
+    border-color: var(--primaryColor);
+    color: var(--backgroundColor);
   }
-  button.set-show {
-    background-color: #7c3607; /* blue-500 */
+  .btn.primary:hover,
+  .add-slide:hover {
+    background: color-mix(in oklab, var(--backgroundColor) 12%, var(--primaryColor));
   }
-  button.set-show-zero {
-    background-color: #11038f; /* blue-500 */
+
+  .set-start { /* neutral/secondary surface tint */ }
+  .set-end {
+    background: var(--secondaryColor);
+    border-color: var(--secondaryColor);
+    color: var(--backgroundColor);
   }
-  button.delete-item {
-    background-color: #e53e3e; /* red-600 */
+  .set-end:hover {
+    background: color-mix(in oklab, var(--backgroundColor) 12%, var(--secondaryColor));
   }
+
+  .set-show {
+    background: var(--primaryColor);
+    border-color: var(--primaryColor);
+    color: var(--backgroundColor);
+  }
+  .set-show:hover {
+    background: color-mix(in oklab, var(--backgroundColor) 12%, var(--primaryColor));
+  }
+
+  .set-show-zero {
+    background: color-mix(in oklab, var(--accentColor) 26%, var(--surfaceColor));
+    border-color: color-mix(in oklab, var(--accentColor) 50%, var(--borderColor));
+    color: var(--primaryText);
+  }
+  .set-show-zero:hover {
+    background: color-mix(in oklab, var(--accentColor) 36%, var(--surfaceColor));
+  }
+
+  .delete-item {
+    background: color-mix(in oklab, var(--accentColor) 80%, var(--surfaceColor));
+    border-color: color-mix(in oklab, var(--accentColor) 80%, var(--borderColor));
+    color: var(--backgroundColor);
+  }
+  .delete-item:hover {
+    background: color-mix(in oklab, var(--backgroundColor) 12%, color-mix(in oklab, var(--accentColor) 80%, var(--surfaceColor)));
+  }
+
+  .slide-controls {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
   .centered {
     text-align: center;
     margin-top: 2rem;
   }
   .error {
-    color: #e53e3e; /* red-600 */
+    color: color-mix(in oklab, var(--accentColor) 80%, var(--primaryText));
     text-align: center;
     margin-top: 1rem;
   }

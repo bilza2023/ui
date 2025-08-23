@@ -57,7 +57,7 @@ export async function getExerciseContent(tcode, chapterSlug, exerciseSlug, opts 
     skip: opts.offset ?? 0,
     take: opts.limit ?? 200,
     select: {
-      filename: true, type: true, name: true, description: true, status: true, tags: true,
+      filename: true, thumbnail: true, type: true, name: true, description: true, status: true, tags: true,
       sortOrder: true, timed: true, createdAt: true, editedAt: true
     }
   });

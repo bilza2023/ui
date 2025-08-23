@@ -122,5 +122,5 @@
   .center { display:flex; align-items:center; justify-content:center; height:100vh; color:#666; }
   .error { color:#b00020; }
   .flex{display:flex}.items-center{align-items:center}.justify-center{justify-content:center}.h-full{height:100%}
-  .doctor-wrap { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #333; }
+  .doctor-wrap { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #333;padding:40px; }
 </style>
