@@ -13,6 +13,6 @@
 
 <SvelteToast {options} />
 
-<div class="min-h-screen h-full">
+<div class="min-h-screen h-full ">
   <slot></slot>
 </div>

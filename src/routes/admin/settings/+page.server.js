@@ -1,11 +1,21 @@
+// src/routes/admin/settings/+page.server.js
 import { fail } from '@sveltejs/kit';
 import { setSetting } from '$lib/services/AppServices.js';
+
+const ALLOWED_KEYS = new Set(['index_data', 'blog_index']); // add more if needed
 
 export const actions = {
   default: async ({ request }) => {
     const data = await request.formData();
-    const file = data.get('index_json');
 
+    const targetKeyRaw = data.get('target_key') ?? 'index_data';
+    const target_key = String(targetKeyRaw);
+
+    if (!ALLOWED_KEYS.has(target_key)) {
+      return fail(400, { ok: false, error: `Key "${target_key}" is not allowed.` });
+    }
+
+    const file = data.get('index_json');
     if (!file || typeof file.text !== 'function') {
       return fail(400, { ok: false, error: 'No file received' });
     }
@@ -24,11 +34,15 @@ export const actions = {
       return fail(400, { ok: false, error: 'Invalid JSON' });
     }
 
+    // minimal guard: expect an array for these two indices
     if (!Array.isArray(json)) {
-      return fail(400, { ok: false, error: 'Expected a JSON array' });
+      return fail(400, {
+        ok: false,
+        error: 'Expected a JSON array (your file is not an array).'
+      });
     }
 
-    await setSetting('index_data', json);
-    return { ok: true, count: json.length };
+    await setSetting(target_key, json);
+    return { ok: true, key: target_key, count: json.length };
   }
 };
