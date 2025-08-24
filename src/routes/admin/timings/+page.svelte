@@ -3,7 +3,8 @@
   import { page } from '$app/stores';
   import PointerEditor from './PointerEditor.svelte';
   import Nav from "$lib/appComps/Nav.svelte";
-  import AdminNav from "$lib/AdminNav.svelte";
+  import AdminNav from "$lib/components/AdminNav.svelte";
+  
   let deck: any = null;
   let deckLoaded = false;
   let error = '';

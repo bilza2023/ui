@@ -1,8 +1,7 @@
 <!-- src/routes/admin/settings/+page.svelte -->
 <script>
   import Nav from "$lib/appComps/Nav.svelte";
-  import AdminNav from "$lib/AdminNav.svelte";
-
+  import AdminNav from "$lib/components/AdminNav.svelte";
   export let form; // SvelteKit form action status (optional if you use enhance)
 
   // Optional: hardcode the same list here to match server allow‑list

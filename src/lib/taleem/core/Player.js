@@ -19,6 +19,10 @@ export default class Player {
       this.sound.play();
     }
   }
+
+  seek(sec){
+    this.sound.seek(sec);
+  }
   pause() {
     this.sound.pause();
   }

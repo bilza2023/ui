@@ -56,7 +56,7 @@
     }
   
     .card {
-      --card-accent: var(--c, var(--accentColor, #6c430b));
+      /* --card-accent: var(--c, var(--accentColor, #6c430b)); */
       width: var(--card-w);
       flex: 0 0 var(--card-w);       /* fixed same width per card */
       display: flex;

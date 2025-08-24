@@ -1,7 +1,7 @@
 <!-- src/routes/admin/delete/+page.svelte -->
 <script>
   import Nav from "$lib/appComps/Nav.svelte";
-  import AdminNav from "$lib/AdminNav.svelte";
+  import AdminNav from "$lib/components/AdminNav.svelte";
   import { onMount } from 'svelte';
   import '$lib/styles/forms.css';  // ✅ shared form styles
 

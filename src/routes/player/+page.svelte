@@ -3,8 +3,8 @@
   import '$lib/styles/tables.css';
 
   // UI bits
-  import Like from '../../lib/Like.svelte';
-  import Comment from '../../lib/Comment.svelte';
+  import Like from '../../lib/components/Like.svelte';
+  import Comment from '../../lib/components/Comment.svelte';
 
   // Taleem module
   import {

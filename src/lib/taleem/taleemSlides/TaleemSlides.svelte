@@ -13,7 +13,7 @@ import SlideMap from './SlideMap.js';
   
   export let background = {
     backgroundColor: '#f2f2b5',
-    backgroundImage: '/images/taleem.webp',
+    backgroundImage: '/media/images/taleem.webp',
     backgroundImageOpacity: 0.1
   };
 

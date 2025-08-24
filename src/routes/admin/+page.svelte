@@ -1,7 +1,7 @@
 <script>
   import { goto } from '$app/navigation';
   import Nav from "$lib/appComps/Nav.svelte";
-  import AdminNav from "../../lib/AdminNav.svelte";
+  import AdminNav from "../../lib/components/AdminNav.svelte";
   import '$lib/styles/tables.css';
 
   export let data;

@@ -55,8 +55,11 @@
 <style>
   /* Page shell */
   .page {
-    max-width: 2500px;
-    margin-inline: auto;
+    max-width: 100%;
+    padding: 0px;
+    margin: 0px;
+
+    /* margin-inline: auto; */
   }
 
   /* Main content panel */
@@ -77,7 +80,4 @@
       0 4px 14px rgba(0,0,0,.08);
   }
 
-  .main-section > * + * {
-    margin-top: clamp(12px, 2vw, 24px);
-  }
 </style>

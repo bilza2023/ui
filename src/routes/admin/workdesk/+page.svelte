@@ -1,8 +1,11 @@
+
 <script>
+
   import { onDestroy } from 'svelte';
-  import { NavBar, TaleemSlides } from '$lib/taleemPlayer';
-  import { clampTime, findSlideIndex, getDeckEnd } from '$lib/taleemPlayer/player-utility.js';
-  import TaleemDoctorComp from '$lib/components/TaleemDoctorComp.svelte';
+  import { NavBar, TaleemSlides,clampTime, findSlideIndex, getDeckEnd , } from '$lib/taleem';
+
+  
+  import TaleemDoctorComp from '../../../lib/taleem/components/TaleemDoctorComp.svelte';
 
   // ── state ─────────────────────────────────────────────
   let question = null;           // full object; slides live at question.deck

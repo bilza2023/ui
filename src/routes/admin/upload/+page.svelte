@@ -1,6 +1,6 @@
 <script>
   import Nav from "$lib/appComps/Nav.svelte";
-  import AdminNav from "$lib/AdminNav.svelte";
+  import AdminNav from "$lib/components/AdminNav.svelte";
   import '$lib/styles/forms.css'; // ✅ shared, theme-aware form styles
 
   import {

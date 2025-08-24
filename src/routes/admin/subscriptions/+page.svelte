@@ -4,8 +4,7 @@
   import '$lib/styles/forms.css';    // ✅ shared form styles
   import '$lib/styles/tables.css';   // ✅ shared table styles
   import Nav from "$lib/appComps/Nav.svelte";
-  import AdminNav from "$lib/AdminNav.svelte";
-
+  import AdminNav from "$lib/components/AdminNav.svelte";
   export let data;
 
   let email = data.selectedEmail ?? '';
