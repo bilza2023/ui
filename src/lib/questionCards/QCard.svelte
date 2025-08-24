@@ -91,7 +91,7 @@
       gap: 0.5rem;
       padding: 0.6rem 0.75rem;
       background: var(--surfaceColor, #0e0e0e);
-      color: var(--card-accent);
+      color: var(--accentColor);
       line-height: 1.2;
       min-height: 48px;              /* uniform title bar height */
     }
