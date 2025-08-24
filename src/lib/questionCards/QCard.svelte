@@ -19,7 +19,7 @@
     }
   
     const hrefFor = (q) =>
-      q.type === "note" ? `/notes/${q.filename}` : `/player?filename=${q.filename}`;
+      q.type === "note" ? `/notes?filename=${q.filename}` : `/player?filename=${q.filename}`;
   </script>
   
   <div class="question-grid">
