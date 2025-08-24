@@ -14,11 +14,11 @@ export default class Player {
     this.sound.on('stop', () => this._clearTickLoop());
     this.sound.on('end', () => this._clearTickLoop());
   }
-
   play() {
-    this.sound.play();
+    if (!this.sound.playing()) {
+      this.sound.play();
+    }
   }
-
   pause() {
     this.sound.pause();
   }
@@ -31,7 +31,7 @@ export default class Player {
   }
 
   _startTickLoop(interval = 200) {
-    this._clearTickLoop();
+    if (this._intervalId) return; // already running
     this._intervalId = setInterval(() => {
       const currentTime = this.sound.seek();
       this._tickCbs.forEach(fn => fn(currentTime));

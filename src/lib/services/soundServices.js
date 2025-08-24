@@ -1,8 +1,7 @@
 // soundServices.js — one API, two backends, with silent auto-detect.
 // Works for both silent & sounded decks. No console spam.
 
-import Player from './Player.js';   // Howler-backed
-import Timer  from './Timer.js';    // setInterval-backed
+import {Player , Timer} from '../taleem';   // Howler-backed
 
 /** Create timing source (Howler if url, Timer otherwise). */
 export function createSoundPlayer(soundUrl) {
