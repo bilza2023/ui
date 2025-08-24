@@ -51,7 +51,6 @@
 
 </div>
 
-
 <Footer/>
 <style>
   /* Page shell */
@@ -63,7 +62,7 @@
   /* Main content panel */
   .main-section {
     width: 100%;
-    min-height: 60vh;
+    min-height: 100vh;
 
     /* Just use surfaceColor directly — avoids mismatch with border */
     background: var(--surfaceColor);

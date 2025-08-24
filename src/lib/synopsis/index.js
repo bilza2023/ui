@@ -11,11 +11,13 @@
 
 import fbise9mathold from './fbise9mathold.js';
 import fbise9physics from './fbise9physics.js';
+import blog from './blog.js';
 
 // Keep a simple registry for lookups if needed
 export const synopsisByTcode = {
   [fbise9mathold.tcodeName]: fbise9mathold,
-  [fbise9physics.tcodeName]: fbise9physics
+  [fbise9physics.tcodeName]: fbise9physics,
+  [blog.tcodeName]: blog
 };
 
 // Shallow meta list for UI pickers / menus

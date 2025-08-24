@@ -9,15 +9,15 @@
     // adjust the import path if QCard lives elsewhere
   </script>
   
+  {#if loading}
   <div class="questions-panel">
-    {#if loading}
       <p class="status">Loading…</p>
+    </div>
     {:else if questions.length}
       <QCard {questions} />
     {:else}
       <p class="status">No items yet.</p>
     {/if}
-  </div>
   
   <style>
     /* Token-only panel, same vibe as your HomeIndex/Tcode panel */
@@ -42,7 +42,7 @@
   
     .status {
       color: var(--secondaryText);
-      font-size: 0.95rem;
+      font-size: 4rem;
     }
   </style>
   

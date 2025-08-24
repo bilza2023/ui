@@ -20,38 +20,27 @@
 </div>
 
 <style>
-  /* PANEL: match HomeIndex .main-content */
   .tcode-grid {
-    /* acts as both the panel and the flex container */
-    border: 4px solid var(--backgroundColor);
-    align-items: flex-start;   /* items keep natural height */
-    align-content: flex-start; /* rows don't stretch to fill 100dvh */
-    border-radius: 16px;
-    min-height: 100vh;   /* fallback */
-    min-height: 100dvh;  
-    padding: clamp(12px, 2vw, 24px);
-    box-shadow:
-      0 1px 1px rgba(0,0,0,.04),
-      0 4px 14px rgba(0,0,0,.08);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  align-items: stretch;   /* 👈 makes all children the same height per row */
+}
 
-    /* flex layout for cards */
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    justify-content: center;
-  }
-
-  /* CARD */
-  .card {
-    display: flex;
-      flex-direction: column;
-      border-radius: 0.75rem;
-      overflow: hidden;
-      border: 2px solid var(--accentColor); /* slimmer border */
-      box-shadow: 0 8px 8px rgba(45, 44, 44, 0.8);
-      transition: transform 120ms ease, box-shadow 120ms ease;
-      text-decoration: none;
-  }
+/* CARD */
+.card {
+  flex: 1 1 260px;        /* 👈 consistent base width, cards expand evenly */
+  max-width: 320px;       /* optional: cap width so they don’t stretch too wide */
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 2px solid var(--accentColor);
+  box-shadow: 0 8px 8px rgba(45, 44, 44, 0.8);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  text-decoration: none;
+}
 
   .card:hover {
     transform: translateY(-2px);
