@@ -3,7 +3,13 @@
   import Nav from "$lib/appComps/Nav.svelte";
   import AdminNav from "$lib/components/AdminNav.svelte";
   export let form; // SvelteKit form action status (optional if you use enhance)
+  import MediaUploadButton from '$lib/components/MediaUploadButton.svelte';
 
+  function handleDone(e) {
+    const { ok, results, error } = e.detail;
+    // show toast / console
+    console.log('upload:', ok, results ?? error);
+  }
   // Optional: hardcode the same list here to match server allow‑list
   const KEYS = [
     { value: "index_data", label: "Home: Videos Index (index_data)" },
@@ -47,9 +53,41 @@
   </fieldset>
 </form>
 
+
+
+<div class="media_div">
+  <h2>Upload Media</h2>
+  
+  <MediaUploadButton
+    label="Upload Images"
+    target="images"
+    accept="image/*"
+    multiple
+    on:done={handleDone}
+  />
+
+  <br>
+  <hr>
+  <br>
+
+  <MediaUploadButton
+    label="Upload Sounds"
+    target="sounds"
+    accept=".mp3,.wav,.ogg,.opus"
+    multiple
+    on:done={handleDone}
+  />
+</div>
+
+
+
+
 <style>
   .main-section {
   min-height: auto;
+}
+.media_div {
+  margin-left: 10%;
 }
 form {
     margin-left: 10%;
