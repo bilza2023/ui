@@ -16,7 +16,9 @@ export default class Player {
   }
 
   play() {
-    this.sound.play();
+    if (!this.sound.playing()) {
+      this.sound.play();
+    }
   }
 
   pause() {
