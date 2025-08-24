@@ -22,7 +22,7 @@
   $: imgUrl = imgItem?.content ?? imgItem?.image ?? imgItem?.imageUrl ?? null;
   $: pointerItems = slide?.data?.filter((d) => d.name === "pointer") ?? [];
 
-  $: console.log("pointerItems", pointerItems);
+  // $: console.log("pointerItems", pointerItems);
 
   /* Utils */
   function toPercent(xPx, yPx, rect) {

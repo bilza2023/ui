@@ -5,7 +5,6 @@
   import '$lib/styles/tables.css';
 
   export let data;
-  console.log("data", data);
 
   let items      = [];
   let totals     = { all: 0, decks: 0, notes: 0 };

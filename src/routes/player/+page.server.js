@@ -49,7 +49,6 @@ export async function load({ url, cookies, request }) {
   // debugger;
   const authz = await isSubscribedForTcode(row.tcode ?? '', token);
   
-  // console.log("authz" ,authz);
   // ⛔ gate playback: bounce to /sales with helpful context
   if (!authz.allowed) {
     const q = new URLSearchParams({

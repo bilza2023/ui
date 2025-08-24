@@ -8,7 +8,6 @@ export async function load({ setHeaders }) {
   const fromIndexData     = await getSetting('index_data', null);
   const blog_index     = await getSetting('blog_index', null);
 
-  // console.log("fromIndexData" ,fromIndexData);
   const questions =  fromIndexData ?? [];
 
   // Optional small cache; remove if you want zero caching.
