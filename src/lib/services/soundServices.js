@@ -28,7 +28,7 @@ export async function headOk(url, fetchFn = globalThis.fetch) {
  */
 export async function detectSoundUrl(filename, fetchFn = globalThis.fetch) {
   if (!filename) return null;
-  const url = `/sounds/${filename}.opus`;
+  const url = `/media/sounds/${filename}.opus`;
   const ok = await headOk(url, fetchFn);
   return ok ? url : null;
 }

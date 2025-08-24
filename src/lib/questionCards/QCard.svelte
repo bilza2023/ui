@@ -2,13 +2,13 @@
     export let questions = [];
   
     const FALLBACKS = {
-      slide: "/images/slide.webp",
-      note:  "/images/beakers2.webp",
-      deck:  "/images/slide.webp"
+      slide: "/media/images/slide.webp",
+      note:  "/media/images/beakers2.webp",
+      deck:  "/media/images/slide.webp"
     };
   
     function getThumb(q) {
-      return q.thumbnail ?? FALLBACKS[q.type] ?? "/images/slide.webp";
+      return q.thumbnail ?? FALLBACKS[q.type] ?? "/media/images/slide.webp";
     }
   
     function getMeta(q) {

@@ -1,12 +1,14 @@
 // src/routes/media/[...path]/+server.js
 import { createReadStream } from 'fs';
 import { stat } from 'fs/promises';
-import { resolve, join } from 'path';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, '../../../../assets'); // adjust ../ as needed
+import { resolve, join,dirname } from 'path';
 
+
+
+// const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// const ROOT = join(__dirname, '../../../../assets'); // adjust ../ as needed
+const ROOT = join(process.cwd(), 'assets');
 // const ROOT = '/home/bilal-tariq/00--TALEEM===>Project/ui/assets'; // contains images/, sounds/
 
 export async function GET({ params }) {

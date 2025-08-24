@@ -3,10 +3,9 @@
     import { goto } from '$app/navigation';
     import '../../lib/styles/notes.css';
     import Nav from "../../lib/appComps/Nav.svelte";
-    import AdminNav from "../../lib/AdminNav.svelte";
     
-  import Like from '../../lib/Like.svelte';
-  import Comment from '../../lib/Comment.svelte';
+  import Like from '$lib/components/Like.svelte';
+  import Comment from '$lib/components//Comment.svelte';
     export let data;
   
     $: title    = data?.meta?.title ?? 'Notes';
