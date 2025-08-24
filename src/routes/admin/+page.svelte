@@ -5,7 +5,7 @@
   import '$lib/styles/tables.css';
 
   export let data;
-
+// console.log("data",data);
   let items      = [];
   let totals     = { all: 0, decks: 0, notes: 0 };
   let tcodeStats = {};
@@ -124,8 +124,8 @@
         <thead>
           <tr>
             <th>Type</th>
-            <th>Name / Filename</th>
-            <th>Path</th>
+            <th>Filename/Name</th>
+            <th>Subj/Chapter/Ex</th>
             <th>Edited</th>
             <th>Created</th>
             <th></th>
@@ -139,8 +139,8 @@
                 <span class="badge" style={`--bg:${b.bg};--fg:${b.fg}`}>{b.label}</span>
               </td>
               <td class="name">
-                <div class="n1">{row.name ?? row.filename}</div>
                 <div class="n2">{row.filename}</div>
+                <div class="n1">{row.name ?? row.filename}</div>
               </td>
               <td class="path">
                 <div class="p1">{row.tcode}</div>
