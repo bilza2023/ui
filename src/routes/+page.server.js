@@ -6,6 +6,7 @@ export const prerender = false; // dynamic DB-backed page
 export async function load({ setHeaders }) {
  
   const fromIndexData     = await getSetting('index_data', null);
+  const blog_index     = await getSetting('blog_index', null);
 
   // console.log("fromIndexData" ,fromIndexData);
   const questions =  fromIndexData ?? [];
@@ -13,5 +14,5 @@ export async function load({ setHeaders }) {
   // Optional small cache; remove if you want zero caching.
   setHeaders({ 'cache-control': 'public, max-age=60' });
 
-  return { questions };
+  return { questions,blog_index };
 }

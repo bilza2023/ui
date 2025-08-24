@@ -24,17 +24,24 @@
 
   <div >
     <SecondaryNav
-      items={["Videos" , "Courses"]}
+      items={["Blog","Videos" , "Courses"]}
       bind:pageDisplayState={pageDisplayState}
     />
   </div>
-
+<!-- blog, videos, courses,  -->
   <section class="main-section">
+    
     {#if pageDisplayState == 0}
+    <QuestionCards questions={data.blog_index}/>
+    {/if}
+    <br>
+    <br>
+    {#if pageDisplayState == 1}
     <QuestionCards questions={data.questions}/>
+    {/if}
     <br>
     <br>
-    {:else if pageDisplayState == 1}
+    {#if pageDisplayState == 2}
     <TcodeCard tcodes={syllabus} />
     {/if}
 
