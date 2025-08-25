@@ -165,7 +165,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 0px;
+    padding: 12px;
     margin: 0px;
 
     background: var(--surfaceColor);
