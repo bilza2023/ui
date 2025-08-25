@@ -112,7 +112,7 @@
 
 
 <nav class="nav">
-  <a class="brand" href="/">Taleem.help</a>
+  <a class="brand" href="/">Taleem.help:Beta</a>
 
   <!-- <a href="/studio" class="link">
     Studio {#if user && unread > 0}<span class="badge">{unread}</span>{/if}
