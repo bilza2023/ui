@@ -30,24 +30,31 @@ export async function POST({ request }) {
     const name = sanitizeName(file.name || 'upload');
     const ext = (name.match(/\.[^.]+$/)?.[0] || '').toLowerCase();
     if (!ALLOWED[target].includes(ext)) {
-      results.push({ name, ok: false, error: `Disallowed extension ${ext}` });
-      continue;
+      return fail(415, { ok: false, error: `Disallowed extension ${ext}`, name });
     }
 
-    const finalName = await dedupe(dir, name);
     const buf = Buffer.from(await file.arrayBuffer());
-    await writeFile(join(dir, finalName), buf);
+    const dest = join(dir, name);
+    try {
+      // HARD-FAIL if a file with this exact name already exists
+      await writeFile(dest, buf, { flag: 'wx' });
+    } catch (e) {
+      if (e?.code === 'EEXIST') {
+        return fail(409, { ok: false, error: `File exists: ${name}`, name });
+      }
+      throw e;
+    }
 
     results.push({
       ok: true,
-      name: finalName,
-      // public URL your app will use:
-      url: `/media/${target}/${finalName}`
+      name,
+      url: `/media/${target}/${name}`
     });
   }
 
   return json({ ok: true, count: results.length, results });
 }
+
 
 // helpers
 function sanitizeName(n) {
