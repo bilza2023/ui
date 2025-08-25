@@ -4,6 +4,7 @@
   import AdminNav from "$lib/components/AdminNav.svelte";
   export let form; // SvelteKit form action status (optional if you use enhance)
   import MediaUploadButton from '$lib/components/MediaUploadButton.svelte';
+  import SoundUploadButton from '$lib/components/SoundUploadButton.svelte';
 
   function handleDone(e) {
     const { ok, results, error } = e.detail;
@@ -70,7 +71,7 @@
   <hr>
   <br>
 
-  <MediaUploadButton
+  <SoundUploadButton
     label="Upload Sounds"
     target="sounds"
     accept=".mp3,.wav,.ogg,.opus"
