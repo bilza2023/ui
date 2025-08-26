@@ -159,6 +159,13 @@ export async function patchQuestionMeta(filename, patch = {}) {
   return prisma.question.update({ where: { filename }, data });
 }
 
+export async function updateNoteString(filename, note) {
+  // Only update the note field; editedAt will bump via @updatedAt
+  return prisma.question.update({
+    where: { filename },
+    data:  { note }
+  });
+}
 /** DELETE — remove by filename */
 export async function deleteByFilename(filename) {
   if (!filename) throw new Error('deleteByFilename: filename required');

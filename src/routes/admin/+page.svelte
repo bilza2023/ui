@@ -154,11 +154,17 @@
                 <a class="btn small" href={hrefFor(row)} target="_blank" rel="noopener">Open</a>
                 
                 
-                <!-- {#if row.type == ""} -->
+                {#if row.type == "note"}
+                  <a class="btn small" href="/admin/editor_note?filename={row.filename}" target="_blank" rel="noopener">Note</a>
+                {/if}
+                {#if row.type == "deck"}
+                  <a class="btn small" href="/admin/editor_slide?filename={row.filename}" target="_blank" rel="noopener">Slide</a>
+                {/if}
+
                 <a class="btn small" href="/admin/question_editor?filename={row.filename}" target="_blank" rel="noopener">Editor</a>
 
 
-                <a class="btn small" href="/admin/delete?filename={row.filename}" target="_blank" rel="noopener">Delete</a>
+                <a class="btn small" href="/admin/delete?filename={row.filename}" target="_blank" rel="noopener">Del</a>
               </td>
             </tr>
           {/each}
