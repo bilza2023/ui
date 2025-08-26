@@ -1,13 +1,14 @@
-// src/routes/api/comment/+server.js
+
+// /src/routes/api/comment/+server.js
 import { json } from '@sveltejs/kit';
 import prisma from '$lib/server/prisma.js';
-import { verify } from '$lib/services/loginServices.js';
+import { taleemServices as svc } from '$lib/taleemServices';
 
 async function getUserIdFromAuth(request) {
   const auth = request.headers.get('authorization') || '';
   if (!auth.toLowerCase().startsWith('bearer ')) throw new Error('E_UNAUTHORIZED');
   const token = auth.slice(7).trim();
-  const { user } = await verify(token);
+  const { user } = await svc.auth.verify(token);
   const user_id = user?.id ?? null;
   if (!user_id) throw new Error('E_UNAUTHORIZED');
   return user_id;

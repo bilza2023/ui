@@ -1,14 +1,16 @@
-// POST /api/auth/register
+// /src/routes/api/auth/register/+server.js
 import { json } from '@sveltejs/kit';
-import { register as svcRegister, login as svcLogin } from '$lib/services/loginServices.js';
+import { taleemServices as svc } from '$lib/taleemServices';
 
 export async function POST({ request, cookies }) {
   try {
     const { email, password } = await request.json();
-    if (!email || !password) return json({ error: 'email and password required' }, { status: 400 });
+    if (!email || !password) {
+      return json({ error: 'email and password required' }, { status: 400 });
+    }
 
-    await svcRegister(email, password);
-    const { token, user } = await svcLogin(email, password);
+    await svc.auth.register(email, password);
+    const { token, user } = await svc.auth.login(email, password);
 
     cookies.set('token', token, {
       httpOnly: true,

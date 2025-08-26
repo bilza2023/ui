@@ -62,9 +62,10 @@
           <td>{safeDT(row.createdAt)}</td>
   
           <td class="actions">
-            <a class="btn" href={viewHrefFor(row)}>Open</a>
-            <a class="btn" href={editHrefFor(row)}>Edit</a>
-            <a class="btn" href= {`/admin/question_editor?filename=${row.filename}`}>Content</a>
+            <a class="btn" href={viewHrefFor(row)}>🦜</a>
+            <a class="btn" href={editHrefFor(row)}>🔱</a>
+            <a class="btn" href= {`/admin/question_editor?filename=${row.filename}`}>📡</a>
+            <a class="btn" href= {`/admin/delete?filename=${row.filename}`}>🗑️</a>
           </td>
         </tr>
       {/each}

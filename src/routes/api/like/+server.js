@@ -1,19 +1,19 @@
-// src/routes/api/like/+server.js
+// /src/routes/api/like/+server.js
 import { json } from '@sveltejs/kit';
 import prisma from '$lib/server/prisma.js';
-import { verify } from '$lib/services/loginServices.js';
+import { taleemServices as svc } from '$lib/taleemServices';
 
 async function getUserIdFromAuth(request) {
   const auth = request.headers.get('authorization') || '';
   if (!auth.toLowerCase().startsWith('bearer ')) throw new Error('E_UNAUTHORIZED');
   const token = auth.slice(7).trim();
-  const { user } = await verify(token);
+  const { user } = await svc.auth.verify(token);
   const user_id = user?.id ?? null;
   if (!user_id) throw new Error('E_UNAUTHORIZED');
   return user_id;
 }
 
-// src/routes/api/like/+server.js
+// GET → check if the current user has liked a content_id
 export async function GET({ url, request }) {
   try {
     const content_id = url.searchParams.get('content_id');
@@ -27,19 +27,15 @@ export async function GET({ url, request }) {
       where: { uniq_user_content_reaction: { user_id, content_id } }
     });
 
-    return json({
-      ok: true,
-      liked: !!existing,
-      user_id
-    }, { status: 200 });
+    return json({ ok: true, liked: !!existing, user_id }, { status: 200 });
   } catch (err) {
     console.error('[/api/like GET] error:', err);
-    const status = err?.code === 'E_UNAUTHORIZED' ? 401 : 500;
+    const status = err?.message === 'E_UNAUTHORIZED' || err?.code === 'E_UNAUTHORIZED' ? 401 : 500;
     return json({ ok:false, code: err?.code || 'E_INTERNAL', message: err?.message || 'Internal error' }, { status });
   }
 }
 
-
+// POST → toggle like for the current user on a content_id
 export async function POST({ request }) {
   try {
     const { content_id } = await request.json().catch(() => ({}));
@@ -48,7 +44,7 @@ export async function POST({ request }) {
     }
 
     const user_id = await getUserIdFromAuth(request);
-    const whereUnique = { uniq_user_content_reaction: { user_id, content_id } }; // name from schema
+    const whereUnique = { uniq_user_content_reaction: { user_id, content_id } };
 
     const existing = await prisma.likes.findUnique({ where: whereUnique });
 
@@ -62,6 +58,7 @@ export async function POST({ request }) {
       return json({ ok:true, liked:true, user_id }, { status:200 });
     } catch (err) {
       if (err?.code === 'P2002') {
+        // race-safe: if duplicate appears, treat as liked
         return json({ ok:true, liked:true, user_id }, { status:200 });
       }
       throw err;

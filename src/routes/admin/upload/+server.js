@@ -1,5 +1,6 @@
+// /src/routes/admin/upload/+server.js  (same logic, now via canonical facade)
 import { json } from '@sveltejs/kit';
-import { createQuestion, exists } from '../../../lib/services/questionServices.js';
+import { taleemServices as svc } from '$lib/taleemServices';
 
 const STATUS = new Set(['draft', 'ready', 'published', 'archived']);
 
@@ -32,7 +33,7 @@ export async function POST({ request }) {
   const tags        = tagsCsv ? tagsCsv.split(',').map((s) => s.trim()).filter(Boolean) : [];
 
   let status = (form.get('status') ?? '').toString().trim();
-  if (status && !STATUS.has(status)) status = ''; // ignore invalid
+  if (status && !STATUS.has(status)) status = '';
 
   // File
   const file = form.get('file');
@@ -47,7 +48,7 @@ export async function POST({ request }) {
   if (!baseName) return json({ error: 'Unable to determine filename' }, { status: 400 });
 
   // Reject duplicates
-  if (await exists(baseName)) {
+  if (await svc.questions.exists(baseName)) {
     return json({ error: 'Filename already exists' }, { status: 409 });
   }
 
@@ -60,12 +61,12 @@ export async function POST({ request }) {
     return json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  // Minimal fields for DB insert (no DeckBuilder, no heavy validation)
+  // Minimal fields for DB insert
   const qName  = deck?.name || baseName;
-  const timed  = false; // keep lean; timings handled elsewhere
+  const timed  = false;
 
   try {
-    await createQuestion({
+    await svc.questions.create({
       filename: baseName,
       tcode,
       chapter,
@@ -82,7 +83,6 @@ export async function POST({ request }) {
     return json({ success: true, filename: baseName });
   } catch (e) {
     const msg = e?.message || 'Server error';
-    // Prisma duplicate safety (if exists() raced)
     if (/P2002/.test(msg)) {
       return json({ error: 'Filename already exists' }, { status: 409 });
     }

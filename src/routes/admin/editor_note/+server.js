@@ -1,13 +1,13 @@
-// +server.js — Note Editor endpoints
+// /src/routes/admin/note_editor/+server.js
 import { json } from '@sveltejs/kit';
-import * as questionService from '../../../lib/services/questionServices.js';
+import { taleemServices as svc } from '$lib/taleemServices';
 
 // GET /admin/note_editor?filename=...
 export async function GET({ url }) {
   const filename = url.searchParams.get('filename');
   if (!filename) return json({ error: 'filename required' }, { status: 400 });
 
-  const record = await questionService.getQuestionByFilename(filename);
+  const record = await svc.questions.getByFilename(filename);
   if (!record) return json({ error: 'Question not found' }, { status: 404 });
 
   // Return full question; client will use question.note
@@ -19,7 +19,8 @@ export async function POST({ request, url }) {
   const filename = url.searchParams.get('filename');
   if (!filename) return json({ error: 'filename required' }, { status: 400 });
 
-  const payload = await request.json();
+  let payload;
+  try { payload = await request.json(); } catch { payload = null; }
 
   // Accept any of:
   // - { question: { note } }
@@ -35,8 +36,7 @@ export async function POST({ request, url }) {
   }
 
   // Update only the note payload; never touch deck/identity/path here
-  // Make sure you have this service; if your name differs, adjust accordingly.
-  await questionService.updateNoteString(filename, newNote);
+  await svc.questions.updateNoteString(filename, newNote);
 
   return json({ success: true });
 }

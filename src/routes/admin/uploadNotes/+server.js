@@ -1,6 +1,6 @@
-// src/routes/admin/uploadNotes/+server.js
+// /src/routes/admin/uploadNotes/+server.js
 import { json } from '@sveltejs/kit';
-import { createQuestion, exists } from '../../../lib/services/questionServices.js'; // ✅ unified service
+import { taleemServices as svc } from '$lib/taleemServices';
 
 export async function POST({ request }) {
   const form = await request.formData();
@@ -28,22 +28,20 @@ export async function POST({ request }) {
                 || originalName.replace(/\.(html|htm)$/i, '');
   if (!baseName) return json({ error: 'Unable to determine filename' }, { status: 400 });
 
-  // ✅ hard fail on duplicate (no upsert)
-  if (await exists(baseName)) {
+  // hard fail on duplicate (no upsert)
+  if (await svc.questions.exists(baseName)) {
     return json({ error: 'Filename already exists. Delete it first or choose a new filename.' }, { status: 409 });
   }
 
   try {
-    // Read note text
     const noteText = await file.text();
     if (!noteText.trim()) {
       return json({ error: 'Note file is empty' }, { status: 400 });
     }
 
-    // ✅ Use createQuestion for notes
-    await createQuestion({
+    await svc.questions.create({
       filename: baseName,
-      type: 'note',                        // <-- important: mark it as a note
+      type: 'note',
       tcode, chapter, exercise,
       name: descriptionOverride || baseName,
       description: descriptionOverride ?? null,

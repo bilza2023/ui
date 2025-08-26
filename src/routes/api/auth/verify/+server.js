@@ -1,7 +1,6 @@
-
-// GET /api/auth/verify
+// /src/routes/api/auth/verify/+server.js
 import { json } from '@sveltejs/kit';
-import { verify as svcVerify } from '$lib/services/loginServices.js';
+import { taleemServices as svc } from '$lib/taleemServices';
 
 function getTokenFrom(req, cookies, url) {
   const h = req.headers.get('authorization') || req.headers.get('Authorization');
@@ -18,7 +17,7 @@ export async function GET({ request, cookies, url }) {
     const token = getTokenFrom(request, cookies, url);
     if (!token) return json({ error: 'missing token' }, { status: 401 });
 
-    const { payload, user } = await svcVerify(token);
+    const { payload, user } = await svc.auth.verify(token);
     return json({ ok: true, user, payload });
   } catch (err) {
     return json({ error: 'invalid token', detail: String(err?.message ?? err) }, { status: 401 });

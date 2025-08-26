@@ -1,8 +1,6 @@
-// +server.js
+// /src/routes/admin/question_editor/+server.js
 import { json, error } from "@sveltejs/kit";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { taleemServices as svc } from "$lib/taleemServices";
 
 // ---- helpers
 const ALLOWED_KEYS = new Set([
@@ -21,7 +19,6 @@ function coerceUpdate(body) {
     if (!ALLOWED_KEYS.has(k)) continue;
 
     if (k === "tags") {
-      // allow CSV string or array of strings
       if (typeof v === "string") {
         const arr = v.split(",").map(s => s.trim()).filter(Boolean);
         update.tags = arr.length ? arr : null;
@@ -48,7 +45,6 @@ function coerceUpdate(body) {
       continue;
     }
 
-    // simple passthrough (strings)
     update[k] = v ?? null;
   }
   return update;
@@ -59,7 +55,7 @@ export async function GET({ url }) {
   const filename = url.searchParams.get("filename");
   if (!filename) throw error(400, "Missing 'filename'.");
 
-  const question = await prisma.question.findUnique({ where: { filename } });
+  const question = await svc.questions.getByFilename(filename);
   if (!question) throw error(404, "Not found");
 
   return json({ question });
@@ -70,10 +66,9 @@ export async function PATCH({ url, request }) {
   const filename = url.searchParams.get("filename");
   if (!filename) throw error(400, "Missing 'filename'.");
 
-  // guard: never allow changing identity/payload/path here
   const body = await request.json().catch(() => ({}));
 
-  // hard reject if someone tries to send forbidden keys
+  // never allow changing identity/payload/path here
   const forbidden = ["filename","type","tcode","chapter","exercise","deck","note"];
   for (const k of forbidden) {
     if (k in body) throw error(400, `Field '${k}' is not editable here.`);
@@ -82,13 +77,9 @@ export async function PATCH({ url, request }) {
   const data = coerceUpdate(body);
 
   try {
-    const updated = await prisma.question.update({
-      where: { filename },
-      data
-    });
+    const updated = await svc.questions.patchMeta(filename, data);
     return json({ ok: true, question: updated });
   } catch (e) {
-    // if not found / other errors
     throw error(500, String(e?.message || e));
   }
 }

@@ -1,16 +1,14 @@
 // /src/routes/admin/delete/+server.js
 import { json, redirect } from '@sveltejs/kit';
-import { deleteByFilename } from '$lib/services/questionServices.js';
+import { taleemServices as svc } from '$lib/taleemServices';
 
 function wantsJson(request) {
   const accept = request.headers.get('accept') || '';
   const mode   = request.headers.get('sec-fetch-mode') || '';
-  // If the client can accept JSON or this isn't a top-level navigation, return JSON
   return accept.includes('application/json') || mode !== 'navigate';
 }
 
 export async function POST({ request }) {
-  // Support both form posts and JSON
   const ct = request.headers.get('content-type') || '';
   let filename = '';
   if (ct.includes('application/json')) {
@@ -29,7 +27,7 @@ export async function POST({ request }) {
   }
 
   try {
-    await deleteByFilename(filename);
+    await svc.questions.delete(filename);
 
     return wantsJson(request)
       ? json({ success: true, deleted: filename })

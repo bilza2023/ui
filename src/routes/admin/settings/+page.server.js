@@ -1,6 +1,7 @@
-// src/routes/admin/settings/+page.server.js
+// /src/routes/admin/settings/+page.server.js
 import { fail } from '@sveltejs/kit';
-import { setSetting } from '$lib/services/AppServices.js';
+import { taleemServices as svc } from '$lib/taleemServices';
+
 // index_data will be converted into video_index at some proper time
 const ALLOWED_KEYS = new Set(['index_data', 'blog_index']); // add more if needed
 
@@ -42,7 +43,7 @@ export const actions = {
       });
     }
 
-    await setSetting(target_key, json);
+    await svc.settings.set(target_key, json);
     return { ok: true, key: target_key, count: json.length };
   }
 };

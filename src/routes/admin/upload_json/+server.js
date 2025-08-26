@@ -1,9 +1,8 @@
-
-// src/routes/admin/upload_json/+server.js
+// /src/routes/admin/upload_json/+server.js
 import { json } from '@sveltejs/kit';
 import DeckDoctor   from '../../../lib/deckdoctor/DeckDoctor.js';
 import DeckBuilder  from '../../../lib/deckbuilder/Deckbuilder.js';
-import { createQuestion, exists } from '../../../lib/services/questionServices.js';
+import { taleemServices as svc } from '$lib/taleemServices';
 import { Buffer } from 'buffer';
 
 export async function POST({ request }) {
@@ -38,7 +37,7 @@ export async function POST({ request }) {
   if (!filename) return json({ error: 'Unable to determine filename' }, { status: 400 });
 
   // Hard fail on duplicate (no upsert)
-  if (await exists(filename)) {
+  if (await svc.questions.exists(filename)) {
     return json({ error: 'Filename already exists. Delete it first.' }, { status: 409 });
   }
 
@@ -58,8 +57,7 @@ export async function POST({ request }) {
 
       const builder = new DeckBuilder();
       define(builder);
-      // Build without double-validating; we’ll normalize+validate below
-      deckRaw = builder.build({ validate: false });
+      deckRaw = builder.build({ validate: false }); // build first; validate below
     } else {
       // JSON upload
       deckRaw = JSON.parse(await file.text());
@@ -72,7 +70,7 @@ export async function POST({ request }) {
       const msgs = validation.errors.map(e => e.message).join('; ');
       return json({ error: `Validation failed: ${msgs}` }, { status: 400 });
     }
-    const deck = validation.value; // full question shape: { version, background, deck: [...slides] }
+    const deck = validation.value; // { version, background, deck: [...slides], ... }
 
     // Metadata precedence
     const qName       = deck?.name || filename;
@@ -89,9 +87,11 @@ export async function POST({ request }) {
     const timed = totalDuration > 0;
 
     // Persist as a Question (type: 'deck')
-    await createQuestion({
-      filename,                 // ← actual uploaded filename (no extension)
-      tcode, chapter, exercise,
+    await svc.questions.create({
+      filename,
+      tcode,
+      chapter,
+      exercise,
       type: 'deck',
       name: qName,
       description,
