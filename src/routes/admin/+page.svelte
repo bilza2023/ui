@@ -9,7 +9,6 @@
 
   // ⬇️ CRUCIAL: accept server data
   export let data;
-
   // ⬇️ derive what the components need (reactively, so navigation updates work)
   let items = [];
   let totals = { all: 0, decks: 0, notes: 0 };
@@ -22,11 +21,10 @@
 <Nav />
 <AdminNav />
 
-<!-- Page-level nav under AdminNav -->
-<AdminIndexPageNav title="Question Index" {totals} />
+<AdminIndexPageNav totals={data.totals} filters={data.filters} />
 
 <!-- Table fed from server-loaded items -->
 <div style="padding:0 60px">
-  <AdminIndexTable {items} />
+  <AdminIndexTable items={data.items} />
 
 </div>
