@@ -33,7 +33,6 @@ export async function GET({ url }) {
   }
 }
 
-// POST: add a comment
 export async function POST({ request }) {
   try {
     const { content_id, text } = await request.json().catch(() => ({}));
@@ -47,13 +46,49 @@ export async function POST({ request }) {
 
     const user_id = await getUserIdFromAuth(request);
 
+    // --- 24h rolling window rate-limit: max 5 comments per user ---
+    const now = Date.now();
+    const WINDOW_MS = 24 * 60 * 60 * 1000;
+    const windowStart = new Date(now - WINDOW_MS);
+
+    const recentCount = await prisma.comments.count({
+      where: { user_id, created_at: { gte: windowStart } }
+    });
+
+    if (recentCount >= 5) {
+      const recent = await prisma.comments.findMany({
+        where: { user_id, created_at: { gte: windowStart } },
+        select: { created_at: true },
+        orderBy: { created_at: 'desc' },
+        take: 5
+      });
+      const oldest = recent.at(-1)?.created_at ?? null;
+      const resetsAt = oldest ? new Date(oldest.getTime() + WINDOW_MS) : null;
+      const retryAfterSeconds = resetsAt
+        ? Math.max(1, Math.ceil((resetsAt.getTime() - now) / 1000))
+        : 3600;
+
+      return json(
+        {
+          ok: false,
+          code: 'E_RATE_LIMIT',
+          message: 'You reached the 24h comment limit (5). Please try again later.',
+          limit: 5,
+          used: recentCount,
+          windowStart: windowStart.toISOString(),
+          resetsAt: resetsAt?.toISOString() ?? null
+        },
+        { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } }
+      );
+    }
+
+    // proceed if under the limit
     const comment = await prisma.comments.create({
       data: { user_id, content_id, text }
     });
 
     return json({ ok: true, comment }, { status: 201 });
   } catch (err) {
-    console.error('[/api/comment POST] error:', err);
     const code =
       err?.message === 'E_UNAUTHORIZED' || err?.code === 'E_UNAUTHORIZED'
         ? 'E_UNAUTHORIZED'

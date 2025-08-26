@@ -46,6 +46,7 @@ model Comments {
   user_id     String
   text        String   // the comment text
   response    String?   // the comment text
+ status      String   @default("new") // 'new' | 'answered' | 'bad'
 
   @@index([content_id, created_at], name: "idx_comment_content_time")
   @@index([user_id, content_id], name: "idx_comment_user_content")

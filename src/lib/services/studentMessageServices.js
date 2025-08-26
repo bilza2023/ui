@@ -9,6 +9,42 @@ const ALLOWED_CATEGORIES = new Set([DEFAULT_CATEGORY]);
 const MAX_MESSAGE_BYTES = 16 * 1024; // 16KB per message (tweak later if needed)
 
 
+export async function listCommentsByStatus(status = 'new', { limit = 50 } = {}) {
+  const take = Math.max(1, Math.min(200, limit|0));
+  return prisma.comments.findMany({
+    where: { status, },
+    orderBy: { created_at: 'asc' },
+    take,
+    select: {
+      id: true, created_at: true, content_id: true, user_id: true,
+      text: true, response: true, status: true
+    }
+  });
+}
+
+export async function answerComment(id, responseText) {
+  if (!id) throw new Error('answerComment: id required');
+  if (!responseText?.trim()) throw new Error('answerComment: response required');
+  return prisma.comments.update({
+    where: { id },
+    data: { response: responseText.trim(), status: 'answered' }
+  });
+}
+
+export async function markCommentBad(id) {
+  if (!id) throw new Error('markCommentBad: id required');
+  return prisma.comments.update({
+    where: { id },
+    data: { status: 'bad' }
+  });
+}
+
+export async function setCommentStatus(id, status) {
+  if (!id) throw new Error('setCommentStatus: id required');
+  if (!['new', 'answered', 'bad'].includes(status)) throw new Error('invalid status');
+  return prisma.comments.update({ where: { id }, data: { status } });
+}
+
 export async function getUserMessages(userId, { onlyUnread = true, limit = 50, cursor = null } = {}) {
   if (!userId || typeof userId !== 'string') throw new Error('getUserMessages: userId (string) is required');
   const take = Math.max(1, Math.min(200, limit|0));
