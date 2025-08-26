@@ -97,12 +97,14 @@
   
   <div class="wrap">
     <header class="pagehead">
-      <h1>Note Editor</h1>
       {#if question}
+
+      <h1>      Name / filename : {question.name} / {question.filename}</h1>
         <div class="hint">
-          <code>{question.filename}</code>
-          <em>· {question.type}</em>
+         <a href={`/notes?filename=${question.filename}`}>View Note :: {question.filename}</a>
+      
         </div>
+        <br>
       {/if}
     </header>
   
