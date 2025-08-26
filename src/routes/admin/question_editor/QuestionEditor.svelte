@@ -160,9 +160,133 @@
       </div>
     </form>
   {/if}
-  
   <style>
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-    .block { padding: 1rem; border: 1px solid var(--borderColor, #333); border-radius: 12px; background: var(--surfaceColor, rgba(255,255,255,0.02)); }
+    /* ===== form container ===== */
+    .form {
+      display: grid;
+      gap: 14px;
+      color: var(--primaryText);
+    }
+    .form-grid.two {
+      display: grid;
+      gap: 14px;
+    }
+    @media (min-width: 900px) {
+      .form-grid.two {
+        grid-template-columns: 1.1fr 1fr;
+        align-items: start;
+      }
+    }
+  
+    /* ===== blocks ===== */
+    .block {
+      padding: 14px;
+      border: 1px solid var(--borderColor);
+      border-radius: 12px;
+      background: var(--surfaceColor);
+      box-shadow: 0 1px 0 rgba(0,0,0,.06);
+    }
+  
+    /* ===== fields ===== */
+    .field {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+  
+    /* Labels: lighter, smaller, uppercase-ish for clear hierarchy */
+    .field > label {
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--secondaryText);
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+  
+    /* Inputs / Textareas / Selects: higher contrast, clear borders */
+    .field input[type="text"],
+    .field input[type="number"],
+    .field input[type="search"],
+    .field input[type="url"],
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--borderColor);
+      background: var(--backgroundColor);
+      color: var(--primaryText);
+      line-height: 1.15;
+      transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+  
+    .field textarea { resize: vertical; }
+  
+    .field input[type="text"]::placeholder,
+    .field input[type="number"]::placeholder,
+    .field textarea::placeholder {
+      color: color-mix(in oklab, var(--secondaryText) 70%, transparent);
+    }
+  
+    /* Focus ring with your primary token */
+    .field input:focus-visible,
+    .field textarea:focus-visible,
+    .field select:focus-visible {
+      outline: none;
+      border-color: var(--primaryColor);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--primaryColor) 25%, transparent);
+    }
+  
+    /* Checkbox row: keep label left, control right-aligned */
+    .field input[type="checkbox"] {
+      width: 18px; height: 18px;
+      accent-color: var(--primaryColor);
+      justify-self: start;
+    }
+  
+    /* ===== read-only outputs (identity block) ===== */
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: var(--backgroundColor);
+      border: 1px dashed var(--borderColor);
+      border-radius: 10px;
+      padding: 8px 10px;
+      color: var(--primaryText);
+      line-height: 1.25;
+      word-break: break-word;
+    }
+  
+    /* Make the “Path” output wrap nicely on small screens */
+    .field output.mono {
+      white-space: normal;
+    }
+  
+    /* ===== actions ===== */
+    .actions {
+      display: flex;
+      gap: 10px;
+      padding-top: 6px;
+    }
+    .actions button {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--borderColor);
+      background: var(--surfaceColor);
+      color: var(--primaryText);
+      cursor: pointer;
+      transition: border-color .15s ease, transform .02s ease-in-out;
+    }
+    .actions button:hover { border-color: var(--primaryColor); }
+    .actions button:active { transform: translateY(1px); }
+  
+    .actions .primary {
+      background: var(--primaryColor);
+      border-color: var(--primaryColor);
+      color: #fff;
+    }
+    .actions .primary:hover {
+      filter: brightness(1.05);
+    }
   </style>
   

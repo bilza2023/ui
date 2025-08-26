@@ -14,7 +14,7 @@
   
     function viewHrefFor(row) {
       return row?.type === "note"
-        ? `/notes/${encodeURIComponent(row.filename)}`
+        ? `/notes?filename=${encodeURIComponent(row.filename)}`
         : `/player?filename=${encodeURIComponent(row.filename)}`;
     }
   
@@ -64,6 +64,7 @@
           <td class="actions">
             <a class="btn" href={viewHrefFor(row)}>Open</a>
             <a class="btn" href={editHrefFor(row)}>Edit</a>
+            <a class="btn" href= {`/admin/question_editor?filename=${row.filename}`}>Content</a>
           </td>
         </tr>
       {/each}

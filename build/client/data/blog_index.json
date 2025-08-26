@@ -6,5 +6,12 @@
       "type": "slide",
       "thumbnail": "/media/images/traversal.webp",
       "tags": []
+    },
+    {
+      "name": "Test",
+      "filename": "test",
+      "type": "note",
+      "thumbnail": "/media/images/taleem.webp",
+      "tags": []
     }
   ]

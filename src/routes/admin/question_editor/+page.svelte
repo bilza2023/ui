@@ -95,7 +95,10 @@
         <div class="note ok">Saved.</div>
       {/if}
   
-      <QuestionEditor {question} on:save={handleSave} />
+      <div style="padding:0 60px">
+        <QuestionEditor {question} on:save={handleSave} />
+
+      </div>
   
       <section class="block" style="margin-top:1rem;">
         <div class="form-grid">

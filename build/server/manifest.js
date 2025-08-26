@@ -7,34 +7,36 @@ function __memo(fn) {
 return {
 	appDir: "_app",
 	appPath: "_app",
-	assets: new Set(["blog/about.md","blog/ai-foundation-track-brochure.html","blog/algebra_basics/algebraIntroduction.html","blog/algebra_basics/hcf.html","blog/algebra_basics/hcf_vs_lcm.html","blog/algebra_basics/index.html","blog/algebra_basics/lcm.html","blog/algebra_basics/list.json","blog/algebra_basics/polynomials_and_their_types.html","blog/algebra_basics/prime_factorization.html","blog/algebra_basics/properties_of_rational_numbers.html","blog/algebra_basics/rational_numbers.html","blog/algebra_basics/what_is_algebra.html","blog/backend-servies-presentation/agile.html","blog/backend-servies-presentation/ai_consultancy.html","blog/backend-servies-presentation/basic_backend_package.html","blog/backend-servies-presentation/bpo.html","blog/backend-servies-presentation/commercial-products.html","blog/backend-servies-presentation/consultancy_product.html","blog/backend-servies-presentation/donts.html","blog/backend-servies-presentation/example_projects.html","blog/backend-servies-presentation/global_it_based_services.html","blog/backend-servies-presentation/images/it_diagram.png","blog/backend-servies-presentation/index.html","blog/backend-servies-presentation/low-level-it-services.html","blog/backend-servies-presentation/off_the_shelf_services.html","blog/backend-servies-presentation/pakistani-it-companies.html","blog/backend-servies-presentation/pakistani-it-industry-overview.html","blog/backend-servies-presentation/projects-weve-built.html","blog/backend-servies-presentation/q.md","blog/backend-servies-presentation/rad.html","blog/backend-servies-presentation/saas.html","blog/backend-servies-presentation/taleem_help_reasons.html","blog/backend-servies-presentation/understanding-software-industry.html","blog/backend-servies-presentation/zameen_example.html","blog/be-part-of-ai-revolution.html","blog/class9_all_theorems_pt1.html","blog/devops/installing_nginx.html","blog/future-in-the-ai-era-for--pakistani-students.html","blog/main.css","blog/pakistani-it-companies.html","blog/pakistani-it-industry-overview.html","blog/pk-ai-startups-report.html","blog/theorem11_1_4.html","blog/why-frontend-frameworks-are-a-scam.html","bookcovers/blog.webp","bookcovers/chemistry_10thFBSIE.png","bookcovers/chemistry_9thFBSIE.png","bookcovers/fbise10math.png","bookcovers/fbise9math.png","bookcovers/fbise9mathOld.png","bookcovers/fbise9physics.png","bookcovers/math.png","bookcovers/math_10thFBSIE.png","bookcovers/math_8thFBSIE.png","bookcovers/math_9thFBSIE.png","bookcovers/physics_10thFBSIE.png","bookcovers/urdu_10thFBSIE.png","bookcovers/urdu_8thFBSIE.png","bookcovers/urdu_9thFBSIE.png","brand/a-deaft.png","brand/add-freelancing.webp","brand/ai-home-thumbnail.webp","brand/ai.webp","brand/ai101.webp","brand/ai2.webp","brand/ai3.webp","brand/ai4.webp","brand/ai4professionals.webp","brand/ai_courses.webp","brand/ai_fundamentals.webp","brand/banner_brand_section.png","brand/brocheure.webp","brand/contact-image.webp","brand/english-fbise.webp","brand/english.webp","brand/english9th.webp","brand/english9th2.webp","brand/facebook_page_profile.webp","brand/fbise-banner.webp","brand/it.webp","brand/it2.webp","brand/it3.webp","brand/math2.webp","brand/math3.webp","brand/math_class9.webp","brand/mathclass9fbise.webp","brand/placeholder.webp","brand/taleem-banner.webp","brand/taleem-banner2.webp","brand/taleem_card.webp","brand/web-brochuer.webp","brand/web.webp","brand/website-7may2025.png","components/taleem-slides/taleem-slides-v-0-0-0.js","components/taleem-slides/taleem-slides.js","components/taleem-slides/taleem-slides.js.map","css/katex.min.css","css/theme.css","data/blog_index.json","data/css/blog.css","data/css/notes.css","data/global-blog.css","data/index_data.json","data/notes/fbise9mathold_theorem11_1_4.json","data/notes/fbise9mathold_theorem_11.1.4.json","data/notes/gold_standard.json","data/notes/test.json","data/syllabus/fbise9mathold.json","data/syllabus/fbise9physics.json","data/syllabus/subjects.json","data/syllabus.json","data/synopsis/fbise9mathold.json","decks/angles_and_transversals.json","decks/congruent_triangles.json","decks/demo_deck.json","decks/parallelogram_properties.json","decks/parallelogram_properties_no_sound.json","decks/posultate_and_SAS_postulate.json","decks/theorem_revision_ch10_11.fixed.json","decks/theorem_revision_ch10_11.json","decks/theorems9old_11.1.1.json","decks/theorems9old_11.1.2.json","decks/theorems9old_11.1.3.json","decks_workdesk/angles_and_transversals.json","decks_workdesk/bullets.json","decks_workdesk/demo_deck.json","decks_workdesk/fbiseclass9theorems1.json","decks_workdesk/glodStandard_deck.js","decks_workdesk/glodStandard_deck.json","decks_workdesk/gold_standard_eq_sp.js","decks_workdesk/gold_standard_eq_sp.json","decks_workdesk/gold_standard_mixed_slide.js","decks_workdesk/gold_standard_mixed_slide.json","decks_workdesk/index.json","decks_workdesk/new_deck.json","decks_workdesk/theorem_revision_ch10_11.js","decks_workdesk/theorem_revision_ch10_11.json","decks_workdesk/theorems9old_11.1.3.js","decks_workdesk/theorems9old_11.1.4.js","decks_workdesk/theorems9old_11.1.5.js","decks_workdesk/water_cycle.js","notes-very-old/best-practices-dockerizing-nodejs-express-api.html","notes-very-old/docker_basics.html","notes-very-old/index.html","notes-very-old/monogodb_docker_setup.html","notes-very-old/using_mongodb_with_dockers.html","reserch/9mathold_ch10.md","reserch/9mathold_ch11.md","reserch/GPT-Reserch-assitance-instruction.md","reserch/Theorem table request.docx","reserch/Theorem table request.pdf","reserch/alrentate_correspondance_angles.md","reserch/angles_and_transversals.md","reserch/class9_all_theorems.md","reserch/congruent_triangles.md","reserch/parallegrams_and_triangles.md","reserch/pointer-idea.md","reserch/transversal.md","sites-available.txt","videoBlog/ce/taleem-slides.js","videoBlog/ce/taleem-slides.js.map","videoBlog/demo_deck.json","videoBlog/player.html"]),
+	assets: new Set(["blog/about.md","blog/ai-foundation-track-brochure.html","blog/algebra_basics/algebraIntroduction.html","blog/algebra_basics/hcf.html","blog/algebra_basics/hcf_vs_lcm.html","blog/algebra_basics/index.html","blog/algebra_basics/lcm.html","blog/algebra_basics/list.json","blog/algebra_basics/polynomials_and_their_types.html","blog/algebra_basics/prime_factorization.html","blog/algebra_basics/properties_of_rational_numbers.html","blog/algebra_basics/rational_numbers.html","blog/algebra_basics/what_is_algebra.html","blog/backend-servies-presentation/agile.html","blog/backend-servies-presentation/ai_consultancy.html","blog/backend-servies-presentation/basic_backend_package.html","blog/backend-servies-presentation/bpo.html","blog/backend-servies-presentation/commercial-products.html","blog/backend-servies-presentation/consultancy_product.html","blog/backend-servies-presentation/donts.html","blog/backend-servies-presentation/example_projects.html","blog/backend-servies-presentation/global_it_based_services.html","blog/backend-servies-presentation/images/it_diagram.png","blog/backend-servies-presentation/index.html","blog/backend-servies-presentation/low-level-it-services.html","blog/backend-servies-presentation/off_the_shelf_services.html","blog/backend-servies-presentation/pakistani-it-companies.html","blog/backend-servies-presentation/pakistani-it-industry-overview.html","blog/backend-servies-presentation/projects-weve-built.html","blog/backend-servies-presentation/q.md","blog/backend-servies-presentation/rad.html","blog/backend-servies-presentation/saas.html","blog/backend-servies-presentation/taleem_help_reasons.html","blog/backend-servies-presentation/understanding-software-industry.html","blog/backend-servies-presentation/zameen_example.html","blog/be-part-of-ai-revolution.html","blog/class9_all_theorems_pt1.html","blog/devops/installing_nginx.html","blog/future-in-the-ai-era-for--pakistani-students.html","blog/main.css","blog/pakistani-it-companies.html","blog/pakistani-it-industry-overview.html","blog/pk-ai-startups-report.html","blog/theorem11_1_4.html","blog/why-frontend-frameworks-are-a-scam.html","bookcovers/blog.webp","bookcovers/chemistry_10thFBSIE.png","bookcovers/chemistry_9thFBSIE.png","bookcovers/fbise10math.png","bookcovers/fbise9math.png","bookcovers/fbise9mathOld.png","bookcovers/fbise9physics.png","bookcovers/math.png","bookcovers/math_10thFBSIE.png","bookcovers/math_8thFBSIE.png","bookcovers/math_9thFBSIE.png","bookcovers/physics_10thFBSIE.png","bookcovers/urdu_10thFBSIE.png","bookcovers/urdu_8thFBSIE.png","bookcovers/urdu_9thFBSIE.png","brand/a-deaft.png","brand/add-freelancing.webp","brand/ai-home-thumbnail.webp","brand/ai.webp","brand/ai101.webp","brand/ai2.webp","brand/ai3.webp","brand/ai4.webp","brand/ai4professionals.webp","brand/ai_courses.webp","brand/ai_fundamentals.webp","brand/banner_brand_section.png","brand/brocheure.webp","brand/contact-image.webp","brand/english-fbise.webp","brand/english.webp","brand/english9th.webp","brand/english9th2.webp","brand/facebook_page_profile.webp","brand/fbise-banner.webp","brand/it.webp","brand/it2.webp","brand/it3.webp","brand/math2.webp","brand/math3.webp","brand/math_class9.webp","brand/mathclass9fbise.webp","brand/placeholder.webp","brand/taleem-banner.webp","brand/taleem-banner2.webp","brand/taleem_card.webp","brand/web-brochuer.webp","brand/web.webp","brand/website-7may2025.png","components/taleem-slides/taleem-slides-v-0-0-0.js","components/taleem-slides/taleem-slides.js","components/taleem-slides/taleem-slides.js.map","css/katex.min.css","css/theme.css","data/blog_index.json","data/css/blog.css","data/css/notes.css","data/global-blog.css","data/notes/fbise9mathold_theorem11_1_4.json","data/notes/fbise9mathold_theorem_11.1.4.json","data/notes/gold_standard.json","data/notes/test.json","data/syllabus/fbise9mathold.json","data/syllabus/fbise9physics.json","data/syllabus/subjects.json","data/syllabus.json","data/synopsis/fbise9mathold.json","data/videos_index.json","decks/angles_and_transversals.json","decks/congruent_triangles.json","decks/demo_deck.json","decks/parallelogram_properties.json","decks/parallelogram_properties_no_sound.json","decks/posultate_and_SAS_postulate.json","decks/theorem_revision_ch10_11.fixed.json","decks/theorem_revision_ch10_11.json","decks/theorems9old_11.1.1.json","decks/theorems9old_11.1.2.json","decks/theorems9old_11.1.3.json","decks_workdesk/angles_and_transversals.json","decks_workdesk/bullets.json","decks_workdesk/demo_deck.json","decks_workdesk/fbiseclass9theorems1.json","decks_workdesk/glodStandard_deck.js","decks_workdesk/glodStandard_deck.json","decks_workdesk/gold_standard_eq_sp.js","decks_workdesk/gold_standard_eq_sp.json","decks_workdesk/gold_standard_mixed_slide.js","decks_workdesk/gold_standard_mixed_slide.json","decks_workdesk/index.json","decks_workdesk/new_deck.json","decks_workdesk/theorem_revision_ch10_11.js","decks_workdesk/theorem_revision_ch10_11.json","decks_workdesk/theorems9old_11.1.3.js","decks_workdesk/theorems9old_11.1.4.js","decks_workdesk/theorems9old_11.1.5.js","decks_workdesk/water_cycle.js","notes-very-old/best-practices-dockerizing-nodejs-express-api.html","notes-very-old/docker_basics.html","notes-very-old/index.html","notes-very-old/monogodb_docker_setup.html","notes-very-old/using_mongodb_with_dockers.html","reserch/9mathold_ch10.md","reserch/9mathold_ch11.md","reserch/GPT-Reserch-assitance-instruction.md","reserch/Theorem table request.docx","reserch/Theorem table request.pdf","reserch/alrentate_correspondance_angles.md","reserch/angles_and_transversals.md","reserch/class9_all_theorems.md","reserch/congruent_triangles.md","reserch/parallegrams_and_triangles.md","reserch/pointer-idea.md","reserch/transversal.md","sites-available.txt","videoBlog/ce/taleem-slides.js","videoBlog/ce/taleem-slides.js.map","videoBlog/demo_deck.json","videoBlog/player.html"]),
 	mimeTypes: {".md":"text/markdown",".html":"text/html",".json":"application/json",".png":"image/png",".css":"text/css",".webp":"image/webp",".js":"text/javascript",".map":"application/json",".pdf":"application/pdf",".txt":"text/plain"},
 	_: {
-		client: {start:"_app/immutable/entry/start.DPWQdYRY.js",app:"_app/immutable/entry/app.BSgJGMFZ.js",imports:["_app/immutable/entry/start.DPWQdYRY.js","_app/immutable/chunks/CjWeu0V1.js","_app/immutable/chunks/C5V-7dkx.js","_app/immutable/chunks/CXNmKXog.js","_app/immutable/entry/app.BSgJGMFZ.js","_app/immutable/chunks/C5V-7dkx.js","_app/immutable/chunks/IHki7fMi.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
+		client: {start:"_app/immutable/entry/start.0Beo2PvS.js",app:"_app/immutable/entry/app.D4iv95Bq.js",imports:["_app/immutable/entry/start.0Beo2PvS.js","_app/immutable/chunks/Bip40WU7.js","_app/immutable/chunks/BCmAYXf5.js","_app/immutable/chunks/BogcK4WV.js","_app/immutable/entry/app.D4iv95Bq.js","_app/immutable/chunks/BCmAYXf5.js","_app/immutable/chunks/IHki7fMi.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
 		nodes: [
-			__memo(() => import('./chunks/0-BOhE6kA-.js')),
-			__memo(() => import('./chunks/1-B61TL1wU.js')),
-			__memo(() => import('./chunks/2-DD_3zw-t.js')),
-			__memo(() => import('./chunks/3-BWydTYbI.js')),
-			__memo(() => import('./chunks/4-BojovS3o.js')),
-			__memo(() => import('./chunks/5-RlxNdqxv.js')),
-			__memo(() => import('./chunks/6-BTDjohp6.js')),
-			__memo(() => import('./chunks/7-NhAcaM66.js')),
-			__memo(() => import('./chunks/8-HCPaoccs.js')),
-			__memo(() => import('./chunks/9-ChOdiU3I.js')),
-			__memo(() => import('./chunks/10-jiTc5wlf.js')),
-			__memo(() => import('./chunks/11-CnpQ0_DJ.js')),
-			__memo(() => import('./chunks/12-tl9_n5OL.js')),
-			__memo(() => import('./chunks/13-BModcK9H.js')),
-			__memo(() => import('./chunks/14-D-YyhLg8.js')),
-			__memo(() => import('./chunks/15-DXgKQJAc.js')),
-			__memo(() => import('./chunks/16-Dsrhvuee.js')),
-			__memo(() => import('./chunks/17-C6D1B4u3.js')),
-			__memo(() => import('./chunks/18-Dz95flm5.js')),
-			__memo(() => import('./chunks/19-C5psRIyT.js')),
-			__memo(() => import('./chunks/20-CNDwVKL-.js')),
-			__memo(() => import('./chunks/21-CnvsKYTH.js')),
-			__memo(() => import('./chunks/22-DnPdfrQF.js'))
+			__memo(() => import('./chunks/0-2ozX5Sp7.js')),
+			__memo(() => import('./chunks/1-9WGD9A1R.js')),
+			__memo(() => import('./chunks/2-fGdwLvIz.js')),
+			__memo(() => import('./chunks/3-Da0mFpON.js')),
+			__memo(() => import('./chunks/4-Cb9mGzKR.js')),
+			__memo(() => import('./chunks/5-wYRMFsu4.js')),
+			__memo(() => import('./chunks/6-CD09ruKj.js')),
+			__memo(() => import('./chunks/7-C0rcfiiB.js')),
+			__memo(() => import('./chunks/8-uhDo4z4r.js')),
+			__memo(() => import('./chunks/9-4HXSwCej.js')),
+			__memo(() => import('./chunks/10-CdB0x2R6.js')),
+			__memo(() => import('./chunks/11-CmSDVTVK.js')),
+			__memo(() => import('./chunks/12-CfOzNO8E.js')),
+			__memo(() => import('./chunks/13-CPDA-pKj.js')),
+			__memo(() => import('./chunks/14-R644Ec-M.js')),
+			__memo(() => import('./chunks/15-CpLauXX8.js')),
+			__memo(() => import('./chunks/16-B9Ytjqq2.js')),
+			__memo(() => import('./chunks/17-lIo7KkZP.js')),
+			__memo(() => import('./chunks/18-CzN9VzT_.js')),
+			__memo(() => import('./chunks/19-CTkp1FXP.js')),
+			__memo(() => import('./chunks/20-CBWwufFp.js')),
+			__memo(() => import('./chunks/21--DKPRowU.js')),
+			__memo(() => import('./chunks/22-CHahzQ75.js')),
+			__memo(() => import('./chunks/23-hPaPPm2a.js')),
+			__memo(() => import('./chunks/24-B67ZJKbx.js'))
 		],
 		remotes: {
 			
@@ -59,62 +61,76 @@ return {
 				pattern: /^\/admin\/delete\/?$/,
 				params: [],
 				page: { layouts: [0,2,], errors: [1,,], leaf: 6 },
-				endpoint: __memo(() => import('./chunks/_server-DQmdgeV1.js'))
+				endpoint: __memo(() => import('./chunks/_server-DtMLBD4W.js'))
 			},
 			{
-				id: "/admin/editor",
-				pattern: /^\/admin\/editor\/?$/,
+				id: "/admin/editor_note",
+				pattern: /^\/admin\/editor_note\/?$/,
 				params: [],
 				page: { layouts: [0,2,], errors: [1,,], leaf: 7 },
-				endpoint: __memo(() => import('./chunks/_server-D8VA1SJw.js'))
+				endpoint: __memo(() => import('./chunks/_server-BLJ-tZzr.js'))
+			},
+			{
+				id: "/admin/editor_slide",
+				pattern: /^\/admin\/editor_slide\/?$/,
+				params: [],
+				page: { layouts: [0,2,], errors: [1,,], leaf: 8 },
+				endpoint: __memo(() => import('./chunks/_server-C22bxgq9.js'))
+			},
+			{
+				id: "/admin/question_editor",
+				pattern: /^\/admin\/question_editor\/?$/,
+				params: [],
+				page: { layouts: [0,2,], errors: [1,,], leaf: 9 },
+				endpoint: __memo(() => import('./chunks/_server-DVKr60xL.js'))
 			},
 			{
 				id: "/admin/settings",
 				pattern: /^\/admin\/settings\/?$/,
 				params: [],
-				page: { layouts: [0,2,], errors: [1,,], leaf: 8 },
+				page: { layouts: [0,2,], errors: [1,,], leaf: 10 },
 				endpoint: __memo(() => import('./chunks/_server-0ALCMTBw.js'))
 			},
 			{
 				id: "/admin/subscriptions",
 				pattern: /^\/admin\/subscriptions\/?$/,
 				params: [],
-				page: { layouts: [0,2,], errors: [1,,], leaf: 9 },
+				page: { layouts: [0,2,], errors: [1,,], leaf: 11 },
 				endpoint: null
 			},
 			{
 				id: "/admin/timings",
 				pattern: /^\/admin\/timings\/?$/,
 				params: [],
-				page: { layouts: [0,2,], errors: [1,,], leaf: 10 },
-				endpoint: __memo(() => import('./chunks/_server-B22220Lw.js'))
+				page: { layouts: [0,2,], errors: [1,,], leaf: 12 },
+				endpoint: __memo(() => import('./chunks/_server-Bgl6-azq.js'))
 			},
 			{
 				id: "/admin/uploadNotes",
 				pattern: /^\/admin\/uploadNotes\/?$/,
 				params: [],
-				page: { layouts: [0,2,], errors: [1,,], leaf: 12 },
-				endpoint: __memo(() => import('./chunks/_server-CnUYV2hD.js'))
+				page: { layouts: [0,2,], errors: [1,,], leaf: 14 },
+				endpoint: __memo(() => import('./chunks/_server-CbZL5Nvn.js'))
 			},
 			{
 				id: "/admin/upload_json",
 				pattern: /^\/admin\/upload_json\/?$/,
 				params: [],
-				page: { layouts: [0,2,], errors: [1,,], leaf: 13 },
-				endpoint: __memo(() => import('./chunks/_server-Bpv1Qvl1.js'))
+				page: { layouts: [0,2,], errors: [1,,], leaf: 15 },
+				endpoint: __memo(() => import('./chunks/_server-DkorKlOC.js'))
 			},
 			{
 				id: "/admin/upload",
 				pattern: /^\/admin\/upload\/?$/,
 				params: [],
-				page: { layouts: [0,2,], errors: [1,,], leaf: 11 },
-				endpoint: __memo(() => import('./chunks/_server-BkOijsID.js'))
+				page: { layouts: [0,2,], errors: [1,,], leaf: 13 },
+				endpoint: __memo(() => import('./chunks/_server-TKnQqnbx.js'))
 			},
 			{
 				id: "/admin/workdesk",
 				pattern: /^\/admin\/workdesk\/?$/,
 				params: [],
-				page: { layouts: [0,2,], errors: [1,,], leaf: 14 },
+				page: { layouts: [0,2,], errors: [1,,], leaf: 16 },
 				endpoint: null
 			},
 			{
@@ -163,14 +179,14 @@ return {
 				id: "/blog",
 				pattern: /^\/blog\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 15 },
+				page: { layouts: [0,], errors: [1,], leaf: 17 },
 				endpoint: null
 			},
 			{
 				id: "/login",
 				pattern: /^\/login\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 16 },
+				page: { layouts: [0,], errors: [1,], leaf: 18 },
 				endpoint: null
 			},
 			{
@@ -184,42 +200,42 @@ return {
 				id: "/notes",
 				pattern: /^\/notes\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 17 },
+				page: { layouts: [0,], errors: [1,], leaf: 19 },
 				endpoint: null
 			},
 			{
 				id: "/player",
 				pattern: /^\/player\/?$/,
 				params: [],
-				page: { layouts: [0,3,], errors: [1,,], leaf: 18 },
+				page: { layouts: [0,3,], errors: [1,,], leaf: 20 },
 				endpoint: null
 			},
 			{
 				id: "/register",
 				pattern: /^\/register\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 19 },
+				page: { layouts: [0,], errors: [1,], leaf: 21 },
 				endpoint: null
 			},
 			{
 				id: "/sales",
 				pattern: /^\/sales\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 20 },
+				page: { layouts: [0,], errors: [1,], leaf: 22 },
 				endpoint: null
 			},
 			{
 				id: "/studio",
 				pattern: /^\/studio\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 21 },
+				page: { layouts: [0,], errors: [1,], leaf: 23 },
 				endpoint: __memo(() => import('./chunks/_server-BVBFNbtq.js'))
 			},
 			{
 				id: "/syllabus",
 				pattern: /^\/syllabus\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 22 },
+				page: { layouts: [0,], errors: [1,], leaf: 24 },
 				endpoint: null
 			}
 		],
