@@ -1,7 +1,6 @@
 <script>
   import Nav from "$lib/appComps/Nav.svelte";
   import "$lib/styles/forms.css"; // keep theme cohesion
-
   export let data;
   const { status, comments = [] } = data;
 
@@ -18,8 +17,8 @@
 
 <section class="studio">
   <header class="studio-header">
-    <h1>Studio</h1>
-    <p class="sub">Your activity feed — comments & replies</p>
+    <h1>Questions and Answers</h1>
+    <p class="sub">Your activity feed — questions & replies</p>
   </header>
 
   {#if status === 'unauthorized'}
@@ -43,9 +42,9 @@
               </div>
               <div class="time">{fmtTime(c.created_at)}</div>
               {#if c.content_id}
-                <div class="link">
+                <!-- <div class="link">
                   <a href={"/player?filename=" + encodeURIComponent(c.content_id)}>View content</a>
-                </div>
+                </div> -->
               {/if}
             </div>
           </header>

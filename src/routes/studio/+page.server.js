@@ -1,6 +1,6 @@
 // /src/routes/studio/+page.server.js
 import prisma from '$lib/server/prisma.js';
-import { verify } from '$lib/services/loginServices.js';
+import { taleemServices as svc } from '$lib/taleemServices';
 
 /** Try to read auth token from Authorization header or a cookie */
 async function getUserId(event) {
@@ -10,7 +10,7 @@ async function getUserId(event) {
   if (!token) token = event.cookies.get('token') || event.cookies.get('auth') || '';
 
   if (!token) throw new Error('E_UNAUTHORIZED');
-  const { user } = await verify(token);
+  const { user } = await svc.auth.verify(token);
   if (!user?.id) throw new Error('E_UNAUTHORIZED');
   return user.id;
 }
@@ -19,7 +19,7 @@ export async function load(event) {
   try {
     const user_id = await getUserId(event);
 
-    // Student's own comments, newest first
+    // TODO: move to svc.messages.listByUser(user_id) when added to the facade
     const comments = await prisma.comments.findMany({
       where: { user_id },
       orderBy: { created_at: 'desc' },
@@ -33,15 +33,8 @@ export async function load(event) {
       }
     });
 
-    return {
-      status: 'ok',
-      comments
-    };
+    return { status: 'ok', comments };
   } catch (e) {
-    return {
-      status: 'unauthorized',
-      comments: [],
-      error: e.message
-    };
+    return { status: 'unauthorized', comments: [], error: e.message };
   }
 }

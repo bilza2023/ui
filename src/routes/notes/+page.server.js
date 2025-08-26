@@ -1,6 +1,6 @@
-
+// /src/routes/notes/+page.server.js
 import { error } from '@sveltejs/kit';
-import prisma from '$lib/server/prisma.js';
+import { taleemServices as svc } from '$lib/taleemServices';
 
 export const prerender = false;
 
@@ -8,23 +8,7 @@ export async function load({ url }) {
   const filename = url.searchParams.get('filename');
   if (!filename) throw error(400, 'filename is required');
 
-  const row = await prisma.question.findUnique({
-    where: { filename },
-    select: {
-      type: true,
-      note: true,
-      name: true,
-      description: true,
-      status: true,
-      tags: true,
-      tcode: true,
-      chapter: true,
-      exercise: true,
-      editedAt: true,
-      createdAt: true
-    }
-  });
-
+  const row = await svc.questions.getByFilename(filename);
   if (!row) throw error(404, `Note "${filename}" not found`);
   if (row.type !== 'note' || !row.note) throw error(415, `Item "${filename}" is not a note`);
 
@@ -41,6 +25,6 @@ export async function load({ url }) {
       editedAt: row.editedAt,
       createdAt: row.createdAt
     },
-    html: row.note // trusted HTML you uploaded
+    html: row.note
   };
 }

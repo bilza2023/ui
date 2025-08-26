@@ -124,6 +124,7 @@
     <span class="muted">…</span>
   {:else if user}
     <span class="hello">Hi, {user.email}</span>
+    <a href="/studio"><span class="hello">🐞</span></a>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="dropdown" on:click|stopPropagation={toggleThemeMenu}>
@@ -147,6 +148,8 @@
     <a href="/login" class="pill">Login</a>
     <a href="/register" class="pill">Register</a>
 
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="dropdown" on:click|stopPropagation={toggleThemeMenu}>
       <button class="pill">Theme ▾</button>
       {#if showThemeMenu}
