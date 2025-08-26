@@ -3,13 +3,7 @@
 // and synopsis services for chapters/exercises + DB-backed counts/content.
 
 import tcodesRegistry from '$lib/synopsis/index.js';
-// import {
-//   getChapters,
-//   getExercises,
-//   resolvePath,
-//   getExerciseCounts,
-//   getExerciseContent
-// } from '$lib/services/synopsisServeces.js';
+
 import { getChapters, getExercises, resolvePath } from '$lib/services/synopsisServices.js';
 import { getExerciseCounts, getExerciseContent } from '$lib/services/synopsisServices.server.js';
 

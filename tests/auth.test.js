@@ -1,39 +1,50 @@
 
+// ui/tests/auth.test.js
+import { describe, it, expect } from 'vitest';
+import { taleemServices as svc } from '../src/lib/taleemServices/index.js';
 
-
-
- import { describe, it, expect, beforeAll } from 'vitest';
- import { apiPost, apiGet, uniqId } from './testClient';
-
-describe('Auth: register → login → verify', () => {
-  const email = `user_${uniqId()}@example.com`;
-  const password = 'Passw0rd!';
-  let token = null;
-  let userId = null;
+describe('auth: register → login → verify', () => {
+  const makeUser = () => {
+    const uniq = Math.random().toString(36).slice(2);
+    return {
+      email: `test+${uniq}@example.com`,
+      pass:  'StrongPass123!' // ≥8 chars, no spaces
+    };
+  };
 
   it('registers a new user', async () => {
-    const { status, data } = await apiPost('/api/auth/register', { email, password });
-    expect([200,201]).toContain(status);
-    expect(data?.ok).toBe(true);
-    expect(data?.user?.id).toBeTruthy();
-    expect(data?.user?.email).toBe(email);
-    userId = data.user.id;
+    const { email, pass } = makeUser();
+    const user = await svc.auth.register(email, pass);
+    expect(user).toMatchObject({ email });
+    expect(user.id).toBeTruthy();
   });
 
-  it('logs in and returns a token', async () => {
-    const { status, data } = await apiPost('/api/auth/login', { email, password });
-    expect(status).toBe(200);
-    expect(data?.ok).toBe(true);
-    expect(data?.token).toBeTruthy();
-    token = data.token;
+  it('prevents duplicate registration for the same email', async () => {
+    const { email, pass } = makeUser();
+    await svc.auth.register(email, pass);
+    await expect(svc.auth.register(email, pass)).rejects.toThrow(/already registered/i);
   });
 
-  it('verifies the token', async () => {
-    const { status, data } = await apiGet('/api/auth/verify', token);
-    expect(status).toBe(200);
-    expect(data?.ok).toBe(true);
-    expect(data?.user?.id).toBe(userId);
-    expect(data?.user?.email).toBe(email);
+  it('logs in with correct credentials and returns a JWT + user', async () => {
+    const { email, pass } = makeUser();
+    await svc.auth.register(email, pass);
+    const { token, user } = await svc.auth.login(email, pass);
+    expect(typeof token).toBe('string');
+    expect(user.email).toBe(email);
   });
-  
+
+  it('rejects invalid credentials', async () => {
+    const { email, pass } = makeUser();
+    await svc.auth.register(email, pass);
+    await expect(svc.auth.login(email, 'wrong-pass')).rejects.toThrow(/invalid credentials/i);
+  });
+
+  it('verifies a valid token and returns the user', async () => {
+    const { email, pass } = makeUser();
+    await svc.auth.register(email, pass);
+    const { token } = await svc.auth.login(email, pass);
+    const { user, payload } = await svc.auth.verify(token);
+    expect(user.email).toBe(email);
+    expect(payload.sub).toBe(user.id);
+  });
 });

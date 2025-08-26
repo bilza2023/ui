@@ -1,45 +1,42 @@
 // Canonical facade — import once, use everywhere as `svc`.
-// Usage: import { taleemServices as svc } from '$lib/taleemServices';
+// Usage: import { taleemServices as svc } from '../taleemServices';
 
 import {
     register, login, verify, isAdmin
-  } from '$lib/services/loginServices.js';
+  } from '../services/loginServices.js';
   
   import {
     getSubjectsIndex, getSyllabusByTcode, getAllSyllabusLegacy
-  } from '$lib/services/syllabusServicer.js';
+  } from '../services/syllabusServicer.js';
   
   import {
     listCommentsByStatus, answerComment, setCommentStatus, markCommentBad,
     getUserMessages, bulkUpload as messagesBulkUpload
-  } from '$lib/services/studentMessageServices.js';
+  } from '../services/studentMessageServices.js';
   
-  import {
-    interaction
-  } from '$lib/services/studentServices.js';
   
   import {
     isSubscribed as subsIsSubscribed, addSubscription
-  } from '$lib/services/subscriptionServices.js';
+  } from '../services/subscriptionServices.js';
   
   import {
     createSoundPlayer, detectSoundUrl, createDetectedSoundPlayer, headOk
-  } from '$lib/services/soundServices.js';
+  } from '../services/soundServices.js';
   
   import {
     getSetting, setSetting, deleteSetting, listSettings,
     getIndexData, setIndexData
-  } from '$lib/services/AppServices.js';
+  } from '../services/AppServices.js';
   
   import {
     checkPassword, assertPasswordOrThrow
-  } from '$lib/services/passwordPolicy.js';
+  } from '../services/passwordPolicy.js';
   
   import {
     exists, getQuestionByFilename, createQuestion, upsertQuestion,
     updateDeckJson, updateNoteHtml, patchQuestionMeta, deleteByFilename,
     updateNoteString
-  } from '$lib/services/questionServices.js';
+  } from '../services/questionServices.js';
   
   export const taleemServices = {
     // Auth & identity
@@ -79,11 +76,6 @@ import {
       updateNoteString,                // raw setter (kept for completeness)
       patchMeta:     patchQuestionMeta,
       delete:        deleteByFilename
-    },
-  
-    // Student-side interactions router
-    students: {
-      interaction
     },
   
     // Subscriptions & access control
