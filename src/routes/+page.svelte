@@ -31,10 +31,12 @@
 <!-- blog, videos, courses,  -->
   <section class="main-section">
     
+    <!-- blog -->
     {#if pageDisplayState == 0}
     <QuestionCards questions={data.blog_index}/>
     {/if}
     <br>
+    <!-- videos -->
     <br>
     {#if pageDisplayState == 1}
     <QuestionCards questions={data.questions}/>

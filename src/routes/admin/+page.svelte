@@ -152,7 +152,12 @@
               <td>{row.createdAt ? new Date(row.createdAt).toLocaleString() : '—'}</td>
               <td class="actions">
                 <a class="btn small" href={hrefFor(row)} target="_blank" rel="noopener">Open</a>
-                <a class="btn small" href="/admin/editor?filename={row.filename}" target="_blank" rel="noopener">Editor</a>
+                
+                
+                <!-- {#if row.type == ""} -->
+                <a class="btn small" href="/admin/question_editor?filename={row.filename}" target="_blank" rel="noopener">Editor</a>
+
+
                 <a class="btn small" href="/admin/delete?filename={row.filename}" target="_blank" rel="noopener">Delete</a>
               </td>
             </tr>

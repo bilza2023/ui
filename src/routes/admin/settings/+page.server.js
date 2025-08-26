@@ -1,7 +1,7 @@
 // src/routes/admin/settings/+page.server.js
 import { fail } from '@sveltejs/kit';
 import { setSetting } from '$lib/services/AppServices.js';
-
+// index_data will be converted into video_index at some proper time
 const ALLOWED_KEYS = new Set(['index_data', 'blog_index']); // add more if needed
 
 export const actions = {
