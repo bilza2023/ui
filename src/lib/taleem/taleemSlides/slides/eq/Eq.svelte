@@ -11,7 +11,14 @@
   $: lines = data.filter(item => item.name === "line");
 
   $: activeLine = lines.findLast(l => l.showAt <= currentTime);
-  $: visibleSpItems = activeLine?.spItems ?? (lines[0]?.spItems ?? []);
+  // $: visibleSpItems = activeLine?.spItems ?? (lines[0]?.spItems ?? []);
+  const FALLBACK_SIDEBAR = [
+    { type: 'spImage', content: '/media/images/taleem.webp', alt: 'Taleem' }
+  ];
+  $: visibleSpItems =
+    Array.isArray(activeLine?.spItems) && activeLine.spItems.length > 0
+      ? activeLine.spItems
+      : FALLBACK_SIDEBAR;
 </script>
 <link rel="stylesheet" href="/css/katex.min.css">
 

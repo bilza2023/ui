@@ -2,6 +2,7 @@
 <script>
   import Katex from 'svelte-katex';
   export let spItems = [];
+
 </script>
 
 <div class="eq-sidebar">
