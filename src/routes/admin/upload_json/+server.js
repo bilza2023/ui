@@ -1,7 +1,7 @@
 
 // /src/routes/admin/upload_json/+server.js
 import { json } from '@sveltejs/kit';
-import DeckLoader from '../../../lib/taleem/core/DeckLoader.js';
+import {validate} from '../../../lib/taleem/core/validate.js';
 import { taleemServices as svc } from '$lib/taleemServices';
 
 export async function POST({ request }) {
@@ -56,7 +56,7 @@ export async function POST({ request }) {
     }
 
     // ── VALIDATE ONLY on upload (do NOT build/normalize here) ─────────────
-    const validation = DeckLoader.validate(deckRaw);
+    const validation = validate(deckRaw);
     if (!validation.ok) {
       const msgs = validation.errors.map(e => e.message).join('; ');
       return json({ error: `Validation failed: ${msgs}` }, { status: 400 });

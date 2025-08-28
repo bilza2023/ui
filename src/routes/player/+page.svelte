@@ -1,7 +1,8 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import '$lib/styles/tables.css';
-  import DeckLoader from '$lib/taleem/core/DeckLoader.js'
+
+  import {validate} from "../../lib/taleem/core/validate";
   // UI bits
   import Like from '../../lib/components/Like.svelte';
   import Comment from '../../lib/components/Comment.svelte';
@@ -10,7 +11,7 @@
   import {
     TaleemSlides,
     NavBar,
-    DeckDoctor,
+    
     clampTime,
     findSlideIndex,
     getDeckEnd
@@ -37,8 +38,8 @@
   try {
     // Wrap legacy array shape if needed, then normalise + validate
     const built = Array.isArray(deckRaw) ? { version: 'deck-v1', deck: deckRaw } : deckRaw;
-    // const built = DeckDoctor.build(candidate);
-    const res = DeckDoctor.validate(built);
+
+    const res = validate(built);
 
     if (!res.ok) {
       errorMsg = (res.errors?.[0]?.message) || 'Invalid deck';
@@ -80,7 +81,7 @@
   // ---- audio init (client-only) ----
   onMount(async () => {
     try {
-      console.log("Player Deck===>" ,deck);
+      // console.log("Player Deck===>" ,deck);
       soundUrl = await detectSoundUrl(filename, fetch);  // may return null (silent mode)
       player = createSoundPlayer(soundUrl);
       player.onTick((t) => {

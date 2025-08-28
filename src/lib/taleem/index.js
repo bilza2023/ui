@@ -2,8 +2,6 @@
 
 
 // index.js
-export { default as DeckDoctor } from './core/DeckLoader.js';
-export { default as Deckbuilder } from './deckbuilder/Deckbuilder.js';
 export { default as TaleemSlides } from './taleemSlides/TaleemSlides.svelte';
 export { default as TaleemDoctorComp } from './taleemDoctor/TaleemDoctorComp.svelte';
 export { default as NavBar } from './components/NavBar.svelte';
