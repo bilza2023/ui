@@ -30,7 +30,7 @@ import SlideMap from './SlideMap.js';
 
   $: ({ index: currentSlideIndex, slide, type: slideType } = pickSlideByTime(deck, currentTime));
   $: SlideComp = resolveSlideComponent(slideType);
-  $: console.log('TaleemSlides (pickSlideByTime) →', { t: currentTime, currentSlideIndex, slideType });
+  // $: console.log('TaleemSlides (pickSlideByTime) →', { t: currentTime, currentSlideIndex, slideType });
 
   // --- Background helpers ---------------------------------------------
   function hexToRgb(hex) {

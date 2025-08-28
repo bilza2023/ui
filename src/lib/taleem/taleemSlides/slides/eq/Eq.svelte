@@ -4,6 +4,7 @@
   import EqSidebar from './EqSidebar.svelte';
 
   export let data = [];
+  console.log("data Eq Slide ==> ",data);
   export let currentTime = 0;
 
   // lines already have shape: { name: "line", showAt, content, type, spItems: [...] }
