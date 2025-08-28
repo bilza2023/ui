@@ -3,15 +3,15 @@
   import { onMount } from "svelte";
   import Nav from "$lib/appComps/Nav.svelte";
   import TcodeCard from "$lib/homeIndex/TcodeCard.svelte";
-
   import QuestionCards from "../lib/questionCards/QuestionCards.svelte";
   import SecondaryNav from "$lib/SecondaryNav.svelte";
- import Footer from "../lib/appComps/Footer.svelte";
+  import Footer from "../lib/appComps/Footer.svelte";
   import { listTcodes } from "../lib/services/synopsisServices";
+  
   export let data;
   let syllabus = [];
+  
   onMount(() => {
-
     syllabus = listTcodes(); // [{ tcodeName, description, image }]
   });
 

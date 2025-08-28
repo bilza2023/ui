@@ -1,11 +1,8 @@
-// ui/vitest.config.js
-import { defineConfig } from 'vitest/config';
+// vite.config.js
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
-  test: {
-    environment: 'node',
-    globals: true,
-    setupFiles: ['tests/setup/test-env.js', 'tests/setup/teardown.js'],
-    include: ['tests/**/*.test.js']
-  }
+  plugins: [sveltekit()]
 });
+
