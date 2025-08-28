@@ -91,7 +91,14 @@ export async function getQuestionByFilename(filename, opts = {}) {
     select.note = true;
   }
 
-  return prisma.question.findUnique({ where: { filename }, select });
+   const r = await prisma.question.findUnique({ where: { filename }, select });
+   // PROOF: log the exact eq line that should have spItems=4
+   try {
+     const eq = Array.isArray(r?.deck) ? r.deck[0] : r?.deck?.deck?.[0];
+     const l10 = eq?.data?.find(x => x?.showAt === 10);
+     console.log('[DB fetch] eq@10s spItems len =', Array.isArray(l10?.spItems) ? l10.spItems.length : l10?.spItems);
+   } catch {}
+   return r;;
 }
 
 /**

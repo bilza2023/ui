@@ -1,9 +1,6 @@
 // DeckDoctor.js
 import { zodAQuestionV1 } from "./ZodAQuestionV1.js";
 
-/**
- * DeckDoctor — canonical validator / normaliser / analyser for deck-v1
- */
 export default class DeckDoctor {
   /* ──────────────────────────────  PUBLIC API  ────────────────────────────── */
 

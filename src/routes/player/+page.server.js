@@ -1,6 +1,7 @@
 // /src/routes/player/+page.server.js
 import { error, redirect } from '@sveltejs/kit';
-import { taleemServices as svc } from '$lib/taleemServices';
+import { getQuestionByFilename} from '../../lib/services/questionServices.js';
+import { taleemServices as svc} from '../../lib/taleemServices';
 
 export const prerender = false;
 
@@ -16,7 +17,7 @@ export async function load({ url, cookies, request }) {
   const filename = url.searchParams.get('filename');
   if (!filename) throw error(400, 'filename is required');
 
-  const row = await svc.questions.getByFilename(filename);
+  const row = await getQuestionByFilename(filename);
   if (!row) throw error(404, `Deck "${filename}" not found`);
   if (row.type !== 'deck' || !row.deck) throw error(415, `Item "${filename}" is not a deck`);
 
@@ -38,6 +39,8 @@ export async function load({ url, cookies, request }) {
     }).toString();
     throw redirect(302, `/sales?${q}`);
   }
+
+  // console.log("row.deck" ,row.deck);
 
   return {
     meta: {

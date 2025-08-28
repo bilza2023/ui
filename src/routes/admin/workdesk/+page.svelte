@@ -5,7 +5,7 @@
   import { NavBar, TaleemSlides,clampTime, findSlideIndex, getDeckEnd , } from '$lib/taleem';
 
   
-  import TaleemDoctorComp from '../../../lib/taleem/components/TaleemDoctorComp.svelte';
+  import TaleemDoctorComp from '../../../lib/taleem/taleemDoctor/TaleemDoctorComp.svelte';
 
   // ── state ─────────────────────────────────────────────
   let question = null;           // full object; slides live at question.deck

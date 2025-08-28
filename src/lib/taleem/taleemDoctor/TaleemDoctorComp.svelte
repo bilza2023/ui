@@ -1,5 +1,5 @@
 <script>
-  import { validate } from '$lib/taleemDoctor/taleemDoctor.js';
+  import { validate } from './taleemDoctor.js';
 
   export let question = null;
   export let strict = true;
