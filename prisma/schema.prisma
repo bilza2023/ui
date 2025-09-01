@@ -110,3 +110,52 @@ model User {
 
   @@index([email])
 }
+
+model SyllabusTcode {
+  id         Int      @id @default(autoincrement())
+  tcode      String   @unique
+  name       String
+  description String?
+  image      String?
+
+  chapters   SyllabusChapter[]
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model SyllabusChapter {
+  id         Int      @id @default(autoincrement())
+  tcodeId    Int
+  tcode      SyllabusTcode @relation(fields: [tcodeId], references: [id], onDelete: Cascade)
+
+  filename   String   // chapter slug
+  name       String
+  sortOrder  Int      @default(0)
+
+  exercises  SyllabusExercise[]
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([tcodeId, filename])
+  @@index([tcodeId])                 // list chapters by tcode
+  @@index([tcodeId, sortOrder])      // ordered lists
+}
+
+model SyllabusExercise {
+  id         Int      @id @default(autoincrement())
+  chapterId  Int
+  chapter    SyllabusChapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  name       String
+  filename   String   // exercise slug
+  sortOrder  Int      @default(0)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([chapterId, filename])
+  @@index([chapterId])               // list exercises by chapter
+  @@index([chapterId, sortOrder])    // ordered lists
+}
