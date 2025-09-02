@@ -178,3 +178,49 @@ export async function deleteByFilename(filename) {
   if (!filename) throw new Error('deleteByFilename: filename required');
   return prisma.question.delete({ where: { filename } });
 }
+
+// READ — flat list by tcode (optionally filter by chapter/exercise/type)
+export async function listQuestionsByTcode({
+  tcode,
+  chapter,
+  exercise,
+  type,                 // optional: 'deck' | 'note'
+  selectPayload = false, // false = omit deck/note blobs
+  limit = 500
+} = {}) {
+  if (!tcode) throw new Error('listQuestionsByTcode: tcode required');
+
+  /** @type {import('@prisma/client').Prisma.QuestionWhereInput} */
+  const where = { tcode };
+  if (chapter)  where.chapter  = chapter;   // NOTE: uses your "filename" fields
+  if (exercise) where.exercise = exercise;  // e.g., "theorems"
+  if (type)     where.type     = type;
+
+  /** @type {import('@prisma/client').Prisma.QuestionSelect} */
+  const select = {
+    filename: true,
+    type: true,
+    name: true,
+    description: true,
+    tags: true,
+    status: true,
+    sortOrder: true,
+    timed: true,
+    tcode: true,
+    chapter: true,
+    exercise: true,
+    createdAt: true,
+    editedAt: true
+  };
+  if (selectPayload) {
+    select.deck = true;
+    select.note = true;
+  }
+
+  return prisma.question.findMany({
+    where,
+    select,
+    orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+    take: limit
+  });
+}
