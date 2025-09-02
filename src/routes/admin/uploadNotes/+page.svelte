@@ -5,7 +5,7 @@
 
   import {
     listTcodes,
-    getChapters,
+    listChapters,
     getExercises,
     chapterNo as chapterNoOf
   } from "../../../lib/services/synopisisServices2";
@@ -77,7 +77,7 @@
   }
 
   // --- Cascading reactivity ---
-  $: chapters = tcode ? getChapters(tcode) : [];
+  $: chapters = tcode ? listChapters(tcode) : [];
   $: if (!chapters.find(c => c.filename === chapterSlug)) chapterSlug = "";
 
   $: chapterNo = (tcode && chapterSlug) ? chapterNoOf(tcode, chapterSlug) : null;

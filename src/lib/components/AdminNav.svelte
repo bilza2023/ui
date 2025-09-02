@@ -2,7 +2,6 @@
     <a href="/" class="nav-link">🔱 App Home</a>
     <a href="/admin/" class="nav-link">🏠 Home</a>
     <a href="/admin/subscriptions" class="nav-link">🔑 Subscriptions</a>
-    <a href="/admin/upload" class="nav-link">📤 Upload</a>
     <a href="/admin/upload_json" class="nav-link">📱 Upload Json</a>
     <a href="/admin/uploadNotes" class="nav-link">📜 Upload Notes</a>
     <a href="/admin/comments" class="nav-link">🔔 comments</a>

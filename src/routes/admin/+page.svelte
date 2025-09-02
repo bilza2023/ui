@@ -1,11 +1,10 @@
 <script>
   import Nav from "$lib/appComps/Nav.svelte";
-  // import AdminNav from "$lib/components/AdminNav.svelte";
+  import AdminNav from "$lib/components/AdminNav.svelte";
   import "$lib/styles/forms.css";
 
   // keep these paths exactly as you requested
   import AdminIndexTable from "./AdminIndexTable.svelte";
-  import AdminIndexPageNav from "./AdminIndexPageNav.svelte";
 
   // ⬇️ CRUCIAL: accept server data
   export let data;
