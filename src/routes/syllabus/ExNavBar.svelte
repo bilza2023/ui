@@ -1,32 +1,27 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
   
-	export let exercises = [];          // [{ name, filename }]
-	export let activeSlug = null;       // exercise filename
-	export let counts = {};             // { [slug]: { total, deck, note, latestEditedAt } }
+	export let exercises = [];     // [{ name, filename }]
+	export let activeSlug = null;  // exercise filename
+	export let counts = {};        // { [slug]: { total } }  ← total is optional
   
 	const dispatch = createEventDispatcher();
 	function pick(slug) { dispatch('pick', { slug }); }
   </script>
   
   <div class="exbar">
-	{#each exercises as ex}
-	  {#key ex.filename}
-		<button
-		  class="ex"
-		  class:active={activeSlug === ex.filename}
-		  on:click={() => pick(ex.filename)}
-		  title={ex.name}>
-		  <span class="label">{ex.name}</span>
-		  {#if counts && counts[ex.filename]}
-			<span class="badges">
-			  <span class="b total" title="Total">{counts[ex.filename].total}</span>
-			  <span class="b decks" title="Decks">{counts[ex.filename].deck}</span>
-			  <span class="b notes" title="Notes">{counts[ex.filename].note}</span>
-			</span>
-		  {/if}
-		</button>
-	  {/key}
+	{#each exercises as ex (ex.filename)}
+	  <button
+		class="ex"
+		class:active={activeSlug === ex.filename}
+		on:click={() => pick(ex.filename)}
+		title={ex.name}>
+		<span class="label">{ex.name}</span>
+  
+		{#if counts && counts[ex.filename] != null && counts[ex.filename].total != null}
+		  <span class="b total" title="Total">{counts[ex.filename].total}</span>
+		{/if}
+	  </button>
 	{/each}
   </div>
   
@@ -48,7 +43,6 @@
 	  border-radius:999px;
 	  cursor:pointer;
   
-	  /* subtle tint so it stands apart from the surface */
 	  background: color-mix(in oklab, var(--accentColor) 10%, var(--surfaceColor));
 	  color: var(--primaryText);
   
@@ -77,12 +71,7 @@
 	  white-space:nowrap;
 	}
   
-	.badges{
-	  display:flex;
-	  gap:6px;
-	}
-  
-	/* badge base */
+	/* single badge */
 	.b{
 	  padding:2px 6px;
 	  border-radius:999px;
@@ -92,19 +81,11 @@
 	  background: color-mix(in oklab, var(--surfaceColor) 85%, var(--backgroundColor));
 	  color: var(--primaryText);
 	}
-  
-	/* semantic tints using tokens */
 	.b.total{
 	  background: color-mix(in oklab, var(--accentColor) 18%, var(--surfaceColor));
 	}
-	.b.decks{
-	  background: color-mix(in oklab, var(--primaryColor) 18%, var(--surfaceColor));
-	}
-	.b.notes{
-	  background: color-mix(in oklab, var(--secondaryColor) 18%, var(--surfaceColor));
-	}
   
-	/* keep badges readable on active (inverted) button */
+	/* keep badge readable on active (inverted) button */
 	.ex.active .b{
 	  border-color: color-mix(in oklab, var(--backgroundColor) 40%, var(--primaryColor));
 	  color: var(--backgroundColor);
@@ -113,12 +94,5 @@
 	.ex.active .b.total{
 	  background: color-mix(in oklab, var(--backgroundColor) 25%, var(--accentColor));
 	}
-	.ex.active .b.decks{
-	  background: color-mix(in oklab, var(--backgroundColor) 25%, var(--primaryColor));
-	}
-	.ex.active .b.notes{
-	  background: color-mix(in oklab, var(--backgroundColor) 25%, var(--secondaryColor));
-	}
   </style>
-  
   

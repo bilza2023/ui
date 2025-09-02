@@ -1,6 +1,7 @@
 <script>
     import QuestionCard from "./QuestionCard.svelte";
     import ExNavBar from "./ExNavBar.svelte";
+    import Nav from "../../lib/appComps/Nav.svelte";
     export let data;
   
     // ————— Utils —————
@@ -88,6 +89,7 @@
   </script>
   
   
+  <Nav />
   <!-- Top -->
   <div class="top">
     <h1>Syllabus</h1>
