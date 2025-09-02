@@ -1,42 +1,29 @@
-// /src/routes/admin/settings/+server.js
+// /src/routes/admin/settings/export/+server.js
 import { error } from '@sveltejs/kit';
 import { getNested, listTcodes } from '$lib/services/synopisisServices2.js';
 
 export async function GET({ url }) {
-  // Download single tcode snapshot as JSON (identical to getNested() single-tcode shape)
   const tcode = (url.searchParams.get('tcode') || '').trim();
+  if (!tcode) throw error(400, 'Missing ?tcode=<tcodeName>');
 
-  if (!tcode) {
-    throw error(400, 'Missing ?tcode=<tcodeName>');
-  }
-
-  // Try to fetch a single-tcode snapshot; if service returns all, filter manually
+  // Try direct single snapshot
   let snapshot = null;
-
   try {
-    const maybeSingle = await getNested(tcode);
-    if (maybeSingle && typeof maybeSingle === 'object' && maybeSingle.tcodeName) {
-      snapshot = maybeSingle;
-    }
-  } catch {
-    // fall through
-  }
+    const one = await getNested(tcode);
+    if (one && typeof one === 'object' && one.tcodeName) snapshot = one;
+  } catch { /* ignore */ }
 
+  // Fallback: scan all
   if (!snapshot) {
     try {
-      const all = await getNested(null); // service sometimes returns full set with null
+      const all = await getNested(null);
       if (Array.isArray(all)) {
-        snapshot = all.find(
-          (x) => x && (x.tcodeName === tcode || x.tcode === tcode)
-        );
+        snapshot = all.find((x) => x && (x.tcodeName === tcode || x.tcode === tcode));
       }
-    } catch {
-      // fall through
-    }
+    } catch { /* ignore */ }
   }
 
   if (!snapshot) {
-    // As a final sanity, verify tcode exists to return a better error
     const tcodes = await listTcodes();
     const exists =
       Array.isArray(tcodes) &&

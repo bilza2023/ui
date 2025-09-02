@@ -1,49 +1,123 @@
 // /src/routes/admin/settings/+page.server.js
 import { fail } from '@sveltejs/kit';
-import { taleemServices as svc } from '$lib/taleemServices';
+import {
+  listTcodes,
+  getNested,
+  addTcode,
+  addChapter,
+  addExercise
+} from '$lib/services/synopisisServices2.js';
 
-// index_data will be converted into video_index at some proper time
-const ALLOWED_KEYS = new Set(['index_data', 'blog_index']); // add more if needed
+export const prerender = false;
+
+export async function load() {
+  const tcodes = await listTcodes();
+  return { tcodes };
+}
 
 export const actions = {
-  default: async ({ request }) => {
-    const data = await request.formData();
+  // POST ?/importSynopsis
+  importSynopsis: async ({ request }) => {
+    const fd = await request.formData();
+    const file = fd.get('synopsis_file');
+    const asTcode = (fd.get('as_tcode') || '').trim();
+    const mode = ((fd.get('mode') || 'merge') + '').trim().toLowerCase(); // reserved
 
-    const targetKeyRaw = data.get('target_key') ?? 'index_data';
-    const target_key = String(targetKeyRaw);
-
-    if (!ALLOWED_KEYS.has(target_key)) {
-      return fail(400, { ok: false, error: `Key "${target_key}" is not allowed.` });
-    }
-
-    const file = data.get('index_json');
     if (!file || typeof file.text !== 'function') {
-      return fail(400, { ok: false, error: 'No file received' });
+      return fail(400, { ok: false, code: 'E_NO_FILE', message: 'Please choose a JSON file.' });
     }
 
-    let text;
+    let payload;
     try {
-      text = await file.text();
+      payload = JSON.parse(await file.text());
     } catch {
-      return fail(400, { ok: false, error: 'Unable to read file' });
+      return fail(400, { ok: false, code: 'E_BAD_JSON', message: 'Invalid JSON file.' });
     }
 
-    let json;
-    try {
-      json = JSON.parse(text);
-    } catch {
-      return fail(400, { ok: false, error: 'Invalid JSON' });
+    // Accept exactly ONE tcode object (same shape as getNested single-tcode)
+    let tcodeObj = null;
+    if (payload && typeof payload === 'object' && payload.tcodeName && Array.isArray(payload.chapters)) {
+      tcodeObj = payload;
+    } else if (payload && Array.isArray(payload.tcodes)) {
+      if (payload.tcodes.length !== 1) {
+        return fail(400, { ok: false, code: 'E_MULTI_TCODE_NOT_SUPPORTED', message: 'Upload exactly one tcode JSON.' });
+      }
+      tcodeObj = payload.tcodes[0];
+    } else {
+      return fail(400, { ok: false, code: 'E_BAD_SHAPE', message: 'Unexpected JSON shape for tcode snapshot.' });
     }
 
-    // minimal guard: expect an array for these two indices
-    if (!Array.isArray(json)) {
-      return fail(400, {
-        ok: false,
-        error: 'Expected a JSON array (your file is not an array).'
+    const tcodeName = asTcode || tcodeObj.tcodeName;
+    if (!tcodeName) {
+      return fail(400, { ok: false, code: 'E_NO_TCODE', message: 'tcodeName missing.' });
+    }
+
+    // Ensure tcode exists (idempotent)
+    const tcodes = await listTcodes();
+    const exists =
+      Array.isArray(tcodes) &&
+      tcodes.some((t) =>
+        typeof t === 'string'
+          ? t === tcodeName
+          : (t.tcode && t.tcode === tcodeName) || (t.tcodeName && t.tcodeName === tcodeName)
+      );
+
+    if (!exists) {
+      await addTcode({
+        tcode: tcodeName,
+        name: tcodeName, // minimal; can be edited later
+        description: tcodeObj.description ?? null,
+        image: tcodeObj.image ?? null
       });
     }
 
-    await svc.settings.set(target_key, json);
-    return { ok: true, key: target_key, count: json.length };
+    // Merge by filename (no deletions)
+    let existing = null;
+    try { existing = await getNested(tcodeName); } catch { existing = null; }
+
+    const chapterMap = new Map();
+    if (existing && Array.isArray(existing.chapters)) {
+      for (const ch of existing.chapters) chapterMap.set(ch.filename, ch);
+    }
+
+    let addedChapters = 0;
+    let addedExercises = 0;
+
+    for (const ch of tcodeObj.chapters || []) {
+      const chFilename = ch.filename;
+      const chName = ch.name ?? chFilename;
+      const already = chapterMap.get(chFilename);
+
+      if (!already) {
+        await addChapter({ tcode: tcodeName, filename: chFilename, name: chName, sortOrder: ch.sortOrder ?? null });
+        addedChapters++;
+      }
+
+      const exSet =
+        already && Array.isArray(already.exercises)
+          ? new Set(already.exercises.map((e) => e.filename))
+          : new Set();
+
+      for (const ex of ch.exercises || []) {
+        if (!exSet.has(ex.filename)) {
+          await addExercise({
+            tcode: tcodeName,
+            chapterFilename: chFilename,
+            filename: ex.filename,
+            name: ex.name ?? ex.filename,
+            sortOrder: null
+          });
+          addedExercises++;
+        }
+      }
+    }
+
+    return {
+      ok: true,
+      action: 'importSynopsis',
+      tcode: tcodeName,
+      added: { chapters: addedChapters, exercises: addedExercises },
+      mode
+    };
   }
 };
