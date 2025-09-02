@@ -1,7 +1,7 @@
 
 // /src/routes/api/tcodes/+server.js
 import { json } from '@sveltejs/kit';
-import { listTcodes } from '../../../lib/services/synopisisServices2';
+import { listTcodes } from 'lib/services/userServices.js';
 
 export async function GET() {
   try {

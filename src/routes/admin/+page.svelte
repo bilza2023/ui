@@ -1,6 +1,6 @@
 <script>
   import Nav from "$lib/appComps/Nav.svelte";
-  import AdminNav from "$lib/components/AdminNav.svelte";
+  // import AdminNav from "$lib/components/AdminNav.svelte";
   import "$lib/styles/forms.css";
 
   // keep these paths exactly as you requested
@@ -21,7 +21,7 @@
 <Nav />
 <AdminNav />
 
-<AdminIndexPageNav totals={data.totals} filters={data.filters} />
+<!-- <AdminIndexPageNav totals={data.totals} filters={data.filters} /> -->
 
 <!-- Table fed from server-loaded items -->
 <div style="padding:0 60px">

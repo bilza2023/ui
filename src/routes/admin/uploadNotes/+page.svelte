@@ -8,7 +8,7 @@
     getChapters,
     getExercises,
     chapterNo as chapterNoOf
-  } from "$lib/services/synopsisServices.js";
+  } from "../../../lib/services/synopisisServices2";
 
   // --- Path state (replaces PathPicker) ---
   const tcodes = listTcodes(); // [{ tcodeName, ... }]

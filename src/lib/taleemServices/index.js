@@ -5,9 +5,9 @@ import {
     register, login, verify, isAdmin
   } from '../services/loginServices.js';
   
-  import {
-    getSubjectsIndex, getSyllabusByTcode, getAllSyllabusLegacy
-  } from '../services/syllabusServicer.js';
+  // import {
+  //   getSubjectsIndex, getSyllabusByTcode, getAllSyllabusLegacy
+  // } from '../services/synopisisServices2.js';
   
   import {
     listCommentsByStatus, answerComment, setCommentStatus, markCommentBad,
@@ -38,6 +38,9 @@ import {
     updateNoteString
   } from '../services/questionServices.js';
   
+  function getSubjectsIndex(){
+
+  }
   export const taleemServices = {
     // Auth & identity
     auth: {
@@ -47,36 +50,36 @@ import {
       isAdmin
     },
   
-    // Syllabus navigation (subjects → chapters → exercises)
-    syllabus: {
-      getSubjectsIndex,
-      getSyllabusByTcode,
-      getAllSyllabusLegacy
-    },
+    // // Syllabus navigation (subjects → chapters → exercises)
+    // syllabus: {
+    //   getSubjectsIndex,
+    //   getSyllabusByTcode,
+    //   getAllSyllabusLegacy
+    // },
   
     // Q&A (comments table, teacher responses)
-    messages: {
-      listByStatus: listCommentsByStatus,
-      answer:       answerComment,
-      setStatus:    setCommentStatus,
-      markBad:      markCommentBad,
+    // messages: {
+    //   listByStatus: listCommentsByStatus,
+    //   answer:       answerComment,
+    //   setStatus:    setCommentStatus,
+    //   markBad:      markCommentBad,
     
-      list:       getUserMessages,
-      bulkUpload: messagesBulkUpload
-    },
+    //   list:       getUserMessages,
+    //   bulkUpload: messagesBulkUpload
+    // },
   
     // Questions store (deck | note records)
-    questions: {
-      exists,
-      getByFilename: getQuestionByFilename,
-      create:        createQuestion,
-      upsert:        upsertQuestion,
-      updateDeck:    updateDeckJson,
-      updateNote:    updateNoteHtml,
-      updateNoteString,                // raw setter (kept for completeness)
-      patchMeta:     patchQuestionMeta,
-      delete:        deleteByFilename
-    },
+    // questions: {
+    //   exists,
+    //   getByFilename: getQuestionByFilename,
+    //   create:        createQuestion,
+    //   upsert:        upsertQuestion,
+    //   updateDeck:    updateDeckJson,
+    //   updateNote:    updateNoteHtml,
+    //   updateNoteString,                // raw setter (kept for completeness)
+    //   patchMeta:     patchQuestionMeta,
+    //   delete:        deleteByFilename
+    // },
   
     // Subscriptions & access control
     subscriptions: {
@@ -108,6 +111,7 @@ import {
       assertOrThrow:  assertPasswordOrThrow
     }
   };
+  
   
   export default taleemServices;
   

@@ -1,6 +1,6 @@
 // /src/routes/api/tcodes/[tcodeSlug]/questions/+server.js
 import { json } from '@sveltejs/kit';
-import { listQuestionsByTcode } from '$lib/services/questionServices.js';
+import { listQuestionsByTcode } from '$lib/services/userServices.js';
 
 const S = (v) => (typeof v === 'string' ? v.trim() : '');
 

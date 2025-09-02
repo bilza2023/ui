@@ -1,7 +1,7 @@
 
 // /src/routes/api/tcodes/[tcodeSlug]/+server.js
 import { json } from '@sveltejs/kit';
-import { getNested } from '$lib/services/synopisisServices2.js';
+import { getNested } from '$lib/services/userServices.js';
 
 export async function GET({ params }) {
   const { tcodeSlug } = params;

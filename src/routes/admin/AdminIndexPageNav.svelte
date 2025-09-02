@@ -8,7 +8,7 @@
     listTcodes,
     getChapters,
     chapterNo as chapterNoOf
-  } from '$lib/services/synopsisServices.js';
+  } from '../../lib/services/synopisisServices2';
 
   // from server load
   export let totals  = { all: 0, decks: 0, notes: 0 };

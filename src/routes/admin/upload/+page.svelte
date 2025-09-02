@@ -8,7 +8,7 @@
     getChapters,
     getExercises,
     chapterNo as chapterNoOf
-  } from "$lib/services/synopsisServices.js";
+  } from "../../../lib/services/synopisisServices2";
 
   // populate once (client-safe)
   const tcodes = listTcodes();                      // [{ tcodeName, ... }]
