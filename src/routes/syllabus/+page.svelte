@@ -1,47 +1,41 @@
 <script>
-    // Provided by +page.server.js
     import QuestionCard from "./QuestionCard.svelte";
     import ExNavBar from "./ExNavBar.svelte";
     export let data;
   
-    // Base derivations (robust fallbacks)
+    // ————— Utils —————
+    const lc = (s) => (s ?? '').toString().trim().toLowerCase();
+    const getChapterSlug = (q) =>
+      q?.chapter ?? q?.chapterFilename ?? q?.chapter_slug ?? q?.chapterName ??
+      (q?.filename ?? '').split('__')[1] ?? '';
+    const getExerciseSlug = (q) =>
+      q?.exercise ?? q?.exerciseSlug ?? (q?.filename ?? '').split('__')[2] ?? '';
+  
+    // ————— Base derivations —————
     $: tcode    = data?.tcode ?? '';
     $: synopsis = data?.synopsis ?? null;
     $: items    = Array.isArray(data?.items)
       ? data.items
       : (Array.isArray(data?.questions) ? data.questions : []);
   
-    // Helpers (define before use)
-    const lc = (s) => (s ?? '').toString().trim().toLowerCase();
+    // Normalize once (cache lowercase slugs for fast filters/counts)
+    $: normalized = items.map((q) => ({
+      ...q,
+      _ch: lc(getChapterSlug(q)),
+      _ex: lc(getExerciseSlug(q))
+    }));
   
-    const chapterFromQuestion = (q) => {
-      const direct =
-        q?.chapter ??
-        q?.chapterFilename ??
-        q?.chapter_slug ??
-        q?.chapterName ?? '';
-      if (direct) return direct;
-      // fallback from filename pattern: tcode__chapter__exercise__q001
-      return (q?.filename ?? '').split('__')[1] ?? '';
-    };
-  
-    const exerciseFromQuestion = (q) =>
-      q?.exercise ??
-      q?.exerciseSlug ??
-      ((q?.filename ?? '').split('__')[2] ?? '');
-  
-    // Chapters (left panel)
+    // Chapters + active chapter
     $: chapters = Array.isArray(synopsis?.chapters) ? synopsis.chapters : [];
-  
-    // Active chapter (SSR/URL first, else first chapter)
     $: activeChapter =
       data?.selected?.chapter ??
       (chapters[0]?.filename ?? chapters[0]?.slug ?? '');
+    $: activeChapterL = lc(activeChapter);
   
-    // Exercise selection state
+    // Exercise selection
     let activeExercise = 'all';
+    $: activeExerciseL = lc(activeExercise);
   
-    // Chapter change handler (also reset exercise)
     function pickChapter(filenameOrSlug) {
       activeChapter  = filenameOrSlug;
       activeExercise = 'all';
@@ -50,46 +44,49 @@
     // Exercises for the active chapter
     $: exercises =
       chapters.find((c) =>
-        [c.filename, c.slug].map(lc).includes(lc(activeChapter))
+        [c?.filename, c?.slug].map(lc).includes(activeChapterL)
       )?.exercises ?? [];
   
     // ExNavBar inputs
     $: exButtons = [{ name: 'All', filename: 'all' }, ...exercises];
   
+    // Counts (by exercise, scoped to active chapter)
     $: exCounts = (() => {
-      const by = {};
-      // per-exercise counts
+      const inChapter = normalized.filter((q) => {
+        // tolerant chapter match
+        return !activeChapterL ||
+               q._ch === activeChapterL ||
+               activeChapterL.includes(q._ch) ||
+               q._ch.includes(activeChapterL);
+      });
+  
+      const by = inChapter.reduce((acc, q) => {
+        acc[q._ex] = (acc[q._ex] ?? 0) + 1;
+        return acc;
+      }, {});
+  
+      const out = { all: { total: inChapter.length } };
       for (const ex of exercises) {
-        const slug = ex?.filename ?? ex?.slug ?? '';
-        const L = lc(slug);
-        by[slug || ''] = {
-          total: items.filter(
-            (q) =>
-              lc(chapterFromQuestion(q)).includes(lc(activeChapter)) &&
-              lc(exerciseFromQuestion(q)) === L
-          ).length
-        };
+        const slug = lc(ex?.filename ?? ex?.slug ?? '');
+        out[slug || ''] = { total: by[slug] ?? 0 };
       }
-      // All = total in active chapter
-      by['all'] = {
-        total: items.filter(
-          (q) => lc(chapterFromQuestion(q)).includes(lc(activeChapter))
-        ).length
-      };
-      return by;
+      return out;
     })();
   
-    // Final questions filter
-    $: filteredQuestions = items.filter((q) => {
-      const A = lc(activeChapter);
-      const C = lc(chapterFromQuestion(q));
-      const inChapter = !A || A === C || A.includes(C) || C.includes(A);
-      if (!inChapter) return false;
+    // Final questions (chapter + exercise)
+    $: filteredQuestions = normalized.filter((q) => {
+      const inChapter =
+        !activeChapterL ||
+        q._ch === activeChapterL ||
+        activeChapterL.includes(q._ch) ||
+        q._ch.includes(activeChapterL);
   
-      if (activeExercise === 'all') return true;
-      return lc(exerciseFromQuestion(q)) === lc(activeExercise);
+      if (!inChapter) return false;
+      if (activeExerciseL === 'all') return true;
+      return q._ex === activeExerciseL;
     });
   </script>
+  
   
   <!-- Top -->
   <div class="top">
@@ -157,32 +154,53 @@
   {/if}
   
   <style>
-    :global(body){ background:#0b1018; color:#e6ebf1; }
-    .muted{ color:#9fb0c5; }
-    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
   
-    .top{ padding:16px 14px; border-bottom:1px solid #1e2a3a;background-color: #1e2a3a; }
-    .top h1{ margin:0 0 6px 0; font-size:1.35rem; }
-    .meta{ display:flex; gap:16px; flex-wrap:wrap; color:#9fb0c5; }
-  
-    .wrap{ display:grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 70px); }
-    .left{ border-right:1px solid #1e2a3a; padding:12px; background:#0a121c; }
-    .left h2{ margin:0 0 10px 0; font-size:1rem; color:#9fb0c5; }
-    .list{ list-style:none; padding:0; margin:0; display:grid; gap:6px; }
-    .list button{ width:100%; text-align:left; display:grid; grid-template-columns: 28px 1fr; gap:8px;
-      padding:8px 10px; border:1px solid #223042; background:#0a121c; color:#e6ebf1; border-radius:10px; }
-    .list button.active{ border-color:#3b82f6; background:#0b1530; }
-    .idx{ opacity:.7; }
-    .title{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  
-    .main{ padding:16px 18px; display:grid; gap:20px; }
-   
-    .qsec h2{ margin:12px 0; }
-    .count{ color:#9fb0c5; margin-left:6px; }
-   
-    @media (max-width: 880px){
-      .wrap{ grid-template-columns: 1fr; }
-      .left{ border-right:0; border-bottom:1px solid #1e2a3a; }
-    }
-  </style>
-  
+  :global(body){ background:#0b1018; color:#e6ebf1; }
+.muted{ color:#9fb0c5; }
+.mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+
+.top{ padding:16px 14px; border-bottom:1px solid #1e2a3a; background-color:#1e2a3a; }
+.top h1{ margin:0 0 6px 0; font-size:1.35rem; }
+.meta{ display:flex; gap:16px; flex-wrap:wrap; color:#9fb0c5; align-items:center; }
+
+/* Page-level layout: keep grid here only */
+.wrap{ display:grid; grid-template-columns:260px 1fr; min-height:calc(100vh - 70px); }
+
+/* Sidebar (flex lists) */
+.left{ border-right:1px solid #1e2a3a; padding:12px; background:#0a121c; }
+.left h2{ margin:0 0 10px 0; font-size:1rem; color:#9fb0c5; }
+.list{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+.list button{
+  width:100%; text-align:left;
+  display:flex; align-items:center; gap:8px;
+  padding:8px 10px; border:1px solid #223042; background:#0a121c; color:#e6ebf1; border-radius:10px;
+}
+.list button.active{ border-color:#3b82f6; background:#0b1530; }
+.idx{ width:28px; flex:0 0 28px; text-align:right; opacity:.7; }
+.title{ flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* Main column (flex stack) */
+.main{
+  padding:16px 18px;
+  display:flex; flex-direction:column; gap:12px; align-items:stretch;
+}
+
+/* ExNavBar wrapper: no extra spacing */
+.exwrap{ display:flex; margin:0; padding:0; align-items:center; }
+.exwrap > :first-child{ margin:0; } /* neutralize any default margins from ExNavBar root */
+
+/* Questions section: tight vertical rhythm */
+.qsec{ display:flex; flex-direction:column; gap:8px; margin:0; padding:0; }
+.qsec > h2{ margin:4px 0 6px; }
+.count{ color:#9fb0c5; margin-left:6px; }
+
+/* Card area */
+.qwrap{ display:flex; justify-content:center; margin:0; padding:0; }
+/* If QuestionCard applies min-heights or outer margins, clamp them here */
+.qwrap :global(.question-card-root){ margin:0 !important; min-height:unset !important; }
+
+@media (max-width:880px){
+  .wrap{ grid-template-columns:1fr; }
+  .left{ border-right:0; border-bottom:1px solid #1e2a3a; }
+}
+</style>
