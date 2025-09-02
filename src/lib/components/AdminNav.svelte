@@ -7,6 +7,7 @@
     <a href="/admin/uploadNotes" class="nav-link">📜 Upload Notes</a>
     <a href="/admin/comments" class="nav-link">🔔 comments</a>
     <a href="/admin/workdesk" target="_blank" class="nav-link">🎖️ workdesk</a>
+    <a href="/admin/synopsis" target="_blank" class="nav-link">🦞 Synopsis</a>
     <a href="/admin/settings" class="nav-link">🛠️ Settings</a>
   </nav>
   
