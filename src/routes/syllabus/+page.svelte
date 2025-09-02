@@ -1,54 +1,93 @@
 <script>
     // Provided by +page.server.js
     import QuestionCard from "./QuestionCard.svelte";
+    import ExNavBar from "./ExNavBar.svelte";
     export let data;
   
-    // Derive safely
+    // Base derivations (robust fallbacks)
     $: tcode    = data?.tcode ?? '';
     $: synopsis = data?.synopsis ?? null;
-    $: items    = Array.isArray(data?.items) ? data.items : [];
+    $: items    = Array.isArray(data?.items)
+      ? data.items
+      : (Array.isArray(data?.questions) ? data.questions : []);
+  
+    // Helpers (define before use)
+    const lc = (s) => (s ?? '').toString().trim().toLowerCase();
+  
+    const chapterFromQuestion = (q) => {
+      const direct =
+        q?.chapter ??
+        q?.chapterFilename ??
+        q?.chapter_slug ??
+        q?.chapterName ?? '';
+      if (direct) return direct;
+      // fallback from filename pattern: tcode__chapter__exercise__q001
+      return (q?.filename ?? '').split('__')[1] ?? '';
+    };
+  
+    const exerciseFromQuestion = (q) =>
+      q?.exercise ??
+      q?.exerciseSlug ??
+      ((q?.filename ?? '').split('__')[2] ?? '');
   
     // Chapters (left panel)
     $: chapters = Array.isArray(synopsis?.chapters) ? synopsis.chapters : [];
   
-    // Active chapter: prefer URL/SSR; else default to first chapter's filename/slug
+    // Active chapter (SSR/URL first, else first chapter)
     $: activeChapter =
-      (data?.selected?.chapter) ||
+      data?.selected?.chapter ??
       (chapters[0]?.filename ?? chapters[0]?.slug ?? '');
   
-    // Exercises for the active chapter (display only)
-    $: exercises =
-      chapters.find(c =>
-        c.filename === activeChapter ||
-        c.slug === activeChapter
-      )?.exercises ?? [];
+    // Exercise selection state
+    let activeExercise = 'all';
   
+    // Chapter change handler (also reset exercise)
     function pickChapter(filenameOrSlug) {
-      activeChapter = filenameOrSlug;
+      activeChapter  = filenameOrSlug;
+      activeExercise = 'all';
     }
   
-    // ── Tolerant filtering (handles different field names / filename parsing) ──
-    const lc = (s) => (s ?? '').toString().trim().toLowerCase();
-    const chapterFromQuestion = (q) => {
-      // try direct fields first
-      const direct =
-        q.chapter ??
-        q.chapterFilename ??
-        q.chapter_slug ??
-        q.chapterName ??
-        '';
-      if (direct) return direct;
+    // Exercises for the active chapter
+    $: exercises =
+      chapters.find((c) =>
+        [c.filename, c.slug].map(lc).includes(lc(activeChapter))
+      )?.exercises ?? [];
   
-      // fallback: parse 2nd segment from filename like "tcode__chapter__exercise__q001"
-      const seg = (q.filename ?? '').split('__')[1] ?? '';
-      return seg;
+    // ExNavBar inputs
+    $: exButtons = [{ name: 'All', filename: 'all' }, ...exercises];
+  
+    $: exCounts = (() => {
+      const by = {};
+      // per-exercise counts
+      for (const ex of exercises) {
+        const slug = ex?.filename ?? ex?.slug ?? '';
+        const L = lc(slug);
+        by[slug || ''] = {
+          total: items.filter(
+            (q) =>
+              lc(chapterFromQuestion(q)).includes(lc(activeChapter)) &&
+              lc(exerciseFromQuestion(q)) === L
+          ).length
+        };
+      }
+      // All = total in active chapter
+      by['all'] = {
+        total: items.filter(
+          (q) => lc(chapterFromQuestion(q)).includes(lc(activeChapter))
+        ).length
       };
+      return by;
+    })();
   
+    // Final questions filter
     $: filteredQuestions = items.filter((q) => {
-      if (!activeChapter) return true;
-      const a = lc(activeChapter);
-      const b = lc(chapterFromQuestion(q));
-      return b === a || a.includes(b) || b.includes(a);
+      const A = lc(activeChapter);
+      const C = lc(chapterFromQuestion(q));
+      const inChapter = !A || A === C || A.includes(C) || C.includes(A);
+      if (!inChapter) return false;
+  
+      if (activeExercise === 'all') return true;
+      return lc(exerciseFromQuestion(q)) === lc(activeExercise);
     });
   </script>
   
@@ -87,39 +126,33 @@
   
       <!-- Main: Exercises + Questions -->
       <main class="main">
-        <section>
-          <h2>Exercises in: <span class="mono">{activeChapter || '—'}</span></h2>
-          {#if exercises.length === 0}
-            <p class="muted">No exercises found for this chapter.</p>
-          {:else}
-            <div class="grid">
-              {#each exercises as ex}
-                <div class="card">
-                  <div class="title">{ex.name}</div>
-                  <div class="slug">{ex.filename ?? ex.slug}</div>
-                </div>
-              {/each}
-            </div>
-          {/if}
-        </section>
-  
-        <section class="qsec">
-          <h2>
-            Questions for <span class="mono">{activeChapter || '—'}</span>
-            <span class="count">({filteredQuestions.length})</span>
-          </h2>
-  
-          {#if filteredQuestions.length === 0}
-            <p class="muted">No questions for this chapter.</p>
-          {:else}        
-                <div class="flex justify-center ">
-                    <QuestionCard items={filteredQuestions} />
-                </div>
- 
-          {/if}
-        </section>
-  
+        {#key `${activeChapter}`}
+          <div class="exwrap">
+            <ExNavBar
+              exercises={exButtons}
+              activeSlug={activeExercise}
+              counts={exCounts}
+              on:pick={(e) => (activeExercise = e.detail.slug)}
+            />
+          </div>
+      
+          <section class="qsec">
+            <h2>
+              Questions for <span class="mono">{activeChapter || '—'}</span>
+              <span class="count">({filteredQuestions.length})</span>
+            </h2>
+      
+            {#if filteredQuestions.length === 0}
+              <p class="muted">No questions for this chapter.</p>
+            {:else}
+              <div class="flex justify-center">
+                <QuestionCard items={filteredQuestions} />
+              </div>
+            {/if}
+          </section>
+        {/key}
       </main>
+      
     </div>
   {/if}
   
@@ -128,7 +161,7 @@
     .muted{ color:#9fb0c5; }
     .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
   
-    .top{ padding:16px 14px; border-bottom:1px solid #1e2a3a; }
+    .top{ padding:16px 14px; border-bottom:1px solid #1e2a3a;background-color: #1e2a3a; }
     .top h1{ margin:0 0 6px 0; font-size:1.35rem; }
     .meta{ display:flex; gap:16px; flex-wrap:wrap; color:#9fb0c5; }
   
@@ -143,11 +176,7 @@
     .title{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   
     .main{ padding:16px 18px; display:grid; gap:20px; }
-    .grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:12px; }
-    .card{ border:1px solid #223042; border-radius:12px; padding:12px; background:#0a121c; display:grid; gap:6px; }
-    .card .title{ font-weight:600; }
-    .card .slug{ color:#7a90a9; font-size:.9rem; }
-  
+   
     .qsec h2{ margin:12px 0; }
     .count{ color:#9fb0c5; margin-left:6px; }
    
