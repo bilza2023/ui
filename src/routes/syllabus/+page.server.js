@@ -23,7 +23,7 @@ export async function load({ url, fetch, setHeaders }) {
     const synRes = await fetch(`/api/tcodes/${encodeURIComponent(tcodeSlug)}`);
     if (!synRes.ok) throw new Error(`synopsis(${tcodeSlug}) → HTTP ${synRes.status}`);
     const synopsis = await synRes.json();
-    console.log('[Syllabus SSR] fetched synopsis for', tcodeSlug, synopsis);
+    // console.log('[Syllabus SSR] fetched synopsis for', tcodeSlug, synopsis);
 
     // 2) Fetch flat questions list for the tcode (no filters for now)
     const qRes = await fetch(`/api/tcodes/${encodeURIComponent(tcodeSlug)}/questions`);

@@ -1,26 +1,55 @@
 <script>
     // Provided by +page.server.js
+    import QuestionCard from "./QuestionCard.svelte";
     export let data;
   
     // Derive safely
-    $: tcode     = data?.tcode ?? '';
-    $: synopsis  = data?.synopsis ?? null;
-    $: items     = Array.isArray(data?.items) ? data.items : [];
+    $: tcode    = data?.tcode ?? '';
+    $: synopsis = data?.synopsis ?? null;
+    $: items    = Array.isArray(data?.items) ? data.items : [];
   
-    $: chapters  = Array.isArray(synopsis?.chapters) ? synopsis.chapters : [];
+    // Chapters (left panel)
+    $: chapters = Array.isArray(synopsis?.chapters) ? synopsis.chapters : [];
+  
+    // Active chapter: prefer URL/SSR; else default to first chapter's filename/slug
     $: activeChapter =
-        (data?.selected?.chapter) ||
-        (chapters[0]?.filename ?? chapters[0]?.slug ?? '');
+      (data?.selected?.chapter) ||
+      (chapters[0]?.filename ?? chapters[0]?.slug ?? '');
   
+    // Exercises for the active chapter (display only)
     $: exercises =
-        chapters.find(c =>
-          c.filename === activeChapter ||
-          c.slug === activeChapter
-        )?.exercises ?? [];
+      chapters.find(c =>
+        c.filename === activeChapter ||
+        c.slug === activeChapter
+      )?.exercises ?? [];
   
     function pickChapter(filenameOrSlug) {
       activeChapter = filenameOrSlug;
     }
+  
+    // ── Tolerant filtering (handles different field names / filename parsing) ──
+    const lc = (s) => (s ?? '').toString().trim().toLowerCase();
+    const chapterFromQuestion = (q) => {
+      // try direct fields first
+      const direct =
+        q.chapter ??
+        q.chapterFilename ??
+        q.chapter_slug ??
+        q.chapterName ??
+        '';
+      if (direct) return direct;
+  
+      // fallback: parse 2nd segment from filename like "tcode__chapter__exercise__q001"
+      const seg = (q.filename ?? '').split('__')[1] ?? '';
+      return seg;
+      };
+  
+    $: filteredQuestions = items.filter((q) => {
+      if (!activeChapter) return true;
+      const a = lc(activeChapter);
+      const b = lc(chapterFromQuestion(q));
+      return b === a || a.includes(b) || b.includes(a);
+    });
   </script>
   
   <!-- Top -->
@@ -41,20 +70,19 @@
       <aside class="left">
         <h2>Chapters ({chapters.length})</h2>
         <ul class="list">
-            {#each chapters as ch, i (ch.filename ?? ch.slug ?? i)}
-              <li>
-                <button
-                  class:active={(activeChapter === (ch.filename ?? ch.slug))}
-                  on:click={() => pickChapter(ch.filename ?? ch.slug)}
-                  title={ch.name}
-                >
-                  <span class="idx">{i + 1}</span>
-                  <span class="title">{ch.name}</span>
-                </button>
-              </li>
-            {/each}
-          </ul>
-          
+          {#each chapters as ch, i (ch.filename ?? ch.slug ?? i)}
+            <li>
+              <button
+                class:active={(activeChapter === (ch.filename ?? ch.slug))}
+                on:click={() => pickChapter(ch.filename ?? ch.slug)}
+                title={ch.name}
+              >
+                <span class="idx">{i + 1}</span>
+                <span class="title">{ch.name}</span>
+              </button>
+            </li>
+          {/each}
+        </ul>
       </aside>
   
       <!-- Main: Exercises + Questions -->
@@ -76,47 +104,23 @@
         </section>
   
         <section class="qsec">
-          <h2>Questions ({items.length})</h2>
-          {#if items.length === 0}
-            <p class="muted">No questions found for this tcode (yet).</p>
-          {:else}
-            <table class="qtable">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Filename/Title</th>
-                  <th>Type</th>
-                  <th>Chapter</th>
-                  <th>Exercise</th>
-                </tr>
-              </thead>
-              <tbody>
-                {#each items as q, i}
-                  <tr>
-                    <td class="idx">{i + 1}</td>
-                    <td class="mono">
-                      {q.filename || q.title || q.name || '(unnamed)'}
-                    </td>
-                    <td>{q.type || '—'}</td>
-                    <td class="mono">{q.chapter || '—'}</td>
-                    <td class="mono">{q.exercise || '—'}</td>
-                  </tr>
-                {/each}
-              </tbody>
-            </table>
+          <h2>
+            Questions for <span class="mono">{activeChapter || '—'}</span>
+            <span class="count">({filteredQuestions.length})</span>
+          </h2>
+  
+          {#if filteredQuestions.length === 0}
+            <p class="muted">No questions for this chapter.</p>
+          {:else}        
+                <div class="flex justify-center ">
+                    <QuestionCard items={filteredQuestions} />
+                </div>
+ 
           {/if}
         </section>
+  
       </main>
     </div>
-  
-    <!-- Raw JSON (handy while wiring; remove later) -->
-    <details class="raw">
-      <summary>Show raw JSON</summary>
-      <h3>synopsis</h3>
-      <pre>{JSON.stringify(synopsis, null, 2)}</pre>
-      <h3>items</h3>
-      <pre>{JSON.stringify(items, null, 2)}</pre>
-    </details>
   {/if}
   
   <style>
@@ -145,13 +149,8 @@
     .card .slug{ color:#7a90a9; font-size:.9rem; }
   
     .qsec h2{ margin:12px 0; }
-    .qtable{ width:100%; border-collapse: collapse; }
-    .qtable th, .qtable td{ padding:8px 10px; border-bottom:1px solid #1e2a3a; }
-    .qtable th{ text-align:left; color:#9fb0c5; font-weight:600; }
-    .qtable .idx{ color:#9fb0c5; }
-  
-    .raw{ margin:14px; }
-    .raw pre{ background:#0a121c; border:1px solid #223042; border-radius:8px; padding:10px; overflow:auto; }
+    .count{ color:#9fb0c5; margin-left:6px; }
+   
     @media (max-width: 880px){
       .wrap{ grid-template-columns: 1fr; }
       .left{ border-right:0; border-bottom:1px solid #1e2a3a; }
