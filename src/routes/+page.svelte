@@ -6,14 +6,10 @@
   import QuestionCards from "../lib/questionCards/QuestionCards.svelte";
   import SecondaryNav from "$lib/SecondaryNav.svelte";
   import Footer from "../lib/appComps/Footer.svelte";
-  import { listTcodes } from "../lib/services/synopsisServices";
   
   export let data;
-  let syllabus = [];
+  const { syllabus = [] } = data;
   
-  onMount(() => {
-    syllabus = listTcodes(); // [{ tcodeName, description, image }]
-  });
 
   let pageDisplayState = 0;
 </script>
