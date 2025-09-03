@@ -1,67 +1,70 @@
-// Admin · Synopsis (server)
-// Uses ONLY v2 service:
-//   $lib/services/synopisisServices2.server.js
-
-import { fail } from '@sveltejs/kit';
-import {
-  addTcode,
-  addChapter,
-  addExercise,
-  listTcodes,
-  getNested
-} from '../../../lib/services/synopisisServices2.js';
-
+// /src/routes/admin/synopsis/+page.server.js
 export const prerender = false;
 
-export async function load() {
-  const [tcodes, nested] = await Promise.all([
-    listTcodes(),
-    getNested(null) // all tcodes → used to cascade chapter dropdown client-side
-  ]);
-  return { tcodes, nested };
+import * as admin from '$lib/services/adminServices.js';
+import { fail } from '@sveltejs/kit';
+
+const S = (v) => (typeof v === 'string' ? v.trim() : '');
+
+// Fallback if admin.slugify isn't present yet
+const localSlugify = (s) =>
+  (s ?? '')
+    .toString()
+    .trim()
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+    .replace(/-{2,}/g, '-');
+
+const SLUG = (s) => (typeof admin.slugify === 'function' ? admin.slugify(s) : localSlugify(s));
+
+export async function load({ setHeaders }) {
+  const tcodes = await admin.listTcodes();
+  setHeaders({ 'cache-control': 'public, max-age=15' });
+  return { tcodes };
 }
 
 export const actions = {
   addTcode: async ({ request }) => {
     const fd = await request.formData();
-    const tcode = (fd.get('tcode') || '').trim();
-    const name = (fd.get('name') || '').trim();
-    const description = (fd.get('description') || '').trim() || null;
-    const image = (fd.get('image') || '').trim() || null;
+    const slug = S(fd.get('tcode'));        // tcode card stays slug-explicit
+    const name = S(fd.get('name'));
+    const description = S(fd.get('description')) || '';
+    const image = S(fd.get('image')) || '';
 
-    if (!tcode || !name) {
+    if (!slug || !name) {
       return fail(400, { action: 'addTcode', ok: false, message: 'tcode and name are required' });
     }
-    await addTcode({ tcode, name, description, image });
-    return { action: 'addTcode', ok: true, message: `Added tcode “${tcode}”` };
+    await admin.addTcode({ slug, name, description, image });
+    return { action: 'addTcode', ok: true, message: `Added tcode “${slug}”` };
   },
 
   addChapter: async ({ request }) => {
     const fd = await request.formData();
-    const tcode = (fd.get('tcode') || '').trim();
-    const filename = (fd.get('filename') || '').trim();   // chapter slug
-    const name = (fd.get('name') || '').trim();
-    const sortRaw = (fd.get('number') || '').trim();       // optional (number = sortOrder)
-    const sortOrder = sortRaw ? Number.parseInt(sortRaw, 10) : null;
+    const tcodeSlug = S(fd.get('tcode'));
+    const name = S(fd.get('name'));
+    const slug = SLUG(name);
 
-    if (!tcode || !filename || !name) {
-      return fail(400, { action: 'addChapter', ok: false, message: 'tcode, filename, name are required' });
+    if (!tcodeSlug || !name) {
+      return fail(400, { action: 'addChapter', ok: false, message: 'tcode and name are required' });
     }
-    await addChapter({ tcode, filename, name, sortOrder });
-    return { action: 'addChapter', ok: true, message: `Added chapter “${filename}” to ${tcode}` };
+    await admin.addChapter({ tcodeSlug, slug, name, description: '' });
+    return { action: 'addChapter', ok: true, message: `Added chapter “${slug}” to ${tcodeSlug}` };
   },
 
   addExercise: async ({ request }) => {
     const fd = await request.formData();
-    const tcode = (fd.get('tcode') || '').trim();
-    const chapterFilename = (fd.get('chapterFilename') || '').trim();
-    const filename = (fd.get('filename') || '').trim();   // exercise slug
-    const name = (fd.get('name') || '').trim();
+    const tcodeSlug = S(fd.get('tcode'));
+    const chapterSlug = S(fd.get('chapterSlug'));
+    const name = S(fd.get('name'));
+    const slug = SLUG(name);
 
-    if (!tcode || !chapterFilename || !filename || !name) {
-      return fail(400, { action: 'addExercise', ok: false, message: 'tcode, chapterFilename, filename, name are required' });
+    if (!tcodeSlug || !chapterSlug || !name) {
+      return fail(400, { action: 'addExercise', ok: false, message: 'tcode, chapterSlug and name are required' });
     }
-    await addExercise({ tcode, chapterFilename, filename, name, sortOrder: null });
-    return { action: 'addExercise', ok: true, message: `Added exercise “${filename}” under ${tcode}/${chapterFilename}` };
+    await admin.addExercise({ tcodeSlug, chapterSlug, slug, name });
+    return { action: 'addExercise', ok: true, message: `Added exercise “${slug}” under ${tcodeSlug}/${chapterSlug}` };
   }
 };

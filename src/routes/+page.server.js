@@ -1,25 +1,34 @@
-// SSR loader for Home page — reads from AppSettings
+// SSR loader for Home (Index) — DB-backed
+export const prerender = false;
+
 import { getSetting } from '$lib/services/AppServices.js';
-import { listTcodes } from '$lib/services/synopisisServices2.js';
-export const prerender = false; // dynamic DB-backed page
+import { listTcodesForIndex, listRecentForIndex } from '$lib/services/userServices.js';
 
 export async function load({ setHeaders }) {
- 
-  const fromIndexData     = await getSetting('index_data', null);
-  const blog_index     = await getSetting('blog_index', null);
+  // Sidebar blog module (independent of syllabus)
+  const blog_index = await getSetting('blog_index', null);
 
-  const questions =  fromIndexData ?? [];
+  // Subjects grid (slug-first)
+  const subjects = await listTcodesForIndex(); // [{ slug, name, description?, image? }]
+  const syllabus = subjects.map(s => ({
+    // new slug-first field
+    slug: s.slug,
+    name: s.name,
+    description: s.description ?? null,
+    image: s.image ?? '/media/images/taleem.webp',
 
-  const rows = await listTcodes(); // [{ id, tcode, name, description, image }]
-  // Shape it to what you want on the client
-  const syllabus = rows.map(r => ({
-    tcodeName: r.tcode,
-    name: r.name,
-    description: r.description,
-    image: r.image
+    // legacy compatibility (if your +page.svelte still uses it)
+    tcodeName: s.slug
   }));
-  // Optional small cache; remove if you want zero caching.
-  setHeaders({ 'cache-control': 'public, max-age=60' });
 
-  return { questions,blog_index,syllabus };
+  // Recent questions feed (metadata only). If you still keep a curated list in settings,
+  // uncomment the override block below.
+  let questions = await listRecentForIndex({ limit: 12 });
+
+  // Optional curated override:
+  // const curated = await getSetting('index_data', null);
+  // if (Array.isArray(curated) && curated.length) questions = curated;
+
+  setHeaders({ 'cache-control': 'public, max-age=60' });
+  return { syllabus, questions, blog_index };
 }
