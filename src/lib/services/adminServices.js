@@ -4,8 +4,8 @@
 // Slug-first API, minimal shaping, no timings/doctor logic here.
 // ------------------------------------------------------------
 
-import * as syllabusSvc from './contentServices/syllabusService.js';
-import * as questionSvc from './contentServices/questionServices.js';
+import * as syllabusSvc from './syllabusService.js';
+import * as questionSvc from './questionServices.js';
 
 /* ------------------------ Tcodes / Chapters / Exercises ------------------------ */
 
@@ -154,7 +154,7 @@ export async function importTcode(syllabusJson) {
   if (!tcodeSlug || !name) throw new Error('importTcode: missing slug/name');
 
   await addTcode({ slug: tcodeSlug, name, description, image });
-
+  syllabusService.js
   for (const ch of chapters) {
     await addChapter({ tcodeSlug, slug: ch.slug, name: ch.name, description: ch.description ?? '' });
     for (const ex of (ch.exercises || [])) {

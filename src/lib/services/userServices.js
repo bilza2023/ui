@@ -6,7 +6,7 @@
 
 import {
   getAllTcodes,
-} from './contentServices/syllabusService.js';
+} from './syllabusService.js';
 
 import {
   listQuestions,

@@ -1,59 +1,64 @@
 <script>
   export let data;
-
-  import TcodeCard from   "./tcode/+page.svelte";
-  import ChapterCard from "./ChapterCard.svelte";
-  import ExerciseCard from "./ExerciseCard.svelte";
-
-  // Safe derive
-  $: tcodes = Array.isArray(data?.tcodes) ? data.tcodes : [];
+  let tcodes = data?.tcodes ?? [];
 </script>
 
-<div class="page admin-synopsis">
-  <header class="top">
-    <h1>Synopsis</h1>
-    <p class="sub">Manage subjects (tcodes), chapters, and exercises — slug-based schema.</p>
-  </header>
+<div class="wrap">
+  <h1>Syllabus – Tcodes</h1>
 
-  <!-- Top row: three compact cards in one line -->
-  <section class="cards-row">
-    <TcodeCard />
-    <ChapterCard {tcodes} />
-    <ExerciseCard {tcodes} />
-  </section>
+  {#if tcodes.length === 0}
+    <p>No tcodes found. <a href="/admin/synopsis/tcode/add">Add one</a>.</p>
+  {:else}
+    <ul class="tcode-list">
+      {#each tcodes as t}
+        <li class="tcode-item">
+          <div class="info">
+            <strong>{t.name}</strong> <span class="slug">({t.slug})</span><br/>
+            {#if t.description}<span class="desc">{t.description}</span>{/if}
+          </div>
+          <div class="actions">
+            <a href={`/admin/synopsis/tcode/${t.slug}/edit`}>Edit</a>
+            <a href={`/admin/synopsis/tcode/${t.slug}/delete`}>Delete</a>
+          </div>
+        </li>
+      {/each}
+    </ul>
+  {/if}
 </div>
 
 <style>
-  :global(.page.admin-synopsis) {
-    --bg:        #0b0f15;
-    --surface-2: #151b2a;
-    --border:    #24304a;
-    --edge:      #2e3b58;
-    --text:      #e9eef6;
-    --muted:     #a4b0c4;
-    --brand:     #7aa9ff;
-
-    --radius-lg: 14px;
-    --radius-sm: 9px;
-    --pad:       16px;
-    --gap:       18px;
-    --shadow:    0 10px 28px rgba(0,0,0,0.35);
-
-    color: var(--text);
-    background: var(--bg);
-    min-height: 100%;
-  }
-
-  .top { margin: 6px 0 18px 0; }
-  .top h1 { margin: 0 0 4px 0; font-size: 1.7rem; font-weight: 700; }
-  .top .sub { margin: 0; color: var(--muted); font-size: 0.95rem; }
-
-  .cards-row {
+  .wrap {
+    max-width: 800px;
+    margin: 2rem auto;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--gap);
-    margin-bottom: var(--gap);
+    gap: 1.5rem;
   }
-  @media (max-width: 1100px) { .cards-row { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 720px)  { .cards-row { grid-template-columns: 1fr; } }
+  h1 { margin: 0; color: var(--primaryText); }
+
+  .tcode-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .tcode-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surfaceColor);
+    border: 1px solid var(--borderColor);
+    border-radius: 12px;
+    padding: 1rem;
+  }
+  .info { color: var(--primaryText); }
+  .slug { color: var(--secondaryText); font-size: 0.85rem; }
+  .desc { color: var(--secondaryText); font-size: 0.9rem; }
+  .actions { display: flex; gap: 1rem; }
+  .actions a {
+    color: var(--primaryColor);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .actions a:hover { text-decoration: underline; }
 </style>
