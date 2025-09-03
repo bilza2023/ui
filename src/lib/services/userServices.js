@@ -10,7 +10,7 @@ import {
 
 import {
   listQuestions,
-} from './contentServices/questionServices.js';
+} from './questionServices.js';
 
 // Fallback image for subjects that don't specify one
 const FALLBACK_IMAGE = '/media/images/taleem.webp';

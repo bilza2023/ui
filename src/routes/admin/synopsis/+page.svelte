@@ -4,8 +4,12 @@
 </script>
 
 <div class="wrap">
+<a href="synopsis/tcode/add">Add Tcode</a>
+
+
   <h1>Syllabus – Tcodes</h1>
 
+ 
   {#if tcodes.length === 0}
     <p>No tcodes found. <a href="/admin/synopsis/tcode/add">Add one</a>.</p>
   {:else}
@@ -17,6 +21,8 @@
             {#if t.description}<span class="desc">{t.description}</span>{/if}
           </div>
           <div class="actions">
+            <a href={`/admin/synopsis/tcode/${t.slug}/chapter`}>Chapters</a>
+            <a href={`/admin/synopsis/tcode/${t.slug}/chapter/add`}>Add Chapter</a>
             <a href={`/admin/synopsis/tcode/${t.slug}/edit`}>Edit</a>
             <a href={`/admin/synopsis/tcode/${t.slug}/delete`}>Delete</a>
           </div>

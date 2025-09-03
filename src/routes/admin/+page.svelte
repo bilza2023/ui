@@ -1,6 +1,5 @@
 <script>
-  import Nav from "$lib/appComps/Nav.svelte";
-  import AdminNav from "$lib/components/AdminNav.svelte";
+ 
   import "$lib/styles/forms.css";
 
   // keep these paths exactly as you requested
@@ -16,9 +15,6 @@
     totals = data.totals ?? { all: 0, decks: 0, notes: 0 };
   }
 </script>
-
-<Nav />
-<AdminNav />
 
 <!-- <AdminIndexPageNav totals={data.totals} filters={data.filters} /> -->
 
