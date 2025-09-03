@@ -1,6 +1,7 @@
 <!-- src/routes/+page.svelte -->
 <script>
-  import { onMount } from "svelte";
+
+
   import Nav from "$lib/appComps/Nav.svelte";
   import TcodeCard from "$lib/homeIndex/TcodeCard.svelte";
   import QuestionCards from "../lib/questionCards/QuestionCards.svelte";
@@ -29,13 +30,13 @@
     
     <!-- blog -->
     {#if pageDisplayState == 0}
-    <QuestionCards questions={data.blog_index}/>
+    <QuestionCards questions={data.blog_index || []}/>
     {/if}
     <br>
     <!-- videos -->
     <br>
     {#if pageDisplayState == 1}
-    <QuestionCards questions={data.questions}/>
+    <QuestionCards questions={data.questions || []}/>
     {/if}
     <br>
     <br>

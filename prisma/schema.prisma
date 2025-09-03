@@ -1,5 +1,3 @@
-// schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,18 +8,18 @@ datasource db {
 }
 
 model Question {
-  filename     String   @id                 // stable identity / anchor
-  tcode        String                       // subject/book
-  chapter      Int                           // chapter number
-  exercise     String                        // exercise name
+  slug         String   @id                 // stable external identity
+  tcode        String                       // subject/book (points to SyllabusTcode.slug)
+  chapter      Int                           // chapter number (sort order)
+  exercise     String                        // exercise slug (points to SyllabusExercise.slug)
   type         String                        // "deck" | "note" | (future: "quiz", "video", ...)
-  
+
   // ── Metadata ──
   name         String?
   description  String?
   tags         Json?
   status       String?                       // draft | ready | hidden
-  thumbnail    String?                       // draft | ready | hidden
+  thumbnail    String?
   sortOrder    Int?                          // manual ordering inside exercise
   timed        Boolean   @default(false)
 
@@ -37,21 +35,21 @@ model Question {
   @@index([tcode, chapter, exercise])
   @@index([tcode, chapter, exercise, sortOrder])
 }
-/////////////////////////////////
+
 model Comments {
   id          String   @id @default(cuid())
   created_at  DateTime @default(now())
 
   content_id  String
   user_id     String
-  text        String   // the comment text
-  response    String?   // the comment text
- status      String   @default("new") // 'new' | 'answered' | 'bad'
+  text        String
+  response    String?
+  status      String   @default("new") // 'new' | 'answered' | 'bad'
 
   @@index([content_id, created_at], name: "idx_comment_content_time")
   @@index([user_id, content_id], name: "idx_comment_user_content")
 }
-///////////
+
 model Likes {
   id            String   @id @default(cuid())
   created_at    DateTime @default(now())
@@ -59,10 +57,10 @@ model Likes {
   content_id    String
   user_id       String
 
-@@unique([user_id, content_id], name: "uniq_user_content_reaction")
-@@index([user_id, content_id], name: "idx_user_content")
+  @@unique([user_id, content_id], name: "uniq_user_content_reaction")
+  @@index([user_id, content_id], name: "idx_user_content")
 }
-//////////////////////
+
 model Subscription {
   id         String   @id @default(cuid())
   created_at DateTime @default(now())
@@ -71,11 +69,11 @@ model Subscription {
   tcode      String
 
   start_date DateTime
-  duration   Int      // number of days
+  duration   Int
 
   @@index([user_id, tcode])
 }
-//////////////////////
+
 model AppSetting {
   id        String   @id @default(cuid())
   key       String   @unique
@@ -85,7 +83,7 @@ model AppSetting {
 
   @@map("app_settings")
 }
-//////////////
+
 enum StudentMessageCategory {
   general
 }
@@ -106,14 +104,14 @@ model User {
   email         String   @unique
   password_hash String
   created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  updatedAt     DateTime @updatedAt
 
   @@index([email])
 }
 
 model SyllabusTcode {
   id         Int      @id @default(autoincrement())
-  tcode      String   @unique
+  slug       String   @unique               // canonical identity
   name       String
   description String?
   image      String?
@@ -127,9 +125,9 @@ model SyllabusTcode {
 model SyllabusChapter {
   id         Int      @id @default(autoincrement())
   tcodeId    Int
+  slug       String
   tcode      SyllabusTcode @relation(fields: [tcodeId], references: [id], onDelete: Cascade)
 
-  filename   String   // chapter slug
   name       String
   sortOrder  Int      @default(0)
 
@@ -138,24 +136,24 @@ model SyllabusChapter {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@unique([tcodeId, filename])
-  @@index([tcodeId])                 // list chapters by tcode
-  @@index([tcodeId, sortOrder])      // ordered lists
+  @@unique([tcodeId, slug])
+  @@index([tcodeId])
+  @@index([tcodeId, sortOrder])
 }
 
 model SyllabusExercise {
   id         Int      @id @default(autoincrement())
   chapterId  Int
+  slug       String
   chapter    SyllabusChapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   name       String
-  filename   String   // exercise slug
   sortOrder  Int      @default(0)
 
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@unique([chapterId, filename])
-  @@index([chapterId])               // list exercises by chapter
-  @@index([chapterId, sortOrder])    // ordered lists
+  @@unique([chapterId, slug])
+  @@index([chapterId])
+  @@index([chapterId, sortOrder])
 }
