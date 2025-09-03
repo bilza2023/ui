@@ -3,7 +3,7 @@ export const prerender = false;
 import * as admin from '$lib/services/adminServices.js';
 import { R } from '$lib/formKit/readers.js';
 import { makeAction } from '$lib/formKit/actionFactory.js';
-import { SLUG } from '../../../../lib/function/slug.js'; // adjust path if different
+import { SLUG } from '../../../../../lib/function/slug.js'; // adjust path if different
 
 /** 
  * SSR load:
