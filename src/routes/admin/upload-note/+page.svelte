@@ -51,19 +51,8 @@
   function success(result, v) {
   return {
     ok: true,
-    message: `Saved “${v.slug}” successfully.`,
-    saved: result?.slug,
-    values: {
-      // keep anchors sticky after save
-      tcode: v.tcode,
-      chapter: v.chapter,
-      exercise: v.exercise,
-      status: v.status ?? "",
-      // clear authoring fields
-      name: "",
-      description: "",
-      noteHtml: ""
-    }
+    message: `Saved successfully.`,
+    
   };
 }
   function handleChange({ detail: { name, value } }) {
