@@ -21,7 +21,15 @@
             {#if t.description}<span class="desc">{t.description}</span>{/if}
           </div>
           <div class="actions">
+
+            <a href={`/admin/upload-note?tcode=${t.slug}`}>Note</a>
+            <a href={`/admin/upload-deck?tcode=${t.slug}`}>Deck</a>
+            
+            
+            
             <a href={`/admin/synopsis/tcode/${t.slug}/chapter`}>Chapters</a>
+            
+            
             <a href={`/admin/synopsis/tcode/${t.slug}/chapter/add`}>Add Chapter</a>
             <a href={`/admin/synopsis/tcode/${t.slug}/edit`}>Edit</a>
             <a href={`/admin/synopsis/tcode/${t.slug}/delete`}>Delete</a>

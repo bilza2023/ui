@@ -4,7 +4,7 @@ import prisma from '../../../lib/server/prisma.js';
 import { isAdmin } from '../../../lib/services/loginServices.js';
 import { addSubscription } from '../../../lib/services/subscriptionServices.js';
 // import { listTcodes } from '../../../lib/services/synopsisServeces.js'; // must return string[]
-import { listTcodes } from "../../../lib/services/synopisisServices2.js";
+import { listTcodes } from "../../../lib/services/syllabusService.js";
 
 const DAY_MS = 86_400_000;
 
