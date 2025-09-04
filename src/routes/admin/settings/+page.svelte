@@ -1,7 +1,6 @@
 <!-- src/routes/admin/settings/+page.svelte -->
 <script>
-  import Nav from "$lib/appComps/Nav.svelte";
-  import AdminNav from "$lib/components/AdminNav.svelte";
+ 
   
   import MediaUploadButton from '$lib/components/MediaUploadButton.svelte';
   import SoundUploadButton from '$lib/components/SoundUploadButton.svelte';
@@ -24,8 +23,6 @@
   ];
 </script>
 
-<Nav />
-<AdminNav />
 <h1 style="margin-left: 10%;">Settings</h1>
 
 <form method="post" enctype="multipart/form-data">
