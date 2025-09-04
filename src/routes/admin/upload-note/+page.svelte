@@ -51,7 +51,7 @@
   function success(result, v) {
   return {
     ok: true,
-    message: `Saved “${v.name}” successfully.`,
+    message: `Saved “${v.slug}” successfully.`,
     saved: result?.slug,
     values: {
       // keep anchors sticky after save
@@ -93,7 +93,15 @@
   Using URL tcode: <code>{data.tcode || '(none)'}</code>. Example: <code>/upload-note?tcode=fbise9mathold</code>
 </p>
 
-<div class="py-14">
+<div class="wrapper">
   <FormUi {config} on:change={handleChange} on:success={success} />
 
 </div>
+
+
+
+<style>
+  .wrapper {
+    padding: 20px 200px;
+  }
+</style>

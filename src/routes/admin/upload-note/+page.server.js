@@ -83,6 +83,7 @@ async function service({ payload }) {
 function success(result, v) {
   return {
     ok: true,
+    message: `Saved successfully.`,   // ← add this line
     saved: result?.slug,
     values: {
       tcode: v.tcode,
@@ -95,6 +96,7 @@ function success(result, v) {
     }
   };
 }
+
 function failure(err, v) {
   return {
     ok: false,
