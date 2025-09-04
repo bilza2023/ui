@@ -3,7 +3,7 @@
     <a href="/admin/" class="nav-link">🏠 Admin Home</a>
     <a href="/admin/subscriptions" class="nav-link">🔑 Subscriptions</a>
     <a href="/admin/upload_json" class="nav-link">📱 Upload Json</a>
-    <a href="/admin/uploadNotes" class="nav-link">📜 Upload Notes</a>
+    <a href="/admin/upload-note" class="nav-link">📜 Upload Note</a>
     <a href="/admin/comments" class="nav-link">🔔 comments</a>
     <a href="/admin/workdesk" target="_blank" class="nav-link">🎖️ workdesk</a>
     <a href="/admin/synopsis" target="_blank" class="nav-link">🦞 Synopsis</a>
