@@ -1,9 +1,9 @@
 <script>
-  export let items = []; // rows from getExerciseContent(): { filename, type, name, description, status, tags, timed, editedAt }
+  export let items = []; // rows from getExerciseContent(): { slug, type, name, description, status, tags, timed, editedAt }
 
   function hrefFor(q) {
-    if (q.type === 'deck') return `/player?filename=${encodeURIComponent(q.filename)}`;
-    if (q.type === 'note') return `/notes?filename=${encodeURIComponent(q.filename)}`;
+    if (q.type === 'deck') return `/player?slug=${encodeURIComponent(q.slug)}`;
+    if (q.type === 'note') return `/notes?slug=${encodeURIComponent(q.slug)}`;
     return '#';
   }
 
@@ -24,7 +24,7 @@
       {@const m = metaFor(q)}
       <a class="card" href={hrefFor(q)}>
         <div class="type" style={`--bg:${m.bg}; --fg:${m.fg}`}>{m.label}</div>
-        <div class="title">{q.name ?? q.filename}</div>
+        <div class="title">{q.name ?? q.slug}</div>
         {#if q.description}
           <div class="desc">{q.description}</div>
         {/if}
@@ -38,7 +38,7 @@
           {/if}
         </div>
         <div class="footer">
-          <span class="fn">{q.filename}</span>
+          <span class="fn">{q.slug}</span>
           {#if q.editedAt}<span class="date" title="Last edited">{new Date(q.editedAt).toLocaleDateString()}</span>{/if}
         </div>
       </a>
