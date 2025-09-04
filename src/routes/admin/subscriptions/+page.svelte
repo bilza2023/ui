@@ -3,8 +3,8 @@
   import { enhance } from '$app/forms';
   import '$lib/styles/forms.css';    // ✅ shared form styles
   import '$lib/styles/tables.css';   // ✅ shared table styles
-  import Nav from "$lib/appComps/Nav.svelte";
-  import AdminNav from "$lib/components/AdminNav.svelte";
+
+  
   export let data;
 
   let email = data.selectedEmail ?? '';
@@ -23,9 +23,6 @@
   $: selectedUser = data.selectedUser;
   $: subscriptions = data.subscriptions ?? [];
 </script>
-
-<Nav />
-<AdminNav />
 
 <div class="page">
   <h1>Subscriptions (Admin)</h1>

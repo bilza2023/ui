@@ -1,97 +1,99 @@
+
 <script>
+  import FormUi from "$lib/formUi/FormUi.svelte"; // your existing FormUi
+  export let data;
 
-import { page } from "$app/stores";
-  import FormUi from "$lib/formUi/FormUi.svelte";
-
-  const uploadNoteConfig = {
-    id: "uploadNote",
-    title: "Upload Note",
-    description: "Paste HTML (or plain text) and save it as a Question of type `note`.",
-    method: "post",
-    action: "/admin/upload-note?/save",
-    layout: "stack",             // <-- stacked / simple layout
-    initial: {
-      name: "",
-      tcode: "",
-      chapter: "",
-      exercise: "",
-      description: "",
-      status: "",
-      noteHtml: ""
-    },
-    items: [
-      { type: "text",    name: "name",      label: "Name",        required: true },
-      { type: "text",    name: "tcode",     label: "Tcode",       required: true },
-      { type: "number",  name: "chapter",   label: "Chapter #",   min: 1, step: 1, required: true },
-      { type: "text",    name: "exercise",  label: "Exercise",    required: true },
-      { type: "text",    name: "description", label: "Description" },
-      {
-        type: "select",
-        name: "status",
-        label: "Status",
-        options: () => ([
-          { value: "",          label: "(none)" },
-          { value: "draft",     label: "draft" },
-          { value: "ready",     label: "ready" },
-          { value: "published", label: "published" },
-          { value: "archived",  label: "archived" }
-        ])
-      },
-      { type: "textarea", name: "noteHtml",  label: "Note HTML *", rows: 16, required: true }
-    ],
-    submit: {
-      label: "Save Note",
-      disabledWhen: (v) =>
-        !v.name?.trim() ||
-        !v.tcode?.trim() ||
-        !(Number(v.chapter) >= 1) ||
-        !v.exercise?.trim() ||
-        !v.noteHtml?.trim()
-    },
-    clearOnSuccess: () => ({
-      name: "",
-      description: "",
-      status: "",
-      noteHtml: ""
-    }),
-    showErrorsList: true
+  // state model
+  let state = {
+    tcode: data.tcode || "",
+    chapter: "",
+    exercise: ""
   };
 
-  function handleSuccess(e) {
-    // e.detail is { ok:true, saved, values } from server success()
-    // hook toast here if you want
+  // options (derived)
+  let opts = {
+    chapters: data.chapters ?? [],
+    exercises: []
+  };
+
+  // quick lookup: chapterValue(number) -> slug
+  const chapterValueToSlug = new Map(
+    (data.chapters ?? []).map(c => [String(c.value), c.slug])
+  );
+
+  // FormUi config (kept simple)
+  let config = {
+    id: "upload-note",
+    action: "?/save",
+    method: "POST",
+    title: "Upload Note",
+    initial: { ...state },
+    items: [
+      { type: "hidden", name: "tcode", value: state.tcode },
+
+      { type: "select", name: "chapter", label: "Chapter",
+        options: () => opts.chapters.map(c => ({ value: c.value, label: c.label })),
+        disabled: () => !state.tcode
+      },
+
+      { type: "select", name: "exercise", label: "Exercise",
+        options: () => opts.exercises,
+        disabled: () => !state.chapter
+      },
+
+      // minimal required fields for action:
+      { type: "text", name: "name", label: "Title", placeholder: "Note title" },
+      { type: "textarea", name: "noteHtml", label: "Note (HTML)", rows: 8 }
+    ],
+    submit: { label: "Save" }
+  };
+
+  function success(result, v) {
+  return {
+    ok: true,
+    message: `Saved “${v.name}” successfully.`,
+    saved: result?.slug,
+    values: {
+      // keep anchors sticky after save
+      tcode: v.tcode,
+      chapter: v.chapter,
+      exercise: v.exercise,
+      status: v.status ?? "",
+      // clear authoring fields
+      name: "",
+      description: "",
+      noteHtml: ""
+    }
+  };
+}
+  function handleChange({ detail: { name, value } }) {
+    if (name === "chapter") {
+      // set chapter, reset exercise
+      state.chapter = value;
+      state.exercise = "";
+
+      const slug = chapterValueToSlug.get(String(value));
+      opts.exercises = slug ? (data.exercisesByChapter[slug] || []) : [];
+
+      // reflect into FormUi's initial so it shows cleared exercise instantly
+      config.initial = { ...config.initial, chapter: state.chapter, exercise: "" };
+      config = { ...config }; // trigger FormUi re-eval (safe nudge)
+    }
+    else if (name === "exercise") {
+      state.exercise = value;
+      config.initial = { ...config.initial, exercise: state.exercise };
+      // no need to bump config if user changed inside FormUi, but harmless:
+      config = { ...config };
+    }
   }
 </script>
 
-<svelte:head>
-  <title>Upload Note</title>
-</svelte:head>
+<!-- URL mode note -->
+<p style="margin:0 0 .5rem 0; color: var(--secondaryText);">
+  Using URL tcode: <code>{data.tcode || '(none)'}</code>. Example: <code>/upload-note?tcode=fbise9mathold</code>
+</p>
 
-<div class="wrap">
-  <!-- Simple, token-based banners driven by $page.form -->
-  {#if $page.form}
-    {#if $page.form.ok === true}
-      <div class="banner success">Saved: <strong>{$page.form.saved}</strong></div>
-    {:else if $page.form.ok === false}
-      <div class="banner error">{$page.form.message ?? 'Save failed.'}</div>
-    {/if}
-  {/if}
+<div class="py-14">
+  <FormUi {config} on:change={handleChange} on:success={success} />
 
-  <FormUi config={uploadNoteConfig} on:success={handleSuccess} />
 </div>
-
-<style>
-  /* tokens.css already applied in layout */
-  .wrap { max-width: 880px; margin: 2rem auto; padding: 1rem; color: var(--primaryText); }
-
-  .banner {
-    padding: 0.6rem 0.8rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    background: var(--surfaceColor);
-    border: 1px solid var(--borderColor);
-    color: var(--primaryText);
-  }
-  .banner.success { border-color: var(--secondaryColor); color: var(--secondaryColor); }
-  .banner.error   { border-color: var(--accentColor);    color: var(--accentColor); }
-</style>

@@ -1,4 +1,5 @@
 <script>
+
   import { enhance } from '$app/forms';
   import { createEventDispatcher } from 'svelte';
 
@@ -136,6 +137,7 @@
                 class="f-input"
                 bind:value={values[item.name]}
                 disabled={itemDisabled(item)}
+                on:change={() => dispatch('change', { name: item.name, value: values[item.name] })}
               >
                 {#each getOptions(item) as opt}
                   <option value={opt.value} disabled={opt.disabled}>{opt.label}</option>

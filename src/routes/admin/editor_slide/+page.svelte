@@ -1,8 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
-  import Nav from '../../../lib/appComps/Nav.svelte';
-
+ 
   let deck: any = null;
   let deckLoaded = false;
   let error = '';
@@ -148,8 +147,6 @@
     deck = { ...deck }; // trigger reactivity
   }
 </script>
-
-<Nav />
 
 <h1 class="banner">💡 Timing Page</h1>
 
