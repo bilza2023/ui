@@ -1,94 +1,114 @@
 <script>
-    import QuestionCard from "./QuestionCard.svelte";
-    import ExNavBar from "./ExNavBar.svelte";
-    import Nav from "../../lib/appComps/Nav.svelte";
-    export let data;
-  
-    // ————— Utils —————
-    const lc = (s) => (s ?? '').toString().trim().toLowerCase();
-    const getChapterSlug = (q) =>
-      q?.chapter ?? q?.chapterFilename ?? q?.chapter_slug ?? q?.chapterName ??
-      (q?.filename ?? '').split('__')[1] ?? '';
-    const getExerciseSlug = (q) =>
-      q?.exercise ?? q?.exerciseSlug ?? (q?.filename ?? '').split('__')[2] ?? '';
-  
-    // ————— Base derivations —————
-    $: tcode    = data?.tcode ?? '';
-    $: synopsis = data?.synopsis ?? null;
-    $: items    = Array.isArray(data?.items)
-      ? data.items
-      : (Array.isArray(data?.questions) ? data.questions : []);
-  
-    // Normalize once (cache lowercase slugs for fast filters/counts)
-    $: normalized = items.map((q) => ({
-      ...q,
-      _ch: lc(getChapterSlug(q)),
-      _ex: lc(getExerciseSlug(q))
-    }));
-  
-    // Chapters + active chapter
-    $: chapters = Array.isArray(synopsis?.chapters) ? synopsis.chapters : [];
-    $: activeChapter =
-      data?.selected?.chapter ??
-      (chapters[0]?.filename ?? chapters[0]?.slug ?? '');
-    $: activeChapterL = lc(activeChapter);
-  
-    // Exercise selection
-    let activeExercise = 'all';
-    $: activeExerciseL = lc(activeExercise);
-  
-    function pickChapter(filenameOrSlug) {
-      activeChapter  = filenameOrSlug;
-      activeExercise = 'all';
-    }
-  
-    // Exercises for the active chapter
-    $: exercises =
-      chapters.find((c) =>
-        [c?.filename, c?.slug].map(lc).includes(activeChapterL)
-      )?.exercises ?? [];
-  
-    // ExNavBar inputs
-    $: exButtons = [{ name: 'All', filename: 'all' }, ...exercises];
-  
-    // Counts (by exercise, scoped to active chapter)
-    $: exCounts = (() => {
-      const inChapter = normalized.filter((q) => {
-        // tolerant chapter match
-        return !activeChapterL ||
-               q._ch === activeChapterL ||
-               activeChapterL.includes(q._ch) ||
-               q._ch.includes(activeChapterL);
-      });
-  
-      const by = inChapter.reduce((acc, q) => {
-        acc[q._ex] = (acc[q._ex] ?? 0) + 1;
-        return acc;
-      }, {});
-  
-      const out = { all: { total: inChapter.length } };
-      for (const ex of exercises) {
-        const slug = lc(ex?.filename ?? ex?.slug ?? '');
-        out[slug || ''] = { total: by[slug] ?? 0 };
-      }
-      return out;
-    })();
-  
-    // Final questions (chapter + exercise)
-    $: filteredQuestions = normalized.filter((q) => {
-      const inChapter =
+  import QuestionCard from "./QuestionCard.svelte";
+  import ExNavBar from "./ExNavBar.svelte";
+  import Nav from "../../lib/appComps/Nav.svelte";
+  export let data;
+
+  // ————— Utils —————
+  const lc = (s) => (s ?? "").toString().trim().toLowerCase();
+  const slugify = (s) =>
+    lc(s)
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "";
+
+  // tolerant chapter/exercise extractors for mixed question shapes
+  const getChapterSlug = (q) =>
+    q?.chapter ??
+    q?.chapterFilename ??
+    q?.chapter_slug ??
+    q?.chapterName ??
+    (q?.filename ?? "").split("__")[1] ??
+    "";
+
+  const getExerciseSlug = (q) =>
+    q?.exercise ?? q?.exerciseSlug ?? (q?.filename ?? "").split("__")[2] ?? "";
+
+  // ————— Base derivations —————
+  $: tcode = data?.tcode ?? "";
+  $: synopsis = data?.synopsis ?? null;
+  $: items = Array.isArray(data?.items)
+    ? data.items
+    : Array.isArray(data?.questions)
+    ? data.questions
+    : [];
+
+  // Normalize once (cache lowercase slugs for fast filters/counts)
+  $: normalized = items.map((q) => ({
+    ...q,
+    _ch: lc(getChapterSlug(q)),
+    _ex: lc(getExerciseSlug(q)),
+  }));
+
+  // Chapters + active chapter
+  $: chapters = Array.isArray(synopsis?.chapters) ? synopsis.chapters : [];
+  $: activeChapter =
+    data?.selected?.chapter ?? (chapters[0]?.filename ?? chapters[0]?.slug ?? "");
+  $: activeChapterL = lc(activeChapter);
+
+  // Exercise selection (default "all")
+  let activeExercise = "all";
+  $: activeExerciseL = lc(activeExercise);
+
+  function pickChapter(filenameOrSlug) {
+    activeChapter = filenameOrSlug;
+    activeExercise = "all"; // reset when chapter changes
+  }
+
+  // Resolve the active chapter object (match by filename OR slug, case-insensitive)
+  $: activeChapterObj =
+    chapters.find((c) => [c?.filename, c?.slug].map(lc).includes(activeChapterL)) ||
+    null;
+
+  // Normalize exercises for the active chapter:
+  // ensure each exercise has a stable, unique "filename" id (fallback to slug → slugified name → index)
+  $: exercisesNormalized = (activeChapterObj?.exercises ?? []).map((e, i) => {
+    const id = e?.filename || e?.slug || slugify(e?.name) || `ex-${i}`;
+    return { ...e, filename: id };
+  });
+
+  // ExNavBar inputs
+  $: exButtons = [{ name: "All", filename: "all" }, ...exercisesNormalized];
+
+  // Counts (by exercise, scoped to active chapter)
+  $: exCounts = (() => {
+    // limit questions to active chapter (tolerant match)
+    const inChapter = normalized.filter(
+      (q) =>
         !activeChapterL ||
         q._ch === activeChapterL ||
         activeChapterL.includes(q._ch) ||
-        q._ch.includes(activeChapterL);
-  
-      if (!inChapter) return false;
-      if (activeExerciseL === 'all') return true;
-      return q._ex === activeExerciseL;
-    });
-  </script>
-  
-  
+        q._ch.includes(activeChapterL)
+    );
+
+    // count by exercise slug
+    const by = inChapter.reduce((acc, q) => {
+      acc[q._ex] = (acc[q._ex] ?? 0) + 1;
+      return acc;
+    }, {});
+
+    // build output with guaranteed keys for buttons (lowercased)
+    const out = { all: { total: inChapter.length } };
+    for (const ex of exercisesNormalized) {
+      const key = lc(ex.filename); // safe id we just normalized
+      out[key || ""] = { total: by[key] ?? 0 };
+    }
+    return out;
+  })();
+
+  // Final questions (chapter + exercise filter)
+  $: filteredQuestions = normalized.filter((q) => {
+    const inChapter =
+      !activeChapterL ||
+      q._ch === activeChapterL ||
+      activeChapterL.includes(q._ch) ||
+      q._ch.includes(activeChapterL);
+
+    if (!inChapter) return false;
+    if (activeExerciseL === "all") return true;
+    return q._ex === activeExerciseL;
+  });
+</script>
+
   <Nav />
   <!-- Top -->
   <div class="top">

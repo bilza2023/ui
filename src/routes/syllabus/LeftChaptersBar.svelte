@@ -1,28 +1,31 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
   
-	export let chapters = [];      // [{ name, filename, number, order }]
-	export let activeSlug = null;  // chapter filename
+	export let chapters = [];      // [{ name, filename?, slug?, number?, sortOrder? }]
+	export let activeSlug = null;
   
 	const dispatch = createEventDispatcher();
+	const id = (ch, i) => ch?.filename ?? ch?.slug ?? `idx-${i}`;
+	const num = (ch, i) => String(ch?.number ?? ch?.sortOrder ?? (i + 1)).padStart(2, '0');
 	function pick(slug) { dispatch('pick', { slug }); }
   </script>
   
   <div class="sidebar">
 	<div class="title">Chapters</div>
 	<div class="list">
-	  {#each chapters as ch}
+	  {#each chapters as ch, i (id(ch, i))}
 		<button
 		  class="ch"
-		  class:active={activeSlug === ch.filename}
-		  on:click={() => pick(ch.filename)}
+		  class:active={activeSlug === id(ch, i)}
+		  on:click={() => pick(id(ch, i))}
 		  title={ch.name}>
-		  <span class="num">{ch.number.toString().padStart(2,'0')}</span>
+		  <span class="num">{num(ch, i)}</span>
 		  <span class="name">{ch.name}</span>
 		</button>
 	  {/each}
 	</div>
   </div>
+  
   
   <style>
 	.sidebar{

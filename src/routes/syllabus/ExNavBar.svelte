@@ -1,30 +1,36 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
   
-	export let exercises = [];     // [{ name, filename }]
-	export let activeSlug = null;  // exercise filename
-	export let counts = {};        // { [slug]: { total } }  ← total is optional
+	export let exercises = [];     // [{ name, filename? , slug? }]
+	export let activeSlug = null;  // 'all' | exercise id
+	export let counts = {};        // { [lowercaseSlug]: { total } }
   
 	const dispatch = createEventDispatcher();
+	const id = (ex, i) => ex?.filename ?? ex?.slug ?? `idx-${i}`;
+	const label = (ex) => ex?.name ?? ex?.title ?? ex?.slug ?? '—';
+	const lc = (s) => (s ?? '').toString().trim().toLowerCase();
+  
 	function pick(slug) { dispatch('pick', { slug }); }
   </script>
   
   <div class="exbar">
-	{#each exercises as ex (ex.filename)}
-	  <button
-		class="ex"
-		class:active={activeSlug === ex.filename}
-		on:click={() => pick(ex.filename)}
-		title={ex.name}>
-		<span class="label">{ex.name}</span>
+	{#each exercises as ex, i (id(ex, i))}
+	  {#key id(ex, i)}
+		<button
+		  class="ex"
+		  class:active={activeSlug === id(ex, i)}
+		  on:click={() => pick(id(ex, i))}
+		  title={label(ex)}>
+		  <span class="label">{label(ex)}</span>
   
-		{#if counts && counts[ex.filename] != null && counts[ex.filename].total != null}
-		  <span class="b total" title="Total">{counts[ex.filename].total}</span>
-		{/if}
-	  </button>
+		  {#if counts && counts[lc(id(ex, i))] != null && counts[lc(id(ex, i))].total != null}
+			<span class="b total" title="Total">{counts[lc(id(ex, i))].total}</span>
+		  {/if}
+		</button>
+	  {/key}
 	{/each}
   </div>
-  
+	
   <style>
 	.exbar{
 	  display:flex;
