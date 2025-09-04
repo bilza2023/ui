@@ -20,10 +20,11 @@ export async function load({ url }) {
 
   const chaptersRows = await syllabusService.getChaptersByTcode(tcode, { includeExercises: true });
 
+  // Sort by sortOrder but ALWAYS assign option values by index (i + 1)
   const chapters = chaptersRows
     .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
     .map((c, i) => ({
-      value: (c.sortOrder ?? i) + 1,   // numeric for action
+      value: i + 1,           // <-- FIX (was (c.sortOrder ?? i) + 1)
       label: c.name,
       slug: c.slug
     }));
@@ -32,7 +33,7 @@ export async function load({ url }) {
   for (const c of chaptersRows) {
     exercisesByChapter[c.slug] = (c.exercises ?? [])
       .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
-      .map((e) => ({ value: e.slug, label: e.name })); // label=name, value=slug
+      .map((e) => ({ value: e.slug, label: e.name }));
   }
 
   return { tcode, chapters, exercisesByChapter };
@@ -50,7 +51,6 @@ const spec = {
 };
 
 function prepare(v) {
-  // parse deck JSON (throw to route failure)
   let parsed;
   try {
     parsed = JSON.parse(v.deckJson);
@@ -58,7 +58,6 @@ function prepare(v) {
     throw new Error("Invalid JSON in Deck field.");
   }
 
-  // timed? (any slide with numeric end > 0)
   const slides = Array.isArray(parsed?.deck)
     ? parsed.deck
     : (Array.isArray(parsed?.slides) ? parsed.slides : []);
@@ -72,8 +71,8 @@ function prepare(v) {
     payload: {
       slug,
       tcode: v.tcode,
-      chapter: Number(v.chapter),
-      exercise: v.exercise,
+      chapter: Number(v.chapter),   // 1-based index aligned with chapters[] above
+      exercise: v.exercise,         // slug
       type: "deck",
       name,
       description: v.description || null,
@@ -95,12 +94,10 @@ function success(result, v) {
     message: "Saved successfully.",
     saved: result?.slug,
     values: {
-      // keep anchors sticky
       tcode: v.tcode,
       chapter: v.chapter,
       exercise: v.exercise,
       status: v.status ?? "",
-      // clear authoring inputs
       name: "",
       description: "",
       deckJson: ""

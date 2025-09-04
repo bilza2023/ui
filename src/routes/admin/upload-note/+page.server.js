@@ -23,13 +23,14 @@ export async function load({ url }) {
     };
   }
 
-  // fetch chapters with exercises once
+  // Get chapters with exercises
   const chaptersRows = await syllabusService.getChaptersByTcode(tcode, { includeExercises: true });
 
+  // Sort by sortOrder (if any), but ALWAYS set the option value by index (i+1)
   const chapters = chaptersRows
     .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
     .map((c, i) => ({
-      value: (c.sortOrder ?? i) + 1,   // numeric for the form action
+      value: i + 1,      // <-- FIX: was (c.sortOrder ?? i) + 1, which collapsed to 1 for all when sortOrder=0
       label: c.name,
       slug: c.slug
     }));
@@ -45,7 +46,7 @@ export async function load({ url }) {
   return { tcode, chapters, exercisesByChapter };
 }
 
-// -------- form action (unchanged) ----------
+// -------- form action ----------
 const spec = {
   name: R.str("name", { required: true }),
   tcode: R.str("tcode", { required: true }),
@@ -63,7 +64,7 @@ function prepare(v) {
     payload: {
       slug,
       tcode: v.tcode,
-      chapter: Number(v.chapter),
+      chapter: Number(v.chapter),   // numeric, 1-based index aligned with chapters[] above
       exercise: v.exercise,
       type: "note",
       name,
@@ -83,7 +84,7 @@ async function service({ payload }) {
 function success(result, v) {
   return {
     ok: true,
-    message: `Saved successfully.`,   // ← add this line
+    message: "Saved successfully.",
     saved: result?.slug,
     values: {
       tcode: v.tcode,
