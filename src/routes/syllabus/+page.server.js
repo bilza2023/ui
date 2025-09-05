@@ -8,12 +8,21 @@ import {
   getQuestionsByExercise
 } from '$lib/services/questionServices.js';
 
-const S = (v) => (typeof v === 'string' ? v.trim() : '');
-
 export async function load({ url, setHeaders }) {
-  const tcodeSlug = S(url.searchParams.get('tcode'));
-  const chapter   = S(url.searchParams.get('chapter')) || '';
-  const exercise  = S(url.searchParams.get('exercise')) || '';
+  const tcodeSlug = url.searchParams.get('tcode')?.trim() || null;
+  const chapterParam = url.searchParams.get('chapter');
+  const exerciseParam = url.searchParams.get('exercise');
+
+  // Normalize
+  const chapter =
+    chapterParam !== null && chapterParam !== ''
+      ? Number(chapterParam)
+      : undefined;
+
+  const exercise =
+    exerciseParam !== null && exerciseParam.trim() !== ''
+      ? exerciseParam.trim()
+      : undefined;
 
   // No tcode → safe, predictable payload so UI never crashes
   if (!tcodeSlug) {
@@ -30,20 +39,26 @@ export async function load({ url, setHeaders }) {
     const synopsis = await getSyllabusForTcode(tcodeSlug);
 
     // 2) Flat questions list (server-side filter if given)
-    const options = { includePayload: false, orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }] };
-    const items =
-      chapter && exercise
-        ? await getQuestionsByExercise(tcodeSlug, chapter, exercise, options)
-        : chapter
-        ? await getQuestionsByChapter(tcodeSlug, chapter, options)
-        : await getQuestionsByTcode(tcodeSlug, options);
+    const options = {
+      includePayload: false,
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }]
+    };
+
+    let items;
+    if (chapter !== undefined && exercise) {
+      items = await getQuestionsByExercise(tcodeSlug, chapter, exercise, options);
+    } else if (chapter !== undefined) {
+      items = await getQuestionsByChapter(tcodeSlug, chapter, options);
+    } else {
+      items = await getQuestionsByTcode(tcodeSlug, options);
+    }
 
     // Light caching
     setHeaders({ 'cache-control': 'public, max-age=30' });
 
     return {
       tcode: tcodeSlug,
-      selected: { chapter, exercise },
+      selected: { chapter: chapter ?? '', exercise: exercise ?? '' },
       synopsis,
       items
     };
@@ -51,7 +66,7 @@ export async function load({ url, setHeaders }) {
     console.error('[Syllabus SSR] failed:', err?.message || err);
     return {
       tcode: tcodeSlug,
-      selected: { chapter, exercise },
+      selected: { chapter: chapter ?? '', exercise: exercise ?? '' },
       synopsis: null,
       items: []
     };
