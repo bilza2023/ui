@@ -2,6 +2,9 @@
   import QuestionCard from "./QuestionCard.svelte";
   import ExNavBar from "./ExNavBar.svelte";
   import Nav from "../../lib/appComps/Nav.svelte";
+
+  import Syllabus from "$lib/syllabusComp/Syllabus.svelte";
+
   export let data;
 
   const lc = (s) => (s ?? "").toString().trim().toLowerCase();
@@ -80,66 +83,17 @@
 
 <Nav />
 
-<div class="top">
-  <h1>Syllabus</h1>
-  <div class="meta">
-    <div><strong>tcode:</strong> {tcode || "—"}</div>
-    {#if synopsis?.name}<div><strong>name:</strong> {synopsis.name}</div>{/if}
-    {#if synopsis?.description}<div><strong>desc:</strong> {synopsis.description}</div>{/if}
-  </div>
+<!-- <div class="top"> -->
+<div class="bg-red-800">
+  <Syllabus
+  tcode={data.tcode}
+  synopsis={data.synopsis}
+  selected={data.selected}
+  items={data.items}
+/>
 </div>
+  <!-- </div> -->
 
-{#if !synopsis}
-  <p class="muted">No synopsis received. Provide <code>?tcode=...</code>.</p>
-{:else}
-  <div class="wrap">
-    <aside class="left">
-      <h2>Chapters ({chapters.length})</h2>
-      <ul class="list">
-        {#each chapters as ch, i (ch.slug)}
-          <li>
-            <button
-              class:active={activeChapter === ch.slug}
-              on:click={() => pickChapter(ch.slug)}
-              title={ch.name}
-            >
-              <span class="idx">{i + 1}</span>
-              <span class="title">{ch.name}</span>
-            </button>
-          </li>
-        {/each}
-      </ul>
-    </aside>
-
-    <main class="main">
-      {#key activeChapter}
-        <div class="exwrap">
-          <ExNavBar
-            exercises={exButtons}
-            activeSlug={activeExercise}
-            counts={exCounts}
-            on:pick={(e) => (activeExercise = e.detail.slug)}
-          />
-        </div>
-
-        <section class="qsec">
-          <h2>
-            Questions for <span class="mono">{activeChapter || "—"}</span>
-            <span class="count">({filteredQuestions.length})</span>
-          </h2>
-
-          {#if filteredQuestions.length === 0}
-            <p class="muted">No questions for this chapter.</p>
-          {:else}
-            <div class="flex justify-center">
-              <QuestionCard items={filteredQuestions} />
-            </div>
-          {/if}
-        </section>
-      {/key}
-    </main>
-  </div>
-{/if}
 
 <style>
   :global(body){

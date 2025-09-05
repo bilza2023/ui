@@ -2,6 +2,9 @@
 	import { createEventDispatcher } from 'svelte';
   
 	export let exercises = [];     // [{ name, filename? , slug? }]
+
+	// console.log("exercises" ,exercises);
+	
 	export let activeSlug = null;  // 'all' | exercise id
 	export let counts = {};        // { [lowercaseSlug]: { total } }
   

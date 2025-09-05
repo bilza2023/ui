@@ -5,6 +5,8 @@
 	export let chapters = [];
 	export let activeSlug = null;
   
+	console.log("chapters" ,chapters);
+	
 	const dispatch = createEventDispatcher();
   
 	// Display number only; identity is always slug

@@ -1,6 +1,7 @@
 <script>
   export let items = []; // rows from getExerciseContent(): { slug, type, name, description, status, tags, timed, editedAt }
 
+  // console.log("items" , items);
   function hrefFor(q) {
     if (q.type === 'deck') return `/player?slug=${encodeURIComponent(q.slug)}`;
     if (q.type === 'note') return `/notes?slug=${encodeURIComponent(q.slug)}`;
