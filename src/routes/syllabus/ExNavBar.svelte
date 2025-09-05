@@ -1,35 +1,26 @@
-<script>
-	import { createEventDispatcher } from 'svelte';
-  
-	export let exercises = [];     // [{ name, filename? , slug? }]
-	export let activeSlug = null;  // 'all' | exercise id
-	export let counts = {};        // { [lowercaseSlug]: { total } }
-  
+
+<script>	
+	import { createEventDispatcher } from "svelte";
+	export let exercises = [];   // [{ slug, label, total }]
+	export let activeSlug = "";  // slug of current exercise
 	const dispatch = createEventDispatcher();
-	const id = (ex, i) => ex?.filename ?? ex?.slug ?? `idx-${i}`;
-	const label = (ex) => ex?.name ?? ex?.title ?? ex?.slug ?? '—';
-	const lc = (s) => (s ?? '').toString().trim().toLowerCase();
-  
-	function pick(slug) { dispatch('pick', { slug }); }
+	const pick = (slug) => dispatch("pick", { slug });
   </script>
   
-  <div class="exbar">
-	{#each exercises as ex, i (id(ex, i))}
-	  {#key id(ex, i)}
-		<button
-		  class="ex"
-		  class:active={activeSlug === id(ex, i)}
-		  on:click={() => pick(id(ex, i))}
-		  title={label(ex)}>
-		  <span class="label">{label(ex)}</span>
+<div class="exbar">
+	{#each exercises as ex (ex.slug)}
+  <button
+    class="ex"
+    class:active={activeSlug === ex.slug }
+    on:click={() => pick(ex.slug)}
+    title={ex.label}>
+    <span class="label">{ex.label}</span>
+   
+  </button>
+{/each}
+
+</div>
   
-		  {#if counts && counts[lc(id(ex, i))] != null && counts[lc(id(ex, i))].total != null}
-			<span class="b total" title="Total">{counts[lc(id(ex, i))].total}</span>
-		  {/if}
-		</button>
-	  {/key}
-	{/each}
-  </div>
 	
   <style>
 	.exbar{
@@ -75,30 +66,6 @@
 	  overflow:hidden;
 	  text-overflow:ellipsis;
 	  white-space:nowrap;
-	}
-  
-	/* single badge */
-	.b{
-	  padding:2px 6px;
-	  border-radius:999px;
-	  font-size:12px;
-	  line-height:1;
-	  border:1px solid var(--borderColor);
-	  background: color-mix(in oklab, var(--surfaceColor) 85%, var(--backgroundColor));
-	  color: var(--primaryText);
-	}
-	.b.total{
-	  background: color-mix(in oklab, var(--accentColor) 18%, var(--surfaceColor));
-	}
-  
-	/* keep badge readable on active (inverted) button */
-	.ex.active .b{
-	  border-color: color-mix(in oklab, var(--backgroundColor) 40%, var(--primaryColor));
-	  color: var(--backgroundColor);
-	  background: color-mix(in oklab, var(--backgroundColor) 25%, var(--primaryColor));
-	}
-	.ex.active .b.total{
-	  background: color-mix(in oklab, var(--backgroundColor) 25%, var(--accentColor));
 	}
   </style>
   

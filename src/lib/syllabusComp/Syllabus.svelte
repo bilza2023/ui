@@ -19,7 +19,7 @@
     import LeftChaptersBar from "./LeftChaptersBar.svelte";
     import ExNavBar from "./ExNavBar.svelte";
     import QuestionCard from "./QuestionCard.svelte";
-    import SyllabusTitle from "./SyllabusTitle.svelte";
+    import Title from "./Title.svelte";
   
     // Local state (slug-based navigation; no reloads within a tcode)
     let activeChapter  = selected.chapter || (synopsis?.chapters?.[0]?.slug ?? "");
@@ -52,11 +52,21 @@
     $: tcodeTotal    = countTcodeTotal(items);
     $: chapterCount  = countChapterTotal(items, exSet);
     $: exerciseCount = countExerciseTotal(items, activeExercise);
+
+    //////////
+    $: exNavExercises = [
+  { slug: "", label: "All", total: chapterCount },
+  ...exercises.map((ex) => ({
+    slug: ex.slug,
+    label: ex.name ?? ex.slug,
+    total: items.filter((q) => q.exercise === ex.slug).length
+  }))
+];
   </script>
   
   
   <!-- Title/Header -->
-  <SyllabusTitle
+  <Title
   chapter={activeChapterName}
   chapterCount={chapterCount}
   tcodeTotal={tcodeTotal}
@@ -77,11 +87,10 @@
     <div class="syllabus-main">
       <!-- Exercise Navbar for the active chapter -->
       <ExNavBar
-        exercises={exercises}
-        activeSlug={activeExercise}
-        on:pick={onPickExercise}
-      />
-  
+      exercises={exNavExercises}
+      activeSlug={activeExercise}
+      on:pick={onPickExercise}
+    />
       <!-- Question list (PASS ARRAY, not item-by-item) -->
       <QuestionCard items={filteredItems} />
     </div>
