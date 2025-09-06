@@ -1,20 +1,27 @@
 <script>
-  // Loader data from +page.server.js
-  export let data = {};
-console.log("data",data);
-  // Reuse the existing Syllabus components
-  import QuestionCard from '$lib/questionCards/QuestionCard.svelte';   // expects `items=[]`
-  // (QuestionItem is used internally by QuestionCard; no need to import here)
+  import BulletsNav from '$lib/components/BulletsNav.svelte';
+  import QuestionCard from '../lib/questionCards/QuestionCard.svelte';
 
-  // Accept common loader keys and pick one list to show
-  const items =
-    Array.isArray(data?.items)        ? data.items :
-    Array.isArray(data?.questions)    ? data.questions :
-    Array.isArray(data?.blog_index)   ? data.blog_index :
-    [];
+  export let data;
 
-  // Nothing else: background + spacing are handled by the root layout & tokens
+  $: questions = data?.questions ?? [];
+  $: types = Array.from(new Set(questions.map(q => q.type))).filter(Boolean);
+
+  let activeType = '';
+
+  function onSelect(e) {
+    activeType = e.detail.type;
+  }
+
+  $: filtered = activeType
+    ? questions.filter(q => q.type === activeType)
+    : questions;
 </script>
 
-<!-- Edge-to-edge; no .page wrapper, no styles -->
-<QuestionCard items={items} />
+<BulletsNav {types} on:select={onSelect} />
+
+<div class="cards">
+  <!-- {#each filtered as q} -->
+  <QuestionCard items={filtered} />
+<!-- {/each} -->
+</div>
