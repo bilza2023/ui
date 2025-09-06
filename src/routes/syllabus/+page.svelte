@@ -1,7 +1,4 @@
 <script>
-  import QuestionCard from "./QuestionCard.svelte";
-  import ExNavBar from "./ExNavBar.svelte";
-  import Nav from "../../lib/appComps/Nav.svelte";
 
   import Syllabus from "$lib/syllabusComp/Syllabus.svelte";
 
@@ -81,7 +78,6 @@
   });
 </script>
 
-<Nav />
 
 <!-- <div class="top"> -->
 <div class="bg-red-800">

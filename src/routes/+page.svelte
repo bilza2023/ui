@@ -1,8 +1,6 @@
 <!-- src/routes/+page.svelte -->
 <script>
 
-
-  import Nav from "$lib/appComps/Nav.svelte";
   import TcodeCard from "$lib/homeIndex/TcodeCard.svelte";
   import QuestionCards from "../lib/questionCards/QuestionCards.svelte";
   import SecondaryNav from "$lib/SecondaryNav.svelte";
@@ -16,7 +14,6 @@
 </script>
 
 
-<Nav />
 <div class="page">
 
   <div >
