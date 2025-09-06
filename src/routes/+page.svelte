@@ -1,7 +1,7 @@
 <script>
   // Loader data from +page.server.js
   export let data = {};
-
+console.log("data",data);
   // Reuse the existing Syllabus components
   import QuestionCard from '$lib/questionCards/QuestionCard.svelte';   // expects `items=[]`
   // (QuestionItem is used internally by QuestionCard; no need to import here)
