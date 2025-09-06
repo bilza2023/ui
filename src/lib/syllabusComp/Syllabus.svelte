@@ -18,7 +18,7 @@
     // Child components (already working; NO changes)
     import LeftChaptersBar from "./LeftChaptersBar.svelte";
     import ExNavBar from "./ExNavBar.svelte";
-    import QuestionCard from "./QuestionCard.svelte";
+    import QuestionCard from "../questionCards/QuestionCard.svelte";
     import Title from "./Title.svelte";
   
     // Local state (slug-based navigation; no reloads within a tcode)

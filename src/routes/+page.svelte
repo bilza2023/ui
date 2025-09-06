@@ -1,13 +1,20 @@
 <script>
+  // Loader data from +page.server.js
   export let data = {};
-  import QuestionCards from '$lib/questionCards/QuestionCards.svelte';
 
-  const categories = Array.isArray(data?.categories) ? data.categories : [];
-  const all = Array.isArray(data?.items) ? data.items : [];
-  let active = categories[0]?.slug ?? '';
+  // Reuse the existing Syllabus components
+  import QuestionCard from '$lib/questionCards/QuestionCard.svelte';   // expects `items=[]`
+  // (QuestionItem is used internally by QuestionCard; no need to import here)
 
-  $: items = active ? all.filter(i => i?.category === active) : all;
+  // Accept common loader keys and pick one list to show
+  const items =
+    Array.isArray(data?.items)        ? data.items :
+    Array.isArray(data?.questions)    ? data.questions :
+    Array.isArray(data?.blog_index)   ? data.blog_index :
+    [];
+
+  // Nothing else: background + spacing are handled by the root layout & tokens
 </script>
 
-
-<QuestionCards questions={items} />
+<!-- Edge-to-edge; no .page wrapper, no styles -->
+<QuestionCard items={items} />

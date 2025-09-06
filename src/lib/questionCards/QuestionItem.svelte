@@ -2,6 +2,15 @@
 <script>
   // Pure CARD — no layout responsibility
   export let item = {}; // { title?, name?, heading?, question?, slug?, type?, exercise?, chapter?, status?, editedAt?, description? }
+  const pick = (v) => (typeof v === 'string' && v.trim() ? v.trim() : '');
+$: rawThumb =
+  pick(item?.thumbnail) ||
+  pick(item?.image) ||
+  pick(item?.thumb) ||
+  pick(item?.cover) || '';
+$: thumbSrc = rawThumb
+  ? (rawThumb.startsWith('http') || rawThumb.startsWith('/') ? rawThumb : `/media/images/${rawThumb}`)
+  : '/media/images/taleem.webp';
 
   const norm = (v) => (v == null ? "" : String(v).trim());
   const humanize = (s) =>
@@ -21,17 +30,20 @@
     return "Untitled";
   })();
 
-  // Static thumbnail for now (as requested)
-  $: thumbSrc =  ("/media/images/" +item?.thumbnail) || item?.thumb || item?.image || item?.cover || "/media/images/taleem.webp";
-  const thumbAlt = displayTitle;
+  $: thumbAlt = `${displayTitle} thumbnail`;
+  
 </script>
 
 <article class="q-card" title={displayTitle} role="article">
   <!-- YouTube-style thumbnail -->
   <figure class="thumb">
-    <!-- <img src={thumbSrc} alt={thumbAlt} loading="lazy" decoding="async" /> -->
-    <img src={thumbSrc} alt={thumbAlt} loading="lazy" decoding="async"
-   on:error={(e) => (e.currentTarget.src = "/media/images/taleem.webp")} />
+        <img
+          src={thumbSrc}
+          alt={thumbAlt}
+          loading="lazy"
+          decoding="async"
+          on:error={(e) => (e.currentTarget.src = '/media/images/taleem.webp')}
+        />
   </figure>
 
   <!-- Body -->
