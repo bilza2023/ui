@@ -1,79 +1,13 @@
-<!-- src/routes/+page.svelte -->
 <script>
+  export let data = {};
+  import QuestionCards from '$lib/questionCards/QuestionCards.svelte';
 
-  import TcodeCard from "$lib/homeIndex/TcodeCard.svelte";
-  import QuestionCards from "../lib/questionCards/QuestionCards.svelte";
-  import SecondaryNav from "$lib/SecondaryNav.svelte";
-  import Footer from "../lib/appComps/Footer.svelte";
-  
-  export let data;
-  const { syllabus = [] } = data;
-  
+  const categories = Array.isArray(data?.categories) ? data.categories : [];
+  const all = Array.isArray(data?.items) ? data.items : [];
+  let active = categories[0]?.slug ?? '';
 
-  let pageDisplayState = 0;
+  $: items = active ? all.filter(i => i?.category === active) : all;
 </script>
 
 
-<div class="page">
-
-  <div >
-    <SecondaryNav
-      items={["Blog","Videos" , "Courses"]}
-      bind:pageDisplayState={pageDisplayState}
-    />
-  </div>
-<!-- blog, videos, courses,  -->
-  <section class="main-section">
-    
-    <!-- blog -->
-    {#if pageDisplayState == 0}
-    <QuestionCards questions={data.blog_index || []}/>
-    {/if}
-    <br>
-    <!-- videos -->
-    <br>
-    {#if pageDisplayState == 1}
-    <QuestionCards questions={data.questions || []}/>
-    {/if}
-    <br>
-    <br>
-    {#if pageDisplayState == 2}
-    <TcodeCard tcodes={syllabus} />
-    {/if}
-
-    <!-- // DO NOT DELETE -->
-    <!-- <Sidebar /> -->
-  </section>
-
-</div>
-
-<Footer/>
-<style>
-  /* Page shell */
-  .page {
-    max-width: 100%;
-    padding: 0px;
-    margin: 0px;
-
-    /* margin-inline: auto; */
-  }
-
-  /* Main content panel */
-  .main-section {
-    width: 100%;
-    min-height: 100vh;
-
-    /* Just use surfaceColor directly — avoids mismatch with border */
-    background: var(--surfaceColor);
-    color: var(--primaryText);
-
-    border: 1px solid var(--borderColor);
-    border-radius: 16px;
-
-    padding: clamp(12px, 2vw, 24px);
-    box-shadow:
-      0 1px 1px rgba(0,0,0,.04),
-      0 4px 14px rgba(0,0,0,.08);
-  }
-
-</style>
+<QuestionCards questions={items} />
