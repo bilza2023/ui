@@ -7,7 +7,6 @@
   
   // important
 import AdminNav from '../../lib/appComps/AdminNav.svelte';
-import Nav from "$lib/appComps/Nav.svelte";
 
   import '$lib/styles/tokens.css';
   import 'katex/dist/katex.min.css';
@@ -19,7 +18,7 @@ import Nav from "$lib/appComps/Nav.svelte";
 <SvelteToast {options} />
 
 <div class="min-h-screen w-full bg-green-400">
-  <Nav />
+
   <AdminNav />
   <slot></slot>
 </div>
