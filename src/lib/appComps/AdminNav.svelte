@@ -5,6 +5,7 @@
    
     
     <a href="/admin/comments" class="nav-link">🔔 comments</a>
+    <a href="/admin/home-index" target="_blank" class="nav-link">📊 Index</a>
     <a href="/admin/workdesk" target="_blank" class="nav-link">🎖️ workdesk</a>
     <a href="/admin/synopsis" target="_blank" class="nav-link">🦞 Synopsis</a>
   </nav>
