@@ -4,18 +4,18 @@
 
   export let data;
 
-  $: questions = data?.questions ?? [];
-  $: types = Array.from(new Set(questions.map(q => q.type))).filter(Boolean);
+  console.log("data" , data);
 
-  let activeType = '';
+  $: questions = data?.questions ?? [];
+  $: types = ["videos" , "blog" ]
+
+  let activeType = 'videos';
 
   function onSelect(e) {
     activeType = e.detail.type;
   }
 
-  $: filtered = activeType
-    ? questions.filter(q => q.type === activeType)
-    : questions;
+  $: filtered = questions.filter(q => q.category === activeType);
 </script>
 
 <BulletsNav {types} on:select={onSelect} />

@@ -164,8 +164,8 @@ model SyllabusExercise {
 model IndexItem {
   id        Int      @id @default(autoincrement())
   category  String   // enum-like: "featured" | "blog" | "videos" | ...
-  question  Question @relation(fields: [questionSlug], references: [slug])
-  questionSlug String
+  question  Question @relation(fields: [slug], references: [slug])
+  slug String
   pinned    Boolean  @default(false)
   sortOrder Int      @default(0)
   status    String   @default("active") // active | hidden

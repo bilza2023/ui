@@ -2,6 +2,9 @@
 <script>
   // Pure CARD — no layout responsibility
   export let item = {}; // { title?, name?, heading?, question?, slug?, type?, exercise?, chapter?, status?, editedAt?, description? }
+
+  // console.log("item" , item);
+
   const pick = (v) => (typeof v === 'string' && v.trim() ? v.trim() : '');
 $: rawThumb =
   pick(item?.thumbnail) ||
@@ -32,8 +35,15 @@ $: thumbSrc = rawThumb
 
   $: thumbAlt = `${displayTitle} thumbnail`;
   
+  const href =
+    item?.type === 'note'
+      ? `/note?filename=${item.slug}`
+      : `/player?filename=${item.slug}`;
 </script>
 
+
+<a class="card-link" href={href} aria-label={item?.title || item?.slug}>
+  
 <article class="q-card" title={displayTitle} role="article">
   <!-- YouTube-style thumbnail -->
   <figure class="thumb">
@@ -57,15 +67,9 @@ $: thumbSrc = rawThumb
       {#if item.status}<span class="chip chip-accent">{item.status}</span>{/if}
     </div>
 
-    <!-- {#if item.editedAt}
-      <div class="q-meta muted">{item.editedAt}</div>
-    {/if} -->
-
-    <!-- {#if item.description}
-      <p class="q-desc">{item.description}</p>
-    {/if} -->
   </div>
 </article>
+</a>
 
 <style>
   /* CARD (token-only) */
