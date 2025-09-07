@@ -71,8 +71,20 @@ $: thumbSrc = rawThumb
 </article>
 </a>
 
+
 <style>
-  /* CARD (token-only) */
+  /* Link wrapper stays neutral on hover */
+  .card-link{
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    font-size: inherit;
+  }
+  .card-link:hover{
+    font-size: inherit; /* guard against any global a:hover font rules */
+  }
+
+  /* CARD (token-only, hover is visual only — no translate/resize) */
   .q-card{
     box-sizing: border-box;
     display: block;
@@ -82,13 +94,16 @@ $: thumbSrc = rawThumb
     border-radius: 12px;
     background: var(--surfaceColor);
     color: var(--primaryText);
-    overflow: hidden; /* so the image corners clip */
-    transition: transform .12s ease, box-shadow .15s ease, border-color .15s ease;
+    overflow: hidden; /* clip image corners */
+    transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
+    contain: content;            /* isolate this subtree */
+    font-size: inherit;          /* never upscale relative to ancestors */
   }
   .q-card:hover{
-    transform: translateY(-1px);
+    background: var(--surfaceElevated, var(--surfaceColor));
     border-color: var(--primaryColor);
-    box-shadow: 0 4px 16px var(--shadowColor, rgba(0,0,0,.15));
+    /* soft shadow that doesn't affect layout */
+    box-shadow: 0 2px 10px var(--shadowColor, rgba(0,0,0,.12));
   }
 
   /* THUMB (16:9 like YouTube) */
@@ -112,7 +127,7 @@ $: thumbSrc = rawThumb
   }
   .q-title{
     margin: 0 0 6px 0;
-    font-size: 15.5px;     /* slimmer than before */
+    font-size: 15.5px;     /* fixed px to avoid fluid-typo jumps */
     line-height: 1.35;
     font-weight: 700;
 
@@ -152,8 +167,8 @@ $: thumbSrc = rawThumb
   .muted{ opacity: .7; }
 
   .q-desc{ margin: 6px 0 0 0; }
-
+/* 
   @media (max-width: 640px){
     .q-card { width: 100%; }
-  }
+  } */
 </style>

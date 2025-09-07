@@ -7,7 +7,6 @@
   import { onMount, onDestroy, createEventDispatcher } from 'svelte';
   import { browser } from '$app/environment';   // ✅ SSR guard
 
- 
   const dispatch = createEventDispatcher();
 
   let loading = true;
@@ -16,15 +15,16 @@
 
   // --- THEMES (keys must match your .theme-* class suffixes) ---
   const THEMES = [
-    { key: 'light',            label: 'Light (Primer)' },
-    { key: 'dark',             label: 'Dark (Primer)' },
-    { key: 'dracula',          label: 'Dracula' },
-    { key: 'nord',             label: 'Nord' },
-    { key: 'github-dim',       label: 'GitHub Dim' },
-    { key: 'gruvbox-dark',     label: 'Gruvbox Dark' },
-    { key: 'solarized-light',  label: 'Solarized Light' },
-    { key: 'latte',            label: 'Latte' },
-  ];
+  { key: 'light',            label: 'Light (Primer)' },
+  { key: 'dark',             label: 'Dark (Primer)' },
+  { key: 'dracula',          label: 'Dracula' },
+  { key: 'nord',             label: 'Nord' },
+  { key: 'github-dim',       label: 'GitHub Dim' },
+  { key: 'gruvbox-dark',     label: 'Gruvbox Dark' },
+  { key: 'solarized-light',  label: 'Solarized Light' },
+  { key: 'latte',            label: 'Latte' },
+];
+
   const ALL_THEME_CLASSES = THEMES.map(t => `theme-${t.key}`);
   const ALLOWED = new Set(THEMES.map(t => t.key));
 
@@ -108,11 +108,15 @@
     dispatch('authchange', { user: null, unread: 0 });
     location.reload();
   }
+
+  
 </script>
 
-
 <nav class="nav">
-  <a class="brand" href="/">Taleem.help:Beta</a>
+  <a class="brand" href="/">
+    <span class="long">Taleem.help:Beta</span>
+    <span class="short">Taleem</span>
+  </a>
 
   <!-- <a href="/studio" class="link">
     Studio {#if user && unread > 0}<span class="badge">{unread}</span>{/if}
@@ -142,7 +146,7 @@
         </div>
       {/if}
     </div>
-    
+
     <button class="pill" on:click={logout}>Logout</button>
   {:else}
     <a href="/login" class="pill">Login</a>
@@ -163,18 +167,22 @@
 </nav>
 
 <style>
-  /* NAV WRAPPER */
+  /* NAV WRAPPER (mobile-first) */
   .nav {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px;
+    flex-wrap: wrap; /* allow a second line on narrow screens */
+    gap: clamp(6px, 1.8vw, 10px);
+    padding: clamp(8px, 2vw, 12px);
     margin: 0px;
 
     background: var(--surfaceColor);
     color: var(--primaryText);
     border-bottom: 1px solid var(--borderColor);
   }
+
+  /* Prevent accidental font bumps from external :hover rules */
+  .nav * { font-size: inherit; }
 
   /* BRAND */
   .brand {
@@ -183,7 +191,14 @@
     color: var(--accentColor);
     text-decoration: none;
     margin-right: 6px;
+
+    font-size: clamp(0.95rem, 2.5vw + 0.2rem, 1.15rem);
+    max-width: 55vw;            /* keep room for actions */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+  .brand .short { display: none; }
 
   /* LINKS */
   .link {
@@ -196,7 +211,7 @@
     background: color-mix(in oklab, var(--primaryText) 8%, var(--surfaceColor));
   }
 
-  .spacer { flex: 1; }
+  .spacer { flex: 1 1 auto; min-width: 0; }
   .muted { opacity: 0.7; }
   .hello { opacity: 0.9; margin-right: 4px; }
 
@@ -245,7 +260,7 @@
     z-index: 50;
   }
   .menu-item {
-    font-size: 0.75rem;
+    font-size: 0.75rem; /* re-assert after .nav * rule */
     width: 100%;
     text-align: left;
     background: transparent;
@@ -257,5 +272,29 @@
   }
   .menu-item:hover {
     background: color-mix(in oklab, var(--primaryColor) 14%, var(--surfaceColor));
+  }
+  .menu-item.active {
+    background: color-mix(in oklab, var(--primaryText) 12%, var(--surfaceColor));
+  }
+
+  /* === RESPONSIVE TWEAKS === */
+  @media (max-width: 768px) {
+    .hello { display: none; }         /* hide the verbose greeting on tablets/phones */
+    .nav { gap: 6px; padding: 8px 10px; }
+  }
+
+  @media (max-width: 520px) {
+    .brand .long { display: none; }
+    .brand .short { display: inline; } /* short label on tiny screens */
+    .pill { padding: 6px 8px; }
+
+    /* Make dropdown behave like a popover so it never overflows viewport */
+    .dropdown .menu {
+      position: fixed;
+      right: 8px;
+      top: 56px;           /* approx nav height; adjust if needed */
+      max-width: 92vw;
+      min-width: unset;
+    }
   }
 </style>

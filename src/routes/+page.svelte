@@ -20,7 +20,7 @@
 
 <BulletsNav {types} on:select={onSelect} />
 
-<div class="cards">
+<div class="">
   <!-- {#each filtered as q} -->
   <QuestionCard items={filtered} />
 <!-- {/each} -->
