@@ -30,7 +30,7 @@ export async function load({ url, setHeaders }) {
     sortOrder: String(r.sortOrder ?? ""),
 
     // NEW: actions column content
-    actions: `<a href="/${r.type === "note" ? "note" : "player"}/${r.slug}">Edit</a>`
+    actions: `<a href="/${r.type === "note" ? "admin/edit-note?slug=" : "admin/edit-deck?slug="}${r.slug}">Edit</a>`
   }));
 
   const columns = [

@@ -4,7 +4,7 @@
 
   export let data;
 
-  console.log("data" , data);
+  // console.log("data" , data);
 
   $: questions = data?.questions ?? [];
   $: types = ["videos" , "blog" ]
