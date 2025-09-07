@@ -20,8 +20,16 @@
 
 <BulletsNav {types} on:select={onSelect} />
 
-<div class="">
+<div class="de">
   <!-- {#each filtered as q} -->
   <QuestionCard items={filtered} />
 <!-- {/each} -->
 </div>
+
+
+<style>
+  .de {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+</style>

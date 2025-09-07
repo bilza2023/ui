@@ -12,5 +12,8 @@
 
 <style>
   /* If Tailwind isn’t active for some reason, keep a safe fallback */
-  .q-list { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
+  .q-list { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; 
+  
+  
+  }
 </style>

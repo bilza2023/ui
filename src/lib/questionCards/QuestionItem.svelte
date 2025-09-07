@@ -89,7 +89,7 @@ $: thumbSrc = rawThumb
     box-sizing: border-box;
     display: block;
     width: var(--q-card-w, 360px);
-    max-width: 100%;
+    max-width: 90%;
     border: 1px solid var(--borderColor);
     border-radius: 12px;
     background: var(--surfaceColor);
