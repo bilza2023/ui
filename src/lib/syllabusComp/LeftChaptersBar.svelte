@@ -194,5 +194,25 @@
 	.leftbar::-webkit-scrollbar-thumb:hover {
 	  background: color-mix(in oklab, var(--primaryText) 40%, var(--surfaceColor));
 	}
+
+  /* === Responsive narrow mode === */
+  @media (max-width: 720px){
+    .sidebar {
+      width: 56px;                /* shrink down to icon size */
+      min-width: 56px;
+    }
+    .sidebar .label,
+    .sidebar .chapter-name,
+    .sidebar .extra-text {        /* any text/labels inside */
+      display: none;              /* hide text, keep only icons */
+    }
+  }
+
+  @media (max-width: 480px){
+    .sidebar {
+      width: 48px;                /* even tighter on tiny phones */
+      min-width: 48px;
+    }
+  }
   </style>
   
