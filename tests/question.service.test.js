@@ -8,7 +8,7 @@ import {
   getQuestionCount, getQuestionStatsByTcode,
   bulkUpdateQuestionStatus, bulkDeleteQuestions, reorderQuestions,
   searchQuestions, getQuestionsByTags
-} from '../src/lib/services/contentServices/questionServices';
+} from '../src/lib/services/questionServices.js';
 
 const uniq = (p='q') => `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`;
 

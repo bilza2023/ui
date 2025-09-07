@@ -12,7 +12,7 @@ import {
   createExercise, getExercisesByChapter, getExerciseBySlug, updateExercise, deleteExercise,
   // bulk
   getCompleteSyllabus, getSyllabusForTcode, reorderChapters, reorderExercises
-} from '../src/lib/services/contentServices/syllabusService.js';
+} from '../src/lib/services/syllabusService';
 
 const uniq = (p='t') => `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`;
 
