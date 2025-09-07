@@ -12,7 +12,7 @@
   "version": "deck-v1",
   "background": {
     "backgroundColor": "#F3E5AB",
-    "backgroundImage": "/images/taleem.webp",
+    "backgroundImage": "taleem.webp",
     "backgroundImageOpacity": 0.1
   },
   "deck": [
@@ -35,7 +35,7 @@
       "data": [
         {
           "name": "image",
-          "content": "/images/traversal.webp",
+          "content": "traversal.webp",
           "showAt": 0
         }
       ]
@@ -64,7 +64,7 @@
       "data": [
         {
           "name": "image",
-          "content": "/images/angles.jpg",
+          "content": "angles.jpg",
           "showAt": 0
         }
       ]

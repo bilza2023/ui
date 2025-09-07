@@ -3,8 +3,8 @@ import { error, redirect } from '@sveltejs/kit';
 import prisma from '../../../lib/server/prisma.js';
 import { isAdmin } from '../../../lib/services/loginServices.js';
 import { addSubscription } from '../../../lib/services/subscriptionServices.js';
-// import { listTcodes } from '../../../lib/services/synopsisServeces.js'; // must return string[]
-import { listTcodes } from "../../../lib/services/syllabusService.js";
+// import { getAllTcodes } from '../../../lib/services/synopsisServeces.js'; // must return string[]
+import { getAllTcodes } from "../../../lib/services/syllabusService.js";
 
 const DAY_MS = 86_400_000;
 
@@ -68,7 +68,7 @@ export async function load(event) {
   const email = event.url.searchParams.get('email') ?? '';
 
   // Data sources
-  const tcodes = await listTcodes(); // string[]
+  const tcodes = await getAllTcodes(); // string[]
 
   // Optional user lookup
   let selectedUser = null;

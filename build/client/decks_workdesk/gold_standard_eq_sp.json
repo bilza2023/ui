@@ -12,7 +12,7 @@
   "version": "deck-v1",
   "background": {
     "backgroundColor": "#F3E5AB",
-    "backgroundImage": "/images/taleem.webp",
+    "backgroundImage": "/media/images/taleem.webp",
     "backgroundImageOpacity": 0.07
   },
   "deck": [
@@ -47,7 +47,7 @@
             },
             {
               "type": "spImage",
-              "content": "images/box.webp"
+              "content": "/media/images/box.webp"
             }
           ]
         },
