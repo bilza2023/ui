@@ -30,8 +30,6 @@ model Question {
   createdAt    DateTime @default(now())
   editedAt     DateTime @updatedAt
 
-  indexItems  IndexItem[]
-  
   @@index([tcode])
   @@index([tcode, chapter])
   @@index([tcode, chapter, exercise])
@@ -160,15 +158,21 @@ model SyllabusExercise {
   @@index([chapterId])
   @@index([chapterId, sortOrder])
 }
+model HomeIndexEntry {
+  id          Int      @id @default(autoincrement())
+  category    String                         // "featured" | "videos" | "blog" | "courses" | ...
+  type        String                         // "deck" | "note" | "blog" | "course" | "link" (free text for now)
+  title       String
+  slug         String                         // absolute or relative
+  description String?
+  thumbnail   String?                        // absolute (/ or http) or bare filename
+  pinned      Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  status      String   @default("active")    // kept for future use
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-model IndexItem {
-  id        Int      @id @default(autoincrement())
-  category  String   // enum-like: "featured" | "blog" | "videos" | ...
-  question  Question @relation(fields: [slug], references: [slug])
-  slug String
-  pinned    Boolean  @default(false)
-  sortOrder Int      @default(0)
-  status    String   @default("active") // active | hidden
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@unique([category, slug], map: "uniq_homeindex_category_url")
+  @@index([category, sortOrder, pinned], map: "idx_homeindex_cat_sort_pin")
 }
+

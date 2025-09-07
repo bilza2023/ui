@@ -1,149 +1,56 @@
+// /src/routes/admin/home-index/+page.server.js
 export const prerender = false;
 
-import { makeAction } from '$lib/formKit/actionFactory.js';
-import { R } from '$lib/formKit/readers.js';
 import { homeIndexService } from '$lib/services/homeIndexServices.js';
+import { R } from '$lib/formKit/readers.js';
+import { makeAction } from '$lib/formKit/actionFactory.js';
 
-const S = (v) => (typeof v === 'string' ? v.trim() : '');
-const toInt = (v, d = null) => {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : d;
-};
+const CATEGORIES = ['featured', 'videos', 'blog', 'courses'];
 
 export async function load({ url }) {
-  const category = S(url.searchParams.get('category')) || '';
-
-  const categories = await homeIndexService.listCategories({ status: 'active' });
-
-  const items = await homeIndexService.listIndexItems({
-    category: category || undefined,
-    status: 'active',
-    includeQuestion: true,
-    limit: 1000
+  const category = (url.searchParams.get('category') || '').trim();
+  const entries = await homeIndexService.listEntries({
+    category: category || null
   });
 
-  // Strict visual order for admin table
-  items.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
-
   return {
+    entries,
     category,
-    categories,
-    items
-  };
-}
-
-/* -------------------- formKit actions -------------------- */
-
-// CREATE
-const createSpec = {
-  category:     R.str('category',     { required: true }),
-  questionSlug: R.str('questionSlug', { required: true }),
-  pinned:       R.str('pinned'),           // checkbox → handled in prepare()
-  sortOrder:    R.num('sortOrder')         // optional
-};
-
-function createPrepare(v) {
-  // normalize checkbox + optional number
-  const pinned = S(v.pinned) === 'on';
-  const sortOrder = (v.sortOrder ?? '') === '' ? null : toInt(v.sortOrder, null);
-  return { category: v.category, questionSlug: v.questionSlug, pinned, sortOrder };
-}
-
-async function createService(v) {
-  // If no sortOrder provided, append to the end of that category
-  let sortOrder = v.sortOrder;
-  if (sortOrder === null) {
-    const existing = await homeIndexService.listIndexItems({
-      category: v.category,
-      status: 'active',
-      includeQuestion: false,
-      limit: 5000
-    });
-    const max = existing.reduce((m, it) => Math.max(m, toInt(it.sortOrder, -1)), -1);
-    sortOrder = max + 1;
-  }
-  const row = await homeIndexService.createIndexItem({
-    category: v.category,
-    questionSlug: v.questionSlug,
-    pinned: v.pinned,
-    sortOrder,
-    status: 'active'
-  });
-  return { id: row?.id ?? null, category: v.category };
-}
-
-function createSuccess(result, v) {
-  return {
-    ok: true,
-    message: 'Added to Home Index.',
-    saved: result?.id,
-    // keep category sticky; clear the other fields
-    values: {
-      category: v.category,
-      questionSlug: '',
-      pinned: false,
-      sortOrder: ''
-    }
-  };
-}
-
-function createFailure(err, v) {
-  return {
-    ok: false,
-    message: err?.message || 'Could not add item.',
-    values: {
-      category: v.category,
-      questionSlug: v.questionSlug,
-      pinned: v.pinned,
-      sortOrder: v.sortOrder ?? ''
-    }
-  };
-}
-
-// DELETE
-const deleteSpec = {
-  id:       R.num('id', { required: true }),
-  category: R.str('category') // preserve filter after delete
-};
-
-function deletePrepare(v) {
-  return { id: toInt(v.id), category: v.category ?? '' };
-}
-
-async function deleteService(v) {
-  await homeIndexService.deleteIndexItem(v.id);
-  return { category: v.category };
-}
-
-function deleteSuccess(result, v) {
-  return {
-    ok: true,
-    message: 'Deleted.',
-    values: { category: v.category }
-  };
-}
-
-function deleteFailure(err, v) {
-  return {
-    ok: false,
-    message: err?.message || 'Delete failed.',
-    values: { category: v.category }
+    categories: CATEGORIES
   };
 }
 
 export const actions = {
-  create: makeAction({
-    spec: createSpec,
-    prepare: createPrepare,
-    service: createService,
-    success: createSuccess,
-    failure: createFailure
-  }),
-  delete: makeAction({
-    spec: deleteSpec,
-    prepare: deletePrepare,
-    service: deleteService,
-    success: deleteSuccess,
-    failure: deleteFailure
+  add: makeAction({
+    spec: {
+      category:   R.$enum('category', ['featured','videos','blog','courses'], { required: true }),
+      type:       R.str('type', { required: false }),
+      title:      R.str('title', { required: true }),
+      url:        R.str('url', { required: true }),
+      description:R.str('description', { required: false }),
+      thumbnail:  R.str('thumbnail', { required: false }),
+      pinned:     R.str('pinned', { required: false }),     // checkbox ('on' | undefined)
+      sortOrder:  R.num('sortOrder', { required: false, gte: 0 })
+    },
+    prepare: (v) => {
+      return {
+        category: v.category,
+        type: (v.type || 'link').trim(),
+        title: v.title,
+        url: v.url,
+        description: v.description?.trim() || null,
+        thumbnail: v.thumbnail?.trim() || null,
+        pinned: v.pinned === 'on',
+        sortOrder: (v.sortOrder ?? null)
+      };
+    },
+    service: (clean) => homeIndexService.createEntry(clean),
+    success: (result, v) => ({
+      ok: true,
+      message: 'Added to Home Index.',
+      saved: result?.id,
+      // FormUi can optionally use this to set sticky defaults client-side if needed
+      defaults: { category: v.category, type: v.type, pinned: v.pinned }
+    })
   })
 };

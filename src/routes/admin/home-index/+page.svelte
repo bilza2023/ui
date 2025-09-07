@@ -1,116 +1,101 @@
-<!-- /src/routes/admin/home-index/+page.svelte -->
 <script>
-  import { invalidateAll } from '$app/navigation';
-  import { enhance } from '$app/forms';
-  import FormUi from '$lib/formUi/FormUi.svelte';
-
+  // Provided by +page.server.js
   export let data;
 
-  // Selected category (from server if URL had ?category=...; else empty)
-  let selectedCategory = data?.category ?? '';
+  import FormUi from '$lib/formUi/FormUi.svelte';
+  import { invalidateAll } from '$app/navigation';
 
-  // Server data
-  const items = Array.isArray(data?.items) ? data.items : [];
+  const categories = Array.isArray(data?.categories) ? data.categories : ['featured','videos','blog','courses'];
 
-  // Fixed categories only (edit this list as needed)
-  const FIXED_CATEGORIES = ['videos', 'blog', 'featured'];
-
-  // Initial category for the create form (fallback to first fixed)
-  const initialCategory =
-    FIXED_CATEGORIES.includes(selectedCategory) ? selectedCategory : (FIXED_CATEGORIES[0] ?? '');
-
-  // Create form config — posts to SAME page (?/create)
+  // --- FormUi config (ultra minimal) ---
   const addConfig = {
-    id: 'addIndexItem',
-    title: 'Add Item',
-    action: '?/create',          // same-page action
+    id: 'homeIndexAdd',
+    title: 'Add Home Index Entry',
+    action: '?/add',
     layout: 'grid-2',
     initial: {
-      category: initialCategory,
-      questionSlug: '',
-      pinned: false
+      category: data?.category || categories[0] || 'featured',
+      type: 'link',
+      title: '',
+      url: '',
+      description: '',
+      thumbnail: '',
+      pinned: false,
+      sortOrder: ''
     },
     items: [
-      {
-        type: 'select',
-        name: 'category',
-        label: 'Category',
-        options: FIXED_CATEGORIES.map(c => ({ value: c, label: c }))
+      { type: 'select', name: 'category', label: 'Category',
+        options: () => categories.map(c => ({ value: c, label: c }))
       },
-      {
-        type: 'text',
-        name: 'questionSlug',
-        label: 'Question Slug',
-        placeholder: 'what-is-algebra',
-        required: true
+      { type: 'select', name: 'type', label: 'Type',
+        options: () => [
+          { value: 'link', label: 'link' },
+          { value: 'deck', label: 'deck' },
+          { value: 'note', label: 'note' },
+          { value: 'blog', label: 'blog' },
+          { value: 'course', label: 'course' }
+        ]
       },
-      { type: 'checkbox', name: 'pinned', label: 'Pinned' }
+      { type: 'text', name: 'title', label: 'Title', placeholder: 'Display title', required: true },
+      { type: 'text', name: 'url', label: 'URL', placeholder: '/player?slug=...' , required: true },
+      { type: 'textarea', name: 'description', label: 'Description', rows: 3 },
+      { type: 'text', name: 'thumbnail', label: 'Thumbnail', placeholder: 'e.g. /media/images/taleem.webp' },
+      { type: 'checkbox', name: 'pinned', label: 'Pinned?' },
+      { type: 'number', name: 'sortOrder', label: 'Sort Order (optional)', min: 0, step: 1 }
     ],
-    submit: { label: 'Add', disabledWhen: (v) => !v.questionSlug?.trim() },
-    clearOnSuccess: () => ({
-      category: initialCategory,
-      questionSlug: '',
-      pinned: false
+    submit: {
+      label: 'Add',
+      disabledWhen: (v) => !(v?.category?.trim() && v?.title?.trim() && v?.url?.trim())
+    },
+    // After success, keep category/type/pinned sticky; clear content fields
+    clearOnSuccess: (v) => ({
+      category: v.category,
+      type: v.type,
+      pinned: v.pinned,
+      sortOrder: '',
+      title: '',
+      url: '',
+      description: '',
+      thumbnail: ''
     }),
     showErrorsList: true
   };
 
-  // Refresh page data after successful add/delete
-  async function onCreateSuccess() { await invalidateAll(); }
-  const onDeleteEnhance = () => ({ result }) => {
-    if (result.type === 'success') invalidateAll();
-  };
-
-  const fmt = (ts) => {
-    try { return new Date(ts).toLocaleString(); } catch { return ''; }
-  };
+  function onSuccess() {
+    // Re-load list below
+    invalidateAll();
+  }
 </script>
 
-<svelte:head>
-  <title>Home Index — Admin</title>
-</svelte:head>
-
 <div class="wrap">
-  <h1>Home Index</h1>
+  <FormUi {addConfig} config={addConfig} on:success={onSuccess} />
 
-  <!-- Create (same-page action + invalidateAll on success) -->
-  <div class="card">
-    <FormUi config={addConfig} on:success={onCreateSuccess} />
-  </div>
+  <div class="list">
+    <h2>All Items</h2>
 
-  <!-- List -->
-  <div class="card">
-    <h2>Items {selectedCategory ? `(${selectedCategory})` : ''}</h2>
-
-    {#if items.length === 0}
-      <p class="muted">No items found.</p>
+    {#if (data?.entries ?? []).length === 0}
+      <div class="empty">No items yet.</div>
     {:else}
-      <table>
+      <table class="table">
         <thead>
           <tr>
-            <th>#</th>
+            <th>Category</th>
             <th>Pinned</th>
-            <th>Slug</th>
+            <th>Sort</th>
             <th>Title</th>
-            <th>Edited</th>
-            <th>Actions</th>
+            <th>Type</th>
+            <th>URL</th>
           </tr>
         </thead>
         <tbody>
-          {#each items as it, i}
+          {#each data.entries as it (it.id)}
             <tr>
-              <td>{i + 1}</td>
-              <td>{it.pinned ? 'Yes' : ''}</td>
-              <td class="mono">{it.questionSlug}</td>
-              <td>{it.question?.name ?? ''}</td>
-              <td>{it.question?.editedAt ? fmt(it.question.editedAt) : ''}</td>
-              <td class="actions">
-                <form method="post" action="?/delete" use:enhance={onDeleteEnhance}>
-                  <input type="hidden" name="id" value={it.id} />
-                  <input type="hidden" name="category" value={selectedCategory} />
-                  <button type="submit" onclick="return confirm('Delete this item?')">Delete</button>
-                </form>
-              </td>
+              <td>{it.category}</td>
+              <td>{it.pinned ? 'Yes' : 'No'}</td>
+              <td>{it.sortOrder}</td>
+              <td>{it.title}</td>
+              <td>{it.type}</td>
+              <td class="url">{it.url}</td>
             </tr>
           {/each}
         </tbody>
@@ -120,12 +105,48 @@
 </div>
 
 <style>
-  .wrap { max-width: 920px; margin: 1.5rem auto; padding: 0 1rem; }
-  .card { border:1px solid #334155; border-radius:10px; padding:1rem; margin-bottom:1rem; }
-  table { width:100%; border-collapse:collapse; }
-  thead th { text-align:left; border-bottom:1px solid #334155; padding:.5rem; }
-  tbody td { border-bottom:1px solid #1f2937; padding:.5rem; vertical-align: top; }
-  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-  .muted { opacity:.8; }
-  .actions button { background:#b91c1c; border:1px solid #b91c1c; color:#fff; border-radius:8px; padding:.35rem .6rem; }
+  .wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px;
+    color: var(--primaryText);
+  }
+
+  h2 {
+    margin: 24px 0 12px;
+    color: var(--primaryText);
+  }
+
+  .list {
+    margin-top: 20px;
+    background: var(--panelBg, rgba(255,255,255,0.02));
+    border: 1px solid var(--panelBorder, rgba(255,255,255,0.08));
+    border-radius: 12px;
+    padding: 12px;
+  }
+
+  .empty {
+    padding: 12px;
+    color: var(--mutedText, #9aa4af);
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  .table th, .table td {
+    text-align: left;
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    vertical-align: top;
+  }
+  .table th {
+    color: var(--secondaryText);
+    font-weight: 600;
+  }
+  .url {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    word-break: break-all;
+  }
 </style>
