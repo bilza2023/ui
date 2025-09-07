@@ -1,6 +1,7 @@
 <script>
   export let data;
   export let currentTime;
+  export let imagesUrl;
 
   // Image: always render if present; highlight after its showAt
   $: imageItem   = (Array.isArray(data) ? data : []).find(d => d?.name === "image");
@@ -25,7 +26,7 @@
 
   {#if imageItem}
     <div class={`image-right ${imageActive ? 'img-active' : 'img-dim'}`}>
-      <img src={imageItem.content} alt="Slide image" />
+      <img src={imagesUrl + imageItem.content} alt="Slide image" />
     </div>
   {/if}
 </div>

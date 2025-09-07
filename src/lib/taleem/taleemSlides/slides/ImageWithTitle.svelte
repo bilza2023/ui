@@ -1,5 +1,6 @@
 <script>
   export let data;
+  export let imagesUrl;
 
   const imageSrc = data.find(d => d.name === "image")?.content ?? "";
   const title = data.find(d => d.name === "title")?.content ?? "";
@@ -10,7 +11,7 @@
     <h1 class="slide-title">{title}</h1>
   </div>
   <div class="image-zone">
-    <img src={imageSrc} alt="Slide Image" />
+    <img src={imagesUrl +imageSrc} alt="Slide Image" />
   </div>
 </div>
 

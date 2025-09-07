@@ -1,7 +1,7 @@
 <script>
   export let data;
   export let currentTime;
-
+  export let imagesUrl;
   // Image: always visible; highlight when time passes showAt
   $: imageItem = (Array.isArray(data) ? data : []).find(d => d?.name === "image");
   $: imageActive = imageItem ? currentTime >= (imageItem.showAt ?? 0) : false;
@@ -15,7 +15,7 @@
 <div class="slide-container">
   {#if imageItem}
     <div class={`image-left ${imageActive ? 'img-active' : 'img-dim'}`}>
-      <img src={imageItem.content} alt="Slide image" />
+      <img src={imagesUrl + imageItem.content} alt="Slide image" />
     </div>
   {/if}
   <div class="bullets-right">

@@ -1,13 +1,14 @@
 <!-- ImageSlide.svelte -->
 <script>
   export let data;
+  export let imagesUrl;
   // find the image URL
   const imageSrc = data.find(d => d.name === "image")?.content ?? "";
 </script>
 
 <div class="image-slide">
   <!-- svelte-ignore a11y-img-redundant-alt -->
-  <img class="fullImage" src={imageSrc} alt="Slide Image" />
+  <img class="fullImage" src={imagesUrl + imageSrc} alt="Slide Image" />
 </div>
 
 <style>

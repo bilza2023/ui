@@ -71,6 +71,7 @@ import SlideMap from './SlideMap.js';
       items={slide.data}
       {slide}
       {currentTime}
+      imagesUrl="/media/images/"
     />
   {:else}
     <div class="fallback">No slide to render.</div>

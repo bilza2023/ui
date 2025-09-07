@@ -17,7 +17,7 @@
 <header class="titlebar">
   <!-- Left: big title -->
   <div class="title-left">
-    <div class="eyebrow">Syllabus</div>
+
     <h1 class="hero">{displayTitle}</h1>
 
     <div class="sub">

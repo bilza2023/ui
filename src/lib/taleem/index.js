@@ -11,3 +11,6 @@ export { default as Timer } from './core/Timer.js';
 // Utilities
 export * as player_utility from './core/player_utility.js';
 export { clampTime, findSlideIndex, getDeckEnd } from './core/player_utility.js';
+
+export {normaliseImagePaths} from "./imagePaths.js";
+

@@ -1,6 +1,7 @@
 // /src/routes/player/+page.server.js
 import { error, redirect } from '@sveltejs/kit';
-import { getQuestionByFilename} from '../../lib/services/questionServices.js';
+import { getQuestionBySlug } from '$lib/services/questionServices.js';
+import { normaliseImagePaths } from '../../lib/taleem';
 import { taleemServices as svc} from '../../lib/taleemServices';
 
 export const prerender = false;
@@ -17,7 +18,12 @@ export async function load({ url, cookies, request }) {
   const filename = url.searchParams.get('filename');
   if (!filename) throw error(400, 'filename is required');
 
-  const row = await getQuestionByFilename(filename);
+  const row = await getQuestionBySlug(filename);
+
+  // const row = await normaliseImagePaths('/media/images/', non_normalized_images); 
+  
+  // console.log("row" ,row);
+
   if (!row) throw error(404, `Deck "${filename}" not found`);
   if (row.type !== 'deck' || !row.deck) throw error(415, `Item "${filename}" is not a deck`);
 

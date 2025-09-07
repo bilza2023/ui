@@ -1,6 +1,6 @@
 // /src/routes/notes/+page.server.js
 import { error } from '@sveltejs/kit';
-import { getQuestionByFilename } from '$lib/services/userServices.js';
+import { getQuestionBySlug } from '$lib/services/questionServices.js';
 
 export const prerender = false;
 
@@ -8,7 +8,7 @@ export async function load({ url }) {
   const filename = url.searchParams.get('filename');
   if (!filename) throw error(400, 'filename is required');
 
-  const row = await getQuestionByFilename(filename);
+  const row = await getQuestionBySlug(filename);
   if (!row) throw error(404, `Note "${filename}" not found`);
   if (row.type !== 'note' || !row.note) throw error(415, `Item "${filename}" is not a note`);
 

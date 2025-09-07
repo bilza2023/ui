@@ -2,8 +2,7 @@
 <script>
     import { goto } from '$app/navigation';
     import '../../lib/styles/notes.css';
-    import Nav from "../../lib/appComps/Nav.svelte";
-    
+  
   import Like from '$lib/components/Like.svelte';
   import Comment from '$lib/components//Comment.svelte';
     export let data;
@@ -24,10 +23,6 @@
   <svelte:head>
     <title>{title}</title>
   </svelte:head>
-  
-
-  <Nav />
-
   
       {#if !html}
         <div class="empty">This note is empty.</div>

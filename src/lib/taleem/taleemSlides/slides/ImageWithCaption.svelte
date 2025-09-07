@@ -1,11 +1,13 @@
 <script>
     export let data;
+    export let imagesUrl;
+
     const imageSrc = data.find(d => d.name === "image")?.content ?? "";
     const caption = data.find(d => d.name === "caption")?.content ?? "";
   </script>
   
   <div class="image-slide">
-    <img class="full-image" src={imageSrc} alt="Slide Image" />
+    <img class="full-image" src={imagesUrl +imageSrc} alt="Slide Image" />
     <div class="text-overlay caption">{caption}</div>
   </div>
   

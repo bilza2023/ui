@@ -1,11 +1,15 @@
 <script>
   // Theme tokens are global; import once here.
   import '$lib/styles/tokens.css';
+  import { page } from '$app/stores';
   import Nav from "$lib/appComps/Nav.svelte";
 </script>
 
 <div class="app">
+
+  {#if $page.url.pathname !== '/player'}
   <Nav />
+{/if}
   <slot />
 </div>
 

@@ -1,6 +1,6 @@
 <script>
   export let data;
-
+  export let imagesUrl;
   // Extract slide data
   const title = data.find(d => d.name === "quoteLine")?.content ?? "";
   const subtitle = data.find(d => d.name === "author")?.content ?? "";
@@ -11,7 +11,7 @@
   <h1 class="title">{title}</h1>
   <p class="subtitle">— {subtitle}</p>
   <div class="image-container">
-    <img src={imageSrc} alt={subtitle} />
+    <img src={imagesUrl +imageSrc} alt={subtitle} />
   </div>
 </div>
 

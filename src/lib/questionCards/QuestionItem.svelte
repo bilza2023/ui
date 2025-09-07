@@ -37,7 +37,7 @@ $: thumbSrc = rawThumb
   
   const href =
     item?.type === 'note'
-      ? `/note?filename=${item.slug}`
+      ? `/notes?filename=${item.slug}`
       : `/player?filename=${item.slug}`;
 </script>
 
