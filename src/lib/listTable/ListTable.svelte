@@ -71,7 +71,8 @@
           >
             {#if showIndex}<td class="index">{i + 1}</td>{/if}
             {#each columns as col}
-              <td class={alignClass(col)}>{fmt(row?.[col.key])}</td>
+              <!-- <td class={alignClass(col)}>{fmt(row?.[col.key])}</td> -->
+              <td class={alignClass(col)}>{@html row?.[col.key]}</td>
             {/each}
           </tr>
         {/each}

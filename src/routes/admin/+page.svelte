@@ -1,25 +1,19 @@
 <script>
   import ListView from "$lib/listTable/ListView.svelte";
-  // optional shared styles
   import "$lib/styles/forms.css";
 
   export let data;
 
-  // From loader
   const columns = data.columns;
   const rows    = data.rows;
 
-  // Search across the most useful text fields
+  // Include “actions” in search if you like, but usually not needed
   const searchKeys = ["title", "category", "type", "slug", "status"];
 
   function onRowclick(e) {
-    // e.detail = { row, index }
-    // You can route by type/slug later if desired
     console.log("rowclick:", e.detail);
   }
 </script>
-
-<h1>Questions</h1>
 
 <div class="page">
   <ListView
@@ -38,11 +32,16 @@
 
 <style>
   .page {
-    height: 100vh;          /* ensure the list can fill */
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    padding-left: 24px;
-    padding-right: 10px;
+    padding: 12px;
     gap: 12px;
+  }
+
+  /* Make links in the table look like standard links */
+  :global(.list-table td a) {
+    color: var(--linkColor, #2b6cb0);
+    text-decoration: underline;
   }
 </style>
