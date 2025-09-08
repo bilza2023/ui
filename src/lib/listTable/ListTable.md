@@ -1,10 +1,4 @@
 
-Here’s a complete, copy-pasteable doc for:
-
-`/home/bilal-tariq/00--TALEEM===>Project/ui/src/lib/listTable/ListTable.md`
-
----
-
 # ListTable Lite v1 — Fast, Reusable Data Tables
 
 A tiny, generic Svelte table with **local search**, **local sort**, **row click**, and **action buttons** — no server mode, no pagination, no coupling to app routes. Use it to build any admin list in minutes.

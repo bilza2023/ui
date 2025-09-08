@@ -1,176 +1,95 @@
 <script>
-  // Data from +page.server.js
-  export let data;
-  const entries = Array.isArray(data?.entries) ? data.entries : [];
+  import '$lib/styles/tokens.css';
+  import ListTable from '$lib/listTable/ListTable.svelte';
+  import { goto } from '$app/navigation';
 
-  // Optional: client-side formatters (kept tiny)
-  const fmtBool = (v) => (v ? "Yes" : "No");
-  const fmtSort = (n) => (Number.isFinite(n) ? String(n) : "—");
-  const fmtUpdated = (iso) => {
-    if (!iso) return "—";
-    try {
-      const d = new Date(iso);
-      // Friendly local date + time
-      return d.toLocaleString();
-    } catch {
-      return iso;
+  export let data;
+
+  // Normalize entries from loader
+  const raw = Array.isArray(data?.entries) ? data.entries : [];
+  const items = raw.map((r) => ({
+    id: r.id,
+    slug: r.slug,
+    name: r.title ?? r.slug ?? 'Untitled',
+    type: r.type,
+    category: r.category,
+    status: r.status ?? '—',
+    editedAt: r.updatedAt ?? r.createdAt ?? null,
+    thumbnail: r.thumbnail ?? null
+  }));
+
+  // Declarative columns
+  const columns = [
+    { id:'thumbnail', label:'', accessor:'thumbnail', kind:'thumbnail', width:'sm' },
+    { id:'name',      label:'Title',   accessor:'name', primary:true, sortable:true },
+    { id:'type',      label:'Type',    accessor:'type', kind:'badge', sortable:true },
+    { id:'category',  label:'Category',accessor:'category', sortable:true },
+    { id:'slug',      label:'Slug',    accessor:'slug', sortable:true },
+    { id:'status',    label:'Status',  accessor:'status', kind:'badge' },
+    { id:'editedAt',  label:'Edited',  accessor:'editedAt', kind:'date', format:'relative' },
+    { id:'actions',   label:'', kind:'actions', action:['edit','delete'], align:'right', width:'sm' }
+  ];
+
+  // Primary click → open viewer route
+  function onRowClick(e) {
+    const row = e.detail;
+    if (!row) return;
+
+    if (row.type === 'note') {
+      goto(`/note/${encodeURIComponent(row.slug)}`);
+    } else if (row.type === 'deck') {
+      goto(`/player?slug=${encodeURIComponent(row.slug)}`);
+    } else if (row.type === 'course') {
+      goto(`/syllabus?tcode=${encodeURIComponent(row.slug)}`);
+    } else {
+      // unknown type → no-op or fallback
     }
-  };
+  }
+
+  // Handle edit/delete
+  function onAction(e) {
+    const { actionId, row } = e.detail || {};
+    if (!row) return;
+
+    if (actionId === 'edit') {
+      goto(`/admin/edit-index?id=${row.id}`);
+      return;
+    }
+
+    if (actionId === 'delete') {
+      if (confirm(`Delete: ${row.name}?`)) {
+        const f = document.createElement('form');
+        f.method = 'post';
+        f.action = '?/delete';
+        const i = document.createElement('input');
+        i.type = 'hidden';
+        i.name = 'id';
+        i.value = row.id;
+        f.appendChild(i);
+        document.body.appendChild(f);
+        f.submit();
+      }
+    }
+  }
 </script>
 
-<!-- Page chrome kept minimal on purpose -->
-<section class="wrap">
-  <header class="bar">
-    <h1>Home Index — Entries</h1>
-    {#if data?.category}
-      <span class="chip">Category: {data.category}</span>
-    {/if}
-  </header>
+<div class="wrap">
+  <h1 class="pageTitle">Home Index</h1>
 
-  <div class="tableWrap">
-    <table class="list">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Type</th>
-          <th>Category</th>
-          <th>Slug / URL</th>
-          <th>Pinned</th>
-          <th>Sort</th>
-          <th>Status</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-
-      {#if entries.length === 0}
-        <tbody>
-          <tr>
-            <td class="empty" colspan="8">No data</td>
-          </tr>
-        </tbody>
-      {:else}
-        <tbody>
-          {#each entries as row (row.id)}
-            <tr>
-              <td class="title">{row.title || "—"}</td>
-              <td class="badge">{row.type || "—"}</td>
-              <td>{row.category || "—"}</td>
-              <td class="mono">{row.slug || "—"}</td>
-              <td>{fmtBool(row.pinned)}</td>
-              <td class="mono">{fmtSort(row.sortOrder)}</td>
-              <td class="badge">{row.status || "—"}</td>
-              
-    <td class="actions">
-      <!-- replace your current delete form with this -->
-      <form method="POST" action="?/delete">
-        <input type="hidden" name="id" value={row.id} />
-        <button class="danger" aria-label={`Delete ${row.title}`}>Delete</button>
-      </form>
-
-      </td>
-
-            </tr>
-          {/each}
-        </tbody>
-      {/if}
-    </table>
-  </div>
-</section>
+  <ListTable
+    items={items}
+    columns={columns}
+    rowKey="id"
+    searchable={true}
+    searchKeys={['name','slug','type','category']}
+    thumbBaseUrl="/media/images"
+    emptyMessage="No entries yet."
+    on:rowClick={onRowClick}
+    on:action={onAction}
+  />
+</div>
 
 <style>
-  /* Uses your token palette if present */
-  :root {
-    --bg: var(--backgroundColor, #0b0b0b);
-    --fg: var(--primaryText, #eaeaea);
-    --muted: #9aa0a6;
-    --chip: #303134;
-    --line: #2a2a2a;
-    --thead: #161616;
-  }
-
-  .wrap {
-    padding: 16px;
-    color: var(--fg);
-    background: var(--bg);
-  }
-
-  .bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-  .bar h1 {
-    font-size: 1.1rem;
-    margin: 0;
-    font-weight: 600;
-  }
-  .chip {
-    background: var(--chip);
-    color: var(--fg);
-    border-radius: 999px;
-    padding: 4px 10px;
-    font-size: 0.85rem;
-  }
-
-  .tableWrap {
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    overflow: auto;
-    background: #0f0f0f;
-  }
-
-  table.list {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 760px; /* keep columns readable */
-  }
-  thead {
-    background: var(--thead);
-  }
-  th, td {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--line);
-    text-align: left;
-    vertical-align: middle;
-    font-size: 0.95rem;
-  }
-  th {
-    color: var(--muted);
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  td.title {
-    font-weight: 600;
-  }
-  td.mono {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    font-size: 0.9rem;
-  }
-  td.badge {
-    text-transform: capitalize;
-  }
-  td.empty {
-    text-align: center;
-    color: var(--muted);
-    padding: 24px 12px;
-  }
-
-  /* Mobile: allow horizontal scroll; reduce padding */
-  @media (max-width: 640px) {
-    th, td { padding: 8px 10px; }
-    .bar h1 { font-size: 1rem; }
-  }
-
-  td.actions { text-align: center; }
-button.danger {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #5c1b1b;
-  background: #2a0f0f;
-  color: #f5d4d4;
-  cursor: pointer;
-}
-button.danger:hover { background: #3b1515; }
-
+  .wrap { padding: 1rem; color: var(--primaryText); }
+  .pageTitle { margin: 0 0 .75rem; font-size: 1.25rem; }
 </style>
