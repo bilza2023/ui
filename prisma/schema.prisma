@@ -164,6 +164,7 @@ model HomeIndexEntry {
   type        String                         // "deck" | "note" | "blog" | "course" | "link" (free text for now)
   title       String
   slug         String                         // absolute or relative
+  href         String                         // absolute or relative
   description String?
   thumbnail   String?                        // absolute (/ or http) or bare filename
   pinned      Boolean  @default(false)

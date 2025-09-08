@@ -6,7 +6,7 @@
     
     <a href="/admin/comments" class="nav-link">🔔 comments</a>
     <a href="/admin/home-index"  class="nav-link">📊 Index</a>
-    <a href="/admin/edit-index"  class="nav-link">📈 Index</a>
+    <a href="/admin/edit-index"  class="nav-link">📈 Edit-Index</a>
     <a href="/admin/synopsis" target="_blank" class="nav-link">🦞 Synopsis</a>
     <a href="/admin/workdesk" target="_blank" class="nav-link">🎖️ workdesk</a>
   </nav>
