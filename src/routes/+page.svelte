@@ -10,6 +10,7 @@
     if (!row?.slug) return '';
     if (row?.type === 'note') return `/notes?filename=${row.slug}`;
     if (row?.type === 'deck') return `/player?filename=${row.slug}`;
+    if (row?.type === 'course') return `/syllabus?tcode=${row.slug}`;
     // unknown type → non-clickable
     return '';
   };
