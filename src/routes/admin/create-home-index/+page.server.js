@@ -6,6 +6,15 @@ import { R } from '$lib/formKit/readers.js';
 import { makeAction } from '$lib/formKit/actionFactory.js';
 import { CATEGORIES, TYPES } from '$lib/constants/homeIndex.js';
 
+// --- Route mapper (authoritative) ---
+const hrefFor = (row) => {
+  if (!row?.slug) return '';
+  if (row?.type === 'note')   return `/notes?filename=${row.slug}`;
+  if (row?.type === 'deck')   return `/player?filename=${row.slug}`;
+  if (row?.type === 'course') return `/syllabus?tcode=${row.slug}`;
+  return '';
+};
+
 export async function load({ url }) {
   const category = (url.searchParams.get('category') || '').trim();
 
@@ -24,8 +33,8 @@ export async function load({ url }) {
 /**
  * Action: add
  * - Uses formKit readers (trim/validate).
- * - Returns { ok, message, values } on failure for sticky inputs.
- * - Returns { ok, message, saved, ... } on success (no redirect).
+ * - Server computes `href` from `type + slug`.
+ * - Returns sticky `values` on failure and resets on success.
  */
 export const actions = {
   add: makeAction({
@@ -33,19 +42,21 @@ export const actions = {
       category:    R.$enum('category', CATEGORIES, { required: true }),
       type:        R.$enum('type', TYPES, { required: true }),
       title:       R.str('title', { required: true }),
-      href:        R.str('href', { required: true }),  // canonical link
+      slug:        R.str('slug', { required: true }),   // anchor/id
+      href:        R.str('href'),                      // UI preview only (ignored)
       description: R.str('description'),
       thumbnail:   R.str('thumbnail'),
       pinned:      R.str('pinned'),                    // 'on' | undefined
       sortOrder:   R.num('sortOrder', { gte: 0 })
     },
     prepare: (v) => {
-      // Shape and clean payload for service layer
+      const computedHref = hrefFor({ type: v.type, slug: v.slug });
       return {
         category:    v.category,
         type:        v.type,
         title:       v.title.trim(),
-        href:        v.href.trim(),
+        slug:        v.slug.trim(),
+        href:        computedHref, // authoritative
         description: v.description?.trim() || null,
         thumbnail:   v.thumbnail?.trim() || null,
         pinned:      v.pinned === 'on',
@@ -58,11 +69,11 @@ export const actions = {
       ok: true,
       message: 'Added to Home Index.',
       saved: result?.id ?? null,
-      // Let the UI re-populate a couple of defaults
       values: {
         category: v.category,
         type: v.type,
         title: '',
+        slug: '',
         href: '',
         description: '',
         thumbnail: '',

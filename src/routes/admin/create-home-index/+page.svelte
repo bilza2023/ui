@@ -1,165 +1,175 @@
 <script>
-  import FormUi from '$lib/formUi/FormUi.svelte';
-  import { invalidateAll } from '$app/navigation';
-
+  // Page data from +page.server.js
   export let data;
+  // Form action result (sticky values, messages)
+  export let form;
 
-  // Show a success banner after a save, without leaving the page
-  let lastSuccess = null;
-  let lastFailure = null;
-
-  const addConfig = {
-    id: 'homeIndexAdd',
-    title: 'Add to Home Index',
-    description: 'Curate a link for the home page feed. `href` is the final URL used on the public site.',
-    action: '?/add',
-    method: 'post',
-    layout: 'grid-2',           // nice two-column compact layout
-    labelPosition: 'top',
-    initial: {
-      category: data.category || '',
-      type: '',
-      title: '',
-      href: '',
-      description: '',
-      thumbnail: '',
-      pinned: '',
-      sortOrder: ''
-    },
-    items: [
-      {
-        type: 'select',
-        name: 'category',
-        label: 'Category',
-        required: true,
-        options: () => (data.categories || []).map(c => ({ value: c, label: c }))
-      },
-      {
-        type: 'select',
-        name: 'type',
-        label: 'Type',
-        required: true,
-        options: () => (data.types || []).map(t => ({ value: t, label: t }))
-      },
-      { type: 'text',     name: 'title',       label: 'Title',       required: true, placeholder: 'Algebra – What is a Variable?' },
-      { type: 'text',     name: 'href',        label: 'Href',        required: true, placeholder: '/player?filename=what_is_algebra' },
-      { type: 'text',     name: 'description', label: 'Description', placeholder: 'Optional short description' },
-      { type: 'text',     name: 'thumbnail',   label: 'Thumbnail',   placeholder: '/media/images/taleem.webp' },
-      { type: 'checkbox', name: 'pinned',      label: 'Pinned?' },
-      { type: 'number',   name: 'sortOrder',   label: 'Sort Order',  min: 0, step: 1, placeholder: 'Auto if blank' }
-    ],
-    submit: {
-      label: 'Add Entry',
-      disabledWhen: (v) => !v?.category || !v?.type || !v?.title?.trim() || !v?.href?.trim()
-    },
-    clearOnSuccess: false,     // we’ll accept returned values from action.success
-    showErrorsList: true
+  // Local model (keeps form sticky values if action failed)
+  let v = {
+    category: data?.category ?? '',
+    type: '',
+    title: '',
+    slug: '',
+    description: '',
+    thumbnail: '',
+    pinned: '',
+    sortOrder: ''
   };
 
-  function handleSuccess(ev) {
-    lastFailure = null;
-    lastSuccess = ev.detail;     // { ok:true, message, saved, values }
-    // Re-fetch the list so the table below updates
-    invalidateAll();
-  }
+  // Merge sticky values after action responses
+  $: if (form?.values) v = { ...v, ...form.values };
 
-  function handleFailure(ev) {
-    lastSuccess = null;
-    lastFailure = ev.detail;     // { ok:false, message, values, errors? }
-  }
-
-  // Simple mapper for fallback thumbnails
-  const imageSrc = (row) => {
-    const t = (row?.thumbnail || '').trim();
-    if (!t) return '/media/images/taleem.webp';
-    return (t.startsWith('/') || t.startsWith('http')) ? t : `/media/images/${t}`;
+  // Mirror of server mapper for live preview
+  const hrefFor = (row) => {
+    if (!row?.slug) return '';
+    if (row?.type === 'note')   return `/notes?filename=${row.slug}`;
+    if (row?.type === 'deck')   return `/player?filename=${row.slug}`;
+    if (row?.type === 'course') return `/syllabus?tcode=${row.slug}`;
+    return '';
   };
+
+  $: computedHref = hrefFor(v);
+  $: canSubmit = !!v.category && !!v.type && !!v.title?.trim() && !!v.slug?.trim() && !!computedHref;
 </script>
 
-<div class="wrap">
-  <h1 class="h1">Home Index — Create</h1>
+<section class="wrap">
+  <h1>Create Home Index Entry</h1>
 
-  {#if lastSuccess?.message}
-    <div class="alert success">{lastSuccess.message}</div>
+  {#if form?.message}
+    <div class:ok={form?.ok} class="flash">
+      {form.message}
+    </div>
   {/if}
-  {#if lastFailure?.message}
-    <div class="alert error">{lastFailure.message}</div>
-  {/if}
 
-  <FormUi
-    config={addConfig}
-    on:success={handleSuccess}
-    on:failure={handleFailure}
-  />
+  <form method="POST" action="?/add" class="form">
+    <!-- Slug first (your request) -->
+    <div class="field">
+      <label for="slug">Slug *</label>
+      <input id="slug" name="slug" type="text" bind:value={v.slug} required />
+      <small>Short id used to build the link</small>
+    </div>
 
-  <hr class="sep" />
+    <div class="row">
+      <div class="field">
+        <label for="category">Category *</label>
+        <select id="category" name="category" bind:value={v.category} required>
+          <option value="" disabled>Select…</option>
+          {#each data.categories as c}
+            <option value={c}>{c}</option>
+          {/each}
+        </select>
+      </div>
 
-  <h2 class="h2">Existing Entries{#if data.category} — {data.category}{/if}</h2>
+      <div class="field">
+        <label for="type">Type *</label>
+        <select id="type" name="type" bind:value={v.type} required>
+          <option value="" disabled>Select…</option>
+          {#each data.types as t}
+            <option value={t}>{t}</option>
+          {/each}
+        </select>
+      </div>
+    </div>
 
-  {#if (data.entries || []).length === 0}
-    <div class="empty">No entries yet.</div>
-  {:else}
-    <table class="grid">
-      <thead>
-        <tr>
-          <th>Thumb</th>
-          <th>Title</th>
-          <th>Category</th>
-          <th>Type</th>
-          <th>Href</th>
-          <th>Pinned</th>
-          <th>Sort</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each data.entries as row}
-          <tr>
-            <td class="thumb">
-              <img src={imageSrc(row)} alt="thumb" />
-            </td>
-            <td class="title">{row.title}</td>
-            <td>{row.category}</td>
-            <td class="badge">{row.type}</td>
-            <td class="mono small">{row.href}</td>
-            <td>{row.pinned ? 'Yes' : '—'}</td>
-            <td class="num">{row.sortOrder ?? '—'}</td>
-            <td class="badge">{row.status ?? 'active'}</td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-  {/if}
-</div>
+    <div class="field">
+      <label for="title">Title *</label>
+      <input id="title" name="title" type="text" bind:value={v.title} required />
+    </div>
+
+    <!-- Auto Href: read-only preview + hidden input -->
+    <div class="field">
+      <label>Href (auto)</label>
+      <input type="text" value={computedHref} readonly />
+      <input type="hidden" name="href" value={computedHref} />
+      <small>Computed from Type + Slug</small>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="thumbnail">Thumbnail</label>
+        <input id="thumbnail" name="thumbnail" type="text" placeholder="/media/images/taleem.webp" bind:value={v.thumbnail} />
+      </div>
+      <div class="field">
+        <label for="sortOrder">Sort</label>
+        <input id="sortOrder" name="sortOrder" type="number" min="0" bind:value={v.sortOrder} />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" rows="3" bind:value={v.description} />
+    </div>
+
+    <div class="field inline">
+      <label class="checkbox">
+        <input type="checkbox" name="pinned" checked={v.pinned === 'on'} />
+        <span>Pinned</span>
+      </label>
+    </div>
+
+    <div class="actions">
+      <button type="submit" disabled={!canSubmit}>Add Entry</button>
+    </div>
+  </form>
+
+  <!-- Simple list so you can see results immediately -->
+  <h2>Existing Entries</h2>
+  <div class="table">
+    <div class="thead">
+      <div>ID</div><div>Title</div><div>Type</div><div>Category</div><div>Slug</div><div>Href</div><div>Pinned</div><div>Sort</div>
+    </div>
+    {#each data.entries as e}
+      <div class="trow">
+        <div>{e.id}</div>
+        <div>{e.title}</div>
+        <div>{e.type}</div>
+        <div>{e.category}</div>
+        <div>{e.slug}</div>
+        <div class="href">{e.href}</div>
+        <div>{e.pinned ? '✓' : ''}</div>
+        <div>{e.sortOrder ?? 0}</div>
+      </div>
+    {/each}
+    {#if !data.entries?.length}
+      <div class="empty">No entries</div>
+    {/if}
+  </div>
+</section>
 
 <style>
-  .wrap { max-width: 1000px; margin: 0 auto; padding: 1rem; }
-  .h1 { margin: 0 0 .5rem; font-size: 1.4rem; }
-  .h2 { margin: 1.5rem 0 .5rem; font-size: 1.1rem; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 16px; }
+  h1 { margin: 8px 0 16px; }
+  .flash { padding: 10px 12px; border-radius: 8px; margin: 8px 0 16px; }
+  .flash.ok { background: #103; color: #9fd; border: 1px solid #2af; }
+  .flash:not(.ok) { background: #301; color: #fbb; border: 1px solid #f66; }
 
-  .alert { margin: .5rem 0 1rem; padding: .6rem .8rem; border-radius: .5rem; }
-  .alert.success {
-    background: color-mix(in srgb, lime 12%, transparent);
-    border: 1px solid color-mix(in srgb, lime 35%, transparent);
-    color: color-mix(in srgb, lime 85%, white);
+  .form { display: grid; gap: 12px; }
+  .row { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+  .field { display: grid; gap: 6px; }
+  .field.inline { align-items: center; }
+  label { font-weight: 600; }
+  input[type="text"], input[type="number"], textarea, select {
+    padding: 8px 10px; border: 1px solid #333; border-radius: 8px; background: #111; color: #eee;
   }
-  .alert.error {
-    background: color-mix(in srgb, crimson 10%, transparent);
-    border: 1px solid color-mix(in srgb, crimson 35%, transparent);
-    color: color-mix(in srgb, crimson 90%, white);
+  input[readonly] { opacity: 0.8; }
+  small { color: #aaa; }
+
+  .actions { margin-top: 6px; }
+  button {
+    padding: 10px 14px; border-radius: 10px; border: 1px solid #2af; background: #041627; color: #cfe9ff;
+    cursor: pointer;
   }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .sep { margin: 1.25rem 0; border: none; height: 1px; background: color-mix(in srgb, white 10%, transparent); }
-
-  .grid { width: 100%; border-collapse: collapse; }
-  .grid th, .grid td { padding: .5rem .6rem; border-bottom: 1px solid color-mix(in srgb, white 10%, transparent); }
-  .grid thead th { text-align: left; font-weight: 600; opacity: .8; }
-  .grid .badge { text-transform: capitalize; opacity: .9; }
-  .grid .num { text-align: right; }
-  .grid .thumb { width: 64px; }
-  .grid .thumb img { width: 48px; height: 48px; object-fit: cover; border-radius: .4rem; }
-  .grid .title { font-weight: 600; }
-  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-  .small { font-size: .84rem; opacity: .9; word-break: break-all; }
-  .empty { opacity: .7; padding: .5rem 0; }
+  .table { margin-top: 24px; border: 1px solid #222; border-radius: 10px; overflow: hidden; }
+  .thead, .trow { display: grid; grid-template-columns: 60px 1.6fr 0.9fr 0.9fr 1.2fr 2fr 0.7fr 0.6fr; }
+  .thead { background: #0a0a0a; font-weight: 700; }
+  .trow:nth-child(even) { background: #0d0d0d; }
+  .thead > div, .trow > div { padding: 8px 10px; border-bottom: 1px solid #171717; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .href { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+  .empty { padding: 12px; color: #aaa; }
+  @media (max-width: 720px) {
+    .row { grid-template-columns: 1fr; }
+    .thead, .trow { grid-template-columns: 40px 1.2fr 0.8fr 0.8fr 1fr 1.4fr 0.6fr 0.6fr; }
+  }
 </style>
