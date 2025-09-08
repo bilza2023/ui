@@ -1,226 +1,493 @@
-// src/lib/services/questionServices.js
+// src/lib/services/question.service.js
 // ------------------------------------------------------------
-// Single source of truth for Questions (deck | note)
-// Create, Read, Update, Delete using Prisma
+// Service layer for managing questions
 // ------------------------------------------------------------
 import prisma from '$lib/server/prisma.js';
 
-const ALLOWED_TYPES = ['deck', 'note'];
-
-/** Internal: validate payload pairing rules */
-function _assertTypeAndPayload({ type, deck, note }) {
-  if (!ALLOWED_TYPES.includes(type)) {
-    throw new Error(`Invalid type "${type}" (allowed: ${ALLOWED_TYPES.join(', ')})`);
-  }
-  if (type === 'deck' && !deck) throw new Error('Deck payload missing for type="deck"');
-  if (type === 'note' && !note) throw new Error('Note payload missing for type="note"');
-}
-
-/** Internal: normalize common fields */
-function _normalizeCommonFields(input = {}) {
-  const {
-    filename,
-    tcode = null,
-    chapter = null,
-    exercise = null,
-    type, // required
-    name = null,
-    description = null,
-    tags = [],
-    status = null,
-    sortOrder = null,
-    timed = false,
-    deck = null,
-    note = null
-  } = input;
-
-  if (!filename) throw new Error('filename is required');
-  _assertTypeAndPayload({ type, deck, note });
-
-  return {
-    filename,
-    tcode,
-    chapter,
-    exercise,
-    type,
-    name,
-    description,
-    tags: Array.isArray(tags) ? tags : [],
-    status,
-    sortOrder: typeof sortOrder === 'number' ? sortOrder : null,
-    timed: Boolean(timed),
-    deck: type === 'deck' ? deck : null,
-    note: type === 'note' ? note : null
-  };
-}
-
-/** READ — does a question exist? (returns row or null) */
-export async function exists(filename) {
-  if (!filename) throw new Error('exists: filename required');
-  return prisma.question.findUnique({ where: { filename } });
-}
+/* -------------------- Question CRUD Operations -------------------- */
 
 /**
- * READ — get one by filename.
- * @param {string} filename
- * @param {{ selectPayload?: boolean }} [opts] selectPayload=false to exclude large deck/note
+ * Create a new question
  */
-export async function getQuestionByFilename(filename, opts = {}) {
-  if (!filename) throw new Error('getQuestionByFilename: filename required');
-  const { selectPayload = true } = opts;
-
-  /** @type {import('@prisma/client').Prisma.QuestionSelect} */
-  const select = {
-    filename: true,
-    type: true,
-    name: true,
-    description: true,
-    tags: true,
-    status: true,
-    sortOrder: true,
-    timed: true,
-    tcode: true,
-    chapter: true,
-    exercise: true,
-    createdAt: true,
-    editedAt: true
-  };
-
-  if (selectPayload) {
-    select.deck = true;
-    select.note = true;
-  }
-
-   const r = await prisma.question.findUnique({ where: { filename }, select });
-   // PROOF: log the exact eq line that should have spItems=4
-   try {
-     const eq = Array.isArray(r?.deck) ? r.deck[0] : r?.deck?.deck?.[0];
-     const l10 = eq?.data?.find(x => x?.showAt === 10);
-     console.log('[DB fetch] eq@10s spItems len =', Array.isArray(l10?.spItems) ? l10.spItems.length : l10?.spItems);
-   } catch {}
-   return r;;
-}
-
-/**
- * CREATE — strict create (no upsert).
- * Provide type="deck" with `deck` OR type="note" with `note`.
- */
-export async function createQuestion(input) {
-  const data = _normalizeCommonFields(input);
-  return prisma.question.create({ data });
-}
-
-/**
- * UPSERT — create or replace whole record by filename.
- * Useful for idempotent imports/CLI sync.
- */
-export async function upsertQuestion(input) {
-  const data = _normalizeCommonFields(input);
-  return prisma.question.upsert({
-    where: { filename: data.filename },
-    create: data,
-    update: data
-  });
-}
-
-/** UPDATE — replace deck JSON and bump editedAt */
-export async function updateDeckJson(filename, deckJson) {
-  if (!filename) throw new Error('updateDeckJson: filename required');
-  if (!deckJson) throw new Error('updateDeckJson: deck JSON required');
-  return prisma.question.update({
-    where: { filename },
-    data: { deck: deckJson, editedAt: new Date(), type: 'deck', note: null }
-  });
-}
-
-/** UPDATE — replace note HTML/string and bump editedAt */
-export async function updateNoteHtml(filename, noteStr) {
-  if (!filename) throw new Error('updateNoteHtml: filename required');
-  if (typeof noteStr !== 'string' || noteStr.length === 0) {
-    throw new Error('updateNoteHtml: note string required');
-  }
-  return prisma.question.update({
-    where: { filename },
-    data: { note: noteStr, editedAt: new Date(), type: 'note', deck: null, timed: false }
-  });
-}
-
-/**
- * UPDATE — partial metadata patch (no deck/note here).
- * Fields allowed: name, description, tags, status, sortOrder, timed, tcode, chapter, exercise
- */
-export async function patchQuestionMeta(filename, patch = {}) {
-  if (!filename) throw new Error('patchQuestionMeta: filename required');
-
-  const allowed = ['name', 'description', 'tags', 'status', 'sortOrder', 'timed', 'tcode', 'chapter', 'exercise'];
-  /** @type {Record<string, any>} */
-  const data = {};
-  for (const k of allowed) {
-    if (patch[k] !== undefined) data[k] = patch[k];
-  }
-  if ('tags' in data && !Array.isArray(data.tags)) data.tags = [];
-
-  if (Object.keys(data).length === 0) return prisma.question.findUnique({ where: { filename } });
-  data.editedAt = new Date();
-
-  return prisma.question.update({ where: { filename }, data });
-}
-
-export async function updateNoteString(filename, note) {
-  // Only update the note field; editedAt will bump via @updatedAt
-  return prisma.question.update({
-    where: { filename },
-    data:  { note }
-  });
-}
-/** DELETE — remove by filename */
-export async function deleteByFilename(filename) {
-  if (!filename) throw new Error('deleteByFilename: filename required');
-  return prisma.question.delete({ where: { filename } });
-}
-
-// READ — flat list by tcode (optionally filter by chapter/exercise/type)
-export async function listQuestionsByTcode({
+export async function createQuestion({
+  slug,
   tcode,
   chapter,
   exercise,
-  type,                 // optional: 'deck' | 'note'
-  selectPayload = false, // false = omit deck/note blobs
-  limit = 500
-} = {}) {
-  if (!tcode) throw new Error('listQuestionsByTcode: tcode required');
+  type,
+  name,
+  description,
+  tags,
+  status = 'draft',
+  thumbnail,
+  sortOrder,
+  timed = false,
+  deck,
+  note
+}) {
+  if (!slug || !tcode || chapter === undefined || !exercise || !type) {
+    throw new Error('slug, tcode, chapter, exercise, and type are required');
+  }
 
-  /** @type {import('@prisma/client').Prisma.QuestionWhereInput} */
-  const where = { tcode };
-  if (chapter)  where.chapter  = chapter;   // NOTE: uses your "filename" fields
-  if (exercise) where.exercise = exercise;  // e.g., "theorems"
-  if (type)     where.type     = type;
+  if (!['deck', 'note'].includes(type)) {
+    throw new Error('Type must be either "deck" or "note"');
+  }
 
-  /** @type {import('@prisma/client').Prisma.QuestionSelect} */
+  // Validate payload based on type
+  if (type === 'deck' && !deck) {
+    throw new Error('Deck payload is required for deck type questions');
+  }
+  if (type === 'note' && !note) {
+    throw new Error('Note payload is required for note type questions');
+  }
+
+  try {
+    return await prisma.question.create({
+      data: {
+        slug,
+        tcode,
+        chapter: Number(chapter),
+        exercise,
+        type,
+        name,
+        description,
+        tags,
+        status,
+        thumbnail,
+        sortOrder,
+        timed,
+        deck: type === 'deck' ? deck : null,
+        note: type === 'note' ? note : null
+      }
+    });
+  } catch (error) {
+    if (error.code === 'P2002') {
+      throw new Error(`Question with slug "${slug}" already exists`);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Get question by slug
+ */
+export async function getQuestionBySlug(slug, { includePayload = true } = {}) {
+  if (!slug) throw new Error('Slug is required');
+
   const select = {
-    filename: true,
+    slug: true,
+    tcode: true,
+    chapter: true,
+    exercise: true,
     type: true,
     name: true,
     description: true,
     tags: true,
     status: true,
+    thumbnail: true,
     sortOrder: true,
     timed: true,
-    tcode: true,
-    chapter: true,
-    exercise: true,
     createdAt: true,
     editedAt: true
   };
-  if (selectPayload) {
+
+  if (includePayload) {
     select.deck = true;
     select.note = true;
   }
 
-  return prisma.question.findMany({
+  const question = await prisma.question.findUnique({
+    where: { slug },
+    select
+  });
+
+  if (!question) {
+    throw new Error(`Question with slug "${slug}" not found`);
+  }
+
+  return question;
+}
+
+/**
+ * Update question
+ */
+export async function updateQuestion(slug, updates) {
+  if (!slug) throw new Error('Slug is required');
+
+  // If type is being changed, validate payload
+  if (updates.type) {
+    if (!['deck', 'note'].includes(updates.type)) {
+      throw new Error('Type must be either "deck" or "note"');
+    }
+  }
+
+  // Convert chapter to number if provided
+  if (updates.chapter !== undefined) {
+    updates.chapter = Number(updates.chapter);
+  }
+
+  try {
+    return await prisma.question.update({
+      where: { slug },
+      data: updates
+    });
+  } catch (error) {
+    if (error.code === 'P2025') {
+      throw new Error(`Question with slug "${slug}" not found`);
+    }
+    if (error.code === 'P2002') {
+      throw new Error(`Question slug "${updates.slug}" already exists`);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Delete question
+ */
+export async function deleteQuestion(slug) {
+  if (!slug) throw new Error('Slug is required');
+
+  try {
+    return await prisma.question.delete({
+      where: { slug }
+    });
+  } catch (error) {
+    if (error.code === 'P2025') {
+      throw new Error(`Question with slug "${slug}" not found`);
+    }
+    throw error;
+  }
+}
+
+/* -------------------- Question Listing and Filtering -------------------- */
+
+/**
+ * List questions with various filters
+ */
+export async function listQuestions({
+  tcode,
+  chapter,
+  exercise,
+  type,
+  status,
+  includePayload = false,
+  limit = 100,
+  offset = 0,
+  orderBy = [{ sortOrder: 'asc' }, { createdAt: 'asc' }]
+} = {}) {
+  const where = {};
+  
+  if (tcode) where.tcode = tcode;
+  if (chapter !== undefined) where.chapter = Number(chapter);
+  if (exercise) where.exercise = exercise;
+  if (type) where.type = type;
+  if (status) where.status = status;
+
+  const select = {
+    slug: true,
+    tcode: true,
+    chapter: true,
+    exercise: true,
+    type: true,
+    name: true,
+    description: true,
+    tags: true,
+    status: true,
+    thumbnail: true,
+    sortOrder: true,
+    timed: true,
+    createdAt: true,
+    editedAt: true
+  };
+
+  if (includePayload) {
+    select.deck = true;
+    select.note = true;
+  }
+
+  return await prisma.question.findMany({
     where,
     select,
-    orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+    orderBy,
+    take: limit,
+    skip: offset
+  });
+}
+
+/**
+ * Get questions by tcode
+ */
+export async function getQuestionsByTcode(tcode, options = {}) {
+  if (!tcode) throw new Error('Tcode is required');
+  
+  return await listQuestions({
+    tcode,
+    ...options
+  });
+}
+
+/**
+ * Get questions by tcode and chapter
+ */
+export async function getQuestionsByChapter(tcode, chapter, options = {}) {
+  if (!tcode || chapter === undefined) {
+    throw new Error('Tcode and chapter are required');
+  }
+  
+  return await listQuestions({
+    tcode,
+    chapter,
+    ...options
+  });
+}
+
+/**
+ * Get questions by tcode, chapter, and exercise
+ */
+export async function getQuestionsByExercise(tcode, chapter, exercise, options = {}) {
+  if (!tcode || chapter === undefined || !exercise) {
+    throw new Error('Tcode, chapter, and exercise are required');
+  }
+  
+  return await listQuestions({
+    tcode,
+    chapter,
+    exercise,
+    ...options
+  });
+}
+
+/* -------------------- Question Statistics and Analytics -------------------- */
+
+/**
+ * Get question count by filters
+ */
+export async function getQuestionCount({
+  tcode,
+  chapter,
+  exercise,
+  type,
+  status
+} = {}) {
+  const where = {};
+  
+  if (tcode) where.tcode = tcode;
+  if (chapter !== undefined) where.chapter = Number(chapter);
+  if (exercise) where.exercise = exercise;
+  if (type) where.type = type;
+  if (status) where.status = status;
+
+  return await prisma.question.count({ where });
+}
+
+/**
+ * Get questions statistics by tcode
+ */
+export async function getQuestionStatsByTcode(tcode) {
+  if (!tcode) throw new Error('Tcode is required');
+
+  const [total, byType, byStatus, byChapter] = await Promise.all([
+    // Total count
+    prisma.question.count({ where: { tcode } }),
+    
+    // Count by type
+    prisma.question.groupBy({
+      by: ['type'],
+      where: { tcode },
+      _count: { _all: true }
+    }),
+    
+    // Count by status
+    prisma.question.groupBy({
+      by: ['status'],
+      where: { tcode },
+      _count: { _all: true }
+    }),
+    
+    // Count by chapter
+    prisma.question.groupBy({
+      by: ['chapter'],
+      where: { tcode },
+      _count: { _all: true },
+      orderBy: { chapter: 'asc' }
+    })
+  ]);
+
+  return {
+    total,
+    byType: byType.reduce((acc, item) => {
+      acc[item.type] = item._count._all;
+      return acc;
+    }, {}),
+    byStatus: byStatus.reduce((acc, item) => {
+      acc[item.status || 'unknown'] = item._count._all;
+      return acc;
+    }, {}),
+    byChapter: byChapter.reduce((acc, item) => {
+      acc[item.chapter] = item._count._all;
+      return acc;
+    }, {})
+  };
+}
+
+/* -------------------- Bulk Operations -------------------- */
+
+/**
+ * Bulk update question status
+ */
+export async function bulkUpdateQuestionStatus(slugs, status) {
+  if (!Array.isArray(slugs) || slugs.length === 0) {
+    throw new Error('Slugs array is required and cannot be empty');
+  }
+  if (!status) throw new Error('Status is required');
+
+  return await prisma.question.updateMany({
+    where: {
+      slug: { in: slugs }
+    },
+    data: { status }
+  });
+}
+
+/**
+ * Bulk delete questions
+ */
+export async function bulkDeleteQuestions(slugs) {
+  if (!Array.isArray(slugs) || slugs.length === 0) {
+    throw new Error('Slugs array is required and cannot be empty');
+  }
+
+  return await prisma.question.deleteMany({
+    where: {
+      slug: { in: slugs }
+    }
+  });
+}
+
+/**
+ * Reorder questions within an exercise
+ */
+export async function reorderQuestions(tcode, chapter, exercise, questionOrder) {
+  if (!tcode || chapter === undefined || !exercise || !Array.isArray(questionOrder)) {
+    throw new Error('Tcode, chapter, exercise, and question order array are required');
+  }
+
+  // Use transaction to ensure all updates succeed or fail together
+  return await prisma.$transaction(
+    questionOrder.map((item, index) =>
+      prisma.question.update({
+        where: { slug: item.slug },
+        data: { sortOrder: index }
+      })
+    )
+  );
+}
+
+/* -------------------- Search and Advanced Queries -------------------- */
+
+/**
+ * Search questions by name or description
+ */
+export async function searchQuestions(searchTerm, {
+  tcode,
+  type,
+  status,
+  limit = 50,
+  includePayload = false
+} = {}) {
+  if (!searchTerm) throw new Error('Search term is required');
+
+  const where = {
+    OR: [
+      { name: { contains: searchTerm } },
+      { description: { contains: searchTerm } }
+    ]
+  };
+
+  if (tcode) where.tcode = tcode;
+  if (type) where.type = type;
+  if (status) where.status = status;
+
+  const select = {
+    slug: true,
+    tcode: true,
+    chapter: true,
+    exercise: true,
+    type: true,
+    name: true,
+    description: true,
+    tags: true,
+    status: true,
+    thumbnail: true,
+    sortOrder: true,
+    timed: true,
+    createdAt: true,
+    editedAt: true
+  };
+
+  if (includePayload) {
+    select.deck = true;
+    select.note = true;
+  }
+
+  return await prisma.question.findMany({
+    where,
+    select,
+    orderBy: [{ name: 'asc' }],
     take: limit
   });
 }
+
+/**
+ * Get questions by tags
+ */
+export async function getQuestionsByTags(tags, options = {}) {
+  if (!Array.isArray(tags) || tags.length === 0) {
+    throw new Error('Tags array is required and cannot be empty');
+  }
+
+  // This assumes tags are stored as JSON array in the database
+  const where = {
+    tags: {
+      array_contains: tags
+    }
+  };
+
+  if (options.tcode) where.tcode = options.tcode;
+  if (options.type) where.type = options.type;
+  if (options.status) where.status = options.status;
+
+  return await listQuestions({
+    ...options,
+    ...where
+  });
+}
+
+/* -------------------- Export -------------------- */
+export const questionService = {
+  // CRUD operations
+  createQuestion,
+  getQuestionBySlug,
+  updateQuestion,
+  deleteQuestion,
+
+  // Listing and filtering
+  listQuestions,
+  getQuestionsByTcode,
+  getQuestionsByChapter,
+  getQuestionsByExercise,
+
+  // Statistics
+  getQuestionCount,
+  getQuestionStatsByTcode,
+
+  // Bulk operations
+  bulkUpdateQuestionStatus,
+  bulkDeleteQuestions,
+  reorderQuestions,
+
+  // Search and advanced queries
+  searchQuestions,
+  getQuestionsByTags
+};
