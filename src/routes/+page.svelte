@@ -5,15 +5,15 @@
   export let data;
   // console.log("data" , data);
 
-  // Route mapper for index entries
-  const hrefFor = (row) => {
-    if (!row?.slug) return '';
-    if (row?.type === 'note') return `/notes?filename=${row.slug}`;
-    if (row?.type === 'deck') return `/player?filename=${row.slug}`;
-    if (row?.type === 'course') return `/syllabus?tcode=${row.slug}`;
-    // unknown type → non-clickable
-    return '';
-  };
+  // // Route mapper for index entries
+  // const hrefFor = (row) => {
+  //   if (!row?.slug) return '';
+  //   if (row?.type === 'note') return `/notes?filename=${row.slug}`;
+  //   if (row?.type === 'deck') return `/player?filename=${row.slug}`;
+  //   if (row?.type === 'course') return `/syllabus?tcode=${row.slug}`;
+  //   // unknown type → non-clickable
+  //   return '';
+  // };
 
   // Chips mapper for UQCard
   const mapToBodyItems = (row) => [
@@ -44,7 +44,7 @@
     {#each filtered as row (row.id)}
       <UQCard
         title={row.title || row.slug}
-        href={hrefFor(row) || undefined}  
+        href={ row.href || undefined}  
         thumbnail={row.thumbnail}
         bodyItems={mapToBodyItems(row)}
       />
