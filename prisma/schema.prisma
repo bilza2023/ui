@@ -163,7 +163,6 @@ model HomeIndexEntry {
   category    String                         // "featured" | "videos" | "blog" | "courses" | ...
   type        String                         // "deck" | "note" | "blog" | "course" | "link" (free text for now)
   title       String
-  slug         String                         // absolute or relative
   href         String                         // absolute or relative
   description String?
   thumbnail   String?                        // absolute (/ or http) or bare filename
@@ -173,7 +172,7 @@ model HomeIndexEntry {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@unique([category, slug], map: "uniq_homeindex_category_url")
+  @@unique([category, href], map: "uniq_homeindex_category_url")
   @@index([category, sortOrder, pinned], map: "idx_homeindex_cat_sort_pin")
 }
 

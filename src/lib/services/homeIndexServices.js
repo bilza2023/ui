@@ -1,12 +1,10 @@
 // src/lib/services/homeIndexServices.js
 // ------------------------------------------------------------
 // Service layer for managing HomeIndexEntry (home page curation)
-// v2: url -> slug (legacy accepted), explicit href persisted,
-//     consistent selects, safe trimming, auto sortOrder append.
+// v3: slug removed from the model; href is canonical.
 // ------------------------------------------------------------
 
 import prisma from '$lib/server/prisma.js';
-import { computeHref } from '$lib/constants/homeIndex.js';
 
 /* -------------------- helpers -------------------- */
 const S     = (v) => (typeof v === 'string' ? v.trim() : '');
@@ -19,8 +17,7 @@ const baseSelect = {
   category: true,
   type: true,
   title: true,
-  slug: true,
-  href: true,
+  href: true,            // ← canonical
   description: true,
   thumbnail: true,
   pinned: true,
@@ -33,7 +30,7 @@ const baseSelect = {
 /* -------------------- CREATE -------------------- */
 /**
  * Create a new HomeIndexEntry.
- * Required: category, type, title, slug (or legacy url), href (if omitted we compute from type+slug)
+ * Required: category, type, title, href
  * Optional: description, thumbnail, pinned, sortOrder, status
  * If sortOrder missing, auto-append to end within category.
  */
@@ -41,9 +38,7 @@ export async function createEntry({
   category,
   type,
   title,
-  slug,          // canonical
-  url,           // legacy input; used only if slug missing
-  href,          // explicit link; if blank, computed from type+slug
+  href,            // canonical link (required)
   description = null,
   thumbnail = null,
   pinned = false,
@@ -53,7 +48,7 @@ export async function createEntry({
   category    = S(category);
   type        = S(type);
   title       = S(title);
-  slug        = S(slug) || S(url); // legacy mapping
+  href        = S(href);
   description = TRIM(description) || null;
   thumbnail   = S(thumbnail) || null;
   pinned      = BOOL(pinned);
@@ -62,10 +57,7 @@ export async function createEntry({
   if (!category) throw new Error('category is required');
   if (!type)     throw new Error('type is required');
   if (!title)    throw new Error('title is required');
-  if (!slug)     throw new Error('slug is required');
-
-  // Compute href if not provided
-  const finalHref = S(href) || computeHref(type, slug);
+  if (!href)     throw new Error('href is required');
 
   // Auto-append sort order within the category if missing
   let finalSort = INT(sortOrder);
@@ -78,29 +70,20 @@ export async function createEntry({
     finalSort = (maxRow?.sortOrder ?? -1) + 1;
   }
 
-  try {
-    return await prisma.homeIndexEntry.create({
-      data: {
-        category,
-        type,
-        title,
-        slug,
-        href: finalHref,           // <-- REQUIRED by schema
-        description,
-        thumbnail,
-        pinned,
-        sortOrder: finalSort,
-        status
-      },
-      select: baseSelect
-    });
-  } catch (err) {
-    // P2002: unique constraint (category, slug)
-    if (err?.code === 'P2002') {
-      throw new Error(`This slug already exists in category "${category}".`);
-    }
-    throw err;
-  }
+  return prisma.homeIndexEntry.create({
+    data: {
+      category,
+      type,
+      title,
+      href,
+      description,
+      thumbnail,
+      pinned,
+      sortOrder: finalSort,
+      status
+    },
+    select: baseSelect
+  });
 }
 
 /* -------------------- READ -------------------- */
@@ -154,10 +137,10 @@ export async function listCategories({ status = null } = {}) {
     .sort((a, b) => a.category.localeCompare(b.category));
 }
 
-/* -------------------- UPDATE (optional) -------------------- */
+/* -------------------- UPDATE -------------------- */
 /**
  * Update an entry.
- * If type or slug change and href is not provided, we recompute href for consistency.
+ * Only trims/normalizes provided fields; no href recompute logic anymore.
  */
 export async function updateEntry(id, updates = {}) {
   if (!id) throw new Error('id is required');
@@ -167,7 +150,6 @@ export async function updateEntry(id, updates = {}) {
   if (data.category != null)    data.category = S(data.category);
   if (data.type != null)        data.type = S(data.type);
   if (data.title != null)       data.title = S(data.title);
-  if (data.slug != null)        data.slug = S(data.slug);
   if (data.href != null)        data.href = S(data.href);
   if (data.description != null) data.description = TRIM(data.description) || null;
   if (data.thumbnail != null)   data.thumbnail = S(data.thumbnail) || null;
@@ -175,32 +157,11 @@ export async function updateEntry(id, updates = {}) {
   if (data.sortOrder != null)   data.sortOrder = Number(data.sortOrder);
   if (data.status != null)      data.status = S(data.status);
 
-  // Recompute href only if caller didn't send one and we have type/slug context
-  if (!data.href && (data.type || data.slug)) {
-    const current = await prisma.homeIndexEntry.findUnique({
-      where: { id: Number(id) },
-      select: { type: true, slug: true }
-    });
-    const nextType = data.type ?? current?.type;
-    const nextSlug = data.slug ?? current?.slug;
-    if (nextType && nextSlug) {
-      data.href = computeHref(nextType, nextSlug);
-    }
-  }
-
-  try {
-    return await prisma.homeIndexEntry.update({
-      where: { id: Number(id) },
-      data,
-      select: baseSelect
-    });
-  } catch (err) {
-    if (err?.code === 'P2002') {
-      // (category, slug) unique
-      throw new Error('Another entry with this category + slug already exists.');
-    }
-    throw err;
-  }
+  return prisma.homeIndexEntry.update({
+    where: { id: Number(id) },
+    data,
+    select: baseSelect
+  });
 }
 
 /* -------------------- DELETE -------------------- */
