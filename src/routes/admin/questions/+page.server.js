@@ -1,10 +1,9 @@
-// Admin: Questions (simple list, no ListView)
+// Admin: Questions (ListTable-powered)
 import { listQuestions, deleteQuestion } from '$lib/services/questionServices.js';
 import { R } from '$lib/formKit/readers.js';
 import { makeAction } from '$lib/formKit/actionFactory.js';
 
 export async function load() {
-  // Lightweight list (no deck/note payloads)
   const items = await listQuestions({ includePayload: false, limit: 500 });
   return { items };
 }
