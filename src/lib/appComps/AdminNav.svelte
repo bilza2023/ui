@@ -1,14 +1,16 @@
+
+
 <nav class="navbar">
-    <a href="/" class="nav-link">🔱 App Home</a>
-    <a href="/admin/" class="nav-link">🏠 Admin Home</a>
-    <a href="/admin/subscriptions" class="nav-link">🔑 Subscriptions</a>
-   
+    <a href="/"                     class="nav-link">🔱   App Home</a>
+    <a href="/admin/"               class="nav-link">🏠   Admin Home</a>
+    <a href="/admin/questions"      class="nav-link">🎖️   Questions</a>
+    <a href="/admin/comments"       class="nav-link">🔔   comments</a>
+    <a href="/admin/subscriptions"  class="nav-link">🔑   Subscriptions</a>
     
-    <a href="/admin/comments" class="nav-link">🔔 comments</a>
+
     <a href="/admin/create-home-index"  class="nav-link">📊 Create Index</a>
-    <a href="/admin/edit-home-index"  class="nav-link">📈 Edit Index</a>
-    <a href="/admin/synopsis" target="_blank" class="nav-link">🦞 Synopsis</a>
-    <!-- <a href="/admin/workdesk" target="_blank" class="nav-link">🎖️ workdesk</a> -->
+    <a href="/admin/edit-home-index"    class="nav-link">📈 Edit Index</a>
+    <a href="/admin/synopsis"           class="nav-link">🦞 Synopsis</a>
   </nav>
   
   <style>

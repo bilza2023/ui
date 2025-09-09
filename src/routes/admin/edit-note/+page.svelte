@@ -1,62 +1,118 @@
+<!-- /src/routes/admin/edit-note/+page.svelte -->
 <script>
-  import { enhance } from '$app/forms';
-  export let data;
+  import '$lib/styles/tokens.css';
+  import FormUi from '$lib/formUi/FormUi.svelte';
 
-  let localForm = data?.form ?? null;
-  const q = data?.question ?? null;
-  const slug = data?.slug ?? null;
+  export let data; // { slug, question, form:{ values, message? } }
 
-  // "sticky" values helper
-  const v = (k, d='') => localForm?.values?.[k] ?? d;
+  const q = data?.question || {};
+  const slug = data?.slug || data?.form?.values?.slug || q.slug || '';
 
-  const onEnhance = () => ({ result }) => {
-    if (result.type === 'failure') {
-      localForm = result.data; // show validation message + keep values
-      return;
-    }
-    if (result.type === 'success') {
-      // Optionally toast or navigate; keeping it simple
-      localForm = { message: 'Saved.', values: { slug, noteHtml: v('noteHtml', q?.note ?? '') } };
-    }
+  const title = q?.name ? `Edit: ${q.name}` : 'Edit Note';
+
+  const STATUS_OPTS = [
+    { label: 'Draft',     value: 'draft' },
+    { label: 'Ready',     value: 'ready' },
+    { label: 'Published', value: 'published' },
+    { label: 'Archived',  value: 'archived' }
+  ];
+
+  // FormUi config (wired to +page.server.js action "save")
+  const editConfig = {
+    id: 'edit-note',
+    title: 'Edit Question',
+    description: slug ? `Slug: ${slug}` : 'Missing ?slug=…',
+    action: '?/save',
+    layout: 'stack',
+    labelPosition: 'top',
+    initial: {
+      slug,
+      name:        data?.form?.values?.name        ?? q.name        ?? '',
+      description: data?.form?.values?.description ?? q.description ?? '',
+      status:      data?.form?.values?.status      ?? q.status      ?? 'draft',
+      thumbnail:   data?.form?.values?.thumbnail   ?? q.thumbnail   ?? '',
+      sortOrder:   data?.form?.values?.sortOrder   ?? q.sortOrder   ?? 0,
+      timed:       data?.form?.values?.timed       ?? q.timed       ?? false,
+      noteHtml:    data?.form?.values?.noteHtml    ?? q.note        ?? ''
+    },
+    items: [
+      { type: 'hidden',   name: 'slug',       value: slug },
+      { type: 'text',     name: 'name',       label: 'Name',        placeholder: 'Display name' },
+      { type: 'textarea', name: 'description',label: 'Description', rows: 3, placeholder: 'Short summary (optional)' },
+      { type: 'select',   name: 'status',     label: 'Status',      options: STATUS_OPTS },
+      { type: 'text',     name: 'thumbnail',  label: 'Thumbnail URL', placeholder: '/media/images/taleem.webp' },
+      { type: 'number',   name: 'sortOrder',  label: 'Sort order',  min: 0, step: 1 },
+      { type: 'checkbox', name: 'timed',      label: 'Timed (has timings/audio)' },
+      { type: 'textarea', name: 'noteHtml',   label: 'Note HTML',   rows: 18, placeholder: '<h2>…</h2><p>…</p>' }
+    ],
+    submit: {
+      label: 'Save',
+      disabledWhen: (v) => !v?.slug?.trim() || !v?.noteHtml?.trim()
+    },
+    clearOnSuccess: false,
+    showErrorsList: true
   };
+
+  let successMsg = '';
+
+  function handleSuccess() {
+    successMsg = 'Saved successfully.';
+  }
+  function handleFailure() {
+    successMsg = '';
+  }
 </script>
 
-{#if localForm?.message}
-  <div role="alert" class="mb-3 rounded-lg border border-red-600/40 bg-red-900/30 px-3 py-2 text-red-200">
-    {localForm.message}
-  </div>
-{/if}
+<div class="wrap">
+  <header class="pagehead">
+    <h1 class="h">{title}</h1>
+    {#if data?.form?.message}
+      <div role="alert" class="alert error">{data.form.message}</div>
+    {/if}
+    {#if successMsg}
+      <div role="status" class="alert success">{successMsg}</div>
+    {/if}
+  </header>
 
-{#if !slug}
-  <div class="wrap">
-    <p>Open this page with <code>?slug=&lt;your-slug&gt;</code>.</p>
-  </div>
-{:else}
-  <form method="post" action="?/_action=save" use:enhance={onEnhance} class="form stack">
-    <!-- Hidden slug so the server action knows what to update -->
-    <input type="hidden" name="slug" id="slug" value={slug} />
-
-    <!-- A11y: label is associated with the textarea via for/id -->
-    <div class="field">
-      <label for="noteHtml" class="label">Note (HTML)</label>
-      <textarea
-        id="noteHtml"
-        name="noteHtml"
-        rows="18"
-        class="textarea"
-        aria-describedby="noteHelp"
-      >{v('noteHtml', q?.note ?? '')}</textarea>
-      <div id="noteHelp" class="help">Paste or edit your HTML here.</div>
-    </div>
-
-    <button type="submit" class="btn primary">Save</button>
-  </form>
-{/if}
+  <section class="panel">
+    <FormUi config={editConfig} on:success={handleSuccess} on:failure={handleFailure} />
+  </section>
+</div>
 
 <style>
-  .form.stack { display: grid; gap: 12px; max-width: 960px; }
-  .field { display: grid; gap: 6px; }
-  .label { font-weight: 600; }
-  .textarea { min-height: 320px; width: 100%; }
-  .btn.primary { padding: 8px 14px; border-radius: 8px; }
+  .wrap {
+    width: 80%;
+    max-width: 1100px;
+    margin-inline: auto;
+    padding: var(--space-6, 24px) var(--space-4, 16px);
+  }
+  .pagehead { margin-bottom: var(--space-4, 16px); }
+  .h {
+    font-size: var(--text-2xl, 1.5rem);
+    line-height: 1.2;
+    margin: 0 0 var(--space-2, 8px) 0;
+  }
+  .panel {
+    background: var(--panel-bg, rgba(255,255,255,0.03));
+    border: 1px solid var(--panel-border, rgba(255,255,255,0.08));
+    border-radius: var(--radius-2xl, 16px);
+    padding: var(--space-6, 24px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .alert {
+    padding: var(--space-3, 12px) var(--space-4, 16px);
+    border-radius: var(--radius-lg, 12px);
+    font-size: var(--text-sm, 0.95rem);
+    border: 1px solid transparent;
+  }
+  .alert.error {
+    background: var(--red-900, #2a0f11);
+    border-color: var(--red-700, #7a2d33);
+    color: var(--red-100, #ffd6d9);
+  }
+  .alert.success {
+    background: var(--green-900, #112a19);
+    border-color: var(--green-700, #2d7a4a);
+    color: var(--green-100, #d6ffea);
+  }
 </style>

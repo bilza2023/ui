@@ -30,7 +30,6 @@
   :global(*) {
     box-sizing: border-box;
   }
-   :global(html,body){margin:0;padding:0;min-height:100%;}
    
   :global(body){
     background:var(--backgroundColor);
