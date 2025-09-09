@@ -64,13 +64,4 @@
 <style>
   .wrap { max-width: 1000px; margin: 0 auto; padding: 1rem; }
   .panel { background: var(--cardBg, rgba(255,255,255,0.02)); border: 1px solid var(--border, rgba(255,255,255,0.1)); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
-  .panel-title { margin: 0 0 .75rem 0; font-size: 1.1rem; }
-  .grid { width: 100%; border-collapse: collapse; }
-  .grid th, .grid td { padding: .5rem .6rem; border-bottom: 1px solid var(--border, rgba(255,255,255,0.08)); vertical-align: top; }
-  .grid thead th { text-align: left; font-weight: 600; opacity: .9; }
-  .empty { opacity: .7; padding: .75rem; }
-  .btn-danger { background: var(--danger, #b91c1c); color: #fff; border: 0; border-radius: 8px; padding: .35rem .6rem; cursor: pointer; }
-  .btn-danger:hover { filter: brightness(1.1); }
-  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-  .small { font-size: .85em; }
 </style>
