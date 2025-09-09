@@ -1,126 +1,233 @@
+
 <script>
     import { createEventDispatcher } from 'svelte';
+    import { page } from '$app/stores';
+    import { goto } from '$app/navigation';
   
-    // Props
-    export let tcode = '';
-    export let synopsis = null;                 // { name, chapters: [{ name, sortOrder? }] }
-    export let selectedChapter = '';            // number | ''  (numeric chapter used by services)
-    export let selectedExercise = '';           // string | ''
-    export let counts = null;                   // { byChapter?: Record<number, number> } (optional)
-    export let sticky = true;                   // stick to top on scroll (mobile-friendly)
+    // ✅ Same props as your old <Title />
+    export let chapter = "";         // human-readable active chapter name
+    export let chapterCount = 0;     // questions in current chapter
+    export let tcodeTotal = 0;       // total questions in tcode
+    export let exerciseCount = 0;    // questions in current exercise
+    export let exercise = "";        // active exercise slug/name ("" = All)
   
     const dispatch = createEventDispatcher();
   
-    // Derive chapter list and numeric mapping
-    $: chapters = Array.isArray(synopsis?.chapters) ? synopsis.chapters : [];
+    // Route/query state
+    $: qp = $page.url.searchParams;
+    $: tcode = qp.get('tcode') || '';
   
-    // Build options: number = (sortOrder ?? index) + 1
+    // SSR data (provided by +page.server.js)
+    $: synopsis = $page.data?.synopsis || null;
+  
+    // Build chapter options (human labels)
+    $: chapters = Array.isArray(synopsis?.chapters)
+      ? synopsis.chapters.slice().sort((a,b) => {
+          const sa = typeof a.sortOrder === 'number' ? a.sortOrder : 0;
+          const sb = typeof b.sortOrder === 'number' ? b.sortOrder : 0;
+          return sa - sb;
+        })
+      : [];
+  
+    function numberFor(ch, idx) {
+      // canonical numeric mapping
+      return (typeof ch?.sortOrder === 'number' ? ch.sortOrder : idx) + 1;
+    }
+  
     $: chapterOptions = chapters.map((c, idx) => {
-      const number = (typeof c.sortOrder === 'number' ? c.sortOrder : idx) + 1;
-      const baseName = (c?.name?.trim?.() || `Chapter ${number}`);
-      const count = counts?.byChapter?.[number];
-      const label = count ? `${number}. ${baseName} (${count})` : `${number}. ${baseName}`;
-      return { number, label };
+      const num = numberFor(c, idx);
+      const name = (c?.name?.trim?.() || `Chapter ${num}`);
+      return { value: String(num), label: `${num}. ${name}` };
     });
   
-    // Title & subtitle
-    $: titleText = (synopsis?.name?.trim?.() || tcode || 'Syllabus');
-    $: chapterText = selectedChapter ? `Chapter ${selectedChapter}` : 'All chapters';
+    // Current selection from URL (?chapter=)
+    $: selectedChapterNum = (() => {
+      const raw = qp.get('chapter');
+      const n = raw ? Number(raw) : NaN;
+      return Number.isFinite(n) && n > 0 ? n : null;   // null => All
+    })();
   
-    // Controlled select value as string
-    let localChapterStr = '';
-    $: localChapterStr = selectedChapter === '' ? '' : String(selectedChapter);
+    // 🔧 Reactive controlled value (was non-reactive before)
+    $: localChapter = selectedChapterNum ? String(selectedChapterNum) : "";
   
-    function onChangeChapter() {
-      const ch = localChapterStr === '' ? null : Number(localChapterStr);
-      dispatch('chapterChange', { chapter: ch }); // number | null (null = All)
+    // Right-side info chips
+    $: rightChapterText = selectedChapterNum ? `Chapter ${selectedChapterNum}` : 'All chapters';
+    $: rightExerciseText = exercise?.trim?.() ? exercise.trim() : 'All';
+  
+    // 🔧 Define disabled state (fixes ReferenceError)
+    $: isDisabled = !chapterOptions.length;
+  
+    function commitChapterChange(nextVal) {
+      const nextNum = nextVal === "" ? null : Number(nextVal);
+  
+      // Optional event for observers
+      dispatch('chapterChange', { chapter: nextNum });
+  
+      // Update URL (keeps your current flow)
+      const q = new URLSearchParams();
+      if (tcode) q.set('tcode', tcode);
+      if (nextNum) q.set('chapter', String(nextNum)); // omit => All
+      // drop stale exercise on chapter change
+      goto(`/syllabus?${q.toString()}`, { keepfocus: true, noScroll: true });
+    }
+  
+    function onSelectChange() {
+      commitChapterChange(localChapter);
     }
   </script>
   
-  <div class="titlebar" class:sticky={sticky} role="region" aria-label="Syllabus title and chapter selector">
+  <div class="bar" role="region" aria-label="Syllabus title and chapter selector">
+    <!-- LEFT: labeled chapter dropdown -->
     <div class="left">
-      <div class="title" title={titleText}>{titleText}</div>
-      <div class="subtitle">{chapterText}</div>
+      <label class="label" for="chapterSelect">Chapter</label>
+      <div class="selectWrap">
+        <select
+          id="chapterSelect"
+          class="select"
+          bind:value={localChapter}
+          on:change={onSelectChange}
+          aria-label="Choose chapter"
+          disabled={isDisabled}
+        >
+          <option value="">All chapters</option>
+          {#each chapterOptions as opt}
+            <option value={opt.value}>{opt.label}</option>
+          {/each}
+        </select>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 10l5 5 5-5" />
+        </svg>
+      </div>
     </div>
   
+    <!-- RIGHT: compact, high-signal info -->
     <div class="right">
-      <label for="chapterSelect" class="sr-only">Chapter</label>
-      <select id="chapterSelect" class="select" bind:value={localChapterStr} on:change={onChangeChapter} aria-label="Choose chapter">
-        <option value="">All chapters</option>
-        {#each chapterOptions as opt}
-          <option value={String(opt.number)}>{opt.label}</option>
-        {/each}
-      </select>
-      <slot name="right" />
+      <div class="pill" title="Selected chapter">
+        <span class="pillLabel">Chapter</span>
+        <span class="pillValue">{rightChapterText}</span>
+        {#if chapterCount}
+          <span class="sep">·</span>
+          <span class="soft">{chapterCount}</span>
+        {/if}
+      </div>
+  
+      <div class="pill" title="Selected exercise">
+        <span class="pillLabel">Exercise</span>
+        <span class="pillValue">{rightExerciseText}</span>
+        {#if exerciseCount}
+          <span class="sep">·</span>
+          <span class="soft">{exerciseCount}</span>
+        {/if}
+      </div>
+  
+      {#if tcodeTotal}
+        <div class="pill" title="Total questions">
+          <span class="pillLabel">Total</span>
+          <span class="pillValue">{tcodeTotal}</span>
+        </div>
+      {/if}
     </div>
   </div>
   
   <style>
-    .titlebar {
+    .bar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 0.75rem;
       align-items: center;
-      padding: 0.75rem 1rem;
-      background: var(--backgroundElevated, rgba(20, 26, 35, 0.6));
+      padding: 0.8rem 1rem;
+      background: var(--backgroundElevated, rgba(15,17,24,0.55));
       backdrop-filter: blur(6px);
       border-bottom: 1px solid color-mix(in oklab, var(--primaryText, #fff) 16%, transparent);
     }
-    .sticky {
-      position: sticky;
-      top: 0;
-      z-index: 20;
+  
+    /* LEFT */
+    .left {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 0.5rem 0.8rem;
+      align-items: center;
     }
-    .left .title {
-      font-size: clamp(1rem, 2.2vw, 1.25rem);
-      font-weight: 700;
-      color: var(--primaryText, #fff);
-      line-height: 1.2;
-      max-width: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .left .subtitle {
-      font-size: 0.85rem;
+    .label {
+      font-size: 0.8rem;
       opacity: 0.8;
+      margin-right: 0.2rem;
+      white-space: nowrap;
     }
+    .selectWrap {
+      position: relative;
+      display: inline-block;
+      min-width: min(64vw, 26rem);
+    }
+    .select {
+      width: 100%;
+      appearance: none;
+      background: var(--surface, #0b1320);
+      color: var(--primaryText, #fff);
+      border: 1px solid color-mix(in oklab, var(--primaryText, #fff) 22%, transparent);
+      border-radius: 0.65rem;
+      padding: 0.55rem 2.2rem 0.55rem 0.75rem;
+      font-size: 0.95rem;
+      line-height: 1.25;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+    }
+    .select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px color-mix(in oklab, var(--primaryText, #fff) 35%, transparent);
+    }
+    .chev {
+      position: absolute;
+      right: 0.7rem;
+      top: 50%;
+      width: 1.1rem;
+      height: 1.1rem;
+      transform: translateY(-50%);
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+  
+    /* RIGHT */
     .right {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
-    .select {
-      appearance: none;
-      background: var(--surface, #0f172a);
-      color: var(--primaryText, #fff);
-      border: 1px solid color-mix(in oklab, var(--primaryText, #fff) 22%, transparent);
-      border-radius: 0.625rem;
-      padding: 0.5rem 0.75rem;
-      font-size: 0.95rem;
-      min-width: min(60vw, 18rem);
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      background: color-mix(in oklab, var(--primaryText, #fff) 10%, transparent);
+      border: 1px solid color-mix(in oklab, var(--primaryText, #fff) 12%, transparent);
+      font-size: 0.9rem;
     }
+    .pillLabel { opacity: 0.7; }
+    .pillValue { font-weight: 700; }
+    .sep { opacity: 0.5; }
+    .soft { opacity: 0.8; }
+  
+    /* Mobile */
     @media (max-width: 640px) {
-      .titlebar {
+      .bar {
         grid-template-columns: 1fr;
-        gap: 0.5rem;
+        gap: 0.6rem;
+        padding: 0.7rem 0.8rem;
       }
-      .right {
-        justify-content: stretch;
+      .left {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
       }
-      .select {
-        width: 100%;
-        min-width: 0;
-      }
-    }
-    /* a11y utility */
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap; border: 0;
+      .selectWrap { min-width: 0; }
+      .right { justify-content: space-between; }
     }
   </style>
   

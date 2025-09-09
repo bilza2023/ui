@@ -1,4 +1,6 @@
 <script>
+  import SyllabusTitle from "./SyllabusTitle.svelte";
+  import UCard from '$lib/components/UCard.svelte';
     import {
       getExercisesForChapter,
       makeExerciseSet,
@@ -19,7 +21,6 @@
     import LeftChaptersBar from "./LeftChaptersBar.svelte";
     import ExNavBar from "./ExNavBar.svelte";
     import QuestionCard from "../questionCards/QuestionCard.svelte";
-    import Title from "./Title.svelte";
   
     // Local state (slug-based navigation; no reloads within a tcode)
     let activeChapter  = selected.chapter || (synopsis?.chapters?.[0]?.slug ?? "");
@@ -62,11 +63,13 @@
     total: items.filter((q) => q.exercise === ex.slug).length
   }))
 ];
+
+
   </script>
   
   
   <!-- Title/Header -->
-  <Title
+  <SyllabusTitle
   chapter={activeChapterName}
   chapterCount={chapterCount}
   tcodeTotal={tcodeTotal}
@@ -74,15 +77,6 @@
   exercise={activeExercise}
 />
 
-  <!-- Layout shell (keeps your existing token-based styles intact if class names match your old page) -->
-  <div class="syllabus-layout">
-    <!-- Chapter Sidebar -->
-    <LeftChaptersBar
-      chapters={synopsis?.chapters ?? []}
-      activeSlug={activeChapter}
-      on:pick={onPickChapter}
-    />
-  
     <!-- Main column -->
     <div class="syllabus-main">
       <!-- Exercise Navbar for the active chapter -->
@@ -91,17 +85,47 @@
       activeSlug={activeExercise}
       on:pick={onPickExercise}
     />
-      <!-- Question list (PASS ARRAY, not item-by-item) -->
-      <QuestionCard items={filteredItems} />
+   
+    <div class="syllabus-layout">
+      {#each filteredItems as row (row.slug)}
+        <UCard
+          title={row.title || row.name || row.slug}
+          href={
+            row.href
+            || (row.type === 'note'   ? `/notes?filename=${row.slug}`
+            :  row.type === 'deck'    ? `/player?filename=${row.slug}`
+            :  row.type === 'course'  ? `/syllabus?tcode=${row.slug}`
+            :  undefined)
+          }
+          thumbnail={row.thumbnail || '/media/images/taleem.webp'}
+        >
+          {#if row.type || row.chapter || row.exercise || row.status}
+            <small>
+              {#if row.type}Type: {row.type}{/if}
+              {#if row.chapter && row.exercise} · Ch {row.chapter} · {row.exercise}{/if}
+              {#if row.status} · {row.status}{/if}
+            </small>
+          {/if}
+        </UCard>
+      {/each}
     </div>
-  </div>
+    
+
+
+    </div>
+  <!-- </div> -->
   
   <style>
     /* Minimal wrapper; keep or replace with your old page styles if needed */
-    .syllabus-layout {
-      display: flex;
-      gap: 1rem;
+    .syllabus-layout { 
+      padding-left: 2%;
+    padding-right: 2%;
+    display: flex;
+    flex-wrap: wrap;          /* NEW: allow wrapping */
+    gap: 1rem;
+    align-items: flex-start;  /* keeps row heights tidy */
     }
+
     .syllabus-main {
       flex: 1;
       display: flex;
