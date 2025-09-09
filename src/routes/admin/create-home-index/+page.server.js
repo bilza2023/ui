@@ -58,7 +58,7 @@ export const actions = {
         slug:        v.slug.trim(),
         href:        computedHref, // authoritative
         description: v.description?.trim() || null,
-        thumbnail:   v.thumbnail?.trim() || null,
+        thumbnail:   v.thumbnail?.trim() || "/media/images/taleem.webp",
         pinned:      v.pinned === 'on',
         sortOrder:   v.sortOrder ?? null,
         status:      'active'

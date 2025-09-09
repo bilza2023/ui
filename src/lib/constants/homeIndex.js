@@ -3,7 +3,6 @@
 
 // Canonical categories for Home Index entries
 export const CATEGORIES = [
-    'featured',
     'videos',
     'blog',
     'courses'
