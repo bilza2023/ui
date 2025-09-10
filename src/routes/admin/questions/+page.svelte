@@ -52,8 +52,8 @@
 
     if (actionId === 'edit') {
       goto(row.type === 'note'
-        ? `/admin/edit-note?slug=${encodeURIComponent(row.slug)}`
-        : `/admin/edit-deck?slug=${encodeURIComponent(row.slug)}`
+        ? `/admin/edit-question?slug=${encodeURIComponent(row.slug)}&questionType=${row.type}`
+        : `/admin/edit-question?slug=${encodeURIComponent(row.slug)}&questionType=${row.type}`
       );
       return;
     }
