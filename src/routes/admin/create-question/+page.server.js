@@ -45,7 +45,8 @@ const baseSpec = {
   chapter: R.num("chapter", { required: true, gte: 1 }),
   exercise: R.str("exercise", { required: true }),
   description: R.str("description"),
-  status: R.$enum("status", ["draft", "ready", "published", "archived"], { optional: true }),
+  status: R.$enum("status", ["draft", "ready", "published", "archived"], { required: false }),
+
   // home-index
   homeCategory: R.str("homeCategory"),
   homeSort: R.num("homeSort", { gte: 0 }),

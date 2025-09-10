@@ -22,8 +22,8 @@
           </div>
           <div class="actions">
 
-            <a href={`/admin/upload-note?tcode=${t.slug}`}>Note</a>
-            <a href={`/admin/upload-deck?tcode=${t.slug}`}>Deck</a>
+            <a href={`/admin/create-question?tcode=${t.slug}&questionType=note`}>Note</a>
+            <a href={`/admin/create-question?tcode=${t.slug}&questionType=deck`}>Deck</a>
             
             
             

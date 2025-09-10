@@ -8,13 +8,7 @@ export const CATEGORIES = [
     'courses'
   ];
   
-  // Canonical types for Home Index entries
-  export const TYPES = [
-    'note',
-    'deck',
-    'course'
-  ];
-  
+
   /**
    * Compute the frontend href for a HomeIndexEntry.
    * @param {string} type - One of TYPES

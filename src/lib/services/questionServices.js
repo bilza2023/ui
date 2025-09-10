@@ -342,12 +342,12 @@ export async function removeFromHomeIndex(slug) {
 
 // Flat list of blog cards (optional filter by category)
 export async function listHomeBlogEntries({ category, limit = 200 } = {}) {
-  const where = {
-    tcode: 'blog',
-    status: 'active',
-    NOT: { homeCategory: null },
-    ...(category ? { homeCategory: category } : {})
-  };
+    const where = {
+        tcode: 'blog',
+        status: 'published',
+        NOT: { homeCategory: null },
+        ...(category ? { homeCategory: category } : {})
+      };
 
   const rows = await prisma.question.findMany({
     where,
