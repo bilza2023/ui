@@ -51,10 +51,7 @@
     if (!row) return;
 
     if (actionId === 'edit') {
-      goto(row.type === 'note'
-        ? `/admin/edit-question?slug=${encodeURIComponent(row.slug)}&questionType=${row.type}`
-        : `/admin/edit-question?slug=${encodeURIComponent(row.slug)}&questionType=${row.type}`
-      );
+      goto(`/admin/edit-question?slug=${encodeURIComponent(row.slug)}&questionType=${row.type}`);
       return;
     }
 
@@ -83,7 +80,7 @@
     columns={columns}
     rowKey="id"
     searchable={true}
-    searchKeys={['name','slug','tcode','chEx']}
+    searchKeys={['name','slug','tcode','chEx','status','type']}
     thumbBaseUrl="/media/images"
     emptyMessage="No questions yet."
     on:rowClick={onRowClick}
