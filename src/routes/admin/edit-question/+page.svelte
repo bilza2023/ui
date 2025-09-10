@@ -59,3 +59,12 @@
 <div class="wrap">
   <FormUi config={config} on:success={handleSuccess}/>
 </div>
+
+
+
+<style>
+  .wrap {
+    padding-left: 200px;
+    padding-right: 200px;
+  }
+</style>
