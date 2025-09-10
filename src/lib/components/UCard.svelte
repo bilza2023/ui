@@ -47,6 +47,10 @@
   {/if}
   
   <style>
+    /* Show full image without crop */ 
+    
+    .thumb img, img.ucard-thumb { width: 100%; height: auto; object-fit: contain !important; object-position: center; display: block; 
+    }
     .ucard {
       display: flex;
       flex-direction: column;
