@@ -434,6 +434,31 @@ export async function reorderExercises(tcodeSlug, chapterSlug, exerciseOrder) {
   );
 }
 
+// Home index: list all tcodes as "course" cards
+export async function listCoursesAsCards() {
+  const rows = await getAllTcodes(); // already ordered by name
+  const thumb = (raw) => {
+    const s = raw?.trim?.() || '';
+    if (!s) return '/media/images/taleem.webp';
+    return s.startsWith('/') || s.startsWith('http') ? s : `/media/images/${s}`;
+  };
+
+  return rows.map((t) => ({
+    id: t.id,
+    category: 'courses',
+    type: 'course',
+    title: t.name || t.slug,
+    href: `/syllabus?tcode=${t.slug}`,
+    description: t.description || null,
+    thumbnail: thumb(t.image),
+    pinned: false,
+    sortOrder: 0,
+    status: 'active',
+    createdAt: t.createdAt,
+    updatedAt: t.updatedAt
+  }));
+}
+
 /* -------------------- Export -------------------- */
 export const syllabusService = {
   // Tcode operations
@@ -443,6 +468,8 @@ export const syllabusService = {
   updateTcode,
   deleteTcode,
 
+
+  listCoursesAsCards,
   // Chapter operations
   createChapter,
   getChaptersByTcode,

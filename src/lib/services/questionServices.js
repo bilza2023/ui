@@ -109,6 +109,12 @@ export async function getQuestionBySlug(slug, { includePayload = true } = {}) {
 export async function updateQuestion(slug, updates) {
   if (!slug) throw new Error('Slug is required');
   try {
+    // if (u.tcode && u.tcode !== 'blog') {
+    //   u.homeCategory = null;
+    //   u.homeSort = 0;
+    //   u.homePinned = false;
+    // }
+    
     return await crudl.update(slug, updates);
   } catch (e) {
     if (e?.code === 'DUPLICATE' && updates?.slug) {

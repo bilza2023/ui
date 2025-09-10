@@ -1,14 +1,20 @@
 // /src/routes/+page.server.js
 export const prerender = false;
 
-import { homeIndexService } from '$lib/services/homeIndexServices.js';
+import { listHomeBlogEntries } from '$lib/services/questionServices.js';
+import { syllabusService } from '$lib/services/syllabusService.js';
 
 export async function load({ setHeaders }) {
-  // Pull all entries (cap high; you said max ~50)
-  const questions = await homeIndexService.listEntries({ limit: 500 });
+  const [blogRaw, courseCards] = await Promise.all([
+    listHomeBlogEntries({}),
+    syllabusService.listCoursesAsCards()
+  ]);
 
-  // Light caching (tweak if you want)
+  // Ensure stable ids for Svelte keyed each
+  const blogCards = blogRaw.map((q, i) => ({ id: q.id ?? `q_${q.slug ?? i}`, ...q }));
+
+  const questions = [...blogCards, ...courseCards];
+
   setHeaders({ 'cache-control': 'public, max-age=30' });
-
   return { questions };
 }

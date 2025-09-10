@@ -1,19 +1,9 @@
 <script>
   import BulletsNav from '$lib/components/BulletsNav.svelte';
-  import UQCard from '../lib/components/UQCard.svelte';
+  import UCard from '../lib/components/UCard.svelte';
   
   export let data;
   // console.log("data" , data);
-
-  // // Route mapper for index entries
-  // const hrefFor = (row) => {
-  //   if (!row?.slug) return '';
-  //   if (row?.type === 'note') return `/notes?filename=${row.slug}`;
-  //   if (row?.type === 'deck') return `/player?filename=${row.slug}`;
-  //   if (row?.type === 'course') return `/syllabus?tcode=${row.slug}`;
-  //   // unknown type → non-clickable
-  //   return '';
-  // };
 
   // Chips mapper for UQCard
   const mapToBodyItems = (row) => [
@@ -42,7 +32,7 @@
   <!-- {#each filtered as q} -->
   <div class="cards">
     {#each filtered as row (row.id)}
-      <UQCard
+      <UCard
         title={row.title || row.slug}
         href={ row.href || undefined}  
         thumbnail={row.thumbnail}
