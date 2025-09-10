@@ -288,6 +288,93 @@ export async function getQuestionsByTags(tags, options = {}) {
   );
 }
 
+///////////////--new index related methods
+// --- Home index helpers (blog-only) ---
+const _hrefFor = (q) => (q.type === 'note'
+  ? `/notes?filename=${q.slug}`
+  : q.type === 'deck'
+  ? `/player?filename=${q.slug}`
+  : '');
+
+const _thumb = (raw) => {
+  const s = raw?.trim?.() || '';
+  if (!s) return '/media/images/taleem.webp';
+  return s.startsWith('/') || s.startsWith('http') ? s : `/media/images/${s}`;
+};
+
+// Add a blog question to home index
+export async function addToHomeIndex(slug, category, { sort = 0, pinned = false } = {}) {
+  if (!slug || !category) throw new Error('slug and category are required');
+  const q = await getQuestionBySlug(slug, { includePayload: false });
+  if (q.tcode !== 'blog') throw new Error('Only blog questions can be added to home');
+  return await updateQuestion(slug, {
+    homeCategory: category,
+    homeSort: Number(sort) || 0,
+    homePinned: !!pinned
+  });
+}
+
+// Update home index fields
+export async function updateHomeIndex(slug, { category, sort, pinned } = {}) {
+  if (!slug) throw new Error('slug is required');
+  const q = await getQuestionBySlug(slug, { includePayload: false });
+  if (q.tcode !== 'blog') throw new Error('Only blog questions can be updated on home');
+
+  const data = {};
+  if (category !== undefined) data.homeCategory = category || null;
+  if (sort !== undefined) data.homeSort = Number(sort) || 0;
+  if (pinned !== undefined) data.homePinned = !!pinned;
+
+  return await updateQuestion(slug, data);
+}
+
+// Remove from home index
+export async function removeFromHomeIndex(slug) {
+  if (!slug) throw new Error('slug is required');
+  return await updateQuestion(slug, { homeCategory: null, homeSort: 0, homePinned: false });
+}
+
+// Flat list of blog cards (optional filter by category)
+export async function listHomeBlogEntries({ category, limit = 200 } = {}) {
+  const where = {
+    tcode: 'blog',
+    status: 'active',
+    NOT: { homeCategory: null },
+    ...(category ? { homeCategory: category } : {})
+  };
+
+  const rows = await prisma.question.findMany({
+    where,
+    select: {
+      slug: true, type: true, name: true, thumbnail: true,
+      homeCategory: true, homeSort: true, homePinned: true, editedAt: true
+    },
+    orderBy: [{ homePinned: 'desc' }, { homeSort: 'asc' }, { editedAt: 'desc' }],
+    take: limit
+  });
+
+  return rows.map((r) => ({
+    title: r.name || r.slug,
+    slug: r.slug,
+    type: r.type,
+    href: _hrefFor(r),
+    thumbnail: _thumb(r.thumbnail),
+    category: r.homeCategory,
+    pinned: r.homePinned,
+    sort: r.homeSort,
+    updatedAt: r.editedAt
+  }));
+}
+
+// Grouped by category for home page consumption
+export async function getHomeIndexBlogGrouped() {
+  const items = await listHomeBlogEntries({});
+  return items.reduce((acc, card) => {
+    (acc[card.category] ||= []).push(card);
+    return acc;
+  }, {});
+}
+
 /* -------------------- Export (compat) -------------------- */
 
 export const questionService = {
@@ -296,6 +383,13 @@ export const questionService = {
   getQuestionBySlug,
   updateQuestion,
   deleteQuestion,
+
+  // home index
+  addToHomeIndex,
+  updateHomeIndex,
+  removeFromHomeIndex,
+  listHomeBlogEntries,
+  getHomeIndexBlogGrouped,
 
   // Listing and filtering
   listQuestions,

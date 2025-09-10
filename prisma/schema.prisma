@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum HomeCategory { 
+  
+  blog
+  videos 
+  courses 
+} 
+
 model Question {
   slug         String   @id                 // stable external identity
   tcode        String                       // subject/book (points to SyllabusTcode.slug)
@@ -14,6 +21,11 @@ model Question {
   exercise     String                        // exercise slug (points to SyllabusExercise.slug)
   type         String                        // "deck" | "note" | (future: "quiz", "video", ...)
 
+////////////////////////////////////////
+  homeCategory HomeCategory? // or String?
+  homeSort     Int           @default(0)
+  homePinned   Boolean       @default(false)
+////////////////////////////////////////
   // ── Metadata ──
   name         String?
   description  String?
