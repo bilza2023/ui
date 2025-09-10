@@ -49,6 +49,8 @@
 </a>
 
 <style>
+     .thumb img, img.ucard-thumb { width: 100%; height: auto; object-fit: contain !important; object-position: center; display: block; 
+     }
   /* Link wrapper stays neutral on hover */
   .card-link {
     display: block;
