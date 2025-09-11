@@ -1,492 +1,194 @@
-// src/lib/services/syllabus.service.js
-// ------------------------------------------------------------
-// Service layer for managing syllabus structure (Tcodes, Chapters, Exercises)
-// ------------------------------------------------------------
-import prisma from '$lib/server/prisma.js';
-
-/* -------------------- SyllabusTcode Services -------------------- */
-
-/**
- * Create a new tcode
- */
-export async function createTcode({ slug, name, description, image }) {
-  if (!slug || !name) {
-    throw new Error('Slug and name are required for tcode creation');
-  }
-
-  try {
-    return await prisma.syllabusTcode.create({
-      data: { slug, name, description, image },
-      include: { chapters: true }
-    });
-  } catch (error) {
-    if (error.code === 'P2002') {
-      throw new Error(`Tcode with slug "${slug}" already exists`);
-    }
-    throw error;
-  }
-}
-
-/**
- * Get all tcodes
- */
-export async function getAllTcodes({ includeChapters = false } = {}) {
-  return await prisma.syllabusTcode.findMany({
-    orderBy: { name: 'asc' },
-    include: {
-      chapters: includeChapters ? {
-        orderBy: { sortOrder: 'asc' },
-        include: {
-          exercises: {
-            orderBy: { sortOrder: 'asc' }
-          }
-        }
-      } : false
-    }
-  });
-}
-
-/**
- * Get tcode by slug
- */
-export async function getTcodeBySlug(slug, { includeChapters = false } = {}) {
-  if (!slug) throw new Error('Slug is required');
-
-  const tcode = await prisma.syllabusTcode.findUnique({
-    where: { slug },
-    include: {
-      chapters: includeChapters ? {
-        orderBy: { sortOrder: 'asc' },
-        include: {
-          exercises: {
-            orderBy: { sortOrder: 'asc' }
-          }
-        }
-      } : false
-    }
-  });
-
-  if (!tcode) {
-    throw new Error(`Tcode with slug "${slug}" not found`);
-  }
-
-  return tcode;
-}
-
-/**
- * Update tcode
- */
-export async function updateTcode(slug, updates) {
-  if (!slug) throw new Error('Slug is required');
-
-  try {
-    return await prisma.syllabusTcode.update({
-      where: { slug },
-      data: updates,
-      include: { chapters: true }
-    });
-  } catch (error) {
-    if (error.code === 'P2025') {
-      throw new Error(`Tcode with slug "${slug}" not found`);
-    }
-    throw error;
-  }
-}
-
-/**
- * Delete tcode (will cascade delete chapters and exercises)
- */
-export async function deleteTcode(slug) {
-  if (!slug) throw new Error('Slug is required');
-
-  try {
-    return await prisma.syllabusTcode.delete({
-      where: { slug }
-    });
-  } catch (error) {
-    if (error.code === 'P2025') {
-      throw new Error(`Tcode with slug "${slug}" not found`);
-    }
-    throw error;
-  }
-}
-
-/* -------------------- SyllabusChapter Services -------------------- */
-
-/**
- * Create a new chapter
- */
-export async function createChapter({ tcodeSlug, slug, name, sortOrder = 0 }) {
-  if (!tcodeSlug || !slug || !name) {
-    throw new Error('TcodeSlug, slug, and name are required for chapter creation');
-  }
-
-  // First get the tcode to get its ID
-  const tcode = await getTcodeBySlug(tcodeSlug);
-
-  try {
-    return await prisma.syllabusChapter.create({
-      data: {
-        tcodeId: tcode.id,
-        slug,
-        name,
-        sortOrder
-      },
-      include: {
-        tcode: true,
-        exercises: true
-      }
-    });
-  } catch (error) {
-    if (error.code === 'P2002') {
-      throw new Error(`Chapter with slug "${slug}" already exists in tcode "${tcodeSlug}"`);
-    }
-    throw error;
-  }
-}
-
-/**
- * Get chapters by tcode slug
- */
-export async function getChaptersByTcode(tcodeSlug, { includeExercises = false } = {}) {
-  if (!tcodeSlug) throw new Error('Tcode slug is required');
-
-  const tcode = await getTcodeBySlug(tcodeSlug);
-
-  return await prisma.syllabusChapter.findMany({
-    where: { tcodeId: tcode.id },
-    orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
-    include: {
-      tcode: true,
-      exercises: includeExercises ? {
-        orderBy: { sortOrder: 'asc' }
-      } : false
-    }
-  });
-}
-
-/**
- * Get chapter by tcode slug and chapter slug
- */
-export async function getChapterBySlug(tcodeSlug, chapterSlug, { includeExercises = false } = {}) {
-  if (!tcodeSlug || !chapterSlug) {
-    throw new Error('Tcode slug and chapter slug are required');
-  }
-
-  const tcode = await getTcodeBySlug(tcodeSlug);
-
-  const chapter = await prisma.syllabusChapter.findFirst({
-    where: {
-      tcodeId: tcode.id,
-      slug: chapterSlug
-    },
-    include: {
-      tcode: true,
-      exercises: includeExercises ? {
-        orderBy: { sortOrder: 'asc' }
-      } : false
-    }
-  });
-
-  if (!chapter) {
-    throw new Error(`Chapter "${chapterSlug}" not found in tcode "${tcodeSlug}"`);
-  }
-
-  return chapter;
-}
-
-/**
- * Update chapter
- */
-export async function updateChapter(tcodeSlug, chapterSlug, updates) {
-  if (!tcodeSlug || !chapterSlug) {
-    throw new Error('Tcode slug and chapter slug are required');
-  }
-
-  const chapter = await getChapterBySlug(tcodeSlug, chapterSlug);
-
-  try {
-    return await prisma.syllabusChapter.update({
-      where: { id: chapter.id },
-      data: updates,
-      include: {
-        tcode: true,
-        exercises: true
-      }
-    });
-  } catch (error) {
-    if (error.code === 'P2002') {
-      throw new Error(`Chapter slug "${updates.slug}" already exists in this tcode`);
-    }
-    throw error;
-  }
-}
-
-/**
- * Delete chapter (will cascade delete exercises)
- */
-export async function deleteChapter(tcodeSlug, chapterSlug) {
-  if (!tcodeSlug || !chapterSlug) {
-    throw new Error('Tcode slug and chapter slug are required');
-  }
-
-  const chapter = await getChapterBySlug(tcodeSlug, chapterSlug);
-
-  return await prisma.syllabusChapter.delete({
-    where: { id: chapter.id }
-  });
-}
-
-/* -------------------- SyllabusExercise Services -------------------- */
-
-/**
- * Create a new exercise
- */
-export async function createExercise({ tcodeSlug, chapterSlug, slug, name, sortOrder = 0 }) {
-  if (!tcodeSlug || !chapterSlug || !slug || !name) {
-    throw new Error('TcodeSlug, chapterSlug, slug, and name are required for exercise creation');
-  }
-
-  const chapter = await getChapterBySlug(tcodeSlug, chapterSlug);
-
-  try {
-    return await prisma.syllabusExercise.create({
-      data: {
-        chapterId: chapter.id,
-        slug,
-        name,
-        sortOrder
-      },
-      include: {
-        chapter: {
-          include: { tcode: true }
-        }
-      }
-    });
-  } catch (error) {
-    if (error.code === 'P2002') {
-      throw new Error(`Exercise with slug "${slug}" already exists in chapter "${chapterSlug}"`);
-    }
-    throw error;
-  }
-}
-
-/**
- * Get exercises by chapter
- */
-export async function getExercisesByChapter(tcodeSlug, chapterSlug) {
-  if (!tcodeSlug || !chapterSlug) {
-    throw new Error('Tcode slug and chapter slug are required');
-  }
-
-  const chapter = await getChapterBySlug(tcodeSlug, chapterSlug);
-
-  return await prisma.syllabusExercise.findMany({
-    where: { chapterId: chapter.id },
-    orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
-    include: {
-      chapter: {
-        include: { tcode: true }
-      }
-    }
-  });
-}
-
-/**
- * Get exercise by slug
- */
-export async function getExerciseBySlug(tcodeSlug, chapterSlug, exerciseSlug) {
-  if (!tcodeSlug || !chapterSlug || !exerciseSlug) {
-    throw new Error('Tcode slug, chapter slug, and exercise slug are required');
-  }
-
-  const chapter = await getChapterBySlug(tcodeSlug, chapterSlug);
-
-  const exercise = await prisma.syllabusExercise.findFirst({
-    where: {
-      chapterId: chapter.id,
-      slug: exerciseSlug
-    },
-    include: {
-      chapter: {
-        include: { tcode: true }
-      }
-    }
-  });
-
-  if (!exercise) {
-    throw new Error(`Exercise "${exerciseSlug}" not found in chapter "${chapterSlug}"`);
-  }
-
-  return exercise;
-}
-
-/**
- * Update exercise
- */
-export async function updateExercise(tcodeSlug, chapterSlug, exerciseSlug, updates) {
-  if (!tcodeSlug || !chapterSlug || !exerciseSlug) {
-    throw new Error('Tcode slug, chapter slug, and exercise slug are required');
-  }
-
-  const exercise = await getExerciseBySlug(tcodeSlug, chapterSlug, exerciseSlug);
-
-  try {
-    return await prisma.syllabusExercise.update({
-      where: { id: exercise.id },
-      data: updates,
-      include: {
-        chapter: {
-          include: { tcode: true }
-        }
-      }
-    });
-  } catch (error) {
-    if (error.code === 'P2002') {
-      throw new Error(`Exercise slug "${updates.slug}" already exists in this chapter`);
-    }
-    throw error;
-  }
-}
-
-/**
- * Delete exercise
- */
-export async function deleteExercise(tcodeSlug, chapterSlug, exerciseSlug) {
-  if (!tcodeSlug || !chapterSlug || !exerciseSlug) {
-    throw new Error('Tcode slug, chapter slug, and exercise slug are required');
-  }
-
-  const exercise = await getExerciseBySlug(tcodeSlug, chapterSlug, exerciseSlug);
-
-  return await prisma.syllabusExercise.delete({
-    where: { id: exercise.id }
-  });
-}
-
-/* -------------------- Bulk Operations -------------------- */
-
-/**
- * Get complete syllabus structure
- */
-export async function getCompleteSyllabus() {
-  return await getAllTcodes({ includeChapters: true });
-}
-
-/**
- * Get syllabus structure for specific tcode
- */
-export async function getSyllabusForTcode(tcodeSlug) {
-  return await getTcodeBySlug(tcodeSlug, { includeChapters: true });
-}
-
-/**
- * Reorder chapters within a tcode
- */
-export async function reorderChapters(tcodeSlug, chapterOrder) {
-  if (!tcodeSlug || !Array.isArray(chapterOrder)) {
-    throw new Error('Tcode slug and chapter order array are required');
-  }
-
-  const tcode = await getTcodeBySlug(tcodeSlug);
-
-  // Use transaction to ensure all updates succeed or fail together
-  return await prisma.$transaction(
-    chapterOrder.map((item, index) =>
-      prisma.syllabusChapter.update({
-        where: {
-          id: item.id || undefined,
-          tcodeId_slug: item.id ? undefined : {
-            tcodeId: tcode.id,
-            slug: item.slug
-          }
-        },
-        data: { sortOrder: index }
-      })
-    )
-  );
-}
-
-/**
- * Reorder exercises within a chapter
- */
-export async function reorderExercises(tcodeSlug, chapterSlug, exerciseOrder) {
-  if (!tcodeSlug || !chapterSlug || !Array.isArray(exerciseOrder)) {
-    throw new Error('Tcode slug, chapter slug, and exercise order array are required');
-  }
-
-  const chapter = await getChapterBySlug(tcodeSlug, chapterSlug);
-
-  // Use transaction to ensure all updates succeed or fail together
-  return await prisma.$transaction(
-    exerciseOrder.map((item, index) =>
-      prisma.syllabusExercise.update({
-        where: {
-          id: item.id || undefined,
-          chapterId_slug: item.id ? undefined : {
-            chapterId: chapter.id,
-            slug: item.slug
-          }
-        },
-        data: { sortOrder: index }
-      })
-    )
-  );
-}
-
-// Home index: list all tcodes as "course" cards
-export async function listCoursesAsCards() {
-  const rows = await getAllTcodes(); // already ordered by name
-  const thumb = (raw) => {
-    const s = raw?.trim?.() || '';
-    if (!s) return '/media/images/taleem.webp';
-    return s.startsWith('/') || s.startsWith('http') ? s : `/media/images/${s}`;
-  };
-
-  return rows.map((t) => ({
-    id: t.id,
-    category: 'courses',
-    type: 'course',
-    title: t.name || t.slug,
-    href: `/syllabus?tcode=${t.slug}`,
-    description: t.description || null,
-    thumbnail: thumb(t.image),
-    pinned: false,
-    sortOrder: 0,
-    status: 'active',
-    createdAt: t.createdAt,
-    updatedAt: t.updatedAt
-  }));
-}
-
-/* -------------------- Export -------------------- */
-export const syllabusService = {
-  // Tcode operations
-  createTcode,
-  getAllTcodes,
-  getTcodeBySlug,
-  updateTcode,
-  deleteTcode,
-
-
-  listCoursesAsCards,
-  // Chapter operations
-  createChapter,
-  getChaptersByTcode,
-  getChapterBySlug,
-  updateChapter,
-  deleteChapter,
-
-  // Exercise operations
-  createExercise,
-  getExercisesByChapter,
-  getExerciseBySlug,
-  updateExercise,
-  deleteExercise,
-
-  // Bulk operations
-  getCompleteSyllabus,
-  getSyllabusForTcode,
-  reorderChapters,
-  reorderExercises
+// /src/lib/services/syllabusService.js
+// ID-first syllabus service on top of crudl().
+// Enforces delete restrictions when dependents exist.
+
+import crudl from '../crudl/crudl.js';
+
+// ---------- helpers ----------
+const toInt = (v) => (v == null || v === '' ? null : Number.parseInt(v, 10));
+const byOrderThenName = (a, b) => {
+  const soA = a?.sortOrder ?? 0, soB = b?.sortOrder ?? 0;
+  if (soA !== soB) return soA - soB;
+  const na = (a?.name || '').toLowerCase();
+  const nb = (b?.name || '').toLowerCase();
+  return na.localeCompare(nb);
 };
+const fkError = (msg) => { const e = new Error(msg); e.code = 'FK_RESTRICT'; return e; };
+
+// ---------- table adapters ----------
+const tcodes    = crudl('syllabusTcode',   { defaultOrderBy: [{ createdAt: 'asc' }] });
+const chapters  = crudl('syllabusChapter', { defaultOrderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }] });
+const exercises = crudl('syllabusExercise',{ defaultOrderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }] });
+const questions = crudl('question');
+
+// ---------- Tcodes ----------
+export async function listTcodes() {
+  const rows = await tcodes.list({});
+  return rows.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+}
+export async function getTcode(id) {
+  const i = toInt(id);
+  if (!i) return null;
+  try { return await tcodes.read(i); } catch { return null; }
+}
+export async function getTcodeBySlug(slug) {
+  if (!slug) return null;
+  try { return await tcodes.read({ slug: slug.trim() }); } catch { return null; }
+}
+export async function createTcode(data) {
+  return tcodes.create({
+    slug: data.slug?.trim(),
+    name: data.name?.trim(),
+    description: data.description ?? '',
+    image: data.image ?? ''
+  });
+}
+export async function updateTcode(id, data) {
+  return tcodes.update(toInt(id), {
+    slug: data.slug?.trim(),
+    name: data.name?.trim(),
+    description: data.description ?? '',
+    image: data.image ?? ''
+  });
+}
+export async function deleteTcode(id) {
+  const i = toInt(id);
+  const [chs, qs] = await Promise.all([
+    chapters.list({ filters: { tcodeId: i } }),
+    questions.list({ filters: { tcodeId: i }, limit: 1 })
+  ]);
+  if (chs.length) throw fkError('Tcode has chapters');
+  if (qs.length)  throw fkError('Tcode has questions');
+  return tcodes.delete(i);
+}
+
+// ---------- Chapters ----------
+export async function listChapters(tcodeId) {
+  const rows = await chapters.list({ filters: { tcodeId: toInt(tcodeId) } });
+  return rows.sort(byOrderThenName);
+}
+export async function getChapter(id) {
+  const i = toInt(id);
+  if (!i) return null;
+  try { return await chapters.read(i); } catch { return null; }
+}
+export async function getChapterBySlug(tcodeId, slug) {
+  const rows = await chapters.list({ filters: { tcodeId: toInt(tcodeId), slug: slug?.trim() } });
+  return rows?.[0] || null;
+}
+export async function createChapter(data) {
+  const tcodeId = toInt(data.tcodeId);
+  if (!tcodeId) throw new Error('tcodeId required');
+  return chapters.create({
+    tcodeId,
+    slug: data.slug?.trim(),
+    name: data.name?.trim(),
+    sortOrder: toInt(data.sortOrder) ?? 0
+  });
+}
+export async function updateChapter(id, data) {
+  return chapters.update(toInt(id), {
+    slug: data.slug?.trim(),
+    name: data.name?.trim(),
+    sortOrder: toInt(data.sortOrder) ?? 0
+  });
+}
+export async function deleteChapter(id) {
+  const i = toInt(id);
+  const [exs, qs] = await Promise.all([
+    exercises.list({ filters: { chapterId: i } }),
+    questions.list({ filters: { chapterId: i }, limit: 1 })
+  ]);
+  if (exs.length) throw fkError('Chapter has exercises');
+  if (qs.length)  throw fkError('Chapter has questions');
+  return chapters.delete(i);
+}
+
+// ---------- Exercises ----------
+export async function listExercises(chapterId) {
+  const rows = await exercises.list({ filters: { chapterId: toInt(chapterId) } });
+  return rows.sort(byOrderThenName);
+}
+export async function getExercise(id) {
+  const i = toInt(id);
+  if (!i) return null;
+  try { return await exercises.read(i); } catch { return null; }
+}
+export async function getExerciseBySlug(chapterId, slug) {
+  const rows = await exercises.list({ filters: { chapterId: toInt(chapterId), slug: slug?.trim() } });
+  return rows?.[0] || null;
+}
+export async function createExercise(data) {
+  const chapterId = toInt(data.chapterId);
+  if (!chapterId) throw new Error('chapterId required');
+  return exercises.create({
+    chapterId,
+    slug: data.slug?.trim(),
+    name: data.name?.trim(),
+    sortOrder: toInt(data.sortOrder) ?? 0
+  });
+}
+export async function updateExercise(id, data) {
+  return exercises.update(toInt(id), {
+    slug: data.slug?.trim(),
+    name: data.name?.trim(),
+    sortOrder: toInt(data.sortOrder) ?? 0
+  });
+}
+export async function deleteExercise(id) {
+  const i = toInt(id);
+  const qs = await questions.list({ filters: { exerciseId: i }, limit: 1 });
+  if (qs.length) throw fkError('Exercise has questions');
+  return exercises.delete(i);
+}
+
+// ---------- Domain reads ----------
+export async function getSyllabusForTcode(tcodeId) {
+  const tId = toInt(tcodeId);
+  const [tcode, chs] = await Promise.all([getTcode(tId), listChapters(tId)]);
+  const exByChapter = Object.fromEntries(
+    await Promise.all(chs.map(async (c) => [c.id, await listExercises(c.id)]))
+  );
+  return { tcode, chapters: chs, exercisesByChapter: exByChapter };
+}
+
+export async function getSynopsis(tcodeId) {
+  const tId = toInt(tcodeId);
+  const tcode = await getTcode(tId);
+  const chs = await listChapters(tId);
+  return {
+    id: tcode?.id,
+    slug: tcode?.slug,
+    name: tcode?.name,
+    description: tcode?.description ?? '',
+    image: tcode?.image ?? '',
+    chapters: await Promise.all(
+      chs.map(async (c) => ({
+        id: c.id,
+        tcodeId: c.tcodeId,
+        slug: c.slug,
+        name: c.name,
+        sortOrder: c.sortOrder ?? 0,
+        exercises: (await listExercises(c.id)).map((e) => ({
+          id: e.id,
+          chapterId: e.chapterId,
+          slug: e.slug,
+          name: e.name,
+          sortOrder: e.sortOrder ?? 0
+        }))
+      }))
+    )
+  };
+}
+
+export async function getFormOptions(tcodeId) {
+  const tId = toInt(tcodeId);
+  const chs = await listChapters(tId);
+  const chaptersOpts = chs.map((c) => ({ value: c.id, label: c.name }));
+  const exercisesByChapter = {};
+  for (const c of chs) {
+    const exs = await listExercises(c.id);
+    exercisesByChapter[c.id] = exs.map((e) => ({ value: e.id, label: e.name }));
+  }
+  return { chapters: chaptersOpts, exercisesByChapter };
+}
