@@ -4,6 +4,8 @@
 
   export let data;
 
+  console.log("data" ,data);
+  
   const lc = (s) => (s ?? "").toString().trim().toLowerCase();
 
   // Base inputs

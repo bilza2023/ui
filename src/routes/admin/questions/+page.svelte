@@ -40,8 +40,8 @@
     const row = e.detail;
     if (!row) return;
     goto(row.type === 'note'
-      ? `/note/${encodeURIComponent(row.slug)}`
-      : `/player?slug=${encodeURIComponent(row.slug)}`
+      ? `/notes?filename=${encodeURIComponent(row.slug)}`
+      : `/player?filename=${encodeURIComponent(row.slug)}`
     );
   }
 
