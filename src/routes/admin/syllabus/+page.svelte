@@ -16,7 +16,9 @@ console.log("items", items);
   { id:'chap',   label:'Chapters',accessor:'chapterCount',kind:'number',sortable:true, align:'right', width:'96px' },
   { id:'edited', label:'Edited', accessor:'editedAt',    kind:'date',  format:'relative', sortable:true, width:'120px' },
   { id:'act',    label:'',       accessor:'__',          kind:'actions', action:['chapters'], align:'right', width:'160px' },
-  { id:'act',    label:'',       accessor:'__',          kind:'actions', action:['addChapter'], align:'right', width:'160px' }
+  { id:'act',    label:'',       accessor:'__',          kind:'actions', action:['addChapter'], align:'right', width:'160px' },
+  { id:'act',    label:'',       accessor:'__',          kind:'actions', action:['edit'], align:'right', width:'160px' }
+  
 ];
 
   // Search across text + non-text columns
@@ -38,14 +40,15 @@ function handleRowClick(ev) {
 
 function handleAction(ev) {
   const { actionId, row } = ev.detail;
-  if (actionId === 'addChapter') return goto(`/admin/syllabus/chapters/create?tcodeId=${row.id}`);
-  if (actionId === 'chapters')    return goto(`/admin/syllabus/chapters?tcodeId=${row.id}`);
-  if (actionId === 'delete')  return console.log('delete', row.slug);
+  if (actionId === 'addChapter') return goto(`/admin/chapters/create?tcodeId=${row.id}`);
+  if (actionId === 'chapters')    return goto(`/admin/chapters?tcodeId=${row.id}`);
+  if (actionId === 'edit')   return goto(`/admin/syllabus/edit?tcodeId=${row.id}`);
 }
 </script>
 
 <section class="wrap">
   <h1>Tcode</h1>
+  <!-- since this does not  have a parent so it can have this link -->
   <h3><a href="/admin/syllabus/create">Add  New Tcode</a></h3>
 
   <ListTable

@@ -13,7 +13,9 @@
     { id:'slug',   label:'Slug',     accessor:'slug',      kind:'text',   sortable:true },
     { id:'order',  label:'Order',    accessor:'sortOrder', kind:'number', sortable:true, align:'right', width:'88px' },
     { id:'edited', label:'Edited',   accessor:'updatedAt', kind:'date',   format:'relative', sortable:true, width:'120px' },
-    { id:'act',    label:'',         accessor:'__',        kind:'actions', action:['questions'], align:'right', width:'120px' }
+    { id:'act',    label:'', accessor:'__',kind:'actions', action:['questions'], align:'right', width:'120px' },
+    { id:'act',    label:'', accessor:'__',kind:'actions', action:['editExercise'], align:'right', width:'120px' }
+
   ];
 
   const searchKeys = ['name','slug'];
@@ -23,7 +25,10 @@
   function handleAction(ev) {
     const { actionId, row } = ev.detail;
     if (actionId === 'questions') {
-      goto(`/admin/questions?tcode=${tcode?.slug ?? ''}&chapter=${chapter?.slug ?? ''}&exercise=${row.slug}`);
+      goto(`/admin/questions/create?tcodeId=${tcode.id}&chapterId=${chapter.id}&exerciseId=${row.id}`);
+    }
+    if (actionId === 'editExercise') {
+      goto(`/admin/exercises/edit?exerciseId=${row.id}`);
     }
   }
 </script>

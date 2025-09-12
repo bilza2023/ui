@@ -16,7 +16,9 @@
     { id:'order',  label:'Order',    accessor:'sortOrder', kind:'number',sortable:true, align:'right', width:'88px' },
     { id:'edited', label:'Edited',   accessor:'updatedAt', kind:'date',  format:'relative', sortable:true, width:'120px' },
     { id:'act',    label:'',         accessor:'__',        kind:'actions', action:['exercises'], align:'right', width:'120px' },
-    { id:'act',    label:'',         accessor:'__',        kind:'actions', action:['addExercise'], align:'right', width:'120px' }
+    { id:'act',    label:'',         accessor:'__',        kind:'actions', action:['addExercise'], align:'right', width:'120px' },
+    { id:'act',    label:'',         accessor:'__',        kind:'actions', action:['edit'], align:'right', width:'120px' }
+    
   ];
 
   const searchKeys = ['name','slug'];
@@ -26,10 +28,13 @@
   function handleAction(ev) {
     const { actionId, row } = ev.detail;
     if (actionId === 'addExercise') {
-      goto(`/admin/syllabus/exercises/create?tcodeId=${tcode.id}&chapterId=${row.id}`);
+      goto(`/admin/exercises/create?tcodeId=${tcode.id}&chapterId=${row.id}`);
     }
     if (actionId === 'exercises') {
-      goto(`/admin/syllabus/exercises?tcode=${tcode.id}&chapter=${row.id}`);
+      goto(`/admin/exercises?tcode=${tcode.id}&chapter=${row.id}`);
+    }
+    if (actionId === 'edit') {
+      goto(`/admin/chapters/edit?tcodeId=${tcode.id}&chapterId=${row.id}`);
     }
   }
 </script>
