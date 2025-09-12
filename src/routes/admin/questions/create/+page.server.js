@@ -17,20 +17,20 @@ export const actions = {
   add: makeAction({
     spec: {
       // identity + relations
-      slug:       R.str('slug', { required: true }),
+      // slug:       R.str('slug', { required: true }),
       tcodeId:    R.intId('tcodeId', { required: true }),
       chapterId:  R.intId('chapterId', { required: true }),
       exerciseId: R.intId('exerciseId', { required: true }),
 
       // metadata
-      name:       R.str('name', { required: true }),
+      name:        R.str('name', { required: true }),
       description: R.str('description', { required: false }),
       thumbnail:   R.str('thumbnail', { required: false }),
       status:      R.$enum('status', ['draft','ready','published','archived'], { required: true }),
       type:        R.$enum('type', ['note','deck'], { required: true })
     },
     prepare: (v) => ({
-      slug: v.slug.trim(),
+      // slug: v.slug.trim(),
       tcodeId: v.tcodeId,
       chapterId: v.chapterId,
       exerciseId: v.exerciseId,
@@ -41,6 +41,6 @@ export const actions = {
       type: v.type
     }),
     service: (v) => questions.create(v),
-    success: (saved) => ({ ok: true, id: saved?.id, slug: saved?.slug })
+    success: (saved) => ({ ok: true, id: saved?.id })
   })
 };

@@ -92,7 +92,6 @@ export async function createQuestion(payload) {
  
   const data = { ...payload };
   data.name = String(data.name || '').trim();
-  data.slug =  SLUG(data.name);
   data.tcodeId = Number(data.tcodeId);
   data.chapterId = Number(data.chapterId);
   data.exerciseId = Number(data.exerciseId);
@@ -100,7 +99,9 @@ export async function createQuestion(payload) {
   data.description = data.description ?? '';
   data.thumbnail = data.thumbnail ?? '';
 
-  if (!data.slug || !data.tcodeId || !data.chapterId || !data.exerciseId || !data.type) {
+  console.log("data",data);
+
+  if ( !data.tcodeId || !data.chapterId || !data.exerciseId || !data.type) {
     throw new Error('name (or slug), tcodeId, chapterId, exerciseId, and type are required');
   }
 
@@ -111,9 +112,9 @@ export async function createQuestion(payload) {
   try {
     return await crudl.create(data);
   } catch (e) {
-    if ((e?.code === 'DUPLICATE' || e?.code === 'P2002') && data?.slug) {
-      throw new Error(`Question with slug "${data.slug}" already exists`);
-    }
+    // if ((e?.code === 'DUPLICATE' || e?.code === 'P2002') && data?.slug) {
+      // throw new Error(`Question with slug "${data.slug}" already exists`);
+    // }
     throw e;
   }
 }

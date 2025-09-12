@@ -11,7 +11,6 @@
     action: '?/add',
     initial: {
       name: '',
-      slug: '',
       type: 'note',
       status: 'draft',
       description: '',
@@ -22,7 +21,6 @@
     },
     items: [
       { type:'text', name:'name', label:'Name', required:true },
-      { type:'text', name:'slug', label:'Slug', required:true },
       {
         type:'select', name:'type', label:'Type',
         options: () => [
@@ -49,9 +47,9 @@
     ],
     submit: {
       label: 'Create',
-      disabledWhen: (v) => !v.slug?.trim() || !v.name?.trim() || !v.type
+      disabledWhen: (v) =>  !v.name?.trim() || !v.type
     },
-    clearOnSuccess: false,
+    clearOnSuccess: true,
     showErrorsList: true
   };
 

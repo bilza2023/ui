@@ -22,7 +22,7 @@ enum QuestionStatus {
 
 model Question {
    id      Int           @id @default(autoincrement())
-  slug String @unique    // stable external identity
+  // slug String @unique    // stable external identity
  
   tcodeId    Int
   chapterId  Int
