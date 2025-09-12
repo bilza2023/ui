@@ -1,19 +1,26 @@
+// /src/routes/admin/synopsis/tcode/add/+page.server.js
 export const prerender = false;
 
-import * as admin from '$lib/services/adminServices.js';
+import { listTcodes, listChapters, createTcode } from '$lib/services/syllabusService.js';
 import { R } from '$lib/formKit/readers.js';
 import { makeAction } from '$lib/formKit/actionFactory.js';
 import { SLUG } from '$lib/function/slug.js';
 
 export async function load({ setHeaders }) {
-  const rows = await admin.listTcodes();
-  const tcodes = (rows ?? []).map(r => ({
-    slug: r.slug,
-    name: r.name,
-    description: r.description ?? null,
-    image: r.image ?? null,
-    chapterCount: Number(r.chapterCount ?? r._count?.chapters ?? 0)
-  }));
+  const rows = await listTcodes();
+
+  const tcodes = await Promise.all(
+    (rows ?? []).map(async (r) => {
+      const chs = await listChapters(r.id);
+      return {
+        slug: r.slug,
+        name: r.name,
+        description: r.description ?? null,
+        image: r.image ?? null,
+        chapterCount: chs.length
+      };
+    })
+  );
 
   setHeaders({ 'cache-control': 'public, max-age=15' });
   return { tcodes };
@@ -32,7 +39,7 @@ export const actions = {
       const image       = v.image?.trim() || undefined;
       return { slug, name: v.name.trim(), description, image };
     },
-    service: (v) => admin.addTcode(v),
+    service: (v) => createTcode(v),
     success: (_result, v) => ({
       message: `Added ${v.name}`,
       tcode: {
