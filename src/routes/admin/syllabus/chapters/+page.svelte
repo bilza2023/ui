@@ -7,12 +7,16 @@
   const tcode = data.tcode;
   const items = data.items ?? [];
 
+  // console.log("items" , items);
+  console.log("tcode" , tcode);
+
   const columns = [
     { id:'name',   label:'Chapter',  accessor:'name',      kind:'text',  primary:true, sortable:true },
     { id:'slug',   label:'Slug',     accessor:'slug',      kind:'text',  sortable:true },
     { id:'order',  label:'Order',    accessor:'sortOrder', kind:'number',sortable:true, align:'right', width:'88px' },
     { id:'edited', label:'Edited',   accessor:'updatedAt', kind:'date',  format:'relative', sortable:true, width:'120px' },
-    { id:'act',    label:'',         accessor:'__',        kind:'actions', action:['exercises'], align:'right', width:'120px' }
+    { id:'act',    label:'',         accessor:'__',        kind:'actions', action:['exercises'], align:'right', width:'120px' },
+    { id:'act',    label:'',         accessor:'__',        kind:'actions', action:['addExercise'], align:'right', width:'120px' }
   ];
 
   const searchKeys = ['name','slug'];
@@ -21,8 +25,11 @@
 
   function handleAction(ev) {
     const { actionId, row } = ev.detail;
+    if (actionId === 'addExercise') {
+      goto(`/admin/syllabus/exercises/create?tcodeId=${tcode.id}&chapterId=${row.id}`);
+    }
     if (actionId === 'exercises') {
-      goto(`/admin/syllabus/exercises?tcode=${tcode?.slug ?? ''}&chapter=${row.slug}`);
+      goto(`/admin/syllabus/exercises?tcode=${tcode.id}&chapter=${row.id}`);
     }
   }
 </script>

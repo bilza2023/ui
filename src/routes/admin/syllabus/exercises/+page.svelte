@@ -31,9 +31,8 @@
 <section class="wrap">
   <header class="hdr">
     <h1>Exercises {#if tcode && chapter}<span class="tc">/ {tcode.name} · {chapter.name}</span>{/if}</h1>
-    {#if tcode && chapter}
-      <a class="btn" href={`/admin/syllabus/exercises/create?tcode=${tcode.slug}&chapter=${chapter.slug}`}>New Exercise</a>
-    {/if}
+    
+    
   </header>
 
   <ListTable

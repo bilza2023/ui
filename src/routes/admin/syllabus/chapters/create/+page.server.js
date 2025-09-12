@@ -1,16 +1,15 @@
 export const prerender = false;
 
-import { listTcodes, createChapter } from '$lib/services/syllabusService.js';
+import { createChapter } from '$lib/services/syllabusService.js';
 import { R } from '$lib/formKit/readers.js';
 import { makeAction } from '$lib/formKit/actionFactory.js';
 import { SLUG } from '$lib/function/slug.js';
 
-export async function load({ setHeaders }) {
+export async function load({ url, setHeaders }) {
   setHeaders({ 'cache-control': 'public, max-age=0' });
-  const tcodes = await listTcodes();
-  return {
-    tcodeOptions: tcodes.map(t => ({ value: t.id, label: t.name || t.slug }))
-  };
+  const idParam = url.searchParams.get('tcodeId');
+  const tcodeId = idParam ? Number(idParam) : null;
+  return { tcodeId };
 }
 
 export const actions = {

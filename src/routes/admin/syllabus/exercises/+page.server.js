@@ -1,23 +1,23 @@
 export const prerender = false;
 
-import { listTcodes, listChapters, listExercises } from '$lib/services/syllabusService.js';
+import { getTcode, listChapters, listExercises } from '$lib/services/syllabusService.js';
 
 export async function load({ url, setHeaders }) {
-  const tcodeSlug = url.searchParams.get('tcode') || '';
-  const chapterSlug = url.searchParams.get('chapter') || '';
+  const tParam = url.searchParams.get('tcode');
+  const cParam = url.searchParams.get('chapter');
+  const tcodeId = tParam ? Number(tParam) : null;
+  const chapterId = cParam ? Number(cParam) : null;
 
-  const tcodes = await listTcodes();                         // [{ id, slug, name }]
-  const tcode = tcodes.find(t => t.slug === tcodeSlug) || null;
+  const tcode = tcodeId ? await getTcode(tcodeId) : null;
+  const chapters = tcodeId ? await listChapters(tcodeId) : [];
+  const chapter = chapterId ? (chapters.find(c => c.id === chapterId) || null) : null;
 
-  const chapters = tcode ? await listChapters(tcode.id) : []; // [{ id, slug, name, sortOrder, updatedAt }]
-  const chapter = chapters.find(c => c.slug === chapterSlug) || null;
-
-  const exercises = chapter ? await listExercises(chapter.id) : []; // [{ id, slug, name, sortOrder, updatedAt }]
+  const exercises = chapter ? await listExercises(chapter.id) : [];
 
   setHeaders({ 'cache-control': 'public, max-age=15' });
 
   return {
-    tcode:   tcode   ? { id: tcode.id, slug: tcode.slug, name: tcode.name }   : null,
+    tcode:   tcode   ? { id: tcode.id, slug: tcode.slug, name: tcode.name } : null,
     chapter: chapter ? { id: chapter.id, slug: chapter.slug, name: chapter.name } : null,
     items: exercises.map(e => ({
       id: e.id,
