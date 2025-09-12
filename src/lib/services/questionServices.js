@@ -6,7 +6,7 @@
 // ------------------------------------------------------------
 import prisma from '$lib/server/prisma.js';
 import { makeCrudl } from '$lib/crudl/crudl.js';
-
+import { SLUG } from '$lib/function/slug.js';
 /* -------------------- CRUDL base (generic) -------------------- */
 
 const SELECT_META = {
@@ -88,12 +88,31 @@ const crudl = makeCrudl('question', {
 /* -------------------- Question CRUD Operations -------------------- */
 
 export async function createQuestion(payload) {
+  // normalize + auto-slug
+ 
+  const data = { ...payload };
+  data.name = String(data.name || '').trim();
+  data.slug =  SLUG(data.name);
+  data.tcodeId = Number(data.tcodeId);
+  data.chapterId = Number(data.chapterId);
+  data.exerciseId = Number(data.exerciseId);
+  data.status = data.status || 'draft';
+  data.description = data.description ?? '';
+  data.thumbnail = data.thumbnail ?? '';
+
+  if (!data.slug || !data.tcodeId || !data.chapterId || !data.exerciseId || !data.type) {
+    throw new Error('name (or slug), tcodeId, chapterId, exerciseId, and type are required');
+  }
+
+  // ensure mutually exclusive payloads
+  if (data.type === 'deck') data.note = null;
+  if (data.type === 'note') data.deck = null;
+
   try {
-    return await crudl.create(payload);
+    return await crudl.create(data);
   } catch (e) {
-    // Align duplicate message with existing tests: /already exists/i
-    if (e?.code === 'DUPLICATE' && payload?.slug) {
-      throw new Error(`Question with slug "${payload.slug}" already exists`);
+    if ((e?.code === 'DUPLICATE' || e?.code === 'P2002') && data?.slug) {
+      throw new Error(`Question with slug "${data.slug}" already exists`);
     }
     throw e;
   }

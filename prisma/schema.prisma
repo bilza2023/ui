@@ -21,11 +21,9 @@ enum QuestionStatus {
 }
 
 model Question {
-  slug String @id // stable external identity
-  // tcode        String                       // subject/book (points to SyllabusTcode.slug)
-  // chapter      Int                           // chapter number (sort order)
-  // exercise     String                        // exercise slug (points to SyllabusExercise.slug)
-
+   id      Int           @id @default(autoincrement())
+  slug String @unique    // stable external identity
+ 
   tcodeId    Int
   chapterId  Int
   exerciseId Int
