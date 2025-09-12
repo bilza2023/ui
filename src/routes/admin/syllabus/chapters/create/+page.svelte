@@ -1,34 +1,40 @@
-
 <script>
   import '$lib/styles/tokens.css';
   import FormUi from '$lib/formUi/FormUi.svelte';
+  import { goto } from '$app/navigation';
   export let data;
 
-  const t = data?.tcode ?? {};
-  const form = {
-    id: 'createChapter',
-    title: `Create Chapter — ${t.name} (${t.slug})`,
+  const config = {
+    id: 'addChapter',
+    title: 'Add Chapter',
     action: '?/add',
-    initial: { tcodeId: t.id, name:'', sortOrder: 0 },
+    initial: { tcodeId: '', name: '', sortOrder: 0 },
     items: [
-      { type:'hidden', name:'tcodeId', value: t.id },
-      { type:'text', name:'name', label:'Name', required:true },
-      { type:'number', name:'sortOrder', label:'Sort Order', min:0, step:1 }
+      { type:'select', name:'tcodeId', label:'Course', required:true, options: () => data.tcodeOptions },
+      { type:'text', name:'name', label:'Name', required:true, placeholder:'e.g. Physical Quantities and Measurement' },
+      { type:'number', name:'sortOrder', label:'Sort order', min:0, step:1 },
+      { type:'note', text:'Slug is auto-generated from Name.' }
     ],
-    submit: { label:'Create', disabledWhen: v => !v.tcodeId || !v.name?.trim() },
-    clearOnSuccess: true
+    submit: { label: 'Add Chapter', disabledWhen: v => !v.tcodeId || !v.name?.trim() },
+    clearOnSuccess: true,
+    showErrorsList: true
   };
+
+  function onSuccess(e) {
+    const { tcodeId } = e.detail || {};
+    if (tcodeId) goto(`/admin/syllabus/chapters?tcodeId=${tcodeId}`);
+  }
 </script>
 
-<div class="wrap">
-  <nav class="crumbs">
-    <a href={`/admin/syllabus/chapters?tcodeId=${t.id}`}>Chapters</a> / Create
-  </nav>
-
-  <FormUi config={form}/>
-</div>
+<section class="wrap">
+  <FormUi {config} on:success={onSuccess} />
+</section>
 
 <style>
-  .wrap { max-width: 800px; margin: 0 auto; padding: 1rem; }
-  .crumbs { margin-bottom: 1rem; opacity: 0.9; }
+  .wrap{
+    width: min(90vw, 1100px);
+    margin-inline: auto;
+    padding: 1rem;
+    color: var(--primaryText);
+  }
 </style>

@@ -1,0 +1,208 @@
+generator client {
+provider = "prisma-client-js"
+}
+
+datasource db {
+provider = "sqlite"
+url = env("DATABASE_URL")
+}
+
+enum HomeCategory {
+blog
+videos
+courses
+}
+
+enum QuestionStatus {
+draft
+ready
+published
+archived
+}
+
+model Question {
+slug String @id // stable external identity
+// tcode String // subject/book (points to SyllabusTcode.slug)
+// chapter Int // chapter number (sort order)
+// exercise String // exercise slug (points to SyllabusExercise.slug)
+
+tcodeId Int
+chapterId Int
+exerciseId Int
+
+type String // "deck" | "note" | (future: "quiz", "video", ...)
+
+////////////////////////////////////////
+homeCategory HomeCategory? // or String?
+homeSort Int @default(0)
+homePinned Boolean @default(false)
+////////////////////////////////////////
+// ── Metadata ──
+name String?
+description String?
+tags Json?
+status QuestionStatus @default(draft)
+thumbnail String?
+sortOrder Int? // manual ordering inside exercise
+timed Boolean @default(false)
+
+// ── Payloads ──
+deck Json? // only when type="deck"
+note String? // only when type="note"
+
+createdAt DateTime @default(now())
+editedAt DateTime @updatedAt
+
+tcode SyllabusTcode @relation(fields: [tcodeId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+chapter SyllabusChapter @relation(fields: [chapterId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+exercise SyllabusExercise @relation(fields: [exerciseId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+@@index([tcodeId])
+@@index([chapterId])
+@@index([exerciseId])
+}
+
+model Comments {
+id String @id @default(cuid())
+created_at DateTime @default(now())
+
+content_id String
+user_id String
+text String
+response String?
+status String @default("new") // 'new' | 'answered' | 'bad'
+
+@@index([content_id, created_at], name: "idx_comment_content_time")
+@@index([user_id, content_id], name: "idx_comment_user_content")
+}
+
+model Likes {
+id String @id @default(cuid())
+created_at DateTime @default(now())
+content_id String
+user_id String
+
+@@unique([user_id, content_id], name: "uniq_user_content_reaction")
+@@index([user_id, content_id], name: "idx_user_content")
+}
+
+model Subscription {
+id String @id @default(cuid())
+created_at DateTime @default(now())
+
+user_id String
+tcode String
+
+start_date DateTime
+duration Int
+
+@@index([user_id, tcode])
+}
+
+model AppSetting {
+id String @id @default(cuid())
+key String @unique
+value Json
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+@@map("app_settings")
+}
+
+enum StudentMessageCategory {
+general
+}
+
+model StudentMessage {
+id String @id @default(cuid())
+user_id String
+category StudentMessageCategory @default(general)
+message String
+read Boolean @default(false)
+created_at DateTime @default(now())
+
+@@index([user_id, read, created_at])
+@@index([user_id, created_at])
+}
+
+model User {
+id String @id @default(cuid())
+email String @unique
+password_hash String
+created_at DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+@@index([email])
+}
+
+model SyllabusTcode {
+id Int @id @default(autoincrement())
+slug String @unique // canonical identity
+name String
+description String?
+image String?
+
+chapters SyllabusChapter[]
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+questions Question[]
+}
+
+model SyllabusChapter {
+id Int @id @default(autoincrement())
+tcodeId Int
+slug String
+tcode SyllabusTcode @relation(fields: [tcodeId], references: [id], onDelete: Cascade)
+
+name String
+sortOrder Int @default(0)
+
+exercises SyllabusExercise[]
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+questions Question[]
+
+@@unique([tcodeId, slug])
+@@index([tcodeId])
+@@index([tcodeId, sortOrder])
+}
+
+model SyllabusExercise {
+id Int @id @default(autoincrement())
+chapterId Int
+slug String
+chapter SyllabusChapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+name String
+sortOrder Int @default(0)
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+questions Question[]
+// Question Question[]
+
+@@unique([chapterId, slug])
+@@index([chapterId])
+@@index([chapterId, sortOrder])
+}
+
+model HomeIndexEntry {
+id Int @id @default(autoincrement())
+category String // "featured" | "videos" | "blog" | "courses" | ...
+type String // "deck" | "note" | "blog" | "course" | "link" (free text for now)
+title String
+href String // absolute or relative
+description String?
+thumbnail String? // absolute (/ or http) or bare filename
+pinned Boolean @default(false)
+sortOrder Int @default(0)
+status String @default("active") // kept for future use
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+@@unique([category, href], map: "uniq_homeindex_category_url")
+@@index([category, sortOrder, pinned], map: "idx_homeindex_cat_sort_pin")
+}

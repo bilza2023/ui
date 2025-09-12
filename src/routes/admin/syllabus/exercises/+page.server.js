@@ -1,20 +1,30 @@
-// /src/routes/admin/syllabus/exercises/+page.server.js
 export const prerender = false;
 
-import { getChapter, getTcode, listExercises } from '$lib/services/syllabusService.js';
+import { listTcodes, listChapters, listExercises } from '$lib/services/syllabusService.js';
 
 export async function load({ url, setHeaders }) {
-  const chapterId = Number.parseInt(url.searchParams.get('chapterId') || '', 10);
+  const tcodeSlug = url.searchParams.get('tcode') || '';
+  const chapterSlug = url.searchParams.get('chapter') || '';
 
-  let chapter = null, tcode = null, exercises = [];
-  if (chapterId) {
-    chapter = await getChapter(chapterId).catch(() => null);
-    if (chapter) {
-      tcode = await getTcode(chapter.tcodeId).catch(() => null);
-      exercises = await listExercises(chapterId);
-    }
-  }
+  const tcodes = await listTcodes();                         // [{ id, slug, name }]
+  const tcode = tcodes.find(t => t.slug === tcodeSlug) || null;
+
+  const chapters = tcode ? await listChapters(tcode.id) : []; // [{ id, slug, name, sortOrder, updatedAt }]
+  const chapter = chapters.find(c => c.slug === chapterSlug) || null;
+
+  const exercises = chapter ? await listExercises(chapter.id) : []; // [{ id, slug, name, sortOrder, updatedAt }]
 
   setHeaders({ 'cache-control': 'public, max-age=15' });
-  return { chapterId: chapterId || 0, chapter, tcode, exercises };
+
+  return {
+    tcode:   tcode   ? { id: tcode.id, slug: tcode.slug, name: tcode.name }   : null,
+    chapter: chapter ? { id: chapter.id, slug: chapter.slug, name: chapter.name } : null,
+    items: exercises.map(e => ({
+      id: e.id,
+      slug: e.slug,
+      name: e.name,
+      sortOrder: e.sortOrder ?? 0,
+      updatedAt: e.updatedAt ?? null
+    }))
+  };
 }

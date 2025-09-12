@@ -1,4 +1,3 @@
-
 # ListTable Lite v1 — Fast, Reusable Data Tables
 
 A tiny, generic Svelte table with **local search**, **local sort**, **row click**, and **action buttons**. No server mode or pagination. Copy, wire, ship.&#x20;
@@ -7,9 +6,9 @@ A tiny, generic Svelte table with **local search**, **local sort**, **row click*
 
 ## Why this exists
 
-* Standardize **row shape**, **column schema**, **events**.
-* Keep lists **payload-light** and client-fast.
-* Zero hidden refetch logic. All filtering/sorting is local.&#x20;
+- Standardize **row shape**, **column schema**, **events**.
+- Keep lists **payload-light** and client-fast.
+- Zero hidden refetch logic. All filtering/sorting is local.&#x20;
 
 ---
 
@@ -27,16 +26,16 @@ Generic. No app imports.&#x20;
 
 ### Props
 
-| Prop            | Type                    |                       Default | Notes                                                                                                                                                                                                         |
-| --------------- | ----------------------- | ----------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`         | `any[]`                 |                          `[]` | Current page rows only. Normalize before passing.                                                                                                                                                             |
-| `columns`       | `Column[]`              |                          `[]` | Declarative schema. `accessor` must exist on every row.                                                                                                                                                       |
-| `rowKey`        | `string`                |                        `"id"` | Unique per row (e.g. `"id"` or `"slug"`).                                                                                                                                                                     |
-| `searchable`    | `boolean`               |                        `true` | Show/hide the search bar.                                                                                                                                                                                     |
-| `searchKeys`    | `string[] \| undefined` |                   `undefined` | **Search scope.** If omitted, the table searches all columns whose `kind` is **`text`** (by their `accessor`). To include non-text columns (e.g. `badge`, `number`, `date`), supply `searchKeys` explicitly.  |
-| `thumbBaseUrl`  | `string`                |                          `""` | Prefix for filename thumbs. Full URLs or `/absolute` paths are used as-is.                                                                                                                                    |
-| `fallbackThumb` | `string`                | `"/media/images/taleem.webp"` | Used when no thumb is present.                                                                                                                                                                                |
-| `emptyMessage`  | `string`                |          `"Nothing here yet"` | Shown when filtered list is empty.                                                                                                                                                                            |
+| Prop            | Type                    |                       Default | Notes                                                                                                                                                                                                        |
+| --------------- | ----------------------- | ----------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `items`         | `any[]`                 |                          `[]` | Current page rows only. Normalize before passing.                                                                                                                                                            |
+| `columns`       | `Column[]`              |                          `[]` | Declarative schema. `accessor` must exist on every row.                                                                                                                                                      |
+| `rowKey`        | `string`                |                        `"id"` | Unique per row (e.g. `"id"` or `"slug"`).                                                                                                                                                                    |
+| `searchable`    | `boolean`               |                        `true` | Show/hide the search bar.                                                                                                                                                                                    |
+| `searchKeys`    | `string[] \| undefined` |                   `undefined` | **Search scope.** If omitted, the table searches all columns whose `kind` is **`text`** (by their `accessor`). To include non-text columns (e.g. `badge`, `number`, `date`), supply `searchKeys` explicitly. |
+| `thumbBaseUrl`  | `string`                |                          `""` | Prefix for filename thumbs. Full URLs or `/absolute` paths are used as-is.                                                                                                                                   |
+| `fallbackThumb` | `string`                | `"/media/images/taleem.webp"` | Used when no thumb is present.                                                                                                                                                                               |
+| `emptyMessage`  | `string`                |          `"Nothing here yet"` | Shown when filtered list is empty.                                                                                                                                                                           |
 
 ### Column schema
 
@@ -45,13 +44,13 @@ type Column = {
   id: string;
   label: string;
   accessor: string; // e.g. "name"
-  kind?: 'text'|'badge'|'date'|'thumbnail'|'number'|'actions';
+  kind?: "text" | "badge" | "date" | "thumbnail" | "number" | "actions";
   primary?: boolean;
   sortable?: boolean;
-  align?: 'left'|'center'|'right';
+  align?: "left" | "center" | "right";
   width?: string;
-  format?: 'relative'|'date'|'datetime'; // for kind:'date'
-  action?: string[];                      // for kind:'actions'
+  format?: "relative" | "date" | "datetime"; // for kind:'date'
+  action?: string[]; // for kind:'actions'
 };
 ```
 
@@ -59,8 +58,8 @@ type Column = {
 
 ### Events
 
-* `rowClick` → emits the **row** when the primary cell is clicked.
-* `action` → emits `{ actionId, row }` for action buttons.&#x20;
+- `rowClick` → emits the **row** when the primary cell is clicked.
+- `action` → emits `{ actionId, row }` for action buttons.&#x20;
 
 ---
 
@@ -90,9 +89,9 @@ Keep rows light. Do not include heavy bodies.&#x20;
 
 ### Behavior
 
-* **Case-insensitive contains** match on selected fields.
-* If you do **not** pass `searchKeys`, the table searches **all columns whose `kind` is `text`** by using their `accessor` names. Columns with other kinds (`badge`, `date`, `number`, `thumbnail`, `actions`) are **not** searched by default.&#x20;
-* Non-string values are stringified; provide strings for best results.&#x20;
+- **Case-insensitive contains** match on selected fields.
+- If you do **not** pass `searchKeys`, the table searches **all columns whose `kind` is `text`** by using their `accessor` names. Columns with other kinds (`badge`, `date`, `number`, `thumbnail`, `actions`) are **not** searched by default.&#x20;
+- Non-string values are stringified; provide strings for best results.&#x20;
 
 ### Common setups
 
@@ -125,7 +124,9 @@ Dates often render as `kind:'date'` and are excluded by default. If you need dat
 
 ```js
 // when normalizing rows
-editedAtIso: r?.editedAt ? new Date(r.editedAt).toISOString().slice(0,10) : '—'
+editedAtIso: r?.editedAt
+  ? new Date(r.editedAt).toISOString().slice(0, 10)
+  : "—";
 ```
 
 ```svelte
@@ -139,11 +140,78 @@ Change the column `kind` to `'text'` if you want it included without `searchKeys
 { id:'status', label:'Status', accessor:'status', kind:'text' }
 ```
 
+### Links and Buttons (navigation patterns)
+
+**Row → link (primary click)**
+
+```svelte
+<script>
+  import { goto } from '$app/navigation';
+  function hrefFor(row){
+    if (row.type === 'note')  return `/notes?filename=${row.slug}`;
+    if (row.type === 'deck')  return `/player?filename=${row.slug}`;
+    if (row.type === 'course')return `/syllabus?tcode=${row.slug}`;
+    return '';
+  }
+  function handleRowClick(e){
+    const row = e.detail;
+    const href = hrefFor(row);
+    if (href) goto(href);
+  }
+</script>
+
+<ListTable on:rowClick={handleRowClick} ... />
+```
+
+**Single button per row**
+
+```svelte
+const columns = [
+  /* …other cols… */
+  { id:'act', label:'', accessor:'__', kind:'actions', action:['chapters'], align:'right', width:'120px' }
+];
+
+function handleAction(e){
+  const { actionId, row } = e.detail;
+  if (actionId === 'chapters') goto(`/admin/syllabus/chapters?slug=${row.slug}`);
+}
+```
+
+**Multiple buttons per row**
+
+```svelte
+{ id:'act', label:'', accessor:'__', kind:'actions', action:['preview','edit','delete'] }
+function handleAction(e){
+  const { actionId, row } = e.detail;
+  if (actionId === 'preview') goto(`/player?filename=${row.slug}`);
+  else if (actionId === 'edit') goto(`/admin/${row.type}/edit?slug=${row.slug}`);
+  else if (actionId === 'delete') console.log('delete', row.slug);
+}
+```
+
+**Disable row click**
+
+- Omit `on:rowClick`, or bind a no-op: `function handleRowClick(_) {}`.
+
+**External link**
+
+```svelte
+function handleRowClick(e){
+  const url = computeExternalUrl(e.detail); // e.g., row.sourceUrl
+  if (url) window.open(url, '_blank', 'noopener');
+}
+```
+
+**Notes**
+
+- Buttons come from a column with `kind:'actions'` and `action:['id', …]`. Handle them in `on:action`.&#x20;
+- Row clicks emit the full row; you decide navigation.&#x20;
+
 ### Quick diagnosis
 
-* “Search only matches the title” → You omitted `searchKeys` and only the `name` column is `kind:'text'`. Add `searchKeys` or set more columns to `kind:'text'`.
-* “Searching ‘published’ finds nothing” → `status` is `kind:'badge'`. Add `'status'` to `searchKeys` (or switch to `kind:'text'`).
-* “Searching dates doesn’t work” → Add a string field like `editedAtIso` and include it in `searchKeys`.&#x20;
+- “Search only matches the title” → You omitted `searchKeys` and only the `name` column is `kind:'text'`. Add `searchKeys` or set more columns to `kind:'text'`.
+- “Searching ‘published’ finds nothing” → `status` is `kind:'badge'`. Add `'status'` to `searchKeys` (or switch to `kind:'text'`).
+- “Searching dates doesn’t work” → Add a string field like `editedAtIso` and include it in `searchKeys`.&#x20;
 
 ---
 
@@ -161,21 +229,21 @@ Loader + page wiring example is unchanged; see sample in this doc for questions 
 
 ## Troubleshooting
 
-* Undefined cells → accessor mismatch.
-* Empty table → bad/duplicate `rowKey`.
-* Search “not working” → `searchKeys` missing the fields you expect or values not strings.
-* Clicks do nothing → you didn’t bind `on:rowClick` / `on:action`.
-* Thumbs missing → set `thumbBaseUrl` for filenames.&#x20;
+- Undefined cells → accessor mismatch.
+- Empty table → bad/duplicate `rowKey`.
+- Search “not working” → `searchKeys` missing the fields you expect or values not strings.
+- Clicks do nothing → you didn’t bind `on:rowClick` / `on:action`.
+- Thumbs missing → set `thumbBaseUrl` for filenames.&#x20;
 
 ---
 
 ## Done definition
 
-* Title shows.
-* Primary click navigates.
-* Actions emit and post.
-* Search filters as designed.
-* Sort toggles on declared columns.
-* No console errors.&#x20;
+- Title shows.
+- Primary click navigates.
+- Actions emit and post.
+- Search filters as designed.
+- Sort toggles on declared columns.
+- No console errors.&#x20;
 
 ---

@@ -18,5 +18,5 @@ export async function load({ setHeaders }) {
   );
 
   setHeaders({ 'cache-control': 'public, max-age=15' });
-  return { tcodes };
+  return { items: tcodes  };
 }
