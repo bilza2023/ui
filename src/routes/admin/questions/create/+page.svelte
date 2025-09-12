@@ -38,12 +38,13 @@
         ]
       },
       { type:'text', name:'thumbnail', label:'Thumbnail URL' },
-      { type:'textarea', name:'description', label:'Description', rows:3 },
+      { type:'text', name:'description', label:'Description'},
 
       // locked from URL
       { type:'hidden', name:'tcodeId', value: tcodeId },
       { type:'hidden', name:'chapterId', value: chapterId },
-      { type:'hidden', name:'exerciseId', value: exerciseId }
+      { type:'hidden', name:'exerciseId', value: exerciseId },
+      { type:'textarea', name:'noteOrDeck', label:'Note/Deck', rows:6 },
     ],
     submit: {
       label: 'Create',
