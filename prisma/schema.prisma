@@ -81,7 +81,6 @@ model Likes {
   created_at DateTime @default(now())
   content_id String
   user_id    String
-
   @@unique([user_id, content_id], name: "uniq_user_content_reaction")
   @@index([user_id, content_id], name: "idx_user_content")
 }
