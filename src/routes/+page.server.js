@@ -1,21 +1,35 @@
 // /src/routes/+page.server.js
 export const prerender = false;
 
-// import { listHomeBlogEntries } from '$lib/services/questionServices.js';
-// import { syllabusService } from '$lib/services/syllabusService.js';
+import { questions } from '$lib/services/questionServices.js';
 
-import {data} from "../lib/ui-demo-data/homepage-demo-data.js"
 export async function load({ setHeaders }) {
-  // const [blogRaw, courseCards] = await Promise.all([
-  //   listHomeBlogEntries({}),
-  //   syllabusService.listCoursesAsCards()
-  // ]);
+  // Fetch only questions pinned to home
+  const rows = await questions.list({
+    filters: { },
+    includePayload: false
+  });
 
-  // // Ensure stable ids for Svelte keyed each
-  // const blogCards = blogRaw.map((q, i) => ({ id: q.id ?? `q_${q.slug ?? i}`, ...q }));
+  console.log("rows" ,rows);
+  // Keep only those with homeCategory set
+  const homeRows = rows.filter(r => r.homeCategory);
 
-  // const questions = [...blogCards, ...courseCards];
+  // Normalize: stable id, card shape for ListTable
+  const questionsData = homeRows.map((q, i) => ({
+    id: q.id ?? `q_${i}`,
+    slug: q.slug,
+    name: q.name,
+    type: q.type,
+    tcode: q.tcodeId ? String(q.tcodeId) : '',
+    chEx: q.chapterId && q.exerciseId ? `Ch ${q.chapterId} · Ex ${q.exerciseId}` : '—',
+    status: q.status ?? '—',
+    thumbnail: q.thumbnail ?? '',
+    editedAt: q.editedAt ?? null,
+    homeCategory: q.homeCategory,
+    homeSort: q.homeSort ?? 0,
+    homePinned: q.homePinned ?? false
+  }));
 
   setHeaders({ 'cache-control': 'public, max-age=30' });
-  return { questions:data };
+  return { questions: questionsData };
 }

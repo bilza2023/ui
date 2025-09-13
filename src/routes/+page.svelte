@@ -3,8 +3,7 @@
   import UCard from '../lib/components/UCard.svelte';
   
   export let data;
-  // console.log("data" , data);
-
+  
   // Chips mapper for UQCard
   const mapToBodyItems = (row) => [
     row?.category ? { label: 'category',     value: row.category } : null,
@@ -16,14 +15,17 @@
   $: questions = data?.questions ?? [];
   $: types = ["videos" , "blog","courses" ]
 
-  let activeType = 'videos';
+  let activeCategory = 'videos';
 
   function onSelect(e) {
-    activeType = e.detail.type;
+    activeCategory = e.detail.type;
   }
  
 
-  $: filtered = questions.filter(q => q.category === activeType);
+  $: filtered = questions.filter(q => q.homeCategory === activeCategory);
+  // $: filtered = questions;
+  console.log("data" , data);
+
 </script>
 
 <BulletsNav {types} on:select={onSelect} />

@@ -1,6 +1,6 @@
 
 // demoRows — paste in +page.svelte and set: const filteredItems = demoRows;
-const data = [
+export const data = [
     {
       id: 'course_fbise9physics',
       type: 'course',
