@@ -4,91 +4,53 @@
   import { goto } from '$app/navigation';
 
   export let data;
+  const items = data.items ?? [];
 
-  // Normalize rows to match column accessors
-  const raw = Array.isArray(data?.items) ? data.items : [];
-  const items = raw.map((r) => {
-    const ch = r?.chapter != null && r?.chapter !== '' ? `Ch ${r.chapter}` : '';
-    const ex = r?.exercise ? (ch ? ` · ${r.exercise}` : r?.exercise) : '';
-    return {
-      id: r.slug, // stable key
-      slug: r.slug,
-      name: r?.name ?? r?.title ?? r?.slug ?? 'Untitled',
-      type: r?.type ?? '—',
-      tcode: r?.tcode ?? '—',
-      chEx: ch || ex ? `${ch}${ex}` : '—',
-      status: r?.status ?? '—',
-      editedAt: r?.editedAt ?? r?.updatedAt ?? r?.createdAt ?? null,
-      thumbnail: r?.thumbnail ?? null
-    };
-  });
-
-  // Declarative columns — accessors MUST match keys in items above
   const columns = [
-    { id: 'thumbnail', label: '', accessor: 'thumbnail', kind: 'thumbnail', width: 'sm' },
-    { id: 'name',      label: 'Title',   accessor: 'name',      primary: true, sortable: true },
-    { id: 'type',      label: 'Type',    accessor: 'type',      kind: 'badge', width: 'sm', sortable: true },
-    { id: 'tcode',     label: 'Subject', accessor: 'tcode',     width: 'sm' },
-    { id: 'chEx',      label: 'Ch/Ex',   accessor: 'chEx',      width: 'md' },
-    { id: 'status',    label: 'Status',  accessor: 'status',    kind: 'badge', width: 'sm' },
-    { id: 'editedAt',  label: 'Edited',  accessor: 'editedAt',  kind: 'date', format: 'relative', width: 'sm' },
-    { id: 'actions',   label: '',        kind: 'actions', action: ['edit','delete'], align: 'right', width: 'sm' }
+    { id:'thumb',   label:'',        accessor:'thumbnail', kind:'thumbnail', width:'60px' },
+    { id:'name',    label:'Title',   accessor:'name',      kind:'text',      primary:true, sortable:true },
+    { id:'type',    label:'Type',    accessor:'type',      kind:'badge',     sortable:true, align:'center' },
+    { id:'tcode',   label:'Tcode',   accessor:'tcode',     kind:'text',      sortable:true },
+    { id:'chEx',    label:'Ch · Ex', accessor:'chEx',      kind:'text' },
+    { id:'status',  label:'Status',  accessor:'status',    kind:'badge',     sortable:true, align:'center' },
+    { id:'edited',  label:'Edited',  accessor:'editedAt',  kind:'date',      format:'relative', sortable:true, align:'right', width:'120px' },
+    { id:'actions', label:'',        kind:'actions',       action:['Edit','Delete'], align:'right', width:'150px' }
   ];
 
-  // Row click → viewer route by type
   function onRowClick(e) {
     const row = e.detail;
-    if (!row) return;
-    goto(row.type === 'note'
-      ? `/notes?filename=${encodeURIComponent(row.slug)}`
-      : `/player?filename=${encodeURIComponent(row.slug)}`
-    );
+    goto(`/admin/questions/edit?questionId=${row.id}`);
   }
-
-  // Generic actions → your routes
   function onAction(e) {
-    const { actionId, row } = e.detail || {};
-    if (!row) return;
-
-    if (actionId === 'edit') {
-      goto(`/admin/edit-question?slug=${encodeURIComponent(row.slug)}&questionType=${row.type}`);
-      return;
-    }
-
-    if (actionId === 'delete') {
-      if (confirm(`Delete: ${row.name || row.slug}?`)) {
-        const f = document.createElement('form');
-        f.method = 'post';
-        f.action = '?/delete';
-        const i = document.createElement('input');
-        i.type = 'hidden';
-        i.name = 'slug';
-        i.value = row.slug;
-        f.appendChild(i);
-        document.body.appendChild(f);
-        f.submit();
-      }
+    const { actionId, row } = e.detail;
+    if (actionId === 'Edit') goto(`/admin/questions/edit?questionId=${row.id}`);
+    if (actionId === 'Delete') {
+      const f = document.getElementById('deleteForm');
+      f.elements.id.value = String(row.id);
+      f.requestSubmit();
     }
   }
 </script>
 
-<div class="wrap">
-  <h1 class="pageTitle">Questions</h1>
+<section class="wrap">
+  <h1>Questions</h1>
 
   <ListTable
-    items={items}
-    columns={columns}
+    {items}
+    {columns}
     rowKey="id"
     searchable={true}
-    searchKeys={['name','slug','tcode','chEx','status','type']}
-    thumbBaseUrl="/media/images"
-    emptyMessage="No questions yet."
+    searchKeys={['name','tcode','chEx','status','type']}
     on:rowClick={onRowClick}
     on:action={onAction}
   />
-</div>
+
+  <form id="deleteForm" method="post" action="?/delete" style="display:none">
+    <input type="hidden" name="id" value="">
+  </form>
+</section>
 
 <style>
-  .wrap { padding: 1rem; color: var(--primaryText); }
-  .pageTitle { margin: 0 0 .75rem; font-size: 1.25rem; }
+  .wrap{ margin-inline:auto; width:min(95vw,1100px); padding:1rem; }
+  h1{ margin:0 0 .75rem 0; font-size:1.25rem; color:var(--primaryText); }
 </style>
