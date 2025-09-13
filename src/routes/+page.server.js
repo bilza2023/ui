@@ -2,15 +2,20 @@
 export const prerender = false;
 
 import { questions } from '$lib/services/questionServices.js';
+import { listTcodes } from '$lib/services/syllabusService.js';
 
 export async function load({ setHeaders }) {
+
+  const tcodes = await listTcodes();
+
+  // console.log("tcodes===>" ,tcodes);
+  
   // Fetch only questions pinned to home
   const rows = await questions.list({
     filters: { },
     includePayload: false
   });
 
-  console.log("rows" ,rows);
   // Keep only those with homeCategory set
   const homeRows = rows.filter(r => r.homeCategory);
 
@@ -31,5 +36,5 @@ export async function load({ setHeaders }) {
   }));
 
   setHeaders({ 'cache-control': 'public, max-age=30' });
-  return { questions: questionsData };
+  return { questions: questionsData , tcodes };
 }

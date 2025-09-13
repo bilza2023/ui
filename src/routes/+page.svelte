@@ -4,6 +4,11 @@
   
   export let data;
   
+
+  let showCourse = false;
+  const tcodes = data.tcodes;
+  console.log("tcodes===>" ,tcodes);
+  
   // Chips mapper for UQCard
   const mapToBodyItems = (row) => [
     row?.category ? { label: 'category',     value: row.category } : null,
@@ -27,11 +32,12 @@
   console.log("data" , data);
 
 </script>
-
+<button on:click={()=> showCourse = !showCourse}>Show Courses</button>
 <BulletsNav {types} on:select={onSelect} />
 
+{#if showCourse}
+<!-- {#each filtered as q} -->
 <div class="de">
-  <!-- {#each filtered as q} -->
   <div class="cards">
     {#each filtered as row (row.id)}
       <UCard
@@ -42,10 +48,24 @@
       />
     {/each}
   </div>
-    
+  </div>
+{:else}
+<div class="de">
+  <!-- {#each filtered as q} -->
+  <div class="cards">
+    {#each tcodes as row (row.id)}
+      <UCard
+        title={row.name}
+        href={ row.href || undefined}  
+        thumbnail={row.image}
+        />
+    {/each}
+        <!-- bodyItems={mapToBodyItems(row)} -->
+  </div>    
+</div>
+{/if}    
 
 <!-- {/each} -->
-</div>
 
 
 <style>
