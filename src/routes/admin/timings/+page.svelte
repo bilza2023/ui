@@ -65,7 +65,7 @@
       const res = await fetch(`/admin/timings?id=${encodeURIComponent(id)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(deck)
+        body: JSON.stringify({ deck })
       });
       if (!res.ok) {
         let errMsg: string;
