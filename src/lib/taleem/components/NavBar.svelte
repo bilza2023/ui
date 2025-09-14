@@ -4,7 +4,7 @@
   import { goto } from '$app/navigation';
 
   export let currentTime = 0;
-  export let soundUrl = null;
+  export let hasSound = null;
   export let duration    = 100;
   export let onPlay  = () => {};
   export let onPause = () => {};
@@ -36,7 +36,7 @@
   on:touchstart={handleMove}
 >
   <!-- NEW Browse button -->
-   {#if soundUrl}
+   {#if hasSound}
   <button on:click={onPlay}> ▶️</button>
   <button on:click={onPause}>⏸️</button>
   <button on:click={onStop}>⏹️</button>

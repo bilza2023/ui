@@ -4,8 +4,13 @@ export default class Player {
   constructor(soundUrl) {
     this.sound = new Howl({
       src: [soundUrl],
+      format: ['opus', 'ogg'],
       html5: true
     });
+    
+    this.sound.on('loaderror', (_id, err) => console.error('audio loaderror', err));
+    this.sound.on('playerror', (_id, err) => console.error('audio playerror', err));
+
     this._tickCbs = [];
     this._intervalId = null;
 
@@ -15,6 +20,7 @@ export default class Player {
     this.sound.on('end', () => this._clearTickLoop());
   }
   play() {
+    debugger;
     if (!this.sound.playing()) {
       this.sound.play();
     }

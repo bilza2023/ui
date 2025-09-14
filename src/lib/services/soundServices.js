@@ -1,43 +1,42 @@
-// soundServices.js — one API, two backends, with silent auto-detect.
-// Works for both silent & sounded decks. No console spam.
 
-import {Player , Timer} from '../taleem';   // Howler-backed
+// /src/lib/services/soundServices.js
+// ID-anchored audio lookup. No legacy filename API.
 
-/** Create timing source (Howler if url, Timer otherwise). */
+import { Player, Timer } from '../taleem';
+
+// const AUDIO_BASE = '/media/audio'; // e.g. /media/audio/q33.opus
+const AUDIO_BASE = '/sounds';
+/** Create timing source: Howler Player if url, else silent Timer. */
 export function createSoundPlayer(soundUrl) {
   return soundUrl ? new Player(soundUrl) : new Timer();
 }
 
-/**
- * Probe a URL with HEAD and return true/false without throwing or logging.
- * Pass SvelteKit's fetch from load/onMount to avoid SSR fetch issues.
- */
+/** HEAD probe without logs or throws. Works in SSR and browser. */
 export async function headOk(url, fetchFn = globalThis.fetch) {
   try {
-    const res = await fetchFn(url, { method: 'HEAD', cache: 'no-store' });
-    return !!res.ok;
+    const res = await fetchFn(url, { method: 'HEAD' });
+    return res.ok;
   } catch {
     return false;
   }
 }
 
-/**
- * Detect an .opus for a given filename under /sounds.
- * Returns the URL if it exists, otherwise null.
- * Example: filename="theorem_revision_ch10_11"
- */
-export async function detectSoundUrl(filename, fetchFn = globalThis.fetch) {
-  if (!filename) return null;
-  const url = `/media/sounds/${filename}.opus`;
-  const ok = await headOk(url, fetchFn);
-  return ok ? url : null;
+/** Build canonical audio URL for a question id. */
+export function urlForId(id) {
+  const n = Number(id);
+  if (!Number.isInteger(n) || n <= 0) return null;
+  return `${AUDIO_BASE}/q${n}.opus`;
 }
 
-/**
- * Convenience: detect + create player in one shot.
- * Use this inside onMount AFTER the deck is loaded.
- */
-export async function createDetectedSoundPlayer(filename, fetchFn = globalThis.fetch) {
-  const url = await detectSoundUrl(filename, fetchFn);
+/** Detect playable audio by question id. Returns URL or null. */
+export async function detectSoundById(id, fetchFn = globalThis.fetch) {
+  const url = urlForId(id);
+  if (!url) return null;
+  return (await headOk(url, fetchFn)) ? url : null;
+}
+
+/** Detect then construct a player. Returns { player, soundUrl }. */
+export async function createDetectedSoundPlayerById(id, fetchFn = globalThis.fetch) {
+  const url = await detectSoundById(id, fetchFn);
   return { player: createSoundPlayer(url), soundUrl: url };
 }

@@ -6,6 +6,7 @@
   // UI bits
   import Like from '../../lib/components/Like.svelte';
   import Comment from '../../lib/components/Comment.svelte';
+  import { detectSoundById, createSoundPlayer } from '$lib/services/soundServices.js';
 
   // Taleem module
   import {
@@ -18,7 +19,7 @@
   } from '$lib/taleem';
 
   // audio utils
-  import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
+  // import { createSoundPlayer, detectSoundUrl } from '$lib/services/soundServices.js';
 
   // data from +page.server.js
   export let data;
@@ -54,7 +55,7 @@
   }
 
   // ---- playback state ----
-  let soundUrl = null;
+  let hasSound = false;
   let player = null;
 
   let currentTime = 0;
@@ -62,7 +63,11 @@
   let deckEnd = getDeckEnd(deck);
 
   // ---- controls ----
-  function play()  { player?.play?.(); }
+  function play()  { 
+    debugger;
+    player?.play?.(); 
+  
+  }
   function pause() { player?.pause?.(); }
   function seek(t) {
     if (!player) return;
@@ -78,24 +83,26 @@
     currentSlideIndex = findSlideIndex(deck, 0);
   }
 
-  // ---- audio init (client-only) ----
   onMount(async () => {
-    try {
-      // console.log("Player Deck===>" ,deck);
-      soundUrl = await detectSoundUrl(filename, fetch);  // may return null (silent mode)
-      player = createSoundPlayer(soundUrl);
-      player.onTick((t) => {
-        currentTime = clampTime(deck, t);
-        currentSlideIndex = findSlideIndex(deck, currentTime);
-        if (currentTime >= deckEnd) {
-          currentTime = deckEnd;
-          player.pause();
-        }
-      });
-    } catch {
-      // no audio is fine; slides still render
-    }
-  });
+  try {
+    const url = await detectSoundById(meta.id, fetch); // returns string or null
+    hasSound = !!url;
+    player = createSoundPlayer(url);
+
+    player.onTick((t) => {
+      currentTime = clampTime(deck, t);
+      currentSlideIndex = findSlideIndex(deck, currentTime);
+      if (currentTime >= deckEnd) {
+        currentTime = deckEnd;
+        player.pause();
+      }
+    });
+  } catch {
+    hasSound = false;
+    player = createSoundPlayer(null);
+  }
+});
+
 
   onDestroy(() => { player?.destroy?.(); });
 </script>
@@ -115,7 +122,7 @@
   {currentTime}
   {currentSlideIndex}
   {deckEnd}
-  {soundUrl}
+  {hasSound}
   onPlay={play}
   onPause={pause}
   onStop={stop}
