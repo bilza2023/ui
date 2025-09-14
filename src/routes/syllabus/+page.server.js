@@ -1,74 +1,56 @@
 // /src/routes/syllabus/+page.server.js
 export const prerender = false;
 
-import { getSyllabusForTcode } from '$lib/services/syllabusService.js';
-import {
-  getQuestionsByTcode,
-  getQuestionsByChapter,
-  getQuestionsByExercise
-} from '$lib/services/questionServices.js';
+import { error } from '@sveltejs/kit';
+import { getSynopsis, getTcodeBySlug } from '$lib/services/syllabusService.js';
+import { questions } from '$lib/services/questionServices.js';
 
 export async function load({ url, setHeaders }) {
-  const tcodeSlug = url.searchParams.get('tcode')?.trim() || null;
-  const chapterParam = url.searchParams.get('chapter');
-  const exerciseParam = url.searchParams.get('exercise');
+  setHeaders({ 'cache-control': 'public, max-age=30' });
 
-  // Normalize
-  const chapter =
-    chapterParam !== null && chapterParam !== ''
-      ? Number(chapterParam)
-      : undefined;
+  const tParam = (url.searchParams.get('tcode') || '').trim();
+  if (!tParam) throw error(400, 'tcode required');
 
-  const exercise =
-    exerciseParam !== null && exerciseParam.trim() !== ''
-      ? exerciseParam.trim()
-      : undefined;
-
-  // No tcode → safe, predictable payload so UI never crashes
-  if (!tcodeSlug) {
-    return {
-      tcode: '',
-      selected: { chapter: '', exercise: '' },
-      synopsis: null,
-      items: []
-    };
+  // Resolve tcodeId from slug or numeric
+  let tcodeId = Number.isFinite(Number(tParam)) ? Number(tParam) : null;
+  if (!tcodeId) {
+    const t = await getTcodeBySlug(tParam);
+    if (!t?.id) throw error(404, 'tcode not found');
+    tcodeId = t.id;
   }
 
-  try {
-    // 1) Nested tcode (synopsis)
-    const synopsis = await getSyllabusForTcode(tcodeSlug);
+  // Synopsis: chapters + exercises tree
+  const synopsis = await getSynopsis(tcodeId);
+  if (!synopsis) throw error(404, 'tcode not found');
 
-    // 2) Flat questions list (server-side filter if given)
-    const options = {
-      includePayload: false,
-      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }]
-    };
-
-    let items;
-    if (chapter !== undefined && exercise) {
-      items = await getQuestionsByExercise(tcodeSlug, chapter, exercise, options);
-    } else if (chapter !== undefined) {
-      items = await getQuestionsByChapter(tcodeSlug, chapter, options);
-    } else {
-      items = await getQuestionsByTcode(tcodeSlug, options);
-    }
-
-    // Light caching
-    setHeaders({ 'cache-control': 'public, max-age=30' });
-
-    return {
-      tcode: tcodeSlug,
-      selected: { chapter: chapter ?? '', exercise: exercise ?? '' },
-      synopsis,
-      items
-    };
-  } catch (err) {
-    console.error('[Syllabus SSR] failed:', err?.message || err);
-    return {
-      tcode: tcodeSlug,
-      selected: { chapter: chapter ?? '', exercise: exercise ?? '' },
-      synopsis: null,
-      items: []
-    };
+  // Build id→slug maps for chapter/exercise
+  const chapterSlugById = new Map(synopsis.chapters.map(c => [c.id, c.slug]));
+  const exerciseSlugById = new Map();
+  for (const c of synopsis.chapters) {
+    for (const e of (c.exercises || [])) exerciseSlugById.set(e.id, e.slug);
   }
+
+  // Questions for this tcode
+  const raw = await questions.getByTcodeId(tcodeId);
+
+  // Format items to what <Syllabus /> expects
+  const items = raw.map(q => ({
+    id: q.id,
+    name: q.name,
+    description: q.description,
+    type: q.type,
+    status: q.status,
+    thumbnail: q.thumbnail || '',
+    editedAt: q.editedAt,
+    tcode: synopsis.slug,
+    chapter: chapterSlugById.get(q.chapterId) || '',
+    exercise: exerciseSlugById.get(q.exerciseId) || ''
+  }));
+
+  const selected = {
+    chapter: (url.searchParams.get('chapter') || '').trim(),
+    exercise: (url.searchParams.get('exercise') || '').trim()
+  };
+
+  return { tcode: synopsis.slug, selected, synopsis, items };
 }

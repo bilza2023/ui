@@ -1,68 +1,41 @@
 // /src/routes/player/+page.server.js
-import { error, redirect } from '@sveltejs/kit';
-import { getQuestionBySlug } from '$lib/services/questionServices.js';
-import { normaliseImagePaths } from '../../lib/taleem';
-import { taleemServices as svc} from '../../lib/taleemServices';
-
 export const prerender = false;
 
-function getToken(cookies, request) {
-  const cookie = cookies.get('token');
-  if (cookie) return cookie;
-  const auth = request.headers.get('authorization');
-  if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
-  return null;
-}
+import { error } from '@sveltejs/kit';
+import { questions } from '$lib/services/questionServices.js';
 
-export async function load({ url, cookies, request }) {
-  const filename = url.searchParams.get('filename');
-  if (!filename) throw error(400, 'filename is required');
+export async function load({ url, setHeaders }) {
+  setHeaders({ 'cache-control': 'public, max-age=30' });
 
-  const row = await getQuestionBySlug(filename);
+  const idParam = (url.searchParams.get('id') || '').trim();
+  const id = Number(idParam);
+  if (!idParam || !Number.isInteger(id)) throw error(400, 'id must be an integer');
 
-  // const row = await normaliseImagePaths('/media/images/', non_normalized_images); 
-  
-  // console.log("row" ,row);
+  const row = await questions.getById(id);
+  if (!row) throw error(404, `Item ${id} not found`);
+  if (row.type !== 'deck' || !row.deck) throw error(415, `Item ${id} is not a deck`);
 
-  if (!row) throw error(404, `Deck "${filename}" not found`);
-  if (row.type !== 'deck' || !row.deck) throw error(415, `Item "${filename}" is not a deck`);
-
-  // row.deck may be {version, background, deck:[]} or an array of slides
-  const slides = Array.isArray(row.deck) ? row.deck : (row.deck.deck ?? []);
+  // Support deck-v1 object or raw slide array
+  const slides = Array.isArray(row.deck) ? row.deck : (row.deck.deck ?? row.deck.slides ?? []);
   if (!Array.isArray(slides) || slides.length === 0) {
-    throw error(422, `Deck "${filename}" has no slides`);
+    throw error(422, `Deck ${id} has no slides`);
   }
-
-  // Subscription check (gate playback)
-  const token = getToken(cookies, request);
-  const authz = await svc.subscriptions.isSubscribed(row.tcode ?? '', token);
-
-  if (!authz.allowed) {
-    const q = new URLSearchParams({
-      tcode: row.tcode ?? '',
-      filename,
-      reason: authz.reason ?? 'denied'
-    }).toString();
-    throw redirect(302, `/sales?${q}`);
-  }
-
-  // console.log("row.deck" ,row.deck);
 
   return {
     meta: {
-      filename,
-      name: row.name ?? filename,
+      id: row.id,
+      title: row.name ?? `Deck ${row.id}`,
       description: row.description ?? '',
       status: row.status ?? null,
       tags: row.tags ?? [],
+      tcodeId: row.tcodeId ?? null,
+      chapterId: row.chapterId ?? null,
+      exerciseId: row.exerciseId ?? null,
+      thumbnail: row.thumbnail ?? null,
       timed: !!row.timed,
-      tcode: row.tcode,
-      chapter: row.chapter,
-      exercise: row.exercise,
       editedAt: row.editedAt,
       createdAt: row.createdAt
     },
-    deckRaw: row.deck,
-    authz // { allowed, reason, userId, tcode, expiresAt, remainingDays }
+    deckRaw: row.deck
   };
 }

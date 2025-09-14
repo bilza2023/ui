@@ -12,15 +12,10 @@
     } from "./syllabusUtils";
   
     // Props from +page.svelte (loader data)
-    export let tcode = "";
-    export let synopsis = null;                 // { slug, name, description?, image?, chapters:[{ slug, name, exercises:[{ slug, name }] }] }
+    export let synopsis;
+    export let items;
     export let selected = { chapter: "", exercise: "" }; // { chapter?: string, exercise?: string }
-    export let items = [];                      // [{ slug, tcode, chapter, exercise, type:'deck'|'note', title, status, editedAt? }]
-  
-    // Child components (already working; NO changes)
-    import LeftChaptersBar from "./LeftChaptersBar.svelte";
     import ExNavBar from "./ExNavBar.svelte";
-    import QuestionCard from "../questionCards/QuestionCard.svelte";
   
     // Local state (slug-based navigation; no reloads within a tcode)
     let activeChapter  = selected.chapter || (synopsis?.chapters?.[0]?.slug ?? "");
@@ -87,14 +82,13 @@
     />
    
     <div class="syllabus-layout">
-      {#each filteredItems as row (row.slug)}
+      {#each filteredItems as row (row.id)}
         <UCard
-          title={row.title || row.name || row.slug}
+          title={row.title || row.name || row.id}
           href={
             row.href
-            || (row.type === 'note'   ? `/notes?filename=${row.slug}`
-            :  row.type === 'deck'    ? `/player?filename=${row.slug}`
-            :  row.type === 'course'  ? `/syllabus?tcode=${row.slug}`
+            || (row.type === 'note'   ? `/notes?id=${row.id}`
+            :  row.type === 'deck'    ? `/player?id=${row.id}`
             :  undefined)
           }
           thumbnail={row.thumbnail || '/media/images/taleem.webp'}
