@@ -67,7 +67,15 @@
         inset 0 1px 0 rgba(255,255,255,.10);
     }
   
-    .pill:active { transform: translateY(1px) scale(0.99); }
+    .pill.active {
+  background: var(--surfaceColor);
+  border-color: color-mix(in oklab, var(--primaryColor), var(--borderColor) 20%);
+  color: var(--accentColor);
+  box-shadow:
+    0 3px 12px color-mix(in oklab, var(--primaryColor), black 25%),
+    inset 0 1px 0 rgba(255,255,255,.10);
+  transform: translateY(-1px);
+}
   
     .pill:focus-visible {
       box-shadow:
