@@ -38,7 +38,6 @@ export async function register(email, password) {
 
   return user;
 }
-
 // Login: check credentials, return JWT + bare user
 export async function login(email, password) {
   const e = normEmail(email);

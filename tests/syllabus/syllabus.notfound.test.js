@@ -3,7 +3,7 @@ import {
   getTcode, getTcodeBySlug,
   getChapter, getChapterBySlug,
   getExercise, getExerciseBySlug
-} from '../src/lib/services/syllabusService.js';
+} from '../../src/lib/services/syllabusService.js';
 
 describe('syllabus: not-found returns null', () => {
   it('tcode not found', async () => {

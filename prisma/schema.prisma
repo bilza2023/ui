@@ -60,6 +60,7 @@ model Question {
   @@index([exerciseId])
 }
 
+
 model Comments {
   id         String   @id @default(cuid())
   created_at DateTime @default(now())
@@ -74,8 +75,9 @@ model Comments {
   @@index([user_id, content_id], name: "idx_comment_user_content")
 }
 
+
 model Likes {
-  id         String   @id @default(cuid())
+  id  String   @id @default(cuid())
   created_at DateTime @default(now())
   content_id String
   user_id    String

@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   createTcode, createChapter, createExercise,
   listChapters, listExercises
-} from '../src/lib/services/syllabusService.js';
+} from '../../src/lib/services/syllabusService.js';
 
 const uniq = (p) => `${p}-${Math.random().toString(36).slice(2,8)}`;
 

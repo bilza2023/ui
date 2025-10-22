@@ -3,8 +3,8 @@ import { describe, it, expect } from 'vitest';
 import {
   createTcode, createChapter, createExercise,
   deleteTcode, deleteChapter, deleteExercise
-} from '../src/lib/services/syllabusService.js';
-import crudl from '../src/lib/crudl/crudl.js';
+} from '../../src/lib/services/syllabusService.js';
+import crudl from '../../src/lib/crudl/crudl.js';
 
 const uniq = (p) => `${p}-${Math.random().toString(36).slice(2,8)}`;
 const questions = crudl('question');

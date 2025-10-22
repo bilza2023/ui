@@ -3,7 +3,7 @@ import {
   createTcode, deleteTcode,
   listChapters, getChapter, getChapterBySlug, createChapter, updateChapter, deleteChapter,
   listExercises, getExercise, getExerciseBySlug, createExercise, updateExercise, deleteExercise
-} from '../src/lib/services/syllabusService.js';
+} from '../../src/lib/services/syllabusService.js';
 
 const uniq = (p) => `${p}-${Math.random().toString(36).slice(2,8)}`;
 
