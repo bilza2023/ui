@@ -4,10 +4,10 @@
     <a href="/"                     class="nav-link">🔱   App Home</a>
     <a href="/admin/"               class="nav-link">🏠   Admin Home</a>
     <a href="/admin/questions"      class="nav-link">🎖️   Questions</a>
-    <a href="/admin/tcodes"           class="nav-link">🦞 Syllabus</a>
     
     <a href="/admin/comments"       class="nav-link">🔔   comments</a>
     <a href="/admin/subscriptions"  class="nav-link">🔑   Subscriptions</a>
+    <a href="/admin/tcodes"           class="nav-link">🦞 Syllabus</a>
     
   </nav>
   
