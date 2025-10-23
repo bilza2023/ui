@@ -7,7 +7,7 @@
   const pageNav =data.pageNav;
   const questions = data.questions;
 
-  let activeTop = 'help';
+  let activeTop = 'videos';
 
   function setCat(newCat){
     activeTop = newCat.id;
