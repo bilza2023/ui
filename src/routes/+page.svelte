@@ -18,7 +18,7 @@
 </script>
 
 <div class="PageCategoryNavWrapper">
-  <PageCategoryNav items={pageNav} evt={setCat} size=40 active={activeTop} />
+  <PageCategoryNav items={pageNav} evt={setCat} size=40 active={activeTop} p/>
 
 </div>
 

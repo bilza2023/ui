@@ -1,5 +1,3 @@
-// /src/routes/+page.server.js
-export const prerender = false;
 
 import { questions } from '$lib/services/questionServices.js';
 import { listTcodes } from '$lib/services/syllabusService.js';
