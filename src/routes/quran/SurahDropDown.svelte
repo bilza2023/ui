@@ -1,17 +1,11 @@
 <!-- /home/bilal-tariq/00--TALEEM===>Project/ui/src/routes/quran/SurahDropDown.svelte -->
 <script>
-    import { createEventDispatcher } from 'svelte';
-  
-    // Optional controlled value (string or number). Leave empty for no preselect.
-    export let selected = '';
-  
-    // Optional placeholder label (set to '' to hide).
-    export let placeholder = 'اختر سورة';
-  
-    // Optional callback: (surahNumber: number, surahName: string) => void
-    export let onPick = null;
-  
-    const dispatch = createEventDispatcher();
+  import { createEventDispatcher, onMount } from 'svelte';
+  export let selected = '';     // selected value
+  export let placeholder = 'اختر سورة';
+  export let onPick = null;
+  const dispatch = createEventDispatcher();
+
   
     // Embedded, stable list of sūrah names (1–114)
     const data = {"surat":[
@@ -131,22 +125,27 @@
       {"surah":"114", "name": "الناس"}
     ]};
   
+
     let selectedStr = String(selected ?? '').trim();
-  
-    function handleChange(e) {
-      selectedStr = e.target.value;
-      const item = data.surat.find(s => s.surah === selectedStr);
-      const num = item ? Number(item.surah) : null;
-      const name = item ? item.name : '';
-  
-      // Call user callback if provided
-      if (onPick && typeof onPick === 'function') {
-        onPick(num, name);
-      }
-  
-      // Also emit an event for users who prefer event listeners
-      dispatch('select', { surah: num, name });
-    }
+
+// === NEW: auto-select first surah ===
+onMount(() => {
+  if (!selectedStr && data.surat.length > 0) {
+    selectedStr = data.surat[0].surah;
+    const item = data.surat[0];
+    if (onPick && typeof onPick === 'function') onPick(Number(item.surah), item.name);
+    dispatch('select', { surah: Number(item.surah), name: item.name });
+  }
+});
+
+function handleChange(e) {
+  selectedStr = e.target.value;
+  const item = data.surat.find((s) => s.surah === selectedStr);
+  const num = item ? Number(item.surah) : null;
+  const name = item ? item.name : '';
+  if (onPick && typeof onPick === 'function') onPick(num, name);
+  dispatch('select', { surah: num, name });
+}
   </script>
   
   <select
