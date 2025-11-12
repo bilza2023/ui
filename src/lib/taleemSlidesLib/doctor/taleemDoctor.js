@@ -1,47 +1,23 @@
-// src/lib/taleemDoctor/taleemDoctor.js
+// /taleemSlides/doctor/taleemDoctor.js
 
-import { zodDeckV1 } from "../core/zodDeckV1.js";
-import { checkTimings } from "./timings.js";
-/** Public constant */
-export const SCHEMA_VERSION = "deck-v1";
+import { zodDeckV1 } from '../schema/zodDeckV1.js';
+import { checkTimings } from '../timings/timings.js';
+import * as registry from '../registry/registry.js';
 
-const SLIDE_TYPES = new Set([
-    "titleAndPara",
-    "svgPointer",
-    "eq",
-    "fillImage",
-    "titleSlide",
-    "titleAndSubtitle",
-    "bulletList",
-    "twoColumnText",
-    "imageSlide",
-    "imageWithTitle",
-    "imageWithCaption",
-    "imageLeftBulletsRight",
-    "imageRightBulletsLeft",
-    "table",
-    "statistic",
-    "donutChart",
-    "bigNumber",
-    "barChart",
-    "quoteSlide",
-    "quoteWithImage",
-    "cornerWordsSlide",
-    "contactSlide"
-  ]);
-  
-/** Helpers */
+export const SCHEMA_VERSION = 'deck-v1';
+
+// diag helper
 const makeDiag = (level, code, message, path, details) =>
   ({ level, code, message, ...(path ? { path } : {}), ...(details ? { details } : {}) });
 
 const jsonPath = (i, j) =>
-  typeof i === "number"
-    ? (typeof j === "number" ? `deck[${i}].data[${j}]` : `deck[${i}]`)
-    : "";
+  typeof i === 'number'
+    ? (typeof j === 'number' ? `deck[${i}].data[${j}]` : `deck[${i}]`)
+    : '';
 
-const num = (v) => (typeof v === "number" && Number.isFinite(v) ? v : undefined);
+const num = (v) => (typeof v === 'number' && Number.isFinite(v) ? v : undefined);
 
-/** Info-only stats */
+// public stats (read-only)
 export function getStats(question) {
   const slides = Array.isArray(question?.deck) ? question.deck : [];
   const slideCount = slides.length;
@@ -51,24 +27,24 @@ export function getStats(question) {
   const types = new Set();
 
   for (const s of slides) {
-    if (typeof s?.end === "number" && s.end > duration) duration = s.end;
+    if (typeof s?.end === 'number' && s.end > duration) duration = s.end;
     if (Array.isArray(s?.data)) items += s.data.length;
-    if (typeof s?.type === "string") types.add(s.type);
+    if (typeof s?.type === 'string') types.add(s.type);
   }
 
   return { slideCount, duration, items, typesUsed: Array.from(types).sort() };
 }
 
-/* ---------- private helpers (pure, read-only) ---------- */
+/* ---------- private helpers ---------- */
 
 function checkBackgroundShape(question, warnings) {
   const bg = question?.background;
-  if (!bg || typeof bg !== "object") return;
-  const allowed = new Set(["backgroundColor", "backgroundImage", "backgroundImageOpacity"]);
+  if (!bg || typeof bg !== 'object') return;
+  const allowed = new Set(['backgroundColor', 'backgroundImage', 'backgroundImageOpacity']);
   const extra = Object.keys(bg).filter((k) => !allowed.has(k));
   if (extra.length) {
     warnings.push(
-      makeDiag("warning", "BACKGROUND_SHAPE", `Background has unknown keys: ${extra.join(", ")}`, undefined, { extraKeys: extra })
+      makeDiag('warning', 'BACKGROUND_SHAPE', `Background has unknown keys: ${extra.join(', ')}`, undefined, { extraKeys: extra })
     );
   }
 }
@@ -79,21 +55,21 @@ function checkSlidesStructure(slides, errors, warnings) {
 
     // type
     const t = s?.type;
-    if (typeof t !== "string" || !SLIDE_TYPES.has(t)) {
-      errors.push(makeDiag("error", "UNKNOWN_SLIDE_TYPE", `Unknown slide type "${t}".`, jsonPath(i), { type: t }));
+    if (typeof t !== 'string' || !registry.hasType(t)) {
+      errors.push(makeDiag('error', 'UNKNOWN_SLIDE_TYPE', `Unknown slide type "${t}".`, jsonPath(i), { type: t }));
     }
 
     // start/end
     const start = num(s?.start);
     const end = num(s?.end);
-    if (typeof start === "number" && typeof end === "number" && start >= end) {
-      errors.push(makeDiag("error", "END_BEFORE_START", `Slide has start >= end (${start} >= ${end}).`, jsonPath(i), { start, end }));
+    if (typeof start === 'number' && typeof end === 'number' && start >= end) {
+      errors.push(makeDiag('error', 'END_BEFORE_START', `Slide has start >= end (${start} >= ${end}).`, jsonPath(i), { start, end }));
     }
 
     // data presence
     const data = Array.isArray(s?.data) ? s.data : [];
     if (data.length === 0) {
-      warnings.push(makeDiag("warning", "EMPTY_DATA", "Slide has no data items.", jsonPath(i)));
+      warnings.push(makeDiag('warning', 'EMPTY_DATA', 'Slide has no data items.', jsonPath(i)));
     }
   }
 }
@@ -101,14 +77,14 @@ function checkSlidesStructure(slides, errors, warnings) {
 function checkSvgPointerRules(slides, errors) {
   for (let i = 0; i < slides.length; i++) {
     const s = slides[i];
-    if (s?.type !== "svgPointer") continue;
+    if (s?.type !== 'svgPointer') continue;
     const data = Array.isArray(s?.data) ? s.data : [];
-    const imgCount = data.filter((d) => d?.type === "image").length;
+    const imgCount = data.filter((d) => d?.type === 'image').length;
     if (imgCount !== 1) {
       errors.push(
         makeDiag(
-          "error",
-          "SVGPOINTER_IMAGE_COUNT",
+          'error',
+          'SVGPOINTER_IMAGE_COUNT',
           `svgPointer slide must contain exactly 1 base image (found ${imgCount}).`,
           jsonPath(i),
           { imageCount: imgCount }
@@ -128,9 +104,9 @@ export function validate(question, { strict = true, maxDiagnostics = 200 } = {})
   if (!parsed.success) {
     const issues = Array.isArray(parsed.error?.issues) ? parsed.error.issues : [];
     for (const iss of issues) {
-      const path = Array.isArray(iss.path) && iss.path.length ? "question." + iss.path.map(String).join(".") : undefined;
+      const path = Array.isArray(iss.path) && iss.path.length ? 'question.' + iss.path.map(String).join('.') : undefined;
       (strict ? errors : warnings).push(
-        makeDiag(strict ? "error" : "warning", "SCHEMA_INVALID", iss.message || "Schema error.", path, { pathArray: iss.path })
+        makeDiag(strict ? 'error' : 'warning', 'SCHEMA_INVALID', iss.message || 'Schema error.', path, { pathArray: iss.path })
       );
     }
   }
@@ -138,15 +114,15 @@ export function validate(question, { strict = true, maxDiagnostics = 200 } = {})
   // 2) Use parsed data if available, else raw question (read-only)
   const q = parsed.success ? parsed.data : question;
 
-  // 3) Version (warning only) — version lives on Question
+  // 3) Version
   if (!q || q.version !== SCHEMA_VERSION) {
-    warnings.push(makeDiag("warning", "MISSING_DECK_VERSION", "Top-level 'version' is missing or not 'deck-v1'."));
+    warnings.push(makeDiag('warning', 'MISSING_DECK_VERSION', "Top-level 'version' is missing or not 'deck-v1'."));
   }
 
-  // 4) Background shape (warning only) — background lives on Question
+  // 4) Background sanity
   checkBackgroundShape(q, warnings);
 
-  // 5) Slides & lints (structure → timings → type-specific) — slides at question.deck
+  // 5) Slides structure, timings, type-specific
   const slides = Array.isArray(q?.deck) ? q.deck : [];
   checkSlidesStructure(slides, errors, warnings);
   checkTimings(slides, warnings);

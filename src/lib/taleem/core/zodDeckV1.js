@@ -319,7 +319,7 @@ const svgPointer = baseSlide.extend({
 
 
 //////////////===> Final Deck Object
-export const zodAQuestionV1 = z.object({
+export const zodDeckV1 = z.object({
     name:        z.string().optional(),
     description: z.string().optional(),
     tags:        z.array(z.string()).optional(),
