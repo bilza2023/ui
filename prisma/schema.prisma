@@ -13,6 +13,29 @@ enum HomeCategory {
   courses
 }
 
+model Hifz {
+  /// Global ayah index 1–6236
+  hookId          Int      @id
+/// Your custom memory description
+  hookDescription String?
+  /// Optional memory-palace image path
+  hookImageUrl    String?
+  /// Visual ayat icon text (from your file: "icon": "...")
+  ayatIcon        String?
+  ayatIconDescription        String?
+
+  /// Surah number
+  surah           Int
+  /// Ayah number within the surah
+  ayah            Int
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([surah, ayah]) // prevents duplicates
+}
+
+
 enum QuestionStatus {
   draft
   ready
