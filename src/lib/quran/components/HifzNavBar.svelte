@@ -158,7 +158,7 @@
   <!-- Bottom row: global scrollbar -->
   <div class="row row-slider" dir="ltr">
     <span class="ayat-label">
-      Ayat # : {hookId} / {maxHook} (<strong>{progressPercent}</strong>% of Qur'an)
+      Ayat # : (<strong>{hookId}</strong> / {maxHook} {progressPercent} % of Qur'an)
     </span>
 
     <input

@@ -4,9 +4,6 @@
 
   import QuranSurahBar from '$lib/quran/components/QuranSurahBar.svelte';
   import QuranAyahReader from '$lib/quran/components/QuranAyahReader.svelte';
-
-  import HifzTextAreaEditor from '$lib/quran/components/HifzTextAreaEditor.svelte';
-
   import HifzNavBar from '$lib/quran/components/HifzNavBar.svelte';
 
   import quran from '$lib/quran/quran.json';
@@ -34,11 +31,8 @@
   // feel free to change to 1 if you want.
   let hookId = 9;
 
-  // Toggle for Hifz panel visibility
-  let showHifzPanel = true;
-
-  // Toggle for Translation visibility
-  let showTranslation = true;
+  // Flip state: false = visualization side, true = ayah+translation side
+  let isRevealed = false;
 
   // Derived ref from hook
   $: currentRef = hookToRef(hookId);
@@ -67,7 +61,7 @@
       : '';
 
   // ============================
-  // Hifz editable state
+  // Hifz state (read-only for this page)
   // ============================
   let hifz = {
     hookDescription: '',
@@ -125,63 +119,34 @@
     loadHifzForCurrentAyah();
   }
 
-  // ------------------------------------------
-  // Save Hifz field to DB
-  // ------------------------------------------
-  async function handleHifzSave(e) {
-    const { field, value } = e.detail || {};
-    if (!field || !currentSurahNumber || !currentAyahNumber) return;
-
-    // Update UI immediately
-    hifz = { ...hifz, [field]: value };
-    console.log('📝 Local Hifz update:', field, value);
-
-    // Save to DB
-    try {
-      const res = await fetch('/api/hifz', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          surah: currentSurahNumber,
-          ayah: currentAyahNumber,
-          field,
-          value
-        })
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        console.error('❌ DB save failed:', data);
-        return;
-      }
-
-      console.log('✅ Saved to DB:', data.hifz);
-    } catch (err) {
-      console.error('❌ Error saving to DB:', err);
-    }
+  // When hook changes (via any navigation), reset flip state
+  let lastHookId = hookId;
+  $: if (hookId !== lastHookId) {
+    lastHookId = hookId;
+    isRevealed = false;
   }
 
   // ============================
   // Surah bar events (jump via hooks)
   // ============================
-  function onSurahPick(e) {
-    const { surah } = e.detail || {};
+  function jumpToSurahStart(surah) {
     if (!surah) return;
     const start = getSurahStartHook(surah);
     if (start) {
       hookId = start;
       lastLoadedKey = ''; // force reload
+      isRevealed = false;
     }
+  }
+
+  function onSurahPick(e) {
+    const { surah } = e.detail || {};
+    jumpToSurahStart(surah);
   }
 
   function onSurahSelect(e) {
     const { surah } = e.detail || {};
-    if (!surah) return;
-    const start = getSurahStartHook(surah);
-    if (start) {
-      hookId = start;
-      lastLoadedKey = ''; // force reload
-    }
+    jumpToSurahStart(surah);
   }
 
   onMount(() => {
@@ -194,11 +159,23 @@
   // ============================
   function onKeydown(e) {
     if (e.key === 'ArrowLeft') {
-      if (hookId > 1) hookId = hookId - 1;
+      if (hookId > 1) {
+        hookId = hookId - 1;
+        isRevealed = false;
+      }
     }
     if (e.key === 'ArrowRight') {
-      if (hookId < MAX_HOOK) hookId = hookId + 1;
+      if (hookId < MAX_HOOK) {
+        hookId = hookId + 1;
+        isRevealed = false;
+      }
     }
+  }
+
+  // Flip handler
+  function toggleReveal() {
+    // Flip card; either visualization OR ayah+translation is visible
+    isRevealed = !isRevealed;
   }
 </script>
 
@@ -222,67 +199,83 @@
     <HifzNavBar bind:hookId />
   </div>
 
-  <!-- Row 3: Reader area (driven by hookId) -->
+  <!-- Row 3: Revision Card (visualization OR ayah, never both) -->
   {#if currentSurah && currentAyahNumber}
-    <div class="row">
-      <QuranAyahReader
-        ayahNumber={currentAyahNumber}
-        totalAyahs={totalAyahs(currentSurah)}
-        arabic={
-          ayahAt(currentSurah, currentAyahNumber - 1)
-            ? getAyahText(ayahAt(currentSurah, currentAyahNumber - 1))
-            : ''
-        }
-        translation={showTranslation ? trText : ''}
-      />
+    <div class="row cardRow" dir="ltr">
+      <div class="revisionCard">
+        <header class="cardHeader">
+          <div class="cardTitle">
+            <span class="surahName">{currentSurahName}</span>
+            <span class="ayahRef">({currentSurahNumber}:{currentAyahNumber})</span>
+          </div>
+          <div class="hookInfo">
+            Hook ID: {hookId}
+            {#if currentRefString}
+              <span class="hookRef">· Ref: {currentRefString}</span>
+            {/if}
+          </div>
+        </header>
+
+        <!-- Flip controls -->
+        <div class="flipControls">
+          <button type="button" on:click={toggleReveal}>
+            {#if isRevealed}
+              Show visualization
+            {:else}
+              Show āyah & translation
+            {/if}
+          </button>
+        </div>
+
+        {#if !isRevealed}
+          <!-- FRONT: Visualization / Icon slide -->
+          <div class="visualSection">
+            <!-- {#if hifz.hookImageUrl}
+              <div class="imageWrapper">
+                <img src={hifz.hookImageUrl} alt="Hook visualization image" />
+              </div>
+            {/if} -->
+
+            <div class="visualText">
+              {#if hifz.ayatIcon || hifz.hookDescription}
+                {#if hifz.ayatIcon}
+                  <!-- Short caption / icon line -->
+                  <div class="ayatIconText">
+                    {hifz.ayatIcon}
+                  </div>
+                {/if}
+
+              {:else}
+                <span class="placeholder">
+                  No hook text saved for this āyah yet.
+                </span>
+              {/if}
+            </div>
+          </div>
+        {:else}
+          <!-- BACK: Ayah + translation only -->
+          <div class="ayahSection" dir="rtl">
+            <QuranAyahReader
+              ayahNumber={currentAyahNumber}
+              totalAyahs={totalAyahs(currentSurah)}
+              arabic={
+                ayahAt(currentSurah, currentAyahNumber - 1)
+                  ? getAyahText(ayahAt(currentSurah, currentAyahNumber - 1))
+                  : ''
+              }
+              translation={trText}
+            />
+          </div>
+        {/if}
+      </div>
     </div>
   {/if}
-
-  <!-- Row 4: Toggles -->
-  <div class="row hifzToggleRow" dir="ltr">
-    <button type="button" on:click={() => (showHifzPanel = !showHifzPanel)}>
-      {showHifzPanel ? 'Hide Visualization' : 'Show Visualization'}
-    </button>
-
-    <button type="button" on:click={() => (showTranslation = !showTranslation)}>
-      {showTranslation ? 'Hide Translation' : 'Show Translation'}
-    </button>
-  </div>
-  {#if currentSurah && currentAyahNumber && showHifzPanel}
-  <div class="row hifzRow" dir="ltr">
-    <HifzTextAreaEditor
-      label={`Visualization Ayat Id:${hookId}`}
-      field="ayatIcon"
-      value={hifz.ayatIcon}
-      on:save={handleHifzSave}
-    />
-    <HifzTextAreaEditor
-      label= "Hook Description"
-      field="hookDescription"
-      value={hifz.hookDescription}
-      on:save={handleHifzSave}
-    />
-  </div>
-{/if}
-
-
 </section>
 
 <style>
   :root {
     --pageW: 820px;
   }
-  .hifzDisplay {
-  width: 100%;
-  padding: 0.9rem 1rem;
-  background: var(--surfaceColor);
-  border: 1px solid var(--borderColor);
-  border-radius: 6px;
-  font-size: 0.96rem;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  color: var(--primaryText);
-}
 
   /* Top-level page wrapper */
   .page {
@@ -305,40 +298,126 @@
     margin-top: 0.5rem;
   }
 
-  .hifzToggleRow {
-    margin-top: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
+  .cardRow {
+    margin-top: 0.75rem;
   }
 
-  .hifzToggleRow button {
-    padding: 0.25rem 0.75rem;
-    font-size: 0.9rem;
-    border-radius: 999px;
-    border: 1px solid var(--borderColor);
+  .revisionCard {
+    width: 100%;
     background: var(--surfaceColor);
-    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid var(--borderColor);
+    padding: 0.9rem 1rem 1rem 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
-  .hifzToggleRow button:hover {
-    filter: brightness(1.05);
+  .cardHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    border-bottom: 1px dashed var(--borderColor);
+    padding-bottom: 0.4rem;
   }
 
-  .hookRef {
-    font-size: 0.85rem;
+  .cardTitle {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem;
+    font-size: 0.96rem;
+  }
+
+  .surahName {
+    font-weight: 600;
+  }
+
+  .ayahRef {
+    opacity: 0.8;
+    font-size: 0.9rem;
+  }
+
+  .hookInfo {
+    font-size: 0.82rem;
     opacity: 0.8;
   }
 
-  .hifzRow {
-    margin-top: 0.75rem;
-    padding: 0.75rem 0;
-    border-top: 1px dashed var(--borderColor);
+  .hookRef {
+    margin-left: 0.35rem;
   }
 
-  .hifzRow h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1rem;
+  .flipControls {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 0.35rem;
+  }
+
+  .flipControls button {
+    padding: 0.35rem 0.9rem;
+    font-size: 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--borderColor);
+    background: var(--backgroundColor);
+    cursor: pointer;
+  }
+
+  .flipControls button:hover {
+    filter: brightness(1.05);
+  }
+
+  .visualSection {
+    margin-top: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .imageWrapper {
+    width: 100%;
+    max-height: 260px;
+    overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid var(--borderColor);
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .imageWrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .visualText {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .ayatIconText {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+
+  .hookDescriptionText {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+
+  .placeholder {
+    opacity: 0.6;
+    font-style: italic;
+    font-size: 0.92rem;
+  }
+
+  .ayahSection {
+    margin-top: 0.6rem;
+    border-top: 1px dashed var(--borderColor);
+    padding-top: 0.5rem;
   }
 </style>
