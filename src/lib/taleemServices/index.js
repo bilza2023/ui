@@ -5,15 +5,6 @@ import {
     register, login, verify, isAdmin
   } from '../services/loginServices.js';
   
-  // import {
-  //   getSubjectsIndex, getSyllabusByTcode, getAllSyllabusLegacy
-  // } from '../services/synopisisServices2.js';
-  
-  import {
-    listCommentsByStatus, answerComment, setCommentStatus, markCommentBad,
-    getUserMessages, bulkUpload as messagesBulkUpload
-  } from '../services/studentMessageServices.js';
-  
   
   import {
     isSubscribed as subsIsSubscribed, addSubscription
@@ -32,15 +23,13 @@ import {
     checkPassword, assertPasswordOrThrow
   } from '../services/passwordPolicy.js';
   
-  import {
-    exists, getQuestionByFilename, createQuestion, upsertQuestion,
-    updateDeckJson, updateNoteHtml, patchQuestionMeta, deleteByFilename,
-    updateNoteString
-  } from '../services/questionServices.js';
+  // import {
+  //   exists, getQuestionByFilename, createQuestion, upsertQuestion,
+  //   updateDeckJson, updateNoteHtml, patchQuestionMeta, deleteByFilename,
+  //   updateNoteString
+  // } from '../services/questionServices.js';
   
-  function getSubjectsIndex(){
 
-  }
   export const taleemServices = {
     // Auth & identity
     auth: {
@@ -49,37 +38,6 @@ import {
       verify,
       isAdmin
     },
-  
-    // // Syllabus navigation (subjects → chapters → exercises)
-    // syllabus: {
-    //   getSubjectsIndex,
-    //   getSyllabusByTcode,
-    //   getAllSyllabusLegacy
-    // },
-  
-    // Q&A (comments table, teacher responses)
-    // messages: {
-    //   listByStatus: listCommentsByStatus,
-    //   answer:       answerComment,
-    //   setStatus:    setCommentStatus,
-    //   markBad:      markCommentBad,
-    
-    //   list:       getUserMessages,
-    //   bulkUpload: messagesBulkUpload
-    // },
-  
-    // Questions store (deck | note records)
-    // questions: {
-    //   exists,
-    //   getByFilename: getQuestionByFilename,
-    //   create:        createQuestion,
-    //   upsert:        upsertQuestion,
-    //   updateDeck:    updateDeckJson,
-    //   updateNote:    updateNoteHtml,
-    //   updateNoteString,                // raw setter (kept for completeness)
-    //   patchMeta:     patchQuestionMeta,
-    //   delete:        deleteByFilename
-    // },
   
     // Subscriptions & access control
     subscriptions: {
