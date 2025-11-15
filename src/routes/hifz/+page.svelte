@@ -1,218 +1,308 @@
-<!-- /home/bilal-tariq/00--TALEEM===>Project/ui/src/routes/quran/+page.svelte -->
+<!-- /home/bilal-tariq/00--TALEEM===>Project/ui/src/routes/hifz/+page.svelte -->
 <script>
-    import { onMount } from 'svelte';
-    import SurahDropDown from '../../lib/quran/SurahDropDown.svelte';
-    import quran from '$lib/quran/quran.json';
-    import maudidi from '$lib/quran/translation/maudidi.json';
-  
-    // Selection state
-    let selectedNum = 2;
-    let selectedName = 'البقرة';
-  
-    // Current sūrah & verse index
-    let currentSurah = null;
-    let ayahIdx = 0;
-  
-    // ===== helpers (Arabic, unchanged) =====
-    const toNum = (v) => (v == null ? null : Number(v));
-    function getAllSurahs() { return Array.isArray(quran) ? quran : (quran?.surahs || quran?.data || []); }
-    function getSurahNumber(s) { return toNum(s?.number ?? s?.id ?? s?.surah_number ?? s?.surah); }
-    function getSurahName(s) { return s?.name ?? s?.arabicName ?? s?.title ?? ''; }
-    function getAyahsArray(s) { return s?.ayahs ?? s?.verses ?? s?.ayah ?? []; }
-    function getAyahText(v) { return (v?.text ?? v?.arabic ?? v?.ar ?? v?.content ?? ''); }
-    function totalAyahs(s) { const arr = getAyahsArray(s); return Array.isArray(arr) ? arr.length : 0; }
-    function ayahAt(s, idx) { const arr = getAyahsArray(s); return Array.isArray(arr) && arr[idx] ? arr[idx] : null; }
-    function findSurahByNumber(num) { const all = getAllSurahs(); return all.find((s) => getSurahNumber(s) === toNum(num)) || null; }
-  
-    // ===== Translation index (flat array: {surah, ayah, text}) =====
-    const trIndex = new Map(); // key: "surah:ayah" -> text
-    if (Array.isArray(maudidi)) {
-      for (const row of maudidi) {
-        const s = Number(row.surah ?? row.Surah);
-        const a = Number(row.ayah  ?? row.aya ?? row.verse ?? row.id);
-        if (!Number.isFinite(s) || !Number.isFinite(a)) continue;
-        const text = row.text ?? row.translation ?? row.en ?? row.ur ?? row.tr ?? row.content ?? '';
-        trIndex.set(`${s}:${a}`, text);
-      }
-    }
-    $: trText = (currentSurah && selectedNum)
-      ? (trIndex.get(`${Number(selectedNum)}:${ayahIdx + 1}`) ?? '')
+  import { onMount } from 'svelte';
+
+  import QuranSurahBar from '$lib/quran/components/QuranSurahBar.svelte';
+  import QuranAyahReader from '$lib/quran/components/QuranAyahReader.svelte';
+
+  import HifzStringEditor from '$lib/quran/components/HifzStringEditor.svelte';
+  import HifzTextAreaEditor from '$lib/quran/components/HifzTextAreaEditor.svelte';
+
+  import HifzNavBar from '$lib/quran/components/HifzNavBar.svelte';
+
+  import quran from '$lib/quran/quran.json';
+  import maudidi from '$lib/quran/translation/maudidi.json';
+
+  import {
+    getSurahName,
+    getAyahText,
+    totalAyahs,
+    ayahAt,
+    findSurahByNumber,
+    buildTranslationIndex
+  } from '$lib/quran/quranHelpers';
+
+  import {
+    hookToRef,
+    getSurahStartHook,
+    MAX_HOOK
+  } from '$lib/quran/hookIndex';
+
+  // ============================
+  // Global hook-based position
+  // ============================
+  // Start at 2:2 (hook 9) since that’s where your icons begin,
+  // feel free to change to 1 if you want.
+  let hookId = 9;
+
+  // Derived ref from hook
+  $: currentRef = hookToRef(hookId);
+  $: currentSurahNumber = currentRef?.surah ?? null;
+  $: currentAyahNumber = currentRef?.ayah ?? null;
+  $: currentRefString = currentRef?.ref ?? '';
+
+  // Current surah object (from quran.json)
+  $: currentSurah = currentSurahNumber
+    ? findSurahByNumber(quran, currentSurahNumber)
+    : null;
+
+  // Surah names for UI
+  $: currentSurahName = currentSurah ? getSurahName(currentSurah) : '';
+  $: selectedNum = currentSurahNumber ?? 2;
+  $: selectedName = currentSurahName ?? '';
+
+  // ============================
+  // Translation index
+  // ============================
+  const trIndex = buildTranslationIndex(maudidi);
+
+  $: trText =
+    currentSurahNumber && currentAyahNumber
+      ? trIndex.get(`${currentSurahNumber}:${currentAyahNumber}`) ?? ''
       : '';
-  
-    // ===== dropdown events =====
-    function handlePick(num, name) { selectedNum = num; selectedName = name ?? ''; loadSurah(); }
-    function handleSelect(e) { const { surah, name } = e.detail || {}; selectedNum = surah ?? null; selectedName = name ?? ''; loadSurah(); }
-    function loadSurah() {
-      currentSurah = selectedNum ? findSurahByNumber(selectedNum) : null;
-      ayahIdx = 0;
+
+  // ============================
+  // Hifz editable state
+  // ============================
+  let hifz = {
+    hookDescription: '',
+    hookImageUrl: '',
+    ayatIcon: '',
+    ayatIconDescription: ''
+  };
+
+  let lastLoadedKey = '';
+
+  // ------------------------------------------
+  // Load Hifz from DB when hook (ayah) changes
+  // ------------------------------------------
+  async function loadHifzForCurrentAyah() {
+    if (!currentSurahNumber || !currentAyahNumber) return;
+
+    const key = `${currentSurahNumber}:${currentAyahNumber}`;
+    if (key === lastLoadedKey) return; // avoid double loads on same ayah
+    lastLoadedKey = key;
+
+    try {
+      const res = await fetch(
+        `/api/hifz?surah=${currentSurahNumber}&ayah=${currentAyahNumber}`
+      );
+
+      if (!res.ok) {
+        console.warn('No Hifz found for', key);
+        hifz = {
+          hookDescription: '',
+          hookImageUrl: '',
+          ayatIcon: '',
+          ayatIconDescription: ''
+        };
+        return;
+      }
+
+      const data = await res.json();
+      const row = data.hifz;
+
+      hifz = {
+        hookDescription: row?.hookDescription ?? '',
+        hookImageUrl: row?.hookImageUrl ?? '',
+        ayatIcon: row?.ayatIcon ?? '',
+        ayatIconDescription: row?.ayatIconDescription ?? ''
+      };
+
+      console.log('📥 Loaded Hifz from DB:', key, hifz);
+    } catch (err) {
+      console.error('Error loading Hifz:', err);
     }
-  
-    onMount(loadSurah);
-  
-    // ===== navigation =====
-    function goFirst() { if (currentSurah) ayahIdx = 0; }
-    function goLast()  { if (currentSurah) ayahIdx = Math.max(0, totalAyahs(currentSurah) - 1); }
-    function goPrev()  { if (currentSurah) ayahIdx = Math.max(0, ayahIdx - 1); }
-    function goNext()  { if (currentSurah) ayahIdx = Math.min(totalAyahs(currentSurah) - 1, ayahIdx + 1); }
-  
-    $: atStart = !currentSurah || ayahIdx === 0;
-    $: atEnd   = !currentSurah || ayahIdx >= totalAyahs(currentSurah) - 1;
-  
-    // Optional: keyboard arrows
-    function onKeydown(e) {
-      if (!currentSurah) return;
-      if (e.key === 'ArrowLeft')  goPrev();
-      if (e.key === 'ArrowRight') goNext();
+  }
+
+  // Reactive load whenever the current ayah changes (via hookId)
+  $: if (currentSurahNumber && currentAyahNumber) {
+    loadHifzForCurrentAyah();
+  }
+
+  // ------------------------------------------
+  // Save Hifz field to DB
+  // ------------------------------------------
+  async function handleHifzSave(e) {
+    const { field, value } = e.detail || {};
+    if (!field || !currentSurahNumber || !currentAyahNumber) return;
+
+    // Update UI immediately
+    hifz = { ...hifz, [field]: value };
+    console.log('📝 Local Hifz update:', field, value);
+
+    // Save to DB
+    try {
+      const res = await fetch('/api/hifz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          surah: currentSurahNumber,
+          ayah: currentAyahNumber,
+          field,
+          value
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        console.error('❌ DB save failed:', data);
+        return;
+      }
+
+      console.log('✅ Saved to DB:', data.hifz);
+    } catch (err) {
+      console.error('❌ Error saving to DB:', err);
     }
-  </script>
-  
-  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <section class="page" dir="rtl" on:keydown={onKeydown} tabindex="0">
-    <!-- Row 1: Picker -->
-    <div class="row pickerRow">
-      <SurahDropDown placeholder="" onPick={handlePick} on:select={handleSelect} />
-    </div>
-  
-    <!-- Row 2: Badge -->
-    <div class="row badgeRow">
-      {#if currentSurah}
-        <p class="badge">
-          <strong>{selectedName || getSurahName(currentSurah)}</strong>
-          — Surah: <strong>{selectedNum}</strong>
-        </p>
-      {:else}
-        <p class="muted">Select a Surah</p>
-      {/if}
-    </div>
-  
-    <!-- Row 3: Nav bar (separate fixed-width container) -->
-    {#if currentSurah}
-    <div class="row navBar" dir="ltr" role="toolbar" aria-label="Verse navigation">
-      <button on:click={goFirst} disabled={atStart} title="First">⏮️ First</button>
-      <button on:click={goNext}  disabled={atEnd}   title="Next">Next ▶️</button>
-      <button on:click={goPrev}  disabled={atStart} title="Previous">◀️ Prev</button>
-      <button on:click={goLast}  disabled={atEnd}   title="Last">⏭️ Last</button>
+  }
+
+  // ============================
+  // Surah bar events (jump via hooks)
+  // ============================
+  function onSurahPick(e) {
+    const { surah } = e.detail || {};
+    if (!surah) return;
+    const start = getSurahStartHook(surah);
+    if (start) {
+      hookId = start;
+      lastLoadedKey = ''; // force reload
+    }
+  }
+
+  function onSurahSelect(e) {
+    const { surah } = e.detail || {};
+    if (!surah) return;
+    const start = getSurahStartHook(surah);
+    if (start) {
+      hookId = start;
+      lastLoadedKey = ''; // force reload
+    }
+  }
+
+  onMount(() => {
+    // just ensure initial load happens for initial hookId
+    lastLoadedKey = '';
+  });
+
+  // ============================
+  // Keyboard navigation (hook-based)
+  // ============================
+  function onKeydown(e) {
+    if (e.key === 'ArrowLeft') {
+      if (hookId > 1) hookId = hookId - 1;
+    }
+    if (e.key === 'ArrowRight') {
+      if (hookId < MAX_HOOK) hookId = hookId + 1;
+    }
+  }
+</script>
+
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<section class="page" dir="rtl" on:keydown={onKeydown} tabindex="0">
+  <!-- Row 1: Surah bar (dropdown + badge in one line) -->
+  <div class="row pickerRow">
+    <QuranSurahBar
+      {selectedNum}
+      {selectedName}
+      {currentSurahName}
+      placeholder=""
+      on:pick={onSurahPick}
+      on:select={onSurahSelect}
+    />
+  </div>
+
+  <!-- Row 2: NEW hook-based Hifz nav bar -->
+  <div class="row">
+    <HifzNavBar bind:hookId />
+  </div>
+
+  <!-- Row 3: Reader area (driven by hookId) -->
+  {#if currentSurah && currentAyahNumber}
+    <div class="row">
+      <QuranAyahReader
+        ayahNumber={currentAyahNumber}
+        totalAyahs={totalAyahs(currentSurah)}
+        arabic={
+          ayahAt(currentSurah, currentAyahNumber - 1)
+            ? getAyahText(ayahAt(currentSurah, currentAyahNumber - 1))
+            : ''
+        }
+        translation={trText}
+      />
     </div>
   {/if}
-  
-    <!-- Row 4: Reader area (fixed width; content can grow vertically without moving nav) -->
-    {#if currentSurah}
-      <div class="row readerRow">
-        <div class="ayahBox">
-          <div class="ayahHeader">
-            <span>آية {ayahIdx + 1} / {totalAyahs(currentSurah)}</span>
-          </div>
-  
-          <!-- Arabic -->
-          <p class="ayahText">
-            {#if ayahAt(currentSurah, ayahIdx)}
-              {getAyahText(ayahAt(currentSurah, ayahIdx))}
-            {:else}
-              —
-            {/if}
-          </p>
-  
-          <!-- Translation -->
-          <p class="trText">
-            {#if trText && trText.length}
-              {trText}
-            {:else}
-              "Translation not found"
-            {/if}
-          </p>
-        </div>
-      </div>
-    {/if}
-  </section>
-  
-  <style>
-    :root { --pageW: 820px; }
-  
-    /* Top-level page wrapper */
-    .page {
-      /* page-level stack */
-      display: flex;
-      flex-direction: column;
-      align-items: center;             /* center rows */
-      gap: 0.75rem;
-      padding: 1rem;
-      color: var(--primaryText);
-      background: var(--backgroundColor);
-    }
-  
-    /* Every stacked piece gets its own fixed-width row box */
-    .row {
-      width: min(100%, var(--pageW));
-    }
-  
-    .pickerRow { margin-top: 0.5rem; }
-  
-    .badgeRow .badge {
-      background: var(--surfaceColor);
-      border: 1px solid var(--borderColor);
-      border-radius: 0.5rem;
-      padding: 0.6rem 0.8rem;
-      display: inline-block;
-      color: var(--primaryText);
-    }
-    .muted { color: var(--secondaryText); }
-  
-    /* Navbar: isolated container so buttons don't shift when content height changes */
-    .navBar {
-  display: flex;
-  flex-direction: row;   /* force normal LTR order */
-  justify-content: flex-start;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  padding: 0.5rem 0;
-  background: var(--backgroundColor);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  border-bottom: 1px dashed var(--borderColor);
-}
 
-    .navBar button {
-      border: 1px solid var(--primaryColor);
-      padding: 0.5rem 0.9rem;
-      border-radius: 0.6rem;
-      background: transparent;
-      color: var(--primaryColor);
-      cursor: pointer;
-    }
-    .navBar button:hover:not(:disabled) { background: var(--primaryColor); color: #fff; }
-    .navBar button:disabled { opacity: 0.55; cursor: not-allowed; }
-  
-    /* Reader row: fixed width, stable box; inner card uses full width */
-    .readerRow { display: grid; }
-    .ayahBox {
-      width: 100%;                     /* stable width */
-      min-height: 8rem;                /* prevents tiny verses from collapsing height too much */
-      background: var(--surfaceColor);
-      border: 1px solid var(--borderColor);
-      border-radius: 0.75rem;
-      padding: 0.9rem 1rem;
-    }
-    .ayahHeader {
-      font-size: 0.9rem;
-      color: var(--secondaryText);
-      margin-bottom: 0.5rem;
-    }
-    .ayahText {
-      font-size: 1.35rem;
-      line-height: 2.1;
-      margin: 0;
-      word-break: break-word;
-      color: var(--primaryText);
-    }
-    .trText {
-      margin-top: 0.5rem;
-      font-size: 1.05rem;
-      line-height: 1.9;
-      color: var(--secondaryText);
-      /* keep RTL for Urdu; switch to LTR for English if needed */
-      /* direction: ltr; text-align: left; */
-    }
-  </style>
-  
+  <!-- Row 4: Hifz panel (editable fields) -->
+  {#if currentSurah && currentAyahNumber}
+    <div class="row hifzRow" dir="ltr">
+      <h3>Hifz Notes</h3>
+
+      <HifzTextAreaEditor
+      label="Āyat Icon Description"
+      field="ayatIconDescription"
+      value={hifz.ayatIconDescription}
+      on:save={handleHifzSave}
+    />
+    
+      <HifzTextAreaEditor
+        label="Hook Description"
+        field="hookDescription"
+        value={hifz.hookDescription}
+        on:save={handleHifzSave}
+      />
+
+      <HifzStringEditor
+        label="Āyat Icon"
+        field="ayatIcon"
+        value={hifz.ayatIcon}
+        on:save={handleHifzSave}
+      />
+
+      <HifzStringEditor
+        label="Hook Image URL"
+        field="hookImageUrl"
+        value={hifz.hookImageUrl}
+        on:save={handleHifzSave}
+      />
+    </div>
+  {/if}
+</section>
+
+<style>
+  :root {
+    --pageW: 820px;
+  }
+
+  /* Top-level page wrapper */
+  .page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    color: var(--primaryText);
+    background: var(--backgroundColor);
+  }
+
+  /* Generic content row wrapper */
+  .row {
+    width: min(100%, var(--pageW));
+  }
+
+  /* Surah bar spacing */
+  .pickerRow {
+    margin-top: 0.5rem;
+  }
+
+  .hifzRow {
+    margin-top: 0.75rem;
+    padding: 0.75rem 0;
+    border-top: 1px dashed var(--borderColor);
+  }
+
+  .hifzRow h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+  }
+</style>
