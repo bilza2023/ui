@@ -1,4 +1,3 @@
-
 // /src/lib/services/soundServices.js
 // ID-anchored audio lookup. No legacy filename API.
 
@@ -6,6 +5,7 @@ import { Player, Timer } from '../taleem';
 
 // const AUDIO_BASE = '/media/audio'; // e.g. /media/audio/q33.opus
 const AUDIO_BASE = '/sounds';
+
 /** Create timing source: Howler Player if url, else silent Timer. */
 export function createSoundPlayer(soundUrl) {
   return soundUrl ? new Player(soundUrl) : new Timer();
@@ -38,5 +38,25 @@ export async function detectSoundById(id, fetchFn = globalThis.fetch) {
 /** Detect then construct a player. Returns { player, soundUrl }. */
 export async function createDetectedSoundPlayerById(id, fetchFn = globalThis.fetch) {
   const url = await detectSoundById(id, fetchFn);
+  return { player: createSoundPlayer(url), soundUrl: url };
+}
+
+/* ------------------------------------------------------------------
+ * Legacy-style convenience wrappers for existing imports:
+ * - detectSoundUrl
+ * - createDetectedSoundPlayer
+ *
+ * These just delegate to the new ID-based functions so the rest
+ * of the app (and taleemServices/index.js) can keep using the old names.
+ * ------------------------------------------------------------------ */
+
+/** Backwards-compatible wrapper: same as detectSoundById(id). */
+export async function detectSoundUrl(id, fetchFn = globalThis.fetch) {
+  return detectSoundById(id, fetchFn);
+}
+
+/** Backwards-compatible wrapper: same as createDetectedSoundPlayerById(id). */
+export async function createDetectedSoundPlayer(id, fetchFn = globalThis.fetch) {
+  const url = await detectSoundUrl(id, fetchFn);
   return { player: createSoundPlayer(url), soundUrl: url };
 }
