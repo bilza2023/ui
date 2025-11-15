@@ -120,12 +120,12 @@
       </div>
   
       <div class="group info">
-        <div>Ref: <strong>{currentRefString}</strong></div>
+        <!-- <div>Ref: <strong>{currentRefString}</strong></div> -->
         <div>
-          Surah āyah: <strong>{currentAyah}</strong> / {currentAyahsInSurah}
+          Surah / āyah: <strong>{currentAyah}</strong> / {currentAyahsInSurah}
         </div>
         <div>
-          Hook: <strong>{hookId}</strong> / {maxHook}
+          Ayat #: <strong>{hookId}</strong> / {maxHook}
           <span class="progress">({progressPercent}% of Qur'an)</span>
         </div>
         {#if statusLabel}
@@ -160,7 +160,7 @@
   
     <!-- Bottom row: global scrollbar -->
     <div class="row row-slider" dir="ltr">
-        <label for="hookSlider">Global position (hook 1 → {maxHook}):</label>
+        <label for="hookSlider">Ayat Number ( 1 → {maxHook}):</label>
         <input
           id="hookSlider"
           type="range"

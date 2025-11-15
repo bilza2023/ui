@@ -23,7 +23,7 @@
         {#if translation && translation.length}
           {translation}
         {:else}
-          "Translation not found"
+          <!-- "Translation not found" -->
         {/if}
       </p>
     </div>

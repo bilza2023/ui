@@ -5,9 +5,7 @@
   import QuranSurahBar from '$lib/quran/components/QuranSurahBar.svelte';
   import QuranAyahReader from '$lib/quran/components/QuranAyahReader.svelte';
 
-  import HifzStringEditor from '$lib/quran/components/HifzStringEditor.svelte';
-  import HifzTextAreaEditor from '$lib/quran/components/HifzTextAreaEditor.svelte';
-
+  import HifzPanel from '$lib/quran/components/HifzPanel.svelte';
   import HifzNavBar from '$lib/quran/components/HifzNavBar.svelte';
 
   import quran from '$lib/quran/quran.json';
@@ -34,6 +32,12 @@
   // Start at 2:2 (hook 9) since that’s where your icons begin,
   // feel free to change to 1 if you want.
   let hookId = 9;
+
+  // Toggle for Hifz panel visibility
+  let showHifzPanel = false;
+
+  // Toggle for Translation visibility
+  let showTranslation = true;
 
   // Derived ref from hook
   $: currentRef = hookToRef(hookId);
@@ -180,7 +184,7 @@
   }
 
   onMount(() => {
-    // just ensure initial load happens for initial hookId
+    // ensure initial load happens for initial hookId
     lastLoadedKey = '';
   });
 
@@ -200,7 +204,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <section class="page" dir="rtl" on:keydown={onKeydown} tabindex="0">
-  <!-- Row 1: Surah bar (dropdown + badge in one line) -->
+  <!-- Row 1: Surah picker -->
   <div class="row pickerRow">
     <QuranSurahBar
       {selectedNum}
@@ -212,7 +216,7 @@
     />
   </div>
 
-  <!-- Row 2: NEW hook-based Hifz nav bar -->
+  <!-- Row 2: Hook-based Hifz nav bar -->
   <div class="row">
     <HifzNavBar bind:hookId />
   </div>
@@ -228,44 +232,33 @@
             ? getAyahText(ayahAt(currentSurah, currentAyahNumber - 1))
             : ''
         }
-        translation={trText}
+        translation={showTranslation ? trText : ''}
       />
     </div>
   {/if}
 
-  <!-- Row 4: Hifz panel (editable fields) -->
-  {#if currentSurah && currentAyahNumber}
-    <div class="row hifzRow" dir="ltr">
-      <h3>Hifz Notes</h3>
+  <!-- Row 4: Toggles -->
+  <div class="row hifzToggleRow" dir="ltr">
+    <button type="button" on:click={() => (showHifzPanel = !showHifzPanel)}>
+      {showHifzPanel ? 'Hide Hifz Panel' : 'Show Hifz Panel'}
+    </button>
 
-      <HifzTextAreaEditor
-      label="Āyat Icon Description"
-      field="ayatIconDescription"
-      value={hifz.ayatIconDescription}
-      on:save={handleHifzSave}
+    <button type="button" on:click={() => (showTranslation = !showTranslation)}>
+      {showTranslation ? 'Hide Translation' : 'Show Translation'}
+    </button>
+
+    <span class="hookRef">
+      Current: {currentRefString}
+    </span>
+  </div>
+
+  <!-- Row 5: Hifz panel (toggleable, extracted into HifzPanel) -->
+  {#if currentSurah && currentAyahNumber && showHifzPanel}
+    <HifzPanel
+      {hookId}
+      {hifz}
+      {handleHifzSave}
     />
-    
-      <HifzTextAreaEditor
-        label="Hook Description"
-        field="hookDescription"
-        value={hifz.hookDescription}
-        on:save={handleHifzSave}
-      />
-
-      <HifzStringEditor
-        label="Āyat Icon"
-        field="ayatIcon"
-        value={hifz.ayatIcon}
-        on:save={handleHifzSave}
-      />
-
-      <HifzStringEditor
-        label="Hook Image URL"
-        field="hookImageUrl"
-        value={hifz.hookImageUrl}
-        on:save={handleHifzSave}
-      />
-    </div>
   {/if}
 </section>
 
@@ -293,6 +286,32 @@
   /* Surah bar spacing */
   .pickerRow {
     margin-top: 0.5rem;
+  }
+
+  .hifzToggleRow {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .hifzToggleRow button {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--borderColor);
+    background: var(--surfaceColor);
+    cursor: pointer;
+  }
+
+  .hifzToggleRow button:hover {
+    filter: brightness(1.05);
+  }
+
+  .hookRef {
+    font-size: 0.85rem;
+    opacity: 0.8;
   }
 
   .hifzRow {
