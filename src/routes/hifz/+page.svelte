@@ -5,7 +5,8 @@
   import QuranSurahBar from '$lib/quran/components/QuranSurahBar.svelte';
   import QuranAyahReader from '$lib/quran/components/QuranAyahReader.svelte';
 
-  import HifzPanel from '$lib/quran/components/HifzPanel.svelte';
+  import HifzTextAreaEditor from '$lib/quran/components/HifzTextAreaEditor.svelte';
+
   import HifzNavBar from '$lib/quran/components/HifzNavBar.svelte';
 
   import quran from '$lib/quran/quran.json';
@@ -34,7 +35,7 @@
   let hookId = 9;
 
   // Toggle for Hifz panel visibility
-  let showHifzPanel = false;
+  let showHifzPanel = true;
 
   // Toggle for Translation visibility
   let showTranslation = true;
@@ -240,32 +241,42 @@
   <!-- Row 4: Toggles -->
   <div class="row hifzToggleRow" dir="ltr">
     <button type="button" on:click={() => (showHifzPanel = !showHifzPanel)}>
-      {showHifzPanel ? 'Hide Hifz Panel' : 'Show Hifz Panel'}
+      {showHifzPanel ? 'Hide Visualization' : 'Show Visualization'}
     </button>
 
     <button type="button" on:click={() => (showTranslation = !showTranslation)}>
       {showTranslation ? 'Hide Translation' : 'Show Translation'}
     </button>
-
-    <span class="hookRef">
-      Current: {currentRefString}
-    </span>
   </div>
-
-  <!-- Row 5: Hifz panel (toggleable, extracted into HifzPanel) -->
   {#if currentSurah && currentAyahNumber && showHifzPanel}
-    <HifzPanel
-      {hookId}
-      {hifz}
-      {handleHifzSave}
+  <div class="row hifzRow" dir="ltr">
+    <HifzTextAreaEditor
+      label={`Visualization Ayat Id:${hookId}`}
+      field="ayatIcon"
+      value={hifz.ayatIcon}
+      on:save={handleHifzSave}
     />
-  {/if}
+  </div>
+{/if}
+
+
 </section>
 
 <style>
   :root {
     --pageW: 820px;
   }
+  .hifzDisplay {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: var(--surfaceColor);
+  border: 1px solid var(--borderColor);
+  border-radius: 6px;
+  font-size: 0.96rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  color: var(--primaryText);
+}
 
   /* Top-level page wrapper */
   .page {

@@ -16,8 +16,10 @@ const ayatIcons = [
   "Smiling mask over a shadowed face.",
   "Trader’s scale tipping against himself; coins spilling away.",
   "Gray mist around eyes and ears; barbed cloud overhead.",
-  "Polished wall front; crumbling bricks hidden behind.",
-  "Seedlings crushed under careless boots.",
+  // 2:11 (was polished wall) → now explicit فساد
+  "Seedlings crushed under heavy boots.",
+  // 2:12 (new) → corrupters but unaware
+  "Footsteps leaving a trail of damage behind a confident, unaware walker.",
   "Offered torch pushed away by a raised palm.",
   "Split mirror: one side smiles, the other frowns.",
   "Puppets tangled in their own strings.",
@@ -118,14 +120,18 @@ async function main() {
   for (const icon of ayatIcons) {
     await prisma.hifz.update({
       where: { hookId },
-      data: { hookDescription: icon }
+      data: { ayatIcon: icon }
     });
 
     console.log(`✔ Updated hookId=${hookId}`);
     hookId++;
   }
 
-  console.log("🎉 All ayat-icons imported successfully!");
+  console.log('🎉 All ayat-icons imported into ayatIcon successfully!');
 }
 
-main().finally(() => prisma.$disconnect());
+main()
+  .catch((err) => {
+    console.error('Import failed:', err);
+  })
+  .finally(() => prisma.$disconnect());

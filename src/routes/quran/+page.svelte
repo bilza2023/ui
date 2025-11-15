@@ -1,7 +1,12 @@
-<!-- /home/bilal-tariq/00--TALEEM===>Project/ui/src/routes/quran/+page.svelte -->
+<!-- /home/bilal-tariq/00--TALEEM===>Project/ui/src/routes/hifz/+page.svelte -->
 <script>
+  import { onMount } from 'svelte';
+
   import QuranSurahBar from '$lib/quran/components/QuranSurahBar.svelte';
   import QuranAyahReader from '$lib/quran/components/QuranAyahReader.svelte';
+
+  import HifzTextAreaEditor from '$lib/quran/components/HifzTextAreaEditor.svelte';
+
   import HifzNavBar from '$lib/quran/components/HifzNavBar.svelte';
 
   import quran from '$lib/quran/quran.json';
@@ -29,6 +34,9 @@
   // feel free to change to 1 if you want.
   let hookId = 9;
 
+  // Toggle for Hifz panel visibility
+  let showHifzPanel = false;
+
   // Toggle for Translation visibility
   let showTranslation = true;
 
@@ -36,6 +44,7 @@
   $: currentRef = hookToRef(hookId);
   $: currentSurahNumber = currentRef?.surah ?? null;
   $: currentAyahNumber = currentRef?.ayah ?? null;
+  $: currentRefString = currentRef?.ref ?? '';
 
   // Current surah object (from quran.json)
   $: currentSurah = currentSurahNumber
@@ -58,6 +67,101 @@
       : '';
 
   // ============================
+  // Hifz editable state
+  // ============================
+  let hifz = {
+    hookDescription: '',
+    hookImageUrl: '',
+    ayatIcon: '',
+    ayatIconDescription: ''
+  };
+
+  let lastLoadedKey = '';
+
+  // ------------------------------------------
+  // Load Hifz from DB when hook (ayah) changes
+  // ------------------------------------------
+  async function loadHifzForCurrentAyah() {
+    if (!currentSurahNumber || !currentAyahNumber) return;
+
+    const key = `${currentSurahNumber}:${currentAyahNumber}`;
+    if (key === lastLoadedKey) return; // avoid double loads on same ayah
+    lastLoadedKey = key;
+
+    try {
+      const res = await fetch(
+        `/api/hifz?surah=${currentSurahNumber}&ayah=${currentAyahNumber}`
+      );
+
+      if (!res.ok) {
+        console.warn('No Hifz found for', key);
+        hifz = {
+          hookDescription: '',
+          hookImageUrl: '',
+          ayatIcon: '',
+          ayatIconDescription: ''
+        };
+        return;
+      }
+
+      const data = await res.json();
+      const row = data.hifz;
+
+      hifz = {
+        hookDescription: row?.hookDescription ?? '',
+        hookImageUrl: row?.hookImageUrl ?? '',
+        ayatIcon: row?.ayatIcon ?? '',
+        ayatIconDescription: row?.ayatIconDescription ?? ''
+      };
+
+      console.log('📥 Loaded Hifz from DB:', key, hifz);
+    } catch (err) {
+      console.error('Error loading Hifz:', err);
+    }
+  }
+
+  // Reactive load whenever the current ayah changes (via hookId)
+  $: if (currentSurahNumber && currentAyahNumber) {
+    loadHifzForCurrentAyah();
+  }
+
+  // ------------------------------------------
+  // Save Hifz field to DB
+  // ------------------------------------------
+  async function handleHifzSave(e) {
+    const { field, value } = e.detail || {};
+    if (!field || !currentSurahNumber || !currentAyahNumber) return;
+
+    // Update UI immediately
+    hifz = { ...hifz, [field]: value };
+    console.log('📝 Local Hifz update:', field, value);
+
+    // Save to DB
+    try {
+      const res = await fetch('/api/hifz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          surah: currentSurahNumber,
+          ayah: currentAyahNumber,
+          field,
+          value
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        console.error('❌ DB save failed:', data);
+        return;
+      }
+
+      console.log('✅ Saved to DB:', data.hifz);
+    } catch (err) {
+      console.error('❌ Error saving to DB:', err);
+    }
+  }
+
+  // ============================
   // Surah bar events (jump via hooks)
   // ============================
   function onSurahPick(e) {
@@ -66,6 +170,7 @@
     const start = getSurahStartHook(surah);
     if (start) {
       hookId = start;
+      lastLoadedKey = ''; // force reload
     }
   }
 
@@ -75,8 +180,14 @@
     const start = getSurahStartHook(surah);
     if (start) {
       hookId = start;
+      lastLoadedKey = ''; // force reload
     }
   }
+
+  onMount(() => {
+    // ensure initial load happens for initial hookId
+    lastLoadedKey = '';
+  });
 
   // ============================
   // Keyboard navigation (hook-based)
@@ -106,7 +217,7 @@
     />
   </div>
 
-  <!-- Row 2: Hook-based nav bar (next/prev within global hook grid) -->
+  <!-- Row 2: Hook-based Hifz nav bar -->
   <div class="row">
     <HifzNavBar bind:hookId />
   </div>
@@ -129,10 +240,23 @@
 
   <!-- Row 4: Toggles -->
   <div class="row hifzToggleRow" dir="ltr">
+    <button type="button" on:click={() => (showHifzPanel = !showHifzPanel)}>
+      {showHifzPanel ? 'Hide Visualization' : 'Show Visualization'}
+    </button>
+
     <button type="button" on:click={() => (showTranslation = !showTranslation)}>
       {showTranslation ? 'Hide Translation' : 'Show Translation'}
     </button>
   </div>
+
+{#if currentSurah && currentAyahNumber && showHifzPanel}
+  <div class="row hifzRow" dir="ltr">
+    <div class="hifzDisplay">
+      {hifz.ayatIcon || 'No visualization saved for this āyah yet.'}
+    </div>
+  </div>
+{/if}
+
 </section>
 
 <style>
@@ -180,5 +304,21 @@
 
   .hifzToggleRow button:hover {
     filter: brightness(1.05);
+  }
+
+  .hookRef {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+
+  .hifzRow {
+    margin-top: 0.75rem;
+    padding: 0.75rem 0;
+    border-top: 1px dashed var(--borderColor);
+  }
+
+  .hifzRow h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
   }
 </style>
