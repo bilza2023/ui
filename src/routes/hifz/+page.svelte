@@ -5,6 +5,7 @@
   import QuranSurahBar from '$lib/quran/components/QuranSurahBar.svelte';
   import QuranAyahReader from '$lib/quran/components/QuranAyahReader.svelte';
 
+  import HifzStringEditor from '$lib/quran/components/HifzStringEditor.svelte';
   import HifzTextAreaEditor from '$lib/quran/components/HifzTextAreaEditor.svelte';
 
   import HifzNavBar from '$lib/quran/components/HifzNavBar.svelte';
@@ -189,17 +190,7 @@
     lastLoadedKey = '';
   });
 
-  // ============================
-  // Keyboard navigation (hook-based)
-  // ============================
-  function onKeydown(e) {
-    if (e.key === 'ArrowLeft') {
-      if (hookId > 1) hookId = hookId - 1;
-    }
-    if (e.key === 'ArrowRight') {
-      if (hookId < MAX_HOOK) hookId = hookId + 1;
-    }
-  }
+  
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -250,18 +241,30 @@
   </div>
   {#if currentSurah && currentAyahNumber && showHifzPanel}
   <div class="row hifzRow" dir="ltr">
+
+<!-- 
+    <HifzStringEditor
+    label= "Hook Image"
+    field="hookImageUrl"
+    value={hifz.hookImageUrl}
+    on:save={handleHifzSave}
+  /> -->
+
     <HifzTextAreaEditor
-      label={`Visualization Ayat Id:${hookId}`}
-      field="ayatIcon"
-      value={hifz.ayatIcon}
-      on:save={handleHifzSave}
-    />
+    label={`Visualization Ayat Id:${hookId}`}
+    field="ayatIcon"
+    value={hifz.ayatIcon}
+    on:save={handleHifzSave}
+  />
+<!--   
     <HifzTextAreaEditor
       label= "Hook Description"
       field="hookDescription"
       value={hifz.hookDescription}
       on:save={handleHifzSave}
-    />
+    /> -->
+   
+
   </div>
 {/if}
 
