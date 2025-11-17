@@ -240,22 +240,22 @@
 
   <!-- Row 4: Toggles -->
   <div class="row hifzToggleRow" dir="ltr">
-    <button type="button" on:click={() => (showHifzPanel = !showHifzPanel)}>
+    <!-- <button type="button" on:click={() => (showHifzPanel = !showHifzPanel)}>
       {showHifzPanel ? 'Hide Visualization' : 'Show Visualization'}
-    </button>
+    </button> -->
 
     <button type="button" on:click={() => (showTranslation = !showTranslation)}>
       {showTranslation ? 'Hide Translation' : 'Show Translation'}
     </button>
   </div>
-
+<!-- 
 {#if currentSurah && currentAyahNumber && showHifzPanel}
   <div class="row hifzRow" dir="ltr">
     <div class="hifzDisplay">
       {hifz.ayatIcon || 'No visualization saved for this āyah yet.'}
     </div>
   </div>
-{/if}
+{/if} -->
 
 </section>
 
