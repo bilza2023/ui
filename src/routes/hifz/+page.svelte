@@ -242,28 +242,12 @@
   {#if currentSurah && currentAyahNumber && showHifzPanel}
   <div class="row hifzRow" dir="ltr">
 
-<!-- 
-    <HifzStringEditor
-    label= "Hook Image"
-    field="hookImageUrl"
-    value={hifz.hookImageUrl}
-    on:save={handleHifzSave}
-  /> -->
-
     <HifzTextAreaEditor
     label={`Visualization Ayat Id:${hookId}`}
     field="ayatIcon"
     value={hifz.ayatIcon}
     on:save={handleHifzSave}
   />
-<!--   
-    <HifzTextAreaEditor
-      label= "Hook Description"
-      field="hookDescription"
-      value={hifz.hookDescription}
-      on:save={handleHifzSave}
-    /> -->
-   
 
   </div>
 {/if}

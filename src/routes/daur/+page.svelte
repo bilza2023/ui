@@ -161,22 +161,23 @@
   // ============================
   // Keyboard navigation (hook-based)
   // ============================
-  // function onKeydown(e) {
-  //   if (e.key === 'ArrowLeft') {
-  //     if (hookId > 1) {
-  //       hookId = hookId - 1;
-  //       isRevealed = false;
-  //       isImageLarge = false;
-  //     }
-  //   }
-  //   if (e.key === 'ArrowRight') {
-  //     if (hookId < MAX_HOOK) {
-  //       hookId = hookId + 1;
-  //       isRevealed = false;
-  //       isImageLarge = false;
-  //     }
-  //   }
-  // }
+  function onKeydown(e) {
+    if (e.key === 'ArrowLeft') {
+      // Previous āyah (previous hook)
+      if (hookId > 1) {
+        hookId = hookId - 1;
+        isRevealed = false;
+        isImageLarge = false;
+      }
+    } else if (e.key === 'ArrowRight') {
+      // Next āyah (next hook)
+      if (hookId < MAX_HOOK) {
+        hookId = hookId + 1;
+        isRevealed = false;
+        isImageLarge = false;
+      }
+    }
+  }
 
   // Flip handler
   function toggleReveal() {
