@@ -243,9 +243,15 @@
   <div class="row hifzRow" dir="ltr">
 
     <HifzTextAreaEditor
-    label={`Visualization Ayat Id:${hookId}`}
+    label={`Ayat Id:${hookId}`}
     field="ayatIcon"
     value={hifz.ayatIcon}
+    on:save={handleHifzSave}
+  />
+    <HifzTextAreaEditor
+    label={`Description:${hookId}`}
+    field="ayatIconDescription"
+    value={hifz.ayatIconDescription}
     on:save={handleHifzSave}
   />
 
@@ -259,17 +265,6 @@
   :root {
     --pageW: 820px;
   }
-  .hifzDisplay {
-  width: 100%;
-  padding: 0.9rem 1rem;
-  background: var(--surfaceColor);
-  border: 1px solid var(--borderColor);
-  border-radius: 6px;
-  font-size: 0.96rem;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  color: var(--primaryText);
-}
 
   /* Top-level page wrapper */
   .page {

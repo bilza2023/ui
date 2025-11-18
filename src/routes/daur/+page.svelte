@@ -255,6 +255,9 @@
                   <div class="ayatIconText">
                     {hifz.ayatIcon}
                   </div>
+                  <div class="ayatIconText">
+                    {hifz.ayatIconDescription}
+                  </div>
                 {/if}
               {:else}
                 <span class="placeholder">
