@@ -4,6 +4,7 @@
 
   import quran from '$lib/quran/quran.json';
   import maudidi from '$lib/quran/translation/maudidi.json';
+  import AyahQarat from '$lib/quran/components/AyahQarat.svelte';
 
   import {
     getSurahName,
@@ -95,7 +96,7 @@
   let toAyah = 10;
 
   let showArabic = true;
-  let showTranslation = true;
+  let showTranslation = false;
   let showAyatIcon = true;
   let showAyatIconDescription = true;
 
@@ -340,9 +341,11 @@
             <tr>
               <th class="colRef">Ref</th>
               <th class="colHook">Hook</th>
+
               {#if showArabic}
                 <th class="colArabic">Arabic</th>
               {/if}
+              
               {#if showTranslation}
                 <th class="colTranslation">Translation</th>
               {/if}
@@ -364,12 +367,30 @@
                 </td>
 
                 {#if showArabic}
-                  <td class="colArabic">
-                    <span class="ayahArabic" dir="rtl">
-                      {row.arabic}
-                    </span>
-                  </td>
-                {/if}
+                <td class="colArabic">
+                  <!-- <div class="qarat-group"> -->
+                    <AyahQarat
+                      surah={row.surahNumber}
+                      ayah={row.ayahNumber}
+                      repeatCount={1} 
+                    />
+                    <AyahQarat
+                      surah={row.surahNumber}
+                      ayah={row.ayahNumber}
+                      repeatCount={3} 
+                    />
+                    <AyahQarat
+                      surah={row.surahNumber}
+                      ayah={row.ayahNumber}
+                      repeatCount={5} 
+                    />
+                  <!-- </div> -->
+                  <span class="ayahArabic" dir="rtl">
+                    {row.arabic}
+                  </span>
+                </td>
+              {/if}
+              
 
                 {#if showTranslation}
                   <td class="colTranslation">
@@ -585,6 +606,7 @@
   .descRow td.descCell {
     padding-top: 0;
     color: var(--secondaryText);
+    background-color: var(--surfaceColor);
     padding-bottom: 0.6rem;
     border-top: none;
     font-size: 0.85rem;
