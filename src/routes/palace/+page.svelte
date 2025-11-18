@@ -584,6 +584,7 @@
   /* Second-row (description) styling */
   .descRow td.descCell {
     padding-top: 0;
+    color: var(--secondaryText);
     padding-bottom: 0.6rem;
     border-top: none;
     font-size: 0.85rem;
