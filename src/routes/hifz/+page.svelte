@@ -196,17 +196,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <section class="page" dir="rtl" on:keydown={onKeydown} tabindex="0">
-  <!-- Row 1: Surah picker -->
-  <div class="row pickerRow">
-    <QuranSurahBar
-      {selectedNum}
-      {selectedName}
-      {currentSurahName}
-      placeholder=""
-      on:pick={onSurahPick}
-      on:select={onSurahSelect}
-    />
-  </div>
+
 
   <!-- Row 2: Hook-based Hifz nav bar -->
   <div class="row">
@@ -243,18 +233,19 @@
   <div class="row hifzRow" dir="ltr">
 
     <HifzTextAreaEditor
-    label={`Ayat Id:${hookId}`}
+    label={`Ayat:${currentSurahNumber}/${currentAyahNumber}`}
     field="ayatIcon"
     value={hifz.ayatIcon}
     on:save={handleHifzSave}
   />
     <HifzTextAreaEditor
-    label={`Description:${hookId}`}
+    label={`Description:${currentSurahNumber}/${currentAyahNumber}`}
     field="ayatIconDescription"
     value={hifz.ayatIconDescription}
     on:save={handleHifzSave}
   />
 
+  
   </div>
 {/if}
 
