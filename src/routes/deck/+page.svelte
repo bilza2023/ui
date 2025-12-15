@@ -1,27 +1,34 @@
 <script>
-  import { onMount, onDestroy } from "svelte";
+  import { onDestroy } from "svelte";
   import Nav from "./Nav.svelte";
 
   // -------- CONFIG --------
   const SURAH = "067";
   const STRIP_COUNT = 5;
+  const SCENES_PER_STRIP = 6;
+  const SCENE_WIDTH = 2560; // px (40 tiles × 64)
 
-  // delay (ms) – controlled by Nav
+  const TOTAL_SCENES = STRIP_COUNT * SCENES_PER_STRIP;
+
+  // delay (ms)
   let delay = 5000;
 
   // runtime
   let container;
   let running = false;
   let timer = null;
-  let currentIndex = 0;
+  let currentScene = 0;
 
   // build strip URLs
   const strips = Array.from({ length: STRIP_COUNT }, (_, i) =>
     `/visual-quran/${SURAH}/${String(i + 1).padStart(2, "0")}.png`
   );
 
+  // ------------------------
   function start() {
-    if (running) return;
+    stop();                // reset any running loop
+    currentScene = 0;
+    scrollToScene(0);
     running = true;
     scheduleNext();
   }
@@ -36,24 +43,23 @@
     if (!running) return;
 
     timer = setTimeout(() => {
-      currentIndex++;
+      currentScene++;
 
-      if (currentIndex >= STRIP_COUNT) {
+      if (currentScene >= TOTAL_SCENES) {
         stop();
         return;
       }
 
-      scrollToIndex(currentIndex);
+      scrollToScene(currentScene);
       scheduleNext();
     }, delay);
   }
 
-  function scrollToIndex(index) {
-    const el = container.children[index];
-    if (!el) return;
+  function scrollToScene(sceneIndex) {
+    const left = sceneIndex * SCENE_WIDTH;
 
     container.scrollTo({
-      left: el.offsetLeft,
+      left,
       behavior: "smooth"
     });
   }
@@ -83,8 +89,8 @@
     overflow-y: hidden;
     width: 100vw;
     height: 100vh;
-    scroll-behavior: smooth;
     background: #111;
+    scroll-behavior: smooth;
   }
 
   img {
