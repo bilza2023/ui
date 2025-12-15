@@ -1,87 +1,95 @@
 <script>
   import { onMount, onDestroy } from "svelte";
+  import Nav from "./Nav.svelte";
 
-  const MAP_URL = "http://localhost:5173/quran/al-mulk.png";
+  // -------- CONFIG --------
+  const SURAH = "067";
+  const STRIP_COUNT = 5;
 
-  let viewer = null;
+  // delay (ms) – controlled by Nav
+  let delay = 5000;
 
-  onMount(async () => {
-    try {
-      const mod = await import("openseadragon");
-      const OpenSeadragonLib = mod.default ?? mod;
-      // keep a global reference to constructors used elsewhere (optional)
-      window.OpenSeadragon = OpenSeadragonLib;
+  // runtime
+  let container;
+  let running = false;
+  let timer = null;
+  let currentIndex = 0;
 
-      viewer = OpenSeadragonLib({
-        id: "viewer",
-        prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
-        gestureSettingsMouse: {
-          clickToZoom: false,
-          dblClickToZoom: false
-        },
-        showNavigator: false,
-        showHomeControl: false,
-        showZoomControl: false,
-        showFullPageControl: false,
-        preserveViewport: true
-      });
+  // build strip URLs
+  const strips = Array.from({ length: STRIP_COUNT }, (_, i) =>
+    `/visual-quran/${SURAH}/${String(i + 1).padStart(2, "0")}.png`
+  );
 
-      // Open the single image (no pyramid)
-      viewer.open({ type: "image", url: MAP_URL, buildPyramid: false });
+  function start() {
+    if (running) return;
+    running = true;
+    scheduleNext();
+  }
 
-      viewer.addHandler("open", () => {
-        try {
-          const item = viewer.world.getItemAt(0);
-          const size = item.getContentSize();
-          console.log("Image loaded. Size:", size);
-          // Fit to home viewport immediately
-          viewer.viewport.goHome(true);
-        } catch (e) {
-          // ignore
-        }
-      });
-    } catch (err) {
-      console.error("OpenSeadragon init failed:", err);
-    }
-  });
+  function stop() {
+    running = false;
+    if (timer) clearTimeout(timer);
+    timer = null;
+  }
 
-  onDestroy(() => {
-    try {
-      if (viewer && typeof viewer.destroy === "function") viewer.destroy();
-      viewer = null;
-    } catch (e) { /* ignore */ }
-  });
+  function scheduleNext() {
+    if (!running) return;
+
+    timer = setTimeout(() => {
+      currentIndex++;
+
+      if (currentIndex >= STRIP_COUNT) {
+        stop();
+        return;
+      }
+
+      scrollToIndex(currentIndex);
+      scheduleNext();
+    }, delay);
+  }
+
+  function scrollToIndex(index) {
+    const el = container.children[index];
+    if (!el) return;
+
+    container.scrollTo({
+      left: el.offsetLeft,
+      behavior: "smooth"
+    });
+  }
+
+  onDestroy(() => stop());
 </script>
 
-<svelte:head>
-  <meta charset="utf-8" />
-  <title>Taleem.Help — Map Viewer (image only)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      background: #111;
-      color: #fff;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-    #viewer {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #111;
-      overflow: hidden;
-      touch-action: none; /* let OSD handle gestures */
-    }
-    /* hide any default OSD chrome */
-    .openseadragon-button,
-    .openseadragon-viewport .navigator,
-    .openseadragon-control {
-      display: none !important;
-    }
-  </style>
-</svelte:head>
+<!-- NAV -->
+<Nav
+  on:start={start}
+  on:stop={stop}
+  on:delayChange={(e) => (delay = e.detail)}
+/>
 
-<div id="viewer" aria-label="Map viewer"></div>
+<!-- PAGE VIEW -->
+<div class="page" bind:this={container}>
+  {#each strips as src}
+    <img src={src} alt="Quran strip" />
+  {/each}
+</div>
+
+<style>
+  .page {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100vw;
+    height: 100vh;
+    scroll-behavior: smooth;
+    background: #111;
+  }
+
+  img {
+    height: 100%;
+    width: auto;
+    flex-shrink: 0;
+  }
+</style>
