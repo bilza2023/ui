@@ -2,34 +2,74 @@
   import { onDestroy } from "svelte";
   import Nav from "./Nav.svelte";
 
-  // -------- CONFIG --------
+  /* ======================
+     CONFIG (LOCKED)
+     ====================== */
   const SURAH = "067";
+
   const STRIP_COUNT = 5;
   const SCENES_PER_STRIP = 6;
-  const SCENE_WIDTH = 2560; // px (40 tiles × 64)
+
+  const TILE_SIZE = 64;
+  const SCENE_TILES_W = 40;
+
+  const SCENE_WIDTH = TILE_SIZE * SCENE_TILES_W; // 2560px
+
+  // 👀 PEEK CONTROL (SET TO 0 TO UNDO)
+  const SCENE_PEEK = 200; // px total (100px each side)
+
+  const EFFECTIVE_SCENE_WIDTH = SCENE_WIDTH - SCENE_PEEK;
 
   const TOTAL_SCENES = STRIP_COUNT * SCENES_PER_STRIP;
 
-  // delay (ms)
-  let delay = 5000;
-
-  // runtime
+  /* ======================
+     STATE
+     ====================== */
   let container;
+  let delay = 5000;
   let running = false;
   let timer = null;
   let currentScene = 0;
 
-  // build strip URLs
-  const strips = Array.from({ length: STRIP_COUNT }, (_, i) =>
-    `/visual-quran/${SURAH}/${String(i + 1).padStart(2, "0")}.png`
+  /* ======================
+     STRIP URLS
+     ====================== */
+  const strips = Array.from(
+    { length: STRIP_COUNT },
+    (_, i) => `/visual-quran/${SURAH}/${String(i + 1).padStart(2, "0")}.png`
   );
 
-  // ------------------------
+  /* ======================
+     CORE SCROLL LOGIC
+     ====================== */
+  function scrollToScene(sceneIndex) {
+    if (!container) return;
+
+    const sceneStartX = sceneIndex * EFFECTIVE_SCENE_WIDTH;
+    const sceneCenterX = sceneStartX + SCENE_WIDTH / 2;
+    const viewportCenterX = container.clientWidth / 2;
+
+    let scrollLeft = sceneCenterX - viewportCenterX;
+
+    const maxScrollLeft =
+      container.scrollWidth - container.clientWidth;
+
+    scrollLeft = Math.max(0, Math.min(scrollLeft, maxScrollLeft));
+
+    container.scrollTo({
+      left: scrollLeft,
+      behavior: "smooth",
+    });
+  }
+
+  /* ======================
+     PLAYER CONTROLS
+     ====================== */
   function start() {
-    stop();                // reset any running loop
+    stop();
     currentScene = 0;
-    scrollToScene(0);
     running = true;
+    scrollToScene(0);
     scheduleNext();
   }
 
@@ -55,29 +95,24 @@
     }, delay);
   }
 
-  function scrollToScene(sceneIndex) {
-    const left = sceneIndex * SCENE_WIDTH;
-
-    container.scrollTo({
-      left,
-      behavior: "smooth"
-    });
-  }
-
-  onDestroy(() => stop());
+  onDestroy(stop);
 </script>
 
-<!-- NAV -->
+<!-- ======================
+     NAV
+     ====================== -->
 <Nav
   on:start={start}
   on:stop={stop}
   on:delayChange={(e) => (delay = e.detail)}
 />
 
-<!-- PAGE VIEW -->
+<!-- ======================
+     VIEWPORT
+     ====================== -->
 <div class="page" bind:this={container}>
   {#each strips as src}
-    <img src={src} alt="Quran strip" />
+    <img {src} alt="Quran strip" />
   {/each}
 </div>
 
@@ -87,15 +122,19 @@
     flex-direction: row;
     overflow-x: auto;
     overflow-y: hidden;
+
     width: 100vw;
     height: 100vh;
+
     background: #111;
     scroll-behavior: smooth;
   }
 
   img {
     height: 100%;
-    width: auto;
-    flex-shrink: 0;
+    width: calc((2560px - 200px) * 6); /* 👀 peek enabled */
+    flex: 0 0 auto;
+    user-select: none;
+    pointer-events: none;
   }
 </style>
