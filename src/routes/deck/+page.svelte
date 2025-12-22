@@ -1,140 +1,88 @@
 <script>
-  import { onDestroy } from "svelte";
-  import Nav from "./Nav.svelte";
+  import { onMount } from "svelte";
+  import {
+    SCENES_PER_STRIP,
+    SCENE_W,
+    SCENE_H,
+    getSceneFromStrip
+  } from "./strips.js";
 
-  /* ======================
-     CONFIG (LOCKED)
-     ====================== */
-  const SURAH = "067";
+  const surahId = "067";
 
-  const STRIP_COUNT = 5;
-  const SCENES_PER_STRIP = 6;
+  let stripUrls = [];
+  let totalScenes = 0;
 
-  const TILE_SIZE = 64;
-  const SCENE_TILES_W = 40;
+  let sceneIndex = 0;
+  let currentScene = null;
 
-  const SCENE_WIDTH = TILE_SIZE * SCENE_TILES_W; // 2560px
+  onMount(async () => {
+    await loadSurah(surahId);
+    updateScene();
+  });
 
-  // 👀 PEEK CONTROL (SET TO 0 TO UNDO)
-  const SCENE_PEEK = 200; // px total (100px each side)
+  async function loadSurah(id) {
+    const base = `/visual-quran/${id}`;
+    const res = await fetch(`${base}/manifest.json`);
+    const manifest = await res.json();
 
-  const EFFECTIVE_SCENE_WIDTH = SCENE_WIDTH - SCENE_PEEK;
+    stripUrls = Array.from(
+      { length: manifest.strips },
+      (_, i) => `${base}/${String(i + 1).padStart(2, "0")}.png`
+    );
 
-  const TOTAL_SCENES = STRIP_COUNT * SCENES_PER_STRIP;
+    totalScenes = manifest.strips * SCENES_PER_STRIP;
+  }
 
-  /* ======================
-     STATE
-     ====================== */
-  let container;
-  let delay = 5000;
-  let running = false;
-  let timer = null;
-  let currentScene = 0;
+  function updateScene() {
+    const stripIndex = Math.floor(sceneIndex / SCENES_PER_STRIP);
+    const sceneIndexInStrip = sceneIndex % SCENES_PER_STRIP;
 
-  /* ======================
-     STRIP URLS
-     ====================== */
-  const strips = Array.from(
-    { length: STRIP_COUNT },
-    (_, i) => `/visual-quran/${SURAH}/${String(i + 1).padStart(2, "0")}.png`
-  );
-
-  /* ======================
-     CORE SCROLL LOGIC
-     ====================== */
-  function scrollToScene(sceneIndex) {
-    if (!container) return;
-
-    const sceneStartX = sceneIndex * EFFECTIVE_SCENE_WIDTH;
-    const sceneCenterX = sceneStartX + SCENE_WIDTH / 2;
-    const viewportCenterX = container.clientWidth / 2;
-
-    let scrollLeft = sceneCenterX - viewportCenterX;
-
-    const maxScrollLeft =
-      container.scrollWidth - container.clientWidth;
-
-    scrollLeft = Math.max(0, Math.min(scrollLeft, maxScrollLeft));
-
-    container.scrollTo({
-      left: scrollLeft,
-      behavior: "smooth",
+    currentScene = getSceneFromStrip({
+      stripUrl: stripUrls[stripIndex],
+      sceneIndexInStrip
     });
   }
 
-  /* ======================
-     PLAYER CONTROLS
-     ====================== */
-  function start() {
-    stop();
-    currentScene = 0;
-    running = true;
-    scrollToScene(0);
-    scheduleNext();
+  // nav will control this later
+  export function setScene(i) {
+    if (i < 0 || i >= totalScenes) return;
+    sceneIndex = i;
+    updateScene();
   }
-
-  function stop() {
-    running = false;
-    if (timer) clearTimeout(timer);
-    timer = null;
-  }
-
-  function scheduleNext() {
-    if (!running) return;
-
-    timer = setTimeout(() => {
-      currentScene++;
-
-      if (currentScene >= TOTAL_SCENES) {
-        stop();
-        return;
-      }
-
-      scrollToScene(currentScene);
-      scheduleNext();
-    }, delay);
-  }
-
-  onDestroy(stop);
 </script>
 
-<!-- ======================
-     NAV
-     ====================== -->
-<Nav
-  on:start={start}
-  on:stop={stop}
-  on:delayChange={(e) => (delay = e.detail)}
-/>
-
-<!-- ======================
-     VIEWPORT
-     ====================== -->
-<div class="page" bind:this={container}>
-  {#each strips as src}
-    <img {src} alt="Quran strip" />
-  {/each}
-</div>
+{#if currentScene}
+  <div class="scene-frame">
+    <img
+      src={currentScene.stripUrl}
+      alt="scene"
+      style="
+        transform: translate(
+          -{currentScene.offsetX}px,
+          0px
+        );
+      "
+    />
+  </div>
+{/if}
 
 <style>
-  .page {
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    width: 100vw;
-    height: 100vh;
-
-    background: #111;
-    scroll-behavior: smooth;
+  /* 🔒 FIXED PIXEL VIEWPORT — NO SCALING */
+  .scene-frame {
+    width: 1280px;     /* half of 2560 */
+    height: 640px;     /* half of 1280 */
+    overflow: hidden;
+    background: #000;
+    margin: 0 auto;
   }
 
-  img {
-    height: 100%;
-    width: calc((2560px - 200px) * 6); /* 👀 peek enabled */
-    flex: 0 0 auto;
+  .scene-frame img {
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
     user-select: none;
     pointer-events: none;
+    display: block;
   }
 </style>
