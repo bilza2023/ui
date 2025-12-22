@@ -1,88 +1,49 @@
 <script>
-  import { onMount } from "svelte";
-  import {
-    SCENES_PER_STRIP,
-    SCENE_W,
-    SCENE_H,
-    getSceneFromStrip
-  } from "./strips.js";
+  import Nav from "./Nav.svelte";
 
+  // CHANGE ONLY THIS
   const surahId = "067";
+  const STRIP_COUNT = 5;
 
-  let stripUrls = [];
-  let totalScenes = 0;
+  const stripUrls = Array.from(
+    { length: STRIP_COUNT },
+    (_, i) => `/visual-quran/${surahId}/${String(i + 1).padStart(2, "0")}.png`
+  );
 
-  let sceneIndex = 0;
-  let currentScene = null;
+  let activeStripIndex = 0;
+  let container;
 
-  onMount(async () => {
-    await loadSurah(surahId);
-    updateScene();
-  });
-
-  async function loadSurah(id) {
-    const base = `/visual-quran/${id}`;
-    const res = await fetch(`${base}/manifest.json`);
-    const manifest = await res.json();
-
-    stripUrls = Array.from(
-      { length: manifest.strips },
-      (_, i) => `${base}/${String(i + 1).padStart(2, "0")}.png`
-    );
-
-    totalScenes = manifest.strips * SCENES_PER_STRIP;
-  }
-
-  function updateScene() {
-    const stripIndex = Math.floor(sceneIndex / SCENES_PER_STRIP);
-    const sceneIndexInStrip = sceneIndex % SCENES_PER_STRIP;
-
-    currentScene = getSceneFromStrip({
-      stripUrl: stripUrls[stripIndex],
-      sceneIndexInStrip
-    });
-  }
-
-  // nav will control this later
-  export function setScene(i) {
-    if (i < 0 || i >= totalScenes) return;
-    sceneIndex = i;
-    updateScene();
+  function onSelect(e) {
+    activeStripIndex = e.detail;
+    container.scrollTop = 0;
   }
 </script>
 
-{#if currentScene}
-  <div class="scene-frame">
-    <img
-      src={currentScene.stripUrl}
-      alt="scene"
-      style="
-        transform: translate(
-          -{currentScene.offsetX}px,
-          0px
-        );
-      "
-    />
-  </div>
-{/if}
+<Nav
+  stripCount={stripUrls.length}
+  active={activeStripIndex}
+  on:select={onSelect}
+/>
+
+<div class="viewer" bind:this={container}>
+  <img
+    src={stripUrls[activeStripIndex]}
+    alt="Quran strip"
+  />
+</div>
 
 <style>
-  /* 🔒 FIXED PIXEL VIEWPORT — NO SCALING */
-  .scene-frame {
-    width: 1280px;     /* half of 2560 */
-    height: 640px;     /* half of 1280 */
-    overflow: hidden;
+  .viewer {
+    height: calc(100vh - 52px);
+    overflow-y: auto;
     background: #000;
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
   }
 
-  .scene-frame img {
+  img {
     width: auto;
-    height: auto;
-    max-width: none;
-    max-height: none;
-    user-select: none;
-    pointer-events: none;
+    max-width: 100%;
     display: block;
   }
 </style>

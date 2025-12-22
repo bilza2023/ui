@@ -1,57 +1,48 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  export let stripCount = 0;
+  export let active = 0;
 
+  import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
-  let delay = 5000;
-
-  function start() {
-    dispatch("start");
-  }
-
-  function stop() {
-    dispatch("stop");
-  }
-
-  function updateDelay(e) {
-    delay = Number(e.target.value);
-    dispatch("delayChange", delay);
+  function select(i) {
+    dispatch("select", i);
   }
 </script>
 
-<div class="nav">
-  <button on:click={start}>Start</button>
-  <button on:click={stop}>Stop</button>
-
-  <label>
-    Delay (ms):
-    <input
-      type="number"
-      min="1000"
-      step="1000"
-      bind:value={delay}
-      on:change={updateDelay}
-    />
-  </label>
-</div>
+<nav class="nav">
+  {#each Array(stripCount) as _, i}
+    <button
+      class:active={i === active}
+      on:click={() => select(i)}
+    >
+      Strip {i + 1}
+    </button>
+  {/each}
+</nav>
 
 <style>
   .nav {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    gap: 8px;
     padding: 8px;
-    border-radius: 6px;
-    color: white;
+    border-bottom: 1px solid #ddd;
+    background: #fafafa;
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 
   button {
-    margin-right: 6px;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
   }
 
-  input {
-    width: 100px;
+  button.active {
+    background: #222;
+    color: white;
+    border-color: #222;
   }
 </style>
