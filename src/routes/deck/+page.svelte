@@ -33,17 +33,16 @@
 </div>
 
 <style>
-  .viewer {
-    height: calc(100vh - 52px);
-    overflow-y: auto;
-    background: #000;
-    display: flex;
-    justify-content: center;
-  }
+.viewer {
+  height: calc(100vh - 52px);
+  overflow: auto;
+  background: #000;
+}
+img {
+  display: block;
+  height: 100vh;
+  width: auto;
+}
 
-  img {
-    width: auto;
-    max-width: 100%;
-    display: block;
-  }
+
 </style>
