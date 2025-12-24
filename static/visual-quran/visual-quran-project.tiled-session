@@ -62,7 +62,7 @@
             "selectedLayer": 2,
             "viewCenter": {
                 "x": 1104,
-                "y": 640
+                "y": 922
             }
         },
         "067/05.tmj": {
@@ -70,7 +70,7 @@
             "selectedLayer": 2,
             "viewCenter": {
                 "x": 9488,
-                "y": 640
+                "y": 922
             }
         },
         "067/base.tsx": {
