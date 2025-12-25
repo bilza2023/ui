@@ -1,5 +1,5 @@
 {
-    "activeFile": "067/05.tmj",
+    "activeFile": "",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -38,7 +38,7 @@
             "selectedLayer": 2,
             "viewCenter": {
                 "x": 1506,
-                "y": 926
+                "y": -94
             }
         },
         "067/02.tmj": {
@@ -66,11 +66,11 @@
             }
         },
         "067/05.tmj": {
-            "scale": 0.5,
+            "scale": 0.33,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 9488,
-                "y": 922
+                "x": 681.818181818182,
+                "y": 936.3636363636363
             }
         },
         "067/base.tsx": {
@@ -113,15 +113,13 @@
     "last.externalTilesetPath": "/home/bilal-tariq/tiles",
     "map.lastUsedFormat": "json",
     "openFiles": [
-        "067/04.tmj",
-        "067/05.tmj"
     ],
     "project": "visual-quran-project.tiled-project",
     "recentFiles": [
+        "067/01.tmj",
         "067/04.tmj",
         "067/05.tmj",
         "067/03.tmj",
-        "067/01.tmj",
         "067/02.tmj",
         "067/strip.tmj",
         "/home/bilal-tariq/tiles/cave.tsx"
